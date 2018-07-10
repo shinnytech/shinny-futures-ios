@@ -1,0 +1,32 @@
+PODS:
+  - Bugly (2.5.0)
+  - DeepDiff (1.2.0)
+  - Siren (3.3.0)
+  - Starscream (3.0.5)
+  - SwiftyJSON (4.1.0)
+
+DEPENDENCIES:
+  - Bugly
+  - DeepDiff
+  - Siren
+  - Starscream
+  - SwiftyJSON
+
+SPEC REPOS:
+  https://github.com/CocoaPods/Specs.git:
+    - Bugly
+    - DeepDiff
+    - Siren
+    - Starscream
+    - SwiftyJSON
+
+SPEC CHECKSUMS:
+  Bugly: 3ca9f255c01025582df26f9222893b383c7e4b4e
+  DeepDiff: 0ee83ac6942d441f677c22e981548c6e0937f2b6
+  Siren: e7183967550b986736103f24ca6c74896a475145
+  Starscream: faf918b2f2eff7d5dd21180646bf015a669673bd
+  SwiftyJSON: c29297daf073d2aa016295d5809cdd68045c39b3
+
+PODFILE CHECKSUM: c61d8b6f6c8d23fc2cee271afa8abf43ba59fc6d
+
+COCOAPODS: 1.5.0

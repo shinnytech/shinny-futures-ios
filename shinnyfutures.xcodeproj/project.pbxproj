@@ -1,0 +1,1137 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 48;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		165C045C54F86506FDF1502D /* Pods_shinnyfuturesTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FB6826955F27A22A338B5C7 /* Pods_shinnyfuturesTests.framework */; };
+		85BAAAC148A0034F65548EEC /* Pods_shinnyfuturesUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 114248B9D168CF863B279BC2 /* Pods_shinnyfuturesUITests.framework */; };
+		A201C1B9C6E1BC86E298943E /* Pods_shinnyfutures.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 757606269397994F1BC181D6 /* Pods_shinnyfutures.framework */; settings = {ATTRIBUTES = (Required, ); }; };
+		D415D0C520DCD6F700EA8DA3 /* CurrentDayMarkerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D415D0C320DCD6F700EA8DA3 /* CurrentDayMarkerView.swift */; };
+		D415D0C620DCD6F700EA8DA3 /* KlineMarkerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D415D0C420DCD6F700EA8DA3 /* KlineMarkerView.swift */; };
+		D4195FC120907C550072C021 /* TDWebSocketUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4195FC020907C550072C021 /* TDWebSocketUtils.swift */; };
+		D4195FCF20994D560072C021 /* TradeConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4195FCE20994D560072C021 /* TradeConstants.swift */; };
+		D420B2AB20DD07320045B6AF /* Charts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D420B28420DD00090045B6AF /* Charts.framework */; };
+		D420B2AC20DD07320045B6AF /* Charts.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D420B28420DD00090045B6AF /* Charts.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		D420B2DD20E091300045B6AF /* CurrentDayCombinedChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D420B2D020E0912F0045B6AF /* CurrentDayCombinedChartView.swift */; };
+		D420B2E120E091300045B6AF /* KlineCombinedChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D420B2D420E0912F0045B6AF /* KlineCombinedChartView.swift */; };
+		D420B2E720E0964E0045B6AF /* CurrentDayYAxisRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D420B2E320E0964E0045B6AF /* CurrentDayYAxisRenderer.swift */; };
+		D420B2E820E0964E0045B6AF /* CurrentDayXAxisRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D420B2E420E0964E0045B6AF /* CurrentDayXAxisRenderer.swift */; };
+		D420B2E920E0964E0045B6AF /* MyXAxis.swift in Sources */ = {isa = PBXBuildFile; fileRef = D420B2E520E0964E0045B6AF /* MyXAxis.swift */; };
+		D420B2EA20E0964E0045B6AF /* MyYAxis.swift in Sources */ = {isa = PBXBuildFile; fileRef = D420B2E620E0964E0045B6AF /* MyYAxis.swift */; };
+		D420B2F020E2207F0045B6AF /* KlineYAxisRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D420B2EB20E2207E0045B6AF /* KlineYAxisRenderer.swift */; };
+		D420B2F220E2207F0045B6AF /* MyCandleStickChartRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D420B2ED20E2207E0045B6AF /* MyCandleStickChartRenderer.swift */; };
+		D420B2F320E2207F0045B6AF /* MyCombinedChartRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D420B2EE20E2207F0045B6AF /* MyCombinedChartRenderer.swift */; };
+		D420B2F420E2207F0045B6AF /* KlineXAxisRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D420B2EF20E2207F0045B6AF /* KlineXAxisRenderer.swift */; };
+		D42EE5282071D3C600EF8066 /* Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = D42EE5272071D3C600EF8066 /* Search.swift */; };
+		D42EE52A2071D55700EF8066 /* SearchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D42EE5292071D55700EF8066 /* SearchTableViewCell.swift */; };
+		D42EE52C20721ED000EF8066 /* SearchTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D42EE52B20721ED000EF8066 /* SearchTableViewController.swift */; };
+		D47A4E772085D0FF00255276 /* QuoteNavigationCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47A4E762085D0FF00255276 /* QuoteNavigationCollectionViewCell.swift */; };
+		D47A4E792085D1A700255276 /* QuoteNavigationCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47A4E782085D1A700255276 /* QuoteNavigationCollectionViewController.swift */; };
+		D47A4E7B20871F7A00255276 /* KlinePopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47A4E7A20871F7A00255276 /* KlinePopupViewController.swift */; };
+		D47A4E7D2087353100255276 /* DrawerStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47A4E7C2087353100255276 /* DrawerStackView.swift */; };
+		D47A4E812088928300255276 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47A4E802088928300255276 /* DataManager.swift */; };
+		D47A4E852089958A00255276 /* FileUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47A4E842089958A00255276 /* FileUtils.swift */; };
+		D47A4E872089BBF100255276 /* CommonConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47A4E862089BBF100255276 /* CommonConstants.swift */; };
+		D480225A20688A180033E202 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D480225920688A180033E202 /* AppDelegate.swift */; };
+		D480225C20688A180033E202 /* QuoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D480225B20688A180033E202 /* QuoteViewController.swift */; };
+		D480225F20688A180033E202 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D480225D20688A180033E202 /* Main.storyboard */; };
+		D480226120688A180033E202 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D480226020688A180033E202 /* Assets.xcassets */; };
+		D480226420688A180033E202 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D480226220688A180033E202 /* LaunchScreen.storyboard */; };
+		D480226F20688A180033E202 /* shinnyfuturesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D480226E20688A180033E202 /* shinnyfuturesTests.swift */; };
+		D480227A20688A180033E202 /* shinnyfuturesUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D480227920688A180033E202 /* shinnyfuturesUITests.swift */; };
+		D48022882068995F0033E202 /* Quote.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48022872068995F0033E202 /* Quote.swift */; };
+		D480228A2068C0240033E202 /* QuoteTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48022892068C0240033E202 /* QuoteTableViewCell.swift */; };
+		D480228C2068D52C0033E202 /* QuoteTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D480228B2068D52C0033E202 /* QuoteTableViewController.swift */; };
+		D48022902069116F0033E202 /* QuotePageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D480228F2069116F0033E202 /* QuotePageViewController.swift */; };
+		D4802296206B375E0033E202 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4802295206B375E0033E202 /* MainViewController.swift */; };
+		D4802298206B67650033E202 /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4802297206B67650033E202 /* AccountViewController.swift */; };
+		D480229C206B67C70033E202 /* FeedbackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D480229B206B67C70033E202 /* FeedbackViewController.swift */; };
+		D480229E206B67FE0033E202 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D480229D206B67FE0033E202 /* LoginViewController.swift */; };
+		D485107920CB7A4C00EC0B19 /* RtnTDConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D485107820CB7A4C00EC0B19 /* RtnTDConstants.swift */; };
+		D485107B20CB7C8E00EC0B19 /* NotifyConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D485107A20CB7C8E00EC0B19 /* NotifyConstants.swift */; };
+		D486069E20A030B900C4FEB5 /* OptionalPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D486069D20A030B900C4FEB5 /* OptionalPopupViewController.swift */; };
+		D48606A020A3E0BC00C4FEB5 /* OptionalPopupCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D486069F20A3E0BC00C4FEB5 /* OptionalPopupCollectionViewController.swift */; };
+		D48606A220A3EA8100C4FEB5 /* OptionalCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48606A120A3EA8100C4FEB5 /* OptionalCollectionViewCell.swift */; };
+		D48606A420A42BAD00C4FEB5 /* ToastUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48606A320A42BAD00C4FEB5 /* ToastUtils.swift */; };
+		D48606A620A43FFA00C4FEB5 /* RtnMDConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48606A520A43FFA00C4FEB5 /* RtnMDConstants.swift */; };
+		D48606A820A4429200C4FEB5 /* QuoteConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48606A720A4429200C4FEB5 /* QuoteConstants.swift */; };
+		D48606AA20A442E200C4FEB5 /* KlineConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48606A920A442E200C4FEB5 /* KlineConstants.swift */; };
+		D48606AC20A444A700C4FEB5 /* TickConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48606AB20A444A700C4FEB5 /* TickConstants.swift */; };
+		D48606AE20A444BA00C4FEB5 /* ChartConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48606AD20A444BA00C4FEB5 /* ChartConstants.swift */; };
+		D48606B220A5283800C4FEB5 /* AccountConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48606B120A5283800C4FEB5 /* AccountConstants.swift */; };
+		D48606B420A5285600C4FEB5 /* PositionConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48606B320A5285600C4FEB5 /* PositionConstants.swift */; };
+		D48606B620A5286E00C4FEB5 /* OrderConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48606B520A5286E00C4FEB5 /* OrderConstants.swift */; };
+		D48E662F20B4235A00C808C2 /* BaseChartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48E662E20B4235A00C808C2 /* BaseChartViewController.swift */; };
+		D48E663120B559B500C808C2 /* KlineMarkerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D48E663020B559B400C808C2 /* KlineMarkerView.xib */; };
+		D48E663A20B5672800C808C2 /* CurrentDayMarkerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D48E663920B5672800C808C2 /* CurrentDayMarkerView.xib */; };
+		D49A718120738A9B00AA947A /* TradeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D49A718020738A9B00AA947A /* TradeTableViewController.swift */; };
+		D49A7187207399C000AA947A /* TradeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D49A7186207399C000AA947A /* TradeTableViewCell.swift */; };
+		D4B1F7B9209020E800BCAD2C /* MDWebSocketUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B1F7B8209020E800BCAD2C /* MDWebSocketUtils.swift */; };
+		D4B3DBC52074C54F00545376 /* PositionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B3DBC42074C54F00545376 /* PositionTableViewCell.swift */; };
+		D4B3DBC72074C55A00545376 /* OrderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B3DBC62074C55A00545376 /* OrderTableViewCell.swift */; };
+		D4B3DBC92074C58200545376 /* PositionTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B3DBC82074C58200545376 /* PositionTableViewController.swift */; };
+		D4B3DBCB2074C59300545376 /* OrderTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B3DBCA2074C59300545376 /* OrderTableViewController.swift */; };
+		D4B3DBCD207B65AB00545376 /* HandicapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B3DBCC207B65AB00545376 /* HandicapViewController.swift */; };
+		D4B3DBCF207B65BE00545376 /* TransactionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B3DBCE207B65BE00545376 /* TransactionViewController.swift */; };
+		D4B3DBD1207CB47400545376 /* TransactionPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B3DBD0207CB47400545376 /* TransactionPageViewController.swift */; };
+		D4B3DBD3207CB7BA00545376 /* KlinePageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B3DBD2207CB7BA00545376 /* KlinePageViewController.swift */; };
+		D4B3DBD5207CB80400545376 /* CurrentDayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B3DBD4207CB80400545376 /* CurrentDayViewController.swift */; };
+		D4B3DBD7207CB82C00545376 /* KlineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B3DBD6207CB82C00545376 /* KlineViewController.swift */; };
+		D4EBC91E20AEB55700A9163F /* VolumeKeyboardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D4EBC91D20AEB55700A9163F /* VolumeKeyboardView.xib */; };
+		D4EBC92220AEB71A00A9163F /* VolumeKeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4EBC92120AEB71A00A9163F /* VolumeKeyboardView.swift */; };
+		D4F10EA320A5780000DC9E1C /* ConfirmSettlementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F10EA220A5780000DC9E1C /* ConfirmSettlementView.swift */; };
+		D4F4E18920AEA080007A2975 /* PriceKeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F4E18820AEA080007A2975 /* PriceKeyboardView.swift */; };
+		D4F4E18B20AEA2CA007A2975 /* PriceKeyboardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D4F4E18A20AEA2CA007A2975 /* PriceKeyboardView.xib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		D420B28320DD00090045B6AF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D420B27E20DD00090045B6AF /* Charts.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 65AD9E95D9ED4DC0BD73A743;
+			remoteInfo = Charts;
+		};
+		D420B28520DD00090045B6AF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D420B27E20DD00090045B6AF /* Charts.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 1CBBC58C6CE1EBEE9852CE41;
+			remoteInfo = ChartsTests;
+		};
+		D420B2AD20DD07320045B6AF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D420B27E20DD00090045B6AF /* Charts.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = A58A4ED274A941CA248EA921;
+			remoteInfo = Charts;
+		};
+		D480226B20688A180033E202 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D480224E20688A180033E202 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D480225520688A180033E202;
+			remoteInfo = shinnyfutures;
+		};
+		D480227620688A180033E202 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D480224E20688A180033E202 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D480225520688A180033E202;
+			remoteInfo = shinnyfutures;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		D415D14C20DCE96800EA8DA3 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				D420B2AC20DD07320045B6AF /* Charts.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D4F4E18520AE6BEA007A2975 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		114248B9D168CF863B279BC2 /* Pods_shinnyfuturesUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_shinnyfuturesUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		228840C2DAB2AF8F4A2305A3 /* Pods-shinnyfuturesTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-shinnyfuturesTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-shinnyfuturesTests/Pods-shinnyfuturesTests.release.xcconfig"; sourceTree = "<group>"; };
+		388B73ABF830D4AAE96C6437 /* Pods-shinnyfutures.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-shinnyfutures.debug.xcconfig"; path = "Pods/Target Support Files/Pods-shinnyfutures/Pods-shinnyfutures.debug.xcconfig"; sourceTree = "<group>"; };
+		4065C7FCF18333E910C02F54 /* Pods-shinnyfuturesUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-shinnyfuturesUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-shinnyfuturesUITests/Pods-shinnyfuturesUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		5D84120F90633A05113A6FBE /* Pods-shinnyfuturesUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-shinnyfuturesUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-shinnyfuturesUITests/Pods-shinnyfuturesUITests.release.xcconfig"; sourceTree = "<group>"; };
+		757606269397994F1BC181D6 /* Pods_shinnyfutures.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_shinnyfutures.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9FB6826955F27A22A338B5C7 /* Pods_shinnyfuturesTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_shinnyfuturesTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D415D0C320DCD6F700EA8DA3 /* CurrentDayMarkerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrentDayMarkerView.swift; sourceTree = "<group>"; };
+		D415D0C420DCD6F700EA8DA3 /* KlineMarkerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KlineMarkerView.swift; sourceTree = "<group>"; };
+		D4195FC020907C550072C021 /* TDWebSocketUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TDWebSocketUtils.swift; sourceTree = "<group>"; };
+		D4195FCE20994D560072C021 /* TradeConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TradeConstants.swift; sourceTree = "<group>"; };
+		D420B27E20DD00090045B6AF /* Charts.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Charts.xcodeproj; path = "Charts-master/Charts.xcodeproj"; sourceTree = "<group>"; };
+		D420B2D020E0912F0045B6AF /* CurrentDayCombinedChartView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrentDayCombinedChartView.swift; sourceTree = "<group>"; };
+		D420B2D420E0912F0045B6AF /* KlineCombinedChartView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KlineCombinedChartView.swift; sourceTree = "<group>"; };
+		D420B2E320E0964E0045B6AF /* CurrentDayYAxisRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrentDayYAxisRenderer.swift; sourceTree = "<group>"; };
+		D420B2E420E0964E0045B6AF /* CurrentDayXAxisRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrentDayXAxisRenderer.swift; sourceTree = "<group>"; };
+		D420B2E520E0964E0045B6AF /* MyXAxis.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyXAxis.swift; sourceTree = "<group>"; };
+		D420B2E620E0964E0045B6AF /* MyYAxis.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyYAxis.swift; sourceTree = "<group>"; };
+		D420B2EB20E2207E0045B6AF /* KlineYAxisRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KlineYAxisRenderer.swift; sourceTree = "<group>"; };
+		D420B2ED20E2207E0045B6AF /* MyCandleStickChartRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyCandleStickChartRenderer.swift; sourceTree = "<group>"; };
+		D420B2EE20E2207F0045B6AF /* MyCombinedChartRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyCombinedChartRenderer.swift; sourceTree = "<group>"; };
+		D420B2EF20E2207F0045B6AF /* KlineXAxisRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KlineXAxisRenderer.swift; sourceTree = "<group>"; };
+		D420B30320E9C2790045B6AF /* shinnyfutures-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "shinnyfutures-Bridging-Header.h"; sourceTree = "<group>"; };
+		D42EE5272071D3C600EF8066 /* Search.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Search.swift; sourceTree = "<group>"; };
+		D42EE5292071D55700EF8066 /* SearchTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTableViewCell.swift; sourceTree = "<group>"; };
+		D42EE52B20721ED000EF8066 /* SearchTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTableViewController.swift; sourceTree = "<group>"; };
+		D47A4E762085D0FF00255276 /* QuoteNavigationCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuoteNavigationCollectionViewCell.swift; sourceTree = "<group>"; };
+		D47A4E782085D1A700255276 /* QuoteNavigationCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuoteNavigationCollectionViewController.swift; sourceTree = "<group>"; };
+		D47A4E7A20871F7A00255276 /* KlinePopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KlinePopupViewController.swift; sourceTree = "<group>"; };
+		D47A4E7C2087353100255276 /* DrawerStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawerStackView.swift; sourceTree = "<group>"; };
+		D47A4E802088928300255276 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
+		D47A4E842089958A00255276 /* FileUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileUtils.swift; sourceTree = "<group>"; };
+		D47A4E862089BBF100255276 /* CommonConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonConstants.swift; sourceTree = "<group>"; };
+		D480225620688A180033E202 /* shinnyfutures.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = shinnyfutures.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D480225920688A180033E202 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		D480225B20688A180033E202 /* QuoteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuoteViewController.swift; sourceTree = "<group>"; };
+		D480225E20688A180033E202 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		D480226020688A180033E202 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		D480226320688A180033E202 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		D480226520688A180033E202 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D480226A20688A180033E202 /* shinnyfuturesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = shinnyfuturesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D480226E20688A180033E202 /* shinnyfuturesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = shinnyfuturesTests.swift; sourceTree = "<group>"; };
+		D480227020688A180033E202 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D480227520688A180033E202 /* shinnyfuturesUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = shinnyfuturesUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D480227920688A180033E202 /* shinnyfuturesUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = shinnyfuturesUITests.swift; sourceTree = "<group>"; };
+		D480227B20688A180033E202 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D48022872068995F0033E202 /* Quote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Quote.swift; sourceTree = "<group>"; };
+		D48022892068C0240033E202 /* QuoteTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuoteTableViewCell.swift; sourceTree = "<group>"; };
+		D480228B2068D52C0033E202 /* QuoteTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuoteTableViewController.swift; sourceTree = "<group>"; };
+		D480228F2069116F0033E202 /* QuotePageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuotePageViewController.swift; sourceTree = "<group>"; };
+		D4802295206B375E0033E202 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		D4802297206B67650033E202 /* AccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
+		D480229B206B67C70033E202 /* FeedbackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackViewController.swift; sourceTree = "<group>"; };
+		D480229D206B67FE0033E202 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		D485107820CB7A4C00EC0B19 /* RtnTDConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RtnTDConstants.swift; sourceTree = "<group>"; };
+		D485107A20CB7C8E00EC0B19 /* NotifyConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotifyConstants.swift; sourceTree = "<group>"; };
+		D486069D20A030B900C4FEB5 /* OptionalPopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionalPopupViewController.swift; sourceTree = "<group>"; };
+		D486069F20A3E0BC00C4FEB5 /* OptionalPopupCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionalPopupCollectionViewController.swift; sourceTree = "<group>"; };
+		D48606A120A3EA8100C4FEB5 /* OptionalCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionalCollectionViewCell.swift; sourceTree = "<group>"; };
+		D48606A320A42BAD00C4FEB5 /* ToastUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastUtils.swift; sourceTree = "<group>"; };
+		D48606A520A43FFA00C4FEB5 /* RtnMDConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RtnMDConstants.swift; sourceTree = "<group>"; };
+		D48606A720A4429200C4FEB5 /* QuoteConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuoteConstants.swift; sourceTree = "<group>"; };
+		D48606A920A442E200C4FEB5 /* KlineConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KlineConstants.swift; sourceTree = "<group>"; };
+		D48606AB20A444A700C4FEB5 /* TickConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TickConstants.swift; sourceTree = "<group>"; };
+		D48606AD20A444BA00C4FEB5 /* ChartConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartConstants.swift; sourceTree = "<group>"; };
+		D48606B120A5283800C4FEB5 /* AccountConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountConstants.swift; sourceTree = "<group>"; };
+		D48606B320A5285600C4FEB5 /* PositionConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PositionConstants.swift; sourceTree = "<group>"; };
+		D48606B520A5286E00C4FEB5 /* OrderConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderConstants.swift; sourceTree = "<group>"; };
+		D48E662E20B4235A00C808C2 /* BaseChartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseChartViewController.swift; sourceTree = "<group>"; };
+		D48E663020B559B400C808C2 /* KlineMarkerView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = KlineMarkerView.xib; sourceTree = "<group>"; };
+		D48E663920B5672800C808C2 /* CurrentDayMarkerView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CurrentDayMarkerView.xib; sourceTree = "<group>"; };
+		D49A718020738A9B00AA947A /* TradeTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TradeTableViewController.swift; sourceTree = "<group>"; };
+		D49A7186207399C000AA947A /* TradeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TradeTableViewCell.swift; sourceTree = "<group>"; };
+		D4B1F7B8209020E800BCAD2C /* MDWebSocketUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MDWebSocketUtils.swift; sourceTree = "<group>"; };
+		D4B3DBC42074C54F00545376 /* PositionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PositionTableViewCell.swift; sourceTree = "<group>"; };
+		D4B3DBC62074C55A00545376 /* OrderTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderTableViewCell.swift; sourceTree = "<group>"; };
+		D4B3DBC82074C58200545376 /* PositionTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PositionTableViewController.swift; sourceTree = "<group>"; };
+		D4B3DBCA2074C59300545376 /* OrderTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderTableViewController.swift; sourceTree = "<group>"; };
+		D4B3DBCC207B65AB00545376 /* HandicapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandicapViewController.swift; sourceTree = "<group>"; };
+		D4B3DBCE207B65BE00545376 /* TransactionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionViewController.swift; sourceTree = "<group>"; };
+		D4B3DBD0207CB47400545376 /* TransactionPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionPageViewController.swift; sourceTree = "<group>"; };
+		D4B3DBD2207CB7BA00545376 /* KlinePageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KlinePageViewController.swift; sourceTree = "<group>"; };
+		D4B3DBD4207CB80400545376 /* CurrentDayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentDayViewController.swift; sourceTree = "<group>"; };
+		D4B3DBD6207CB82C00545376 /* KlineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KlineViewController.swift; sourceTree = "<group>"; };
+		D4EBC91D20AEB55700A9163F /* VolumeKeyboardView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VolumeKeyboardView.xib; sourceTree = "<group>"; };
+		D4EBC92120AEB71A00A9163F /* VolumeKeyboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolumeKeyboardView.swift; sourceTree = "<group>"; };
+		D4F10EA220A5780000DC9E1C /* ConfirmSettlementView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfirmSettlementView.swift; sourceTree = "<group>"; };
+		D4F4E18820AEA080007A2975 /* PriceKeyboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceKeyboardView.swift; sourceTree = "<group>"; };
+		D4F4E18A20AEA2CA007A2975 /* PriceKeyboardView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PriceKeyboardView.xib; sourceTree = "<group>"; };
+		EC3CBB6F47B2110E1B2E2365 /* Pods-shinnyfuturesTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-shinnyfuturesTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-shinnyfuturesTests/Pods-shinnyfuturesTests.debug.xcconfig"; sourceTree = "<group>"; };
+		FC8D39CA76C29378AD94B136 /* Pods-shinnyfutures.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-shinnyfutures.release.xcconfig"; path = "Pods/Target Support Files/Pods-shinnyfutures/Pods-shinnyfutures.release.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		D480225320688A180033E202 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A201C1B9C6E1BC86E298943E /* Pods_shinnyfutures.framework in Frameworks */,
+				D420B2AB20DD07320045B6AF /* Charts.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D480226720688A180033E202 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				165C045C54F86506FDF1502D /* Pods_shinnyfuturesTests.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D480227220688A180033E202 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				85BAAAC148A0034F65548EEC /* Pods_shinnyfuturesUITests.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		3A875C7DD54F40D9738E5FA5 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				388B73ABF830D4AAE96C6437 /* Pods-shinnyfutures.debug.xcconfig */,
+				FC8D39CA76C29378AD94B136 /* Pods-shinnyfutures.release.xcconfig */,
+				EC3CBB6F47B2110E1B2E2365 /* Pods-shinnyfuturesTests.debug.xcconfig */,
+				228840C2DAB2AF8F4A2305A3 /* Pods-shinnyfuturesTests.release.xcconfig */,
+				4065C7FCF18333E910C02F54 /* Pods-shinnyfuturesUITests.debug.xcconfig */,
+				5D84120F90633A05113A6FBE /* Pods-shinnyfuturesUITests.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		D420B27F20DD00090045B6AF /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D420B28420DD00090045B6AF /* Charts.framework */,
+				D420B28620DD00090045B6AF /* ChartsTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		D47A4E882089BC6500255276 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				D47A4E842089958A00255276 /* FileUtils.swift */,
+				D4B1F7B8209020E800BCAD2C /* MDWebSocketUtils.swift */,
+				D4195FC020907C550072C021 /* TDWebSocketUtils.swift */,
+				D48606A320A42BAD00C4FEB5 /* ToastUtils.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		D480224D20688A180033E202 = {
+			isa = PBXGroup;
+			children = (
+				D420B30320E9C2790045B6AF /* shinnyfutures-Bridging-Header.h */,
+				D420B27E20DD00090045B6AF /* Charts.xcodeproj */,
+				D480225820688A180033E202 /* shinnyfutures */,
+				D480226D20688A180033E202 /* shinnyfuturesTests */,
+				D480227820688A180033E202 /* shinnyfuturesUITests */,
+				D480225720688A180033E202 /* Products */,
+				3A875C7DD54F40D9738E5FA5 /* Pods */,
+				E16A9E2ED1671736EDEED584 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		D480225720688A180033E202 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D480225620688A180033E202 /* shinnyfutures.app */,
+				D480226A20688A180033E202 /* shinnyfuturesTests.xctest */,
+				D480227520688A180033E202 /* shinnyfuturesUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		D480225820688A180033E202 /* shinnyfutures */ = {
+			isa = PBXGroup;
+			children = (
+				D4F1E1AB206E33C400BC1C50 /* Controller */,
+				D4F1E1AA206E339B00BC1C50 /* View */,
+				D4F1E1A9206E339300BC1C50 /* Model */,
+				D47A4E882089BC6500255276 /* Utils */,
+				D4F1E1A8206E336200BC1C50 /* Interface */,
+				D480225920688A180033E202 /* AppDelegate.swift */,
+				D480226520688A180033E202 /* Info.plist */,
+				D480226020688A180033E202 /* Assets.xcassets */,
+			);
+			path = shinnyfutures;
+			sourceTree = "<group>";
+		};
+		D480226D20688A180033E202 /* shinnyfuturesTests */ = {
+			isa = PBXGroup;
+			children = (
+				D480226E20688A180033E202 /* shinnyfuturesTests.swift */,
+				D480227020688A180033E202 /* Info.plist */,
+			);
+			path = shinnyfuturesTests;
+			sourceTree = "<group>";
+		};
+		D480227820688A180033E202 /* shinnyfuturesUITests */ = {
+			isa = PBXGroup;
+			children = (
+				D480227920688A180033E202 /* shinnyfuturesUITests.swift */,
+				D480227B20688A180033E202 /* Info.plist */,
+			);
+			path = shinnyfuturesUITests;
+			sourceTree = "<group>";
+		};
+		D4F1E1A8206E336200BC1C50 /* Interface */ = {
+			isa = PBXGroup;
+			children = (
+				D480225D20688A180033E202 /* Main.storyboard */,
+				D48E663920B5672800C808C2 /* CurrentDayMarkerView.xib */,
+				D48E663020B559B400C808C2 /* KlineMarkerView.xib */,
+				D4F4E18A20AEA2CA007A2975 /* PriceKeyboardView.xib */,
+				D4EBC91D20AEB55700A9163F /* VolumeKeyboardView.xib */,
+				D480226220688A180033E202 /* LaunchScreen.storyboard */,
+			);
+			path = Interface;
+			sourceTree = "<group>";
+		};
+		D4F1E1A9206E339300BC1C50 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				D47A4E802088928300255276 /* DataManager.swift */,
+				D47A4E862089BBF100255276 /* CommonConstants.swift */,
+				D48606A520A43FFA00C4FEB5 /* RtnMDConstants.swift */,
+				D48606A720A4429200C4FEB5 /* QuoteConstants.swift */,
+				D48606A920A442E200C4FEB5 /* KlineConstants.swift */,
+				D48606AB20A444A700C4FEB5 /* TickConstants.swift */,
+				D48606AD20A444BA00C4FEB5 /* ChartConstants.swift */,
+				D485107820CB7A4C00EC0B19 /* RtnTDConstants.swift */,
+				D485107A20CB7C8E00EC0B19 /* NotifyConstants.swift */,
+				D48606B120A5283800C4FEB5 /* AccountConstants.swift */,
+				D48606B320A5285600C4FEB5 /* PositionConstants.swift */,
+				D48606B520A5286E00C4FEB5 /* OrderConstants.swift */,
+				D4195FCE20994D560072C021 /* TradeConstants.swift */,
+				D48022872068995F0033E202 /* Quote.swift */,
+				D42EE5272071D3C600EF8066 /* Search.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		D4F1E1AA206E339B00BC1C50 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				D48022892068C0240033E202 /* QuoteTableViewCell.swift */,
+				D47A4E762085D0FF00255276 /* QuoteNavigationCollectionViewCell.swift */,
+				D48606A120A3EA8100C4FEB5 /* OptionalCollectionViewCell.swift */,
+				D42EE5292071D55700EF8066 /* SearchTableViewCell.swift */,
+				D49A7186207399C000AA947A /* TradeTableViewCell.swift */,
+				D4B3DBC42074C54F00545376 /* PositionTableViewCell.swift */,
+				D4B3DBC62074C55A00545376 /* OrderTableViewCell.swift */,
+				D47A4E7C2087353100255276 /* DrawerStackView.swift */,
+				D4F10EA220A5780000DC9E1C /* ConfirmSettlementView.swift */,
+				D4F4E18820AEA080007A2975 /* PriceKeyboardView.swift */,
+				D4EBC92120AEB71A00A9163F /* VolumeKeyboardView.swift */,
+				D420B2E520E0964E0045B6AF /* MyXAxis.swift */,
+				D420B2E620E0964E0045B6AF /* MyYAxis.swift */,
+				D420B2D020E0912F0045B6AF /* CurrentDayCombinedChartView.swift */,
+				D420B2E420E0964E0045B6AF /* CurrentDayXAxisRenderer.swift */,
+				D420B2E320E0964E0045B6AF /* CurrentDayYAxisRenderer.swift */,
+				D415D0C320DCD6F700EA8DA3 /* CurrentDayMarkerView.swift */,
+				D420B2D420E0912F0045B6AF /* KlineCombinedChartView.swift */,
+				D420B2EF20E2207F0045B6AF /* KlineXAxisRenderer.swift */,
+				D420B2EB20E2207E0045B6AF /* KlineYAxisRenderer.swift */,
+				D420B2EE20E2207F0045B6AF /* MyCombinedChartRenderer.swift */,
+				D420B2ED20E2207E0045B6AF /* MyCandleStickChartRenderer.swift */,
+				D415D0C420DCD6F700EA8DA3 /* KlineMarkerView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		D4F1E1AB206E33C400BC1C50 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				D4802295206B375E0033E202 /* MainViewController.swift */,
+				D480228B2068D52C0033E202 /* QuoteTableViewController.swift */,
+				D486069D20A030B900C4FEB5 /* OptionalPopupViewController.swift */,
+				D47A4E782085D1A700255276 /* QuoteNavigationCollectionViewController.swift */,
+				D480228F2069116F0033E202 /* QuotePageViewController.swift */,
+				D42EE52B20721ED000EF8066 /* SearchTableViewController.swift */,
+				D49A718020738A9B00AA947A /* TradeTableViewController.swift */,
+				D4802297206B67650033E202 /* AccountViewController.swift */,
+				D480229B206B67C70033E202 /* FeedbackViewController.swift */,
+				D480229D206B67FE0033E202 /* LoginViewController.swift */,
+				D480225B20688A180033E202 /* QuoteViewController.swift */,
+				D486069F20A3E0BC00C4FEB5 /* OptionalPopupCollectionViewController.swift */,
+				D4B3DBCC207B65AB00545376 /* HandicapViewController.swift */,
+				D4B3DBC82074C58200545376 /* PositionTableViewController.swift */,
+				D4B3DBCA2074C59300545376 /* OrderTableViewController.swift */,
+				D4B3DBCE207B65BE00545376 /* TransactionViewController.swift */,
+				D4B3DBD0207CB47400545376 /* TransactionPageViewController.swift */,
+				D48E662E20B4235A00C808C2 /* BaseChartViewController.swift */,
+				D4B3DBD4207CB80400545376 /* CurrentDayViewController.swift */,
+				D4B3DBD6207CB82C00545376 /* KlineViewController.swift */,
+				D4B3DBD2207CB7BA00545376 /* KlinePageViewController.swift */,
+				D47A4E7A20871F7A00255276 /* KlinePopupViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		E16A9E2ED1671736EDEED584 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				757606269397994F1BC181D6 /* Pods_shinnyfutures.framework */,
+				9FB6826955F27A22A338B5C7 /* Pods_shinnyfuturesTests.framework */,
+				114248B9D168CF863B279BC2 /* Pods_shinnyfuturesUITests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		D480225520688A180033E202 /* shinnyfutures */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D480227E20688A180033E202 /* Build configuration list for PBXNativeTarget "shinnyfutures" */;
+			buildPhases = (
+				7501780749F922C028D8807C /* [CP] Check Pods Manifest.lock */,
+				D480225220688A180033E202 /* Sources */,
+				D480225320688A180033E202 /* Frameworks */,
+				D480225420688A180033E202 /* Resources */,
+				6BCCDC5D5172B190D2FF30E3 /* [CP] Embed Pods Frameworks */,
+				D4F4E18520AE6BEA007A2975 /* Embed App Extensions */,
+				D415D14C20DCE96800EA8DA3 /* Embed Frameworks */,
+				D47B8FF720F3536E006D5DE6 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D420B2AE20DD07320045B6AF /* PBXTargetDependency */,
+			);
+			name = shinnyfutures;
+			productName = shinnyfutures;
+			productReference = D480225620688A180033E202 /* shinnyfutures.app */;
+			productType = "com.apple.product-type.application";
+		};
+		D480226920688A180033E202 /* shinnyfuturesTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D480228120688A180033E202 /* Build configuration list for PBXNativeTarget "shinnyfuturesTests" */;
+			buildPhases = (
+				4565C7BDCAC5E92DCA55AC60 /* [CP] Check Pods Manifest.lock */,
+				D480226620688A180033E202 /* Sources */,
+				D480226720688A180033E202 /* Frameworks */,
+				D480226820688A180033E202 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D480226C20688A180033E202 /* PBXTargetDependency */,
+			);
+			name = shinnyfuturesTests;
+			productName = shinnyfuturesTests;
+			productReference = D480226A20688A180033E202 /* shinnyfuturesTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		D480227420688A180033E202 /* shinnyfuturesUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D480228420688A180033E202 /* Build configuration list for PBXNativeTarget "shinnyfuturesUITests" */;
+			buildPhases = (
+				B035DAACB9F92D929A21FD49 /* [CP] Check Pods Manifest.lock */,
+				D480227120688A180033E202 /* Sources */,
+				D480227220688A180033E202 /* Frameworks */,
+				D480227320688A180033E202 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D480227720688A180033E202 /* PBXTargetDependency */,
+			);
+			name = shinnyfuturesUITests;
+			productName = shinnyfuturesUITests;
+			productReference = D480227520688A180033E202 /* shinnyfuturesUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		D480224E20688A180033E202 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0930;
+				LastUpgradeCheck = 0930;
+				ORGANIZATIONNAME = xinyi;
+				TargetAttributes = {
+					D480225520688A180033E202 = {
+						CreatedOnToolsVersion = 9.2;
+						ProvisioningStyle = Automatic;
+					};
+					D480226920688A180033E202 = {
+						CreatedOnToolsVersion = 9.2;
+						ProvisioningStyle = Automatic;
+						TestTargetID = D480225520688A180033E202;
+					};
+					D480227420688A180033E202 = {
+						CreatedOnToolsVersion = 9.2;
+						ProvisioningStyle = Automatic;
+						TestTargetID = D480225520688A180033E202;
+					};
+				};
+			};
+			buildConfigurationList = D480225120688A180033E202 /* Build configuration list for PBXProject "shinnyfutures" */;
+			compatibilityVersion = "Xcode 8.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = D480224D20688A180033E202;
+			productRefGroup = D480225720688A180033E202 /* Products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = D420B27F20DD00090045B6AF /* Products */;
+					ProjectRef = D420B27E20DD00090045B6AF /* Charts.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				D480225520688A180033E202 /* shinnyfutures */,
+				D480226920688A180033E202 /* shinnyfuturesTests */,
+				D480227420688A180033E202 /* shinnyfuturesUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		D420B28420DD00090045B6AF /* Charts.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Charts.framework;
+			remoteRef = D420B28320DD00090045B6AF /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D420B28620DD00090045B6AF /* ChartsTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = ChartsTests.xctest;
+			remoteRef = D420B28520DD00090045B6AF /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXResourcesBuildPhase section */
+		D480225420688A180033E202 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D480226420688A180033E202 /* LaunchScreen.storyboard in Resources */,
+				D480226120688A180033E202 /* Assets.xcassets in Resources */,
+				D4EBC91E20AEB55700A9163F /* VolumeKeyboardView.xib in Resources */,
+				D48E663120B559B500C808C2 /* KlineMarkerView.xib in Resources */,
+				D4F4E18B20AEA2CA007A2975 /* PriceKeyboardView.xib in Resources */,
+				D480225F20688A180033E202 /* Main.storyboard in Resources */,
+				D48E663A20B5672800C808C2 /* CurrentDayMarkerView.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D480226820688A180033E202 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D480227320688A180033E202 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		4565C7BDCAC5E92DCA55AC60 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-shinnyfuturesTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6BCCDC5D5172B190D2FF30E3 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-shinnyfutures/Pods-shinnyfutures-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/DeepDiff/DeepDiff.framework",
+				"${BUILT_PRODUCTS_DIR}/Siren/Siren.framework",
+				"${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DeepDiff.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Siren.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Starscream.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-shinnyfutures/Pods-shinnyfutures-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		7501780749F922C028D8807C /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-shinnyfutures-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B035DAACB9F92D929A21FD49 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-shinnyfuturesUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D47B8FF720F3536E006D5DE6 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#!/bin/bash\n// 判断是哪个configuration\n// Release Debug 或者只自定义的配置\nif [ \"Release\" != \"${CONFIGURATION}\" ]\n// 如果是Release做哪些事情\nthen\n// 如果不是Release做哪些事情\n// exit 0 退出 不执行下面的代码\nfi\n\n// 获取info.plist信息 CFBundleVersion 可以更改为想获取的信息的名字\nbuildNumber=$(/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"$INFOPLIST_FILE\")\nbuildNumber=$(($buildNumber + 1))\n\n// 设置info.plist\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"$INFOPLIST_FILE\"\n\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		D480225220688A180033E202 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D420B2E720E0964E0045B6AF /* CurrentDayYAxisRenderer.swift in Sources */,
+				D4195FC120907C550072C021 /* TDWebSocketUtils.swift in Sources */,
+				D4F10EA320A5780000DC9E1C /* ConfirmSettlementView.swift in Sources */,
+				D415D0C620DCD6F700EA8DA3 /* KlineMarkerView.swift in Sources */,
+				D420B2EA20E0964E0045B6AF /* MyYAxis.swift in Sources */,
+				D4B3DBC92074C58200545376 /* PositionTableViewController.swift in Sources */,
+				D49A718120738A9B00AA947A /* TradeTableViewController.swift in Sources */,
+				D48606B220A5283800C4FEB5 /* AccountConstants.swift in Sources */,
+				D48606A820A4429200C4FEB5 /* QuoteConstants.swift in Sources */,
+				D4B3DBCF207B65BE00545376 /* TransactionViewController.swift in Sources */,
+				D47A4E852089958A00255276 /* FileUtils.swift in Sources */,
+				D480229E206B67FE0033E202 /* LoginViewController.swift in Sources */,
+				D480228A2068C0240033E202 /* QuoteTableViewCell.swift in Sources */,
+				D48606A020A3E0BC00C4FEB5 /* OptionalPopupCollectionViewController.swift in Sources */,
+				D415D0C520DCD6F700EA8DA3 /* CurrentDayMarkerView.swift in Sources */,
+				D4F4E18920AEA080007A2975 /* PriceKeyboardView.swift in Sources */,
+				D48606AE20A444BA00C4FEB5 /* ChartConstants.swift in Sources */,
+				D485107B20CB7C8E00EC0B19 /* NotifyConstants.swift in Sources */,
+				D48E662F20B4235A00C808C2 /* BaseChartViewController.swift in Sources */,
+				D48606A220A3EA8100C4FEB5 /* OptionalCollectionViewCell.swift in Sources */,
+				D4B3DBCB2074C59300545376 /* OrderTableViewController.swift in Sources */,
+				D485107920CB7A4C00EC0B19 /* RtnTDConstants.swift in Sources */,
+				D49A7187207399C000AA947A /* TradeTableViewCell.swift in Sources */,
+				D420B2F420E2207F0045B6AF /* KlineXAxisRenderer.swift in Sources */,
+				D47A4E7D2087353100255276 /* DrawerStackView.swift in Sources */,
+				D47A4E872089BBF100255276 /* CommonConstants.swift in Sources */,
+				D48606B620A5286E00C4FEB5 /* OrderConstants.swift in Sources */,
+				D4B3DBC72074C55A00545376 /* OrderTableViewCell.swift in Sources */,
+				D420B2F020E2207F0045B6AF /* KlineYAxisRenderer.swift in Sources */,
+				D480225C20688A180033E202 /* QuoteViewController.swift in Sources */,
+				D420B2F220E2207F0045B6AF /* MyCandleStickChartRenderer.swift in Sources */,
+				D47A4E7B20871F7A00255276 /* KlinePopupViewController.swift in Sources */,
+				D4B3DBD1207CB47400545376 /* TransactionPageViewController.swift in Sources */,
+				D48022882068995F0033E202 /* Quote.swift in Sources */,
+				D48022902069116F0033E202 /* QuotePageViewController.swift in Sources */,
+				D420B2F320E2207F0045B6AF /* MyCombinedChartRenderer.swift in Sources */,
+				D48606AC20A444A700C4FEB5 /* TickConstants.swift in Sources */,
+				D42EE52C20721ED000EF8066 /* SearchTableViewController.swift in Sources */,
+				D480225A20688A180033E202 /* AppDelegate.swift in Sources */,
+				D42EE52A2071D55700EF8066 /* SearchTableViewCell.swift in Sources */,
+				D48606A620A43FFA00C4FEB5 /* RtnMDConstants.swift in Sources */,
+				D4B3DBD5207CB80400545376 /* CurrentDayViewController.swift in Sources */,
+				D4B3DBC52074C54F00545376 /* PositionTableViewCell.swift in Sources */,
+				D480228C2068D52C0033E202 /* QuoteTableViewController.swift in Sources */,
+				D420B2E920E0964E0045B6AF /* MyXAxis.swift in Sources */,
+				D420B2E120E091300045B6AF /* KlineCombinedChartView.swift in Sources */,
+				D486069E20A030B900C4FEB5 /* OptionalPopupViewController.swift in Sources */,
+				D4195FCF20994D560072C021 /* TradeConstants.swift in Sources */,
+				D480229C206B67C70033E202 /* FeedbackViewController.swift in Sources */,
+				D420B2E820E0964E0045B6AF /* CurrentDayXAxisRenderer.swift in Sources */,
+				D47A4E812088928300255276 /* DataManager.swift in Sources */,
+				D4B3DBD7207CB82C00545376 /* KlineViewController.swift in Sources */,
+				D420B2DD20E091300045B6AF /* CurrentDayCombinedChartView.swift in Sources */,
+				D47A4E772085D0FF00255276 /* QuoteNavigationCollectionViewCell.swift in Sources */,
+				D4802296206B375E0033E202 /* MainViewController.swift in Sources */,
+				D4802298206B67650033E202 /* AccountViewController.swift in Sources */,
+				D4B3DBCD207B65AB00545376 /* HandicapViewController.swift in Sources */,
+				D48606B420A5285600C4FEB5 /* PositionConstants.swift in Sources */,
+				D4EBC92220AEB71A00A9163F /* VolumeKeyboardView.swift in Sources */,
+				D42EE5282071D3C600EF8066 /* Search.swift in Sources */,
+				D47A4E792085D1A700255276 /* QuoteNavigationCollectionViewController.swift in Sources */,
+				D4B1F7B9209020E800BCAD2C /* MDWebSocketUtils.swift in Sources */,
+				D48606AA20A442E200C4FEB5 /* KlineConstants.swift in Sources */,
+				D48606A420A42BAD00C4FEB5 /* ToastUtils.swift in Sources */,
+				D4B3DBD3207CB7BA00545376 /* KlinePageViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D480226620688A180033E202 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D480226F20688A180033E202 /* shinnyfuturesTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D480227120688A180033E202 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D480227A20688A180033E202 /* shinnyfuturesUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		D420B2AE20DD07320045B6AF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = Charts;
+			targetProxy = D420B2AD20DD07320045B6AF /* PBXContainerItemProxy */;
+		};
+		D480226C20688A180033E202 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D480225520688A180033E202 /* shinnyfutures */;
+			targetProxy = D480226B20688A180033E202 /* PBXContainerItemProxy */;
+		};
+		D480227720688A180033E202 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D480225520688A180033E202 /* shinnyfutures */;
+			targetProxy = D480227620688A180033E202 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		D480225D20688A180033E202 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D480225E20688A180033E202 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		D480226220688A180033E202 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D480226320688A180033E202 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		D480227C20688A180033E202 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Shanghai Shinny Information Technology Co.ltd (ETY2JG84H2)";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OBJC_BRIDGING_HEADER = "/Users/chenli/XCodeProjects/shinny-futures-ios/shinnyfutures-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		D480227D20688A180033E202 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Shanghai Shinny Information Technology Co.ltd (ETY2JG84H2)";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_OBJC_BRIDGING_HEADER = "/Users/chenli/XCodeProjects/shinny-futures-ios/shinnyfutures-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		D480227F20688A180033E202 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 388B73ABF830D4AAE96C6437 /* Pods-shinnyfutures.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = ETY2JG84H2;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				INFOPLIST_FILE = shinnyfutures/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.shinnytech.futures;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				USER_HEADER_SEARCH_PATHS = "";
+			};
+			name = Debug;
+		};
+		D480228020688A180033E202 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = FC8D39CA76C29378AD94B136 /* Pods-shinnyfutures.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = ETY2JG84H2;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				INFOPLIST_FILE = shinnyfutures/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = com.shinnytech.futures;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				USER_HEADER_SEARCH_PATHS = "";
+			};
+			name = Release;
+		};
+		D480228220688A180033E202 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = EC3CBB6F47B2110E1B2E2365 /* Pods-shinnyfuturesTests.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = RDT92TVT53;
+				INFOPLIST_FILE = shinnyfuturesTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.xinyi.shinnyfuturesTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/shinnyfutures.app/shinnyfutures";
+			};
+			name = Debug;
+		};
+		D480228320688A180033E202 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 228840C2DAB2AF8F4A2305A3 /* Pods-shinnyfuturesTests.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = RDT92TVT53;
+				INFOPLIST_FILE = shinnyfuturesTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.xinyi.shinnyfuturesTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/shinnyfutures.app/shinnyfutures";
+			};
+			name = Release;
+		};
+		D480228520688A180033E202 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4065C7FCF18333E910C02F54 /* Pods-shinnyfuturesUITests.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = RDT92TVT53;
+				INFOPLIST_FILE = shinnyfuturesUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.xinyi.shinnyfuturesUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = shinnyfutures;
+			};
+			name = Debug;
+		};
+		D480228620688A180033E202 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5D84120F90633A05113A6FBE /* Pods-shinnyfuturesUITests.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = RDT92TVT53;
+				INFOPLIST_FILE = shinnyfuturesUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.xinyi.shinnyfuturesUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = shinnyfutures;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		D480225120688A180033E202 /* Build configuration list for PBXProject "shinnyfutures" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D480227C20688A180033E202 /* Debug */,
+				D480227D20688A180033E202 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D480227E20688A180033E202 /* Build configuration list for PBXNativeTarget "shinnyfutures" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D480227F20688A180033E202 /* Debug */,
+				D480228020688A180033E202 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D480228120688A180033E202 /* Build configuration list for PBXNativeTarget "shinnyfuturesTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D480228220688A180033E202 /* Debug */,
+				D480228320688A180033E202 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D480228420688A180033E202 /* Build configuration list for PBXNativeTarget "shinnyfuturesUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D480228520688A180033E202 /* Debug */,
+				D480228620688A180033E202 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = D480224E20688A180033E202 /* Project object */;
+}

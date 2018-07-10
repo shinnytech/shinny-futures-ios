@@ -1,0 +1,6 @@
+framework module Pods_shinnyfuturesTests {
+  umbrella header "Pods-shinnyfuturesTests-umbrella.h"
+
+  export *
+  module * { export * }
+}
