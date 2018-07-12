@@ -980,7 +980,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
-					"./**",
 				);
 				INFOPLIST_FILE = shinnyfutures/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -1008,7 +1007,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
-					"./**",
 				);
 				INFOPLIST_FILE = shinnyfutures/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
