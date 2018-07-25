@@ -9,6 +9,4 @@
 #ifndef shinnyfutures_Bridging_Header_h
 #define shinnyfutures_Bridging_Header_h
 
-#import <Bugly/Bugly.h>
-
 #endif /* shinnyfutures_Bridging_Header_h */

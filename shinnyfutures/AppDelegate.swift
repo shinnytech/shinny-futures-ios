@@ -9,6 +9,7 @@
 import UIKit
 import SwiftyJSON
 import Siren
+import Bugly
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, MDWebSocketUtilsDelegate, TDWebSocketUtilsDelegate {
@@ -101,38 +102,36 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MDWebSocketUtilsDelegate,
         let url = URL(string: urlString)
         //请求
         let request = URLRequest(url: url!)
-
         let session = URLSession.shared
+        let handler = { (location: URL?, _: URLResponse?, error: Error?) -> Void in
+            if error != nil {
+                print(error.debugDescription)
+                return
+            }
+            do {
+                let documentsURL = try
+                    FileManager.default.url(for: .documentDirectory,
+                                            in: .userDomainMask,
+                                            appropriateFor: nil,
+                                            create: false)
+                let savedURL = documentsURL.appendingPathComponent(fileName)
+                if FileManager.default.fileExists(atPath: savedURL.path) {
+                    try FileManager.default.removeItem(at: savedURL)
+                }
+                try FileManager.default.copyItem(at: location!, to: savedURL)
+                DataManager.getInstance().parseLatestFile()
+                NSLog("合约列表解析完毕")
+                DispatchQueue.main.async {
+                    NotificationCenter.default.post(name: Notification.Name(CommonConstants.LatestFileParsedNotification), object: nil)
+                }
+                self.mdWebSocketUtils.connect()
+                self.transactionWebSocketUtils.connect()
+            } catch {
+                print ("file error: \(error)")
+            }
+        }
         //下载任务
-        let downloadTask = session.downloadTask(with: request,
-                                                completionHandler: { (location: URL?, _: URLResponse?, error: Error?) -> Void in
-                                                    if error != nil {
-                                                        print(error.debugDescription)
-                                                    } else {
-                                                        do {
-                                                            let documentsURL = try
-                                                                FileManager.default.url(for: .documentDirectory,
-                                                                                        in: .userDomainMask,
-                                                                                        appropriateFor: nil,
-                                                                                        create: false)
-                                                            let savedURL = documentsURL.appendingPathComponent(fileName)
-                                                            if FileManager.default.fileExists(atPath: savedURL.path) {
-                                                                try FileManager.default.removeItem(at: savedURL)
-                                                            }
-                                                            try FileManager.default.copyItem(at: location!, to: savedURL)
-                                                            DataManager.getInstance().parseLatestFile()
-                                                            NSLog("合约列表解析完毕")
-                                                            DispatchQueue.main.async {
-                                                                NotificationCenter.default.post(name: Notification.Name(CommonConstants.LatestFileParsedNotification), object: nil)
-                                                            }
-                                                            self.mdWebSocketUtils.connect()
-                                                            self.transactionWebSocketUtils.connect()
-                                                        } catch {
-                                                            print ("file error: \(error)")
-                                                        }
-                                                    }
-        })
-
+        let downloadTask = session.downloadTask(with: request, completionHandler: handler)
         //使用resume方法启动任务
         downloadTask.resume()
     }
