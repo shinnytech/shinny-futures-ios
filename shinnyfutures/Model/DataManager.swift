@@ -261,7 +261,6 @@ class DataManager {
 
     func parseRtnMD(rtnData: JSON) {
         do {
-            print(rtnData)
 //            NSLog("解析开始")
             let dataArray = rtnData[RtnMDConstants.data].arrayValue
             for dataJson in dataArray {

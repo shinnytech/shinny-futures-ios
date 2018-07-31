@@ -221,6 +221,7 @@
 		D48E662E20B4235A00C808C2 /* BaseChartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseChartViewController.swift; sourceTree = "<group>"; };
 		D48E663020B559B400C808C2 /* KlineMarkerView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = KlineMarkerView.xib; sourceTree = "<group>"; };
 		D48E663920B5672800C808C2 /* CurrentDayMarkerView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CurrentDayMarkerView.xib; sourceTree = "<group>"; };
+		D4910C4F21106412007E236B /* shinnyfutures-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "shinnyfutures-Bridging-Header.h"; sourceTree = "<group>"; };
 		D49A718020738A9B00AA947A /* TradeTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TradeTableViewController.swift; sourceTree = "<group>"; };
 		D49A7186207399C000AA947A /* TradeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TradeTableViewCell.swift; sourceTree = "<group>"; };
 		D4B1F7B8209020E800BCAD2C /* MDWebSocketUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MDWebSocketUtils.swift; sourceTree = "<group>"; };
@@ -339,6 +340,7 @@
 				D480225920688A180033E202 /* AppDelegate.swift */,
 				D480226520688A180033E202 /* Info.plist */,
 				D480226020688A180033E202 /* Assets.xcassets */,
+				D4910C4F21106412007E236B /* shinnyfutures-Bridging-Header.h */,
 			);
 			path = shinnyfutures;
 			sourceTree = "<group>";
@@ -907,7 +909,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_OBJC_BRIDGING_HEADER = "/Users/chenli/XCodeProjects/shinny-futures-ios/shinnyfutures-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -959,7 +961,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
-				SWIFT_OBJC_BRIDGING_HEADER = "/Users/chenli/XCodeProjects/shinny-futures-ios/shinnyfutures-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -986,7 +988,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "d39e462c-8999-45f5-a92b-85fd3ec25c48";
 				PROVISIONING_PROFILE_SPECIFIER = futures;
-				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "/Users/chenli/XCodeProjects/shinny-futures-ios/shinnyfutures/shinnyfutures-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "";
@@ -1015,7 +1017,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "d39e462c-8999-45f5-a92b-85fd3ec25c48";
 				PROVISIONING_PROFILE_SPECIFIER = futures;
-				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "/Users/chenli/XCodeProjects/shinny-futures-ios/shinnyfutures/shinnyfutures-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "";

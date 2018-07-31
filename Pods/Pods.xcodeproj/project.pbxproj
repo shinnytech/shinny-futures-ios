@@ -7,54 +7,54 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		04BCDC692F0CD3E74C7E666CB3A3E8BF /* WebSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FB518E075E3013FE216693036C189C7 /* WebSocket.swift */; };
-		110B74CEAED1D795F8A38D8A95A2565F /* DeepDiff.swift in Sources */ = {isa = PBXBuildFile; fileRef = D387E3F97712034BF6B6B604278F24F3 /* DeepDiff.swift */; };
-		150E4E8B6A964AE05389F93201B46A2E /* Array+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB421BA8979A07404D700855D8345DD /* Array+Extensions.swift */; };
-		155973ED5A711CB320A17D632A200C52 /* SwiftyJSON-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = C61A9CBEF63FDC3F3BBCC37F1051BF1E /* SwiftyJSON-dummy.m */; };
-		16B625DB2BDC9E7D64753B92EA7ED8C3 /* UITableView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8812702C0D9CB2CB5ACE6CFA277192A1 /* UITableView+Extensions.swift */; };
-		1F2B59BCF143025842A55AF6CFE82323 /* IndexPathConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC22C3C31B09403787A1DC246045C5D /* IndexPathConverter.swift */; };
-		1F556DD8D4EC6C5F65A92244AD203021 /* SirenDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93A90A863217011A4E295F6DDF5DAA77 /* SirenDelegate.swift */; };
-		24EF4F601E2F9FB50EB14A8D52130E3B /* Siren.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 3681A3DD04E31A6F364EDB30C00B8A9E /* Siren.bundle */; };
-		2732B94EC9820CE24EE5FF3F5C63EBBE /* DeepDiff-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = D7A70AE23195BFE7E35E7FACBE655156 /* DeepDiff-dummy.m */; };
-		2C617884CAF73E0EB387A6D7842E1666 /* SirenAlertMessaging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2541E8C792E0E751C96C216A0394B0D1 /* SirenAlertMessaging.swift */; };
+		04BCDC692F0CD3E74C7E666CB3A3E8BF /* WebSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AB6C02DE7B811927E2DE8DF51C337E4 /* WebSocket.swift */; };
+		110B74CEAED1D795F8A38D8A95A2565F /* DeepDiff.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE9B743B5922B6D14B227077F37BA5AA /* DeepDiff.swift */; };
+		150E4E8B6A964AE05389F93201B46A2E /* Array+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13A9D12E4FCDD299EDDB9F2CA32F6106 /* Array+Extensions.swift */; };
+		155973ED5A711CB320A17D632A200C52 /* SwiftyJSON-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 8189DF34EA41E1BE4878778EAC174049 /* SwiftyJSON-dummy.m */; };
+		16B625DB2BDC9E7D64753B92EA7ED8C3 /* UITableView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F35617E6AB9E68848DB2F1D41EB1169 /* UITableView+Extensions.swift */; };
+		1F2B59BCF143025842A55AF6CFE82323 /* IndexPathConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B57CAA7F5009E0A6582AB3D098EDE84B /* IndexPathConverter.swift */; };
+		1F556DD8D4EC6C5F65A92244AD203021 /* SirenDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D913D533AFAAD78B30DDFCA84CE973 /* SirenDelegate.swift */; };
+		24EF4F601E2F9FB50EB14A8D52130E3B /* Siren.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A6E8E907DBC7183803C49BE3F7020C48 /* Siren.bundle */; };
+		2732B94EC9820CE24EE5FF3F5C63EBBE /* DeepDiff-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A117F295E8ABCA8DEF6493C15020BAD /* DeepDiff-dummy.m */; };
+		2C617884CAF73E0EB387A6D7842E1666 /* SirenAlertMessaging.swift in Sources */ = {isa = PBXBuildFile; fileRef = B69C1BB54D0B89E040AE11CB4FDE4343 /* SirenAlertMessaging.swift */; };
 		41FE3F3481354AE6456B1376D6699603 /* Pods-shinnyfutures-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = DF6ABD08AE6E38C898DB191357CCA633 /* Pods-shinnyfutures-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		431CD34BAC837995126E5462EE657C04 /* Siren-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = B17325B0622C0AF49C4EAD3494DD4581 /* Siren-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		432F95EF5B2DCC25A9C5E3DDE4C43967 /* SirenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B36F078ED2455E8CF90B153DD4135046 /* SirenViewController.swift */; };
-		4A8340577017EACEB10785729592B789 /* SirenDateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 606534AB795EDD9346FCB294F771DAF7 /* SirenDateExtension.swift */; };
-		5A062B264D4607A15F96651B1DEA296E /* DeepDiff-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 51329F13F38DA370380D9E8CBC98F2D9 /* DeepDiff-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		691A9E8489FAECCD60270CDBC861E6EF /* SirenBundleExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C1A615BADAEF56A54D475F58FBEBCEC /* SirenBundleExtension.swift */; };
+		431CD34BAC837995126E5462EE657C04 /* Siren-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C9B6C78D1B9B1D9D098EF597CB2D03A /* Siren-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		432F95EF5B2DCC25A9C5E3DDE4C43967 /* SirenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80799B7FF05013A0C33C645320F4087D /* SirenViewController.swift */; };
+		4A8340577017EACEB10785729592B789 /* SirenDateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 262B239A699F3614227EC9585C2EEF54 /* SirenDateExtension.swift */; };
+		5A062B264D4607A15F96651B1DEA296E /* DeepDiff-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 21CCD3A3DD08045E3908BEB2090667F9 /* DeepDiff-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		691A9E8489FAECCD60270CDBC861E6EF /* SirenBundleExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7226556E75AB36C589AD0A1F41B9187E /* SirenBundleExtension.swift */; };
 		6C7638A7B237727AE94A2D5E6ECE7AB6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D88AAE1F92055A60CC2FC970D7D34634 /* Foundation.framework */; };
-		6DC79B8977F8DE4422D54DFB313DB387 /* UICollectionView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE8D8B918333E34A0309776C0839C986 /* UICollectionView+Extensions.swift */; };
-		79DECD5F87D7E6F9AE3350B1F7B84202 /* SirenUIAlertControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DC1E618651507B7DDF8048D6389E3F4 /* SirenUIAlertControllerExtension.swift */; };
-		80102E1036D5BDF1609E30002BA57B42 /* DiffAware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EDDD527FDDD8554B32A0DA9F55A1032 /* DiffAware.swift */; };
-		92CC0C513D7F8ED01922220F20F71671 /* SirenLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 714B6A02BEEC6C3866384F0C8628B0E3 /* SirenLog.swift */; };
-		93A45BB45F8A88DA418AFC07C4E8DB32 /* Starscream-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = C2EFAB7EA57539A720EC690B47A1A7AC /* Starscream-dummy.m */; };
+		6DC79B8977F8DE4422D54DFB313DB387 /* UICollectionView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7292A1209DC41D7723432721811D011 /* UICollectionView+Extensions.swift */; };
+		79DECD5F87D7E6F9AE3350B1F7B84202 /* SirenUIAlertControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA69956BF3416967F4FDF58ADF8FD71E /* SirenUIAlertControllerExtension.swift */; };
+		80102E1036D5BDF1609E30002BA57B42 /* DiffAware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 352CC0A6ACC39189D5D749124A64448C /* DiffAware.swift */; };
+		92CC0C513D7F8ED01922220F20F71671 /* SirenLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97D0285C6C9D3410661BBB416A47A11C /* SirenLog.swift */; };
+		93A45BB45F8A88DA418AFC07C4E8DB32 /* Starscream-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = EF1F97EDE3A19124CAB7345AE230D044 /* Starscream-dummy.m */; };
 		9765CC8BE5ABE9193401923DDDC8420E /* Pods-shinnyfuturesUITests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 0023DDBEB706EF1CEB9C853571BA23AB /* Pods-shinnyfuturesUITests-dummy.m */; };
-		9F1B0140B50EE481A2A178AB848F9EE0 /* SSLSecurity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5F8C53F734D3E12F96CD119812F7E35 /* SSLSecurity.swift */; };
-		9F724CA33E81D1BE4E66AC2FB0B0976F /* MoveReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F87277520EAB39221496C3AF04F9720 /* MoveReducer.swift */; };
-		9FA2DD50E406E92123EF6607FC672E11 /* SirenLookupModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817F757BAF56BEE0367FD8E731C7059D /* SirenLookupModel.swift */; };
+		9F1B0140B50EE481A2A178AB848F9EE0 /* SSLSecurity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DDF49638C86D88551E760AEEE0660A0 /* SSLSecurity.swift */; };
+		9F724CA33E81D1BE4E66AC2FB0B0976F /* MoveReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E3A621601A8C501FDDA92B26BCE885C /* MoveReducer.swift */; };
+		9FA2DD50E406E92123EF6607FC672E11 /* SirenLookupModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E83C421E78D2BAC51C3AAECAB6AD09A /* SirenLookupModel.swift */; };
 		A25548A5ED2289883D60F1826700079E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D88AAE1F92055A60CC2FC970D7D34634 /* Foundation.framework */; };
 		A37AB981FFE1705D785E071B4246E9C6 /* Pods-shinnyfutures-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D9D346B2744BCD47C6CDC61E1ED6CEA /* Pods-shinnyfutures-dummy.m */; };
-		A72B614CDEB02B9D679E4D2E4C97AF46 /* Compression.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DE0804C624B5173A97292F52396E73 /* Compression.swift */; };
+		A72B614CDEB02B9D679E4D2E4C97AF46 /* Compression.swift in Sources */ = {isa = PBXBuildFile; fileRef = D678A4C7295ED3E8C083430F16196255 /* Compression.swift */; };
 		ADE13E7388B48A80313BD381522F47D7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D88AAE1F92055A60CC2FC970D7D34634 /* Foundation.framework */; };
-		ADE70C3A03F332CE8AB33E95F391E907 /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F497FF817C0ECAFE37A95474CBB864F /* SwiftyJSON.swift */; };
-		B1924DD04776CC93C569C849B1D601A0 /* SwiftyJSON-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = BFF40CF429034E844C73445828E0496F /* SwiftyJSON-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		BDE5ACA0DB95850F6E568BBF42223267 /* WagnerFischer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8876B8D1CC612654AE58745FDC1362A /* WagnerFischer.swift */; };
-		BE6F4D2FB42FA5B7F2649FC76542D874 /* SirenTestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4763B799EE57BAE8F7729A343D41D858 /* SirenTestHelper.swift */; };
+		ADE70C3A03F332CE8AB33E95F391E907 /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 714EE5F3C51D1EAC341CCE2B46FC627F /* SwiftyJSON.swift */; };
+		B1924DD04776CC93C569C849B1D601A0 /* SwiftyJSON-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 0C22B9CEC199F616D37B8E6B97392920 /* SwiftyJSON-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BDE5ACA0DB95850F6E568BBF42223267 /* WagnerFischer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 615F6F68E72889227012B0434A9964DF /* WagnerFischer.swift */; };
+		BE6F4D2FB42FA5B7F2649FC76542D874 /* SirenTestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C94F157894310663B0752C3E79039137 /* SirenTestHelper.swift */; };
 		C98477FCE3C968B367EF661A72F8595F /* Pods-shinnyfuturesTests-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 2EB89163E87942DD5C33858A186B4267 /* Pods-shinnyfuturesTests-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CA79ACE2C082349D2236E15F84D5FAFF /* Pods-shinnyfuturesUITests-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 4929C13949CB25ED80777108AB34633E /* Pods-shinnyfuturesUITests-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CEC02D93B1CC046C8B5A3AF1DE36383C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D88AAE1F92055A60CC2FC970D7D34634 /* Foundation.framework */; };
 		CF9E9C61F7E50A0D17C302250B02DF3F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D88AAE1F92055A60CC2FC970D7D34634 /* Foundation.framework */; };
-		D0BACE672AF79F06D5703897E259D0BF /* Siren-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 05481A750911A15B17F764C0E9A5DC5E /* Siren-dummy.m */; };
+		D0BACE672AF79F06D5703897E259D0BF /* Siren-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = F14698E864A3933B9AB83757CB49A4D8 /* Siren-dummy.m */; };
 		D442F7FA4D9DB9FB4CF33DE02251B51E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D88AAE1F92055A60CC2FC970D7D34634 /* Foundation.framework */; };
-		D67E1A97F35F0802BE335BA04498B66C /* Siren.swift in Sources */ = {isa = PBXBuildFile; fileRef = E506FE9682DC9A0B54DD47F4F10A9F2D /* Siren.swift */; };
+		D67E1A97F35F0802BE335BA04498B66C /* Siren.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA89C1D27E5B65766AF26E0E62571A1D /* Siren.swift */; };
 		D796E97F98485891D5E7165DDF95C5AB /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B63C6A64CF66340668996F78DA6BB482 /* UIKit.framework */; };
-		E4ECC3093F797456AFDDF46F32DAE7A5 /* Change.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C02EF6C1CD68773C58A39722BDAAF4 /* Change.swift */; };
+		E4ECC3093F797456AFDDF46F32DAE7A5 /* Change.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D87FDE9F42E5D72F7A59830651A727F /* Change.swift */; };
 		E583D1ECD5F8052439209B7C417FB053 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D88AAE1F92055A60CC2FC970D7D34634 /* Foundation.framework */; };
 		E7D99120DDC8B25E7AB04CD20D145AFE /* Pods-shinnyfuturesTests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 133DF315F07544E8015B82A0CCB4F6B8 /* Pods-shinnyfuturesTests-dummy.m */; };
-		E8A78E15DC41F5B442B9EF1B357BC62F /* Starscream-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 4D64DD0DA7938D73EB3CB3550C88CF5C /* Starscream-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		FE20BCE5D640DAEF2205AC87188DA856 /* Heckel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9827E4B6023FE34B83063AF7692CA447 /* Heckel.swift */; };
-		FE7AA47FA1283FA0597BEA5B712424F1 /* SirenError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12E07FED45B703BFF19E05B109801501 /* SirenError.swift */; };
+		E8A78E15DC41F5B442B9EF1B357BC62F /* Starscream-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = B7678F5C2428E39997ACCEBE4013C3E1 /* Starscream-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FE20BCE5D640DAEF2205AC87188DA856 /* Heckel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B390A2559210C8C78B47200F5EC8A5A3 /* Heckel.swift */; };
+		FE7AA47FA1283FA0597BEA5B712424F1 /* SirenError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9775FACDAEC81C7F4FD92EB4C9A61165 /* SirenError.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -104,94 +104,95 @@
 
 /* Begin PBXFileReference section */
 		0023DDBEB706EF1CEB9C853571BA23AB /* Pods-shinnyfuturesUITests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-shinnyfuturesUITests-dummy.m"; sourceTree = "<group>"; };
-		037EAA2307B448319D3A29E4D89F94AF /* Starscream.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Starscream.xcconfig; sourceTree = "<group>"; };
-		05481A750911A15B17F764C0E9A5DC5E /* Siren-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Siren-dummy.m"; sourceTree = "<group>"; };
+		057C9EE11874F659F23CE20FB81C2B1E /* SwiftyJSON.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = SwiftyJSON.xcconfig; sourceTree = "<group>"; };
 		0585F92A22E6A94B7C21284CE5DE17D0 /* Pods-shinnyfuturesUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-shinnyfuturesUITests.release.xcconfig"; sourceTree = "<group>"; };
+		07508EE4A191E582CAE5AEF12662EEC3 /* Siren-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Siren-prefix.pch"; sourceTree = "<group>"; };
 		0B2352FE602B38EB945572BF82C7B981 /* SwiftyJSON.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = SwiftyJSON.framework; path = SwiftyJSON.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		0C22B9CEC199F616D37B8E6B97392920 /* SwiftyJSON-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SwiftyJSON-umbrella.h"; sourceTree = "<group>"; };
+		0DDF49638C86D88551E760AEEE0660A0 /* SSLSecurity.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SSLSecurity.swift; path = Sources/SSLSecurity.swift; sourceTree = "<group>"; };
 		0EC134AD2FF6AD2213928252EF50D02A /* Pods-shinnyfuturesTests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-shinnyfuturesTests-acknowledgements.plist"; sourceTree = "<group>"; };
-		0EDDD527FDDD8554B32A0DA9F55A1032 /* DiffAware.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DiffAware.swift; path = Sources/Shared/Algorithms/DiffAware.swift; sourceTree = "<group>"; };
-		10130E57DBF244FA937DBE873962C0E1 /* DeepDiff-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "DeepDiff-prefix.pch"; sourceTree = "<group>"; };
 		103905C18D95724B765D8571FE09E83B /* Pods-shinnyfutures.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-shinnyfutures.modulemap"; sourceTree = "<group>"; };
 		10D2744FE5EC7F2F6747C26E0A0749B1 /* Pods-shinnyfuturesUITests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-shinnyfuturesUITests-acknowledgements.markdown"; sourceTree = "<group>"; };
-		12E07FED45B703BFF19E05B109801501 /* SirenError.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SirenError.swift; path = Sources/SirenError.swift; sourceTree = "<group>"; };
 		133DF315F07544E8015B82A0CCB4F6B8 /* Pods-shinnyfuturesTests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-shinnyfuturesTests-dummy.m"; sourceTree = "<group>"; };
+		13A9D12E4FCDD299EDDB9F2CA32F6106 /* Array+Extensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "Array+Extensions.swift"; path = "Sources/Shared/Array+Extensions.swift"; sourceTree = "<group>"; };
 		171870C78CAAA29471D2A827881AC002 /* Pods-shinnyfutures.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-shinnyfutures.debug.xcconfig"; sourceTree = "<group>"; };
-		1E5C860A9F8CB054C5F72D0EB700E515 /* Starscream.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = Starscream.modulemap; sourceTree = "<group>"; };
-		2541E8C792E0E751C96C216A0394B0D1 /* SirenAlertMessaging.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SirenAlertMessaging.swift; path = Sources/SirenAlertMessaging.swift; sourceTree = "<group>"; };
-		299C005CD8A58BD7B29059ECA81CEC74 /* Siren-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Siren-prefix.pch"; sourceTree = "<group>"; };
+		1F7505DE3323D3C5B6CCC34ABCE858F7 /* Starscream.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Starscream.xcconfig; sourceTree = "<group>"; };
+		21CCD3A3DD08045E3908BEB2090667F9 /* DeepDiff-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "DeepDiff-umbrella.h"; sourceTree = "<group>"; };
+		23AF59F413F129B8D50BB465D390673E /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		262B239A699F3614227EC9585C2EEF54 /* SirenDateExtension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SirenDateExtension.swift; path = Sources/SirenDateExtension.swift; sourceTree = "<group>"; };
+		2707E7FB0AED2E658FF176F506560810 /* Bugly.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Bugly.framework; sourceTree = "<group>"; };
+		2A117F295E8ABCA8DEF6493C15020BAD /* DeepDiff-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "DeepDiff-dummy.m"; sourceTree = "<group>"; };
 		2D9D346B2744BCD47C6CDC61E1ED6CEA /* Pods-shinnyfutures-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-shinnyfutures-dummy.m"; sourceTree = "<group>"; };
 		2E22EE1EF19E50A9529CB64FE8C05CDE /* Pods-shinnyfuturesUITests-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-shinnyfuturesUITests-resources.sh"; sourceTree = "<group>"; };
+		2E3A621601A8C501FDDA92B26BCE885C /* MoveReducer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = MoveReducer.swift; path = Sources/Shared/MoveReducer.swift; sourceTree = "<group>"; };
 		2EB89163E87942DD5C33858A186B4267 /* Pods-shinnyfuturesTests-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-shinnyfuturesTests-umbrella.h"; sourceTree = "<group>"; };
 		2FE31FFCCCA159CBF130970EAAC77BE2 /* Pods-shinnyfuturesUITests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-shinnyfuturesUITests-acknowledgements.plist"; sourceTree = "<group>"; };
-		34AA60D622A506E3FE7FDF10EB63D990 /* SwiftyJSON-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SwiftyJSON-prefix.pch"; sourceTree = "<group>"; };
-		3681A3DD04E31A6F364EDB30C00B8A9E /* Siren.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; name = Siren.bundle; path = Sources/Siren.bundle; sourceTree = "<group>"; };
+		352CC0A6ACC39189D5D749124A64448C /* DiffAware.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DiffAware.swift; path = Sources/Shared/Algorithms/DiffAware.swift; sourceTree = "<group>"; };
 		36F7580004F8EB12F1BAA4C4D78AABEB /* Pods_shinnyfuturesTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_shinnyfuturesTests.framework; path = "Pods-shinnyfuturesTests.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
-		3BB421BA8979A07404D700855D8345DD /* Array+Extensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "Array+Extensions.swift"; path = "Sources/Shared/Array+Extensions.swift"; sourceTree = "<group>"; };
+		3AB6C02DE7B811927E2DE8DF51C337E4 /* WebSocket.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = WebSocket.swift; path = Sources/WebSocket.swift; sourceTree = "<group>"; };
 		3BD78E6FC574B43A67F59B66FACA013E /* Siren.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Siren.framework; path = Siren.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		4010AFA6A2BF5194C7EB305FE5EA4851 /* Siren.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Siren.xcconfig; sourceTree = "<group>"; };
+		3C9B6C78D1B9B1D9D098EF597CB2D03A /* Siren-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Siren-umbrella.h"; sourceTree = "<group>"; };
+		3D87FDE9F42E5D72F7A59830651A727F /* Change.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Change.swift; path = Sources/Shared/Change.swift; sourceTree = "<group>"; };
+		3E83C421E78D2BAC51C3AAECAB6AD09A /* SirenLookupModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SirenLookupModel.swift; path = Sources/SirenLookupModel.swift; sourceTree = "<group>"; };
+		3F35617E6AB9E68848DB2F1D41EB1169 /* UITableView+Extensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "UITableView+Extensions.swift"; path = "Sources/iOS/UITableView+Extensions.swift"; sourceTree = "<group>"; };
 		40B6B95C536386FEA980643EAF16985F /* Pods-shinnyfuturesTests-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-shinnyfuturesTests-resources.sh"; sourceTree = "<group>"; };
 		42DE12D5557BCA45FB92B369431F4CB5 /* Pods-shinnyfuturesUITests-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-shinnyfuturesUITests-frameworks.sh"; sourceTree = "<group>"; };
-		4360068EA775035502FAB721CFFBF88E /* DeepDiff.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = DeepDiff.xcconfig; sourceTree = "<group>"; };
-		453FADBF4EDEE474E204AE1C8EDB1C29 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		44733C4BEBBD88E066C92E8FB5EC7242 /* DeepDiff.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = DeepDiff.xcconfig; sourceTree = "<group>"; };
+		45D913D533AFAAD78B30DDFCA84CE973 /* SirenDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SirenDelegate.swift; path = Sources/SirenDelegate.swift; sourceTree = "<group>"; };
 		46E875D4BEE2D07B7E297D6A2D26EA79 /* Pods-shinnyfuturesTests-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-shinnyfuturesTests-frameworks.sh"; sourceTree = "<group>"; };
-		4763B799EE57BAE8F7729A343D41D858 /* SirenTestHelper.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SirenTestHelper.swift; path = Sources/SirenTestHelper.swift; sourceTree = "<group>"; };
-		47C02EF6C1CD68773C58A39722BDAAF4 /* Change.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Change.swift; path = Sources/Shared/Change.swift; sourceTree = "<group>"; };
 		48B327822BC7188E6700ED9B6F65B105 /* Pods-shinnyfutures-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-shinnyfutures-acknowledgements.markdown"; sourceTree = "<group>"; };
 		4929C13949CB25ED80777108AB34633E /* Pods-shinnyfuturesUITests-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-shinnyfuturesUITests-umbrella.h"; sourceTree = "<group>"; };
 		4945BD0AF61566E35BD64BAB2D594F2A /* Pods-shinnyfuturesUITests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-shinnyfuturesUITests.modulemap"; sourceTree = "<group>"; };
 		494E69A50D06029F13AB7187B6662B79 /* Pods_shinnyfutures.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_shinnyfutures.framework; path = "Pods-shinnyfutures.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
-		4D64DD0DA7938D73EB3CB3550C88CF5C /* Starscream-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Starscream-umbrella.h"; sourceTree = "<group>"; };
-		51329F13F38DA370380D9E8CBC98F2D9 /* DeepDiff-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "DeepDiff-umbrella.h"; sourceTree = "<group>"; };
 		519CB0FE4493F1E78BF9D951C8324DD4 /* Pods-shinnyfuturesTests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-shinnyfuturesTests-acknowledgements.markdown"; sourceTree = "<group>"; };
 		5621CADC009D71DBD4E084458CB3F098 /* Pods-shinnyfuturesTests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-shinnyfuturesTests.modulemap"; sourceTree = "<group>"; };
-		5B7504EE01A717DA9E826F5F90DA2C03 /* Starscream-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Starscream-prefix.pch"; sourceTree = "<group>"; };
-		5CC22C3C31B09403787A1DC246045C5D /* IndexPathConverter.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = IndexPathConverter.swift; path = Sources/iOS/IndexPathConverter.swift; sourceTree = "<group>"; };
 		5DF4C24892C7C5F0D82FE1B661A4A693 /* Pods-shinnyfutures.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-shinnyfutures.release.xcconfig"; sourceTree = "<group>"; };
-		606534AB795EDD9346FCB294F771DAF7 /* SirenDateExtension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SirenDateExtension.swift; path = Sources/SirenDateExtension.swift; sourceTree = "<group>"; };
-		639555EE600C86531C134DE0C29AB29C /* Siren.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = Siren.modulemap; sourceTree = "<group>"; };
-		6F497FF817C0ECAFE37A95474CBB864F /* SwiftyJSON.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SwiftyJSON.swift; path = Source/SwiftyJSON.swift; sourceTree = "<group>"; };
-		714B6A02BEEC6C3866384F0C8628B0E3 /* SirenLog.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SirenLog.swift; path = Sources/SirenLog.swift; sourceTree = "<group>"; };
-		722F02A8F53ADC4F2097FB033B9C64F0 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		7DC1E618651507B7DDF8048D6389E3F4 /* SirenUIAlertControllerExtension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SirenUIAlertControllerExtension.swift; path = Sources/SirenUIAlertControllerExtension.swift; sourceTree = "<group>"; };
-		7F87277520EAB39221496C3AF04F9720 /* MoveReducer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = MoveReducer.swift; path = Sources/Shared/MoveReducer.swift; sourceTree = "<group>"; };
+		613D458E4C323BF8A574B73DC8AD6578 /* SwiftyJSON-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SwiftyJSON-prefix.pch"; sourceTree = "<group>"; };
+		615F6F68E72889227012B0434A9964DF /* WagnerFischer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = WagnerFischer.swift; path = Sources/Shared/Algorithms/WagnerFischer.swift; sourceTree = "<group>"; };
+		64F71720852BBE4A41FD8D442DB89428 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		65A62671A4FE1A5EC5DAAB3D0D913BA3 /* DeepDiff.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = DeepDiff.modulemap; sourceTree = "<group>"; };
+		714EE5F3C51D1EAC341CCE2B46FC627F /* SwiftyJSON.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SwiftyJSON.swift; path = Source/SwiftyJSON.swift; sourceTree = "<group>"; };
+		7226556E75AB36C589AD0A1F41B9187E /* SirenBundleExtension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SirenBundleExtension.swift; path = Sources/SirenBundleExtension.swift; sourceTree = "<group>"; };
+		7B0079302D8A085105E3A383475D0D59 /* SwiftyJSON.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = SwiftyJSON.modulemap; sourceTree = "<group>"; };
 		7FE6224ED9D09B058ACE7E36E22A0253 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		817F757BAF56BEE0367FD8E731C7059D /* SirenLookupModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SirenLookupModel.swift; path = Sources/SirenLookupModel.swift; sourceTree = "<group>"; };
-		8812702C0D9CB2CB5ACE6CFA277192A1 /* UITableView+Extensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "UITableView+Extensions.swift"; path = "Sources/iOS/UITableView+Extensions.swift"; sourceTree = "<group>"; };
+		80799B7FF05013A0C33C645320F4087D /* SirenViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SirenViewController.swift; path = Sources/SirenViewController.swift; sourceTree = "<group>"; };
+		8189DF34EA41E1BE4878778EAC174049 /* SwiftyJSON-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "SwiftyJSON-dummy.m"; sourceTree = "<group>"; };
 		8AF7F4DDECB325A5017369805E4DAD27 /* Pods_shinnyfuturesUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_shinnyfuturesUITests.framework; path = "Pods-shinnyfuturesUITests.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8BE9125D2423CD3F0356530B5D1AA534 /* Starscream.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Starscream.framework; path = Starscream.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		8FB518E075E3013FE216693036C189C7 /* WebSocket.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = WebSocket.swift; path = Sources/WebSocket.swift; sourceTree = "<group>"; };
+		92D765F78E4067F875E5E13C1D0BFDDA /* Starscream.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = Starscream.modulemap; sourceTree = "<group>"; };
 		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		93A90A863217011A4E295F6DDF5DAA77 /* SirenDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SirenDelegate.swift; path = Sources/SirenDelegate.swift; sourceTree = "<group>"; };
-		9472C002BA7C7568DB4FEE807F6EE32E /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		94FA5B31D36345A19BAF89EB19EAAA6A /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		9827E4B6023FE34B83063AF7692CA447 /* Heckel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Heckel.swift; path = Sources/Shared/Algorithms/Heckel.swift; sourceTree = "<group>"; };
-		9C1A615BADAEF56A54D475F58FBEBCEC /* SirenBundleExtension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SirenBundleExtension.swift; path = Sources/SirenBundleExtension.swift; sourceTree = "<group>"; };
+		9775FACDAEC81C7F4FD92EB4C9A61165 /* SirenError.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SirenError.swift; path = Sources/SirenError.swift; sourceTree = "<group>"; };
+		97D0285C6C9D3410661BBB416A47A11C /* SirenLog.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SirenLog.swift; path = Sources/SirenLog.swift; sourceTree = "<group>"; };
+		990611A4442B4094B93AD62776C57001 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9E71967B881889BC315890EA17CB6197 /* Pods-shinnyfutures-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-shinnyfutures-frameworks.sh"; sourceTree = "<group>"; };
+		A6E8E907DBC7183803C49BE3F7020C48 /* Siren.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; name = Siren.bundle; path = Sources/Siren.bundle; sourceTree = "<group>"; };
+		AA69956BF3416967F4FDF58ADF8FD71E /* SirenUIAlertControllerExtension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SirenUIAlertControllerExtension.swift; path = Sources/SirenUIAlertControllerExtension.swift; sourceTree = "<group>"; };
 		ABCC9AB4109BD0AFEC92BC78DA326985 /* Pods-shinnyfutures-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-shinnyfutures-resources.sh"; sourceTree = "<group>"; };
-		AE8D8B918333E34A0309776C0839C986 /* UICollectionView+Extensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "UICollectionView+Extensions.swift"; path = "Sources/iOS/UICollectionView+Extensions.swift"; sourceTree = "<group>"; };
-		B17325B0622C0AF49C4EAD3494DD4581 /* Siren-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Siren-umbrella.h"; sourceTree = "<group>"; };
-		B36F078ED2455E8CF90B153DD4135046 /* SirenViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SirenViewController.swift; path = Sources/SirenViewController.swift; sourceTree = "<group>"; };
+		B390A2559210C8C78B47200F5EC8A5A3 /* Heckel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Heckel.swift; path = Sources/Shared/Algorithms/Heckel.swift; sourceTree = "<group>"; };
+		B40243D92B4643B73066ADB8D8C1AD7B /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B57CAA7F5009E0A6582AB3D098EDE84B /* IndexPathConverter.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = IndexPathConverter.swift; path = Sources/iOS/IndexPathConverter.swift; sourceTree = "<group>"; };
+		B60B3FBAC1EDEEE51E1766822FA08931 /* Siren.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Siren.xcconfig; sourceTree = "<group>"; };
 		B63C6A64CF66340668996F78DA6BB482 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
+		B69C1BB54D0B89E040AE11CB4FDE4343 /* SirenAlertMessaging.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SirenAlertMessaging.swift; path = Sources/SirenAlertMessaging.swift; sourceTree = "<group>"; };
+		B7678F5C2428E39997ACCEBE4013C3E1 /* Starscream-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Starscream-umbrella.h"; sourceTree = "<group>"; };
+		BA89C1D27E5B65766AF26E0E62571A1D /* Siren.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Siren.swift; path = Sources/Siren.swift; sourceTree = "<group>"; };
 		BABDFEEB55DCA5556A98ECB849C96204 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BB7CDCC7D786A795A150FA590C469774 /* DeepDiff.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = DeepDiff.framework; path = DeepDiff.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BD0CFD9B3C4614B2554CF65999EE2280 /* Pods-shinnyfuturesUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-shinnyfuturesUITests.debug.xcconfig"; sourceTree = "<group>"; };
-		BDD4442E47883A8BF505E3604BA696FD /* SwiftyJSON.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = SwiftyJSON.modulemap; sourceTree = "<group>"; };
-		BEC61B836A0D090020E8ACA6B57EE120 /* DeepDiff.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = DeepDiff.modulemap; sourceTree = "<group>"; };
-		BFF40CF429034E844C73445828E0496F /* SwiftyJSON-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SwiftyJSON-umbrella.h"; sourceTree = "<group>"; };
-		C2EFAB7EA57539A720EC690B47A1A7AC /* Starscream-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Starscream-dummy.m"; sourceTree = "<group>"; };
-		C30E303FF1AED6C9BDBA8F61786D632D /* SwiftyJSON.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = SwiftyJSON.xcconfig; sourceTree = "<group>"; };
-		C4DE0804C624B5173A97292F52396E73 /* Compression.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Compression.swift; path = Sources/Compression.swift; sourceTree = "<group>"; };
-		C61A9CBEF63FDC3F3BBCC37F1051BF1E /* SwiftyJSON-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "SwiftyJSON-dummy.m"; sourceTree = "<group>"; };
-		D387E3F97712034BF6B6B604278F24F3 /* DeepDiff.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DeepDiff.swift; path = Sources/Shared/DeepDiff.swift; sourceTree = "<group>"; };
-		D7A70AE23195BFE7E35E7FACBE655156 /* DeepDiff-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "DeepDiff-dummy.m"; sourceTree = "<group>"; };
+		C7292A1209DC41D7723432721811D011 /* UICollectionView+Extensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "UICollectionView+Extensions.swift"; path = "Sources/iOS/UICollectionView+Extensions.swift"; sourceTree = "<group>"; };
+		C94F157894310663B0752C3E79039137 /* SirenTestHelper.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SirenTestHelper.swift; path = Sources/SirenTestHelper.swift; sourceTree = "<group>"; };
+		CFF9CA9AF9E5658C3569D2A49490B2B1 /* Siren.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = Siren.modulemap; sourceTree = "<group>"; };
+		D444090F0FD411D2EC15205938BE3510 /* DeepDiff-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "DeepDiff-prefix.pch"; sourceTree = "<group>"; };
+		D678A4C7295ED3E8C083430F16196255 /* Compression.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Compression.swift; path = Sources/Compression.swift; sourceTree = "<group>"; };
 		D88AAE1F92055A60CC2FC970D7D34634 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		DE9B743B5922B6D14B227077F37BA5AA /* DeepDiff.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DeepDiff.swift; path = Sources/Shared/DeepDiff.swift; sourceTree = "<group>"; };
 		DF6ABD08AE6E38C898DB191357CCA633 /* Pods-shinnyfutures-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-shinnyfutures-umbrella.h"; sourceTree = "<group>"; };
 		DFBA343CD8D2880D80367FE37BDF2938 /* Pods-shinnyfuturesTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-shinnyfuturesTests.release.xcconfig"; sourceTree = "<group>"; };
 		E4327E7C52E8454A86ABE6E6736F792F /* Pods-shinnyfutures-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-shinnyfutures-acknowledgements.plist"; sourceTree = "<group>"; };
-		E506FE9682DC9A0B54DD47F4F10A9F2D /* Siren.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Siren.swift; path = Sources/Siren.swift; sourceTree = "<group>"; };
+		EF1F97EDE3A19124CAB7345AE230D044 /* Starscream-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Starscream-dummy.m"; sourceTree = "<group>"; };
+		F14698E864A3933B9AB83757CB49A4D8 /* Siren-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Siren-dummy.m"; sourceTree = "<group>"; };
 		F191F77A3A02498E8B1E73D6452B8CE3 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		F5F8C53F734D3E12F96CD119812F7E35 /* SSLSecurity.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SSLSecurity.swift; path = Sources/SSLSecurity.swift; sourceTree = "<group>"; };
-		F8876B8D1CC612654AE58745FDC1362A /* WagnerFischer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = WagnerFischer.swift; path = Sources/Shared/Algorithms/WagnerFischer.swift; sourceTree = "<group>"; };
+		F59E8596F348E6771BC9C31DCD808577 /* Starscream-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Starscream-prefix.pch"; sourceTree = "<group>"; };
 		FFDADDB8A43620E041285B089985D81B /* Pods-shinnyfuturesTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-shinnyfuturesTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -280,23 +281,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		0B0058F47810ECCC2B3F1367031CB0DD /* DeepDiff */ = {
+		0A1FC2F12E326A0D9480EAC99734BC2F /* SwiftyJSON */ = {
 			isa = PBXGroup;
 			children = (
-				3BB421BA8979A07404D700855D8345DD /* Array+Extensions.swift */,
-				47C02EF6C1CD68773C58A39722BDAAF4 /* Change.swift */,
-				D387E3F97712034BF6B6B604278F24F3 /* DeepDiff.swift */,
-				0EDDD527FDDD8554B32A0DA9F55A1032 /* DiffAware.swift */,
-				9827E4B6023FE34B83063AF7692CA447 /* Heckel.swift */,
-				5CC22C3C31B09403787A1DC246045C5D /* IndexPathConverter.swift */,
-				7F87277520EAB39221496C3AF04F9720 /* MoveReducer.swift */,
-				AE8D8B918333E34A0309776C0839C986 /* UICollectionView+Extensions.swift */,
-				8812702C0D9CB2CB5ACE6CFA277192A1 /* UITableView+Extensions.swift */,
-				F8876B8D1CC612654AE58745FDC1362A /* WagnerFischer.swift */,
-				7BFB73882BDADE01B39895B483FB221B /* Support Files */,
+				714EE5F3C51D1EAC341CCE2B46FC627F /* SwiftyJSON.swift */,
+				BED23986999E887F47DC5D520EFB238F /* Support Files */,
 			);
-			name = DeepDiff;
-			path = DeepDiff;
+			name = SwiftyJSON;
+			path = SwiftyJSON;
 			sourceTree = "<group>";
 		};
 		2388F3F8AF7F64C610C0D5FC78E0378C /* Pods-shinnyfuturesTests */ = {
@@ -317,15 +309,57 @@
 			path = "Target Support Files/Pods-shinnyfuturesTests";
 			sourceTree = "<group>";
 		};
-		2E33626954B9C0344D8555979F685F4C /* Pods */ = {
+		2FF99D5FFAC186D0360DA1B9520DEBF7 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				0B0058F47810ECCC2B3F1367031CB0DD /* DeepDiff */,
-				6447E8BF6906DB24762A0EDDA55DF364 /* Siren */,
-				ED84F97DD58032FC4493EF627F9CCBE7 /* Starscream */,
-				7382787BC7942693D5DA62B30FB7C607 /* SwiftyJSON */,
+				A6E8E907DBC7183803C49BE3F7020C48 /* Siren.bundle */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		31165E90989E038C5358B8325A609191 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				770B4C73725DB28460B29379A6442E7A /* Bugly */,
+				CC7C80E1996EAA045B661E96C5BDD148 /* DeepDiff */,
+				328281EA545CFF165500B731E97E2689 /* Siren */,
+				41A1D4DF44D1418BD41C401AFEB52B09 /* Starscream */,
+				0A1FC2F12E326A0D9480EAC99734BC2F /* SwiftyJSON */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		328281EA545CFF165500B731E97E2689 /* Siren */ = {
+			isa = PBXGroup;
+			children = (
+				BA89C1D27E5B65766AF26E0E62571A1D /* Siren.swift */,
+				B69C1BB54D0B89E040AE11CB4FDE4343 /* SirenAlertMessaging.swift */,
+				7226556E75AB36C589AD0A1F41B9187E /* SirenBundleExtension.swift */,
+				262B239A699F3614227EC9585C2EEF54 /* SirenDateExtension.swift */,
+				45D913D533AFAAD78B30DDFCA84CE973 /* SirenDelegate.swift */,
+				9775FACDAEC81C7F4FD92EB4C9A61165 /* SirenError.swift */,
+				97D0285C6C9D3410661BBB416A47A11C /* SirenLog.swift */,
+				3E83C421E78D2BAC51C3AAECAB6AD09A /* SirenLookupModel.swift */,
+				C94F157894310663B0752C3E79039137 /* SirenTestHelper.swift */,
+				AA69956BF3416967F4FDF58ADF8FD71E /* SirenUIAlertControllerExtension.swift */,
+				80799B7FF05013A0C33C645320F4087D /* SirenViewController.swift */,
+				2FF99D5FFAC186D0360DA1B9520DEBF7 /* Resources */,
+				DFD8E0D437D8A89644EA67C9639DD2FF /* Support Files */,
+			);
+			name = Siren;
+			path = Siren;
+			sourceTree = "<group>";
+		};
+		41A1D4DF44D1418BD41C401AFEB52B09 /* Starscream */ = {
+			isa = PBXGroup;
+			children = (
+				D678A4C7295ED3E8C083430F16196255 /* Compression.swift */,
+				0DDF49638C86D88551E760AEEE0660A0 /* SSLSecurity.swift */,
+				3AB6C02DE7B811927E2DE8DF51C337E4 /* WebSocket.swift */,
+				F2FE5BFCE99D6E4AD044E4CCC9B1E539 /* Support Files */,
+			);
+			name = Starscream;
+			path = Starscream;
 			sourceTree = "<group>";
 		};
 		433CD3331B6C3787F473C941B61FC68F /* Frameworks */ = {
@@ -343,20 +377,6 @@
 				B63C6A64CF66340668996F78DA6BB482 /* UIKit.framework */,
 			);
 			name = iOS;
-			sourceTree = "<group>";
-		};
-		5D2BE95BABFD7F954CEAEEC219BE5EC8 /* Support Files */ = {
-			isa = PBXGroup;
-			children = (
-				94FA5B31D36345A19BAF89EB19EAAA6A /* Info.plist */,
-				BDD4442E47883A8BF505E3604BA696FD /* SwiftyJSON.modulemap */,
-				C30E303FF1AED6C9BDBA8F61786D632D /* SwiftyJSON.xcconfig */,
-				C61A9CBEF63FDC3F3BBCC37F1051BF1E /* SwiftyJSON-dummy.m */,
-				34AA60D622A506E3FE7FDF10EB63D990 /* SwiftyJSON-prefix.pch */,
-				BFF40CF429034E844C73445828E0496F /* SwiftyJSON-umbrella.h */,
-			);
-			name = "Support Files";
-			path = "../Target Support Files/SwiftyJSON";
 			sourceTree = "<group>";
 		};
 		5E6D01E38163A4F847A5CCC1988B0026 /* Pods-shinnyfutures */ = {
@@ -377,49 +397,6 @@
 			path = "Target Support Files/Pods-shinnyfutures";
 			sourceTree = "<group>";
 		};
-		5F60AFB4E25D21922ACFBACF6D1D99DB /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				3681A3DD04E31A6F364EDB30C00B8A9E /* Siren.bundle */,
-			);
-			name = Resources;
-			sourceTree = "<group>";
-		};
-		6447E8BF6906DB24762A0EDDA55DF364 /* Siren */ = {
-			isa = PBXGroup;
-			children = (
-				E506FE9682DC9A0B54DD47F4F10A9F2D /* Siren.swift */,
-				2541E8C792E0E751C96C216A0394B0D1 /* SirenAlertMessaging.swift */,
-				9C1A615BADAEF56A54D475F58FBEBCEC /* SirenBundleExtension.swift */,
-				606534AB795EDD9346FCB294F771DAF7 /* SirenDateExtension.swift */,
-				93A90A863217011A4E295F6DDF5DAA77 /* SirenDelegate.swift */,
-				12E07FED45B703BFF19E05B109801501 /* SirenError.swift */,
-				714B6A02BEEC6C3866384F0C8628B0E3 /* SirenLog.swift */,
-				817F757BAF56BEE0367FD8E731C7059D /* SirenLookupModel.swift */,
-				4763B799EE57BAE8F7729A343D41D858 /* SirenTestHelper.swift */,
-				7DC1E618651507B7DDF8048D6389E3F4 /* SirenUIAlertControllerExtension.swift */,
-				B36F078ED2455E8CF90B153DD4135046 /* SirenViewController.swift */,
-				5F60AFB4E25D21922ACFBACF6D1D99DB /* Resources */,
-				7C26BA03EDBB819B0F6D5EB395429841 /* Support Files */,
-			);
-			name = Siren;
-			path = Siren;
-			sourceTree = "<group>";
-		};
-		650A8F13CCD921118472AA588EFF3CE8 /* Support Files */ = {
-			isa = PBXGroup;
-			children = (
-				9472C002BA7C7568DB4FEE807F6EE32E /* Info.plist */,
-				1E5C860A9F8CB054C5F72D0EB700E515 /* Starscream.modulemap */,
-				037EAA2307B448319D3A29E4D89F94AF /* Starscream.xcconfig */,
-				C2EFAB7EA57539A720EC690B47A1A7AC /* Starscream-dummy.m */,
-				5B7504EE01A717DA9E826F5F90DA2C03 /* Starscream-prefix.pch */,
-				4D64DD0DA7938D73EB3CB3550C88CF5C /* Starscream-umbrella.h */,
-			);
-			name = "Support Files";
-			path = "../Target Support Files/Starscream";
-			sourceTree = "<group>";
-		};
 		66F3574AA1C923D3E1F0F63632DED61C /* Pods-shinnyfuturesUITests */ = {
 			isa = PBXGroup;
 			children = (
@@ -438,42 +415,13 @@
 			path = "Target Support Files/Pods-shinnyfuturesUITests";
 			sourceTree = "<group>";
 		};
-		7382787BC7942693D5DA62B30FB7C607 /* SwiftyJSON */ = {
+		770B4C73725DB28460B29379A6442E7A /* Bugly */ = {
 			isa = PBXGroup;
 			children = (
-				6F497FF817C0ECAFE37A95474CBB864F /* SwiftyJSON.swift */,
-				5D2BE95BABFD7F954CEAEEC219BE5EC8 /* Support Files */,
+				F98B93F09F25967F765C199A8F958C4B /* Frameworks */,
 			);
-			name = SwiftyJSON;
-			path = SwiftyJSON;
-			sourceTree = "<group>";
-		};
-		7BFB73882BDADE01B39895B483FB221B /* Support Files */ = {
-			isa = PBXGroup;
-			children = (
-				BEC61B836A0D090020E8ACA6B57EE120 /* DeepDiff.modulemap */,
-				4360068EA775035502FAB721CFFBF88E /* DeepDiff.xcconfig */,
-				D7A70AE23195BFE7E35E7FACBE655156 /* DeepDiff-dummy.m */,
-				10130E57DBF244FA937DBE873962C0E1 /* DeepDiff-prefix.pch */,
-				51329F13F38DA370380D9E8CBC98F2D9 /* DeepDiff-umbrella.h */,
-				453FADBF4EDEE474E204AE1C8EDB1C29 /* Info.plist */,
-			);
-			name = "Support Files";
-			path = "../Target Support Files/DeepDiff";
-			sourceTree = "<group>";
-		};
-		7C26BA03EDBB819B0F6D5EB395429841 /* Support Files */ = {
-			isa = PBXGroup;
-			children = (
-				722F02A8F53ADC4F2097FB033B9C64F0 /* Info.plist */,
-				639555EE600C86531C134DE0C29AB29C /* Siren.modulemap */,
-				4010AFA6A2BF5194C7EB305FE5EA4851 /* Siren.xcconfig */,
-				05481A750911A15B17F764C0E9A5DC5E /* Siren-dummy.m */,
-				299C005CD8A58BD7B29059ECA81CEC74 /* Siren-prefix.pch */,
-				B17325B0622C0AF49C4EAD3494DD4581 /* Siren-umbrella.h */,
-			);
-			name = "Support Files";
-			path = "../Target Support Files/Siren";
+			name = Bugly;
+			path = Bugly;
 			sourceTree = "<group>";
 		};
 		7DB346D0F39D3F0E887471402A8071AB = {
@@ -481,22 +429,93 @@
 			children = (
 				93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */,
 				433CD3331B6C3787F473C941B61FC68F /* Frameworks */,
-				2E33626954B9C0344D8555979F685F4C /* Pods */,
+				31165E90989E038C5358B8325A609191 /* Pods */,
 				096F5E3571FEB5275EE19EF978D697B4 /* Products */,
 				07426A5D7CF4AEE9746C9AB084A552F2 /* Targets Support Files */,
 			);
 			sourceTree = "<group>";
 		};
-		ED84F97DD58032FC4493EF627F9CCBE7 /* Starscream */ = {
+		B56FD491BF66A65C4329C1BDC596124C /* Support Files */ = {
 			isa = PBXGroup;
 			children = (
-				C4DE0804C624B5173A97292F52396E73 /* Compression.swift */,
-				F5F8C53F734D3E12F96CD119812F7E35 /* SSLSecurity.swift */,
-				8FB518E075E3013FE216693036C189C7 /* WebSocket.swift */,
-				650A8F13CCD921118472AA588EFF3CE8 /* Support Files */,
+				65A62671A4FE1A5EC5DAAB3D0D913BA3 /* DeepDiff.modulemap */,
+				44733C4BEBBD88E066C92E8FB5EC7242 /* DeepDiff.xcconfig */,
+				2A117F295E8ABCA8DEF6493C15020BAD /* DeepDiff-dummy.m */,
+				D444090F0FD411D2EC15205938BE3510 /* DeepDiff-prefix.pch */,
+				21CCD3A3DD08045E3908BEB2090667F9 /* DeepDiff-umbrella.h */,
+				23AF59F413F129B8D50BB465D390673E /* Info.plist */,
 			);
-			name = Starscream;
-			path = Starscream;
+			name = "Support Files";
+			path = "../Target Support Files/DeepDiff";
+			sourceTree = "<group>";
+		};
+		BED23986999E887F47DC5D520EFB238F /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				64F71720852BBE4A41FD8D442DB89428 /* Info.plist */,
+				7B0079302D8A085105E3A383475D0D59 /* SwiftyJSON.modulemap */,
+				057C9EE11874F659F23CE20FB81C2B1E /* SwiftyJSON.xcconfig */,
+				8189DF34EA41E1BE4878778EAC174049 /* SwiftyJSON-dummy.m */,
+				613D458E4C323BF8A574B73DC8AD6578 /* SwiftyJSON-prefix.pch */,
+				0C22B9CEC199F616D37B8E6B97392920 /* SwiftyJSON-umbrella.h */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/SwiftyJSON";
+			sourceTree = "<group>";
+		};
+		CC7C80E1996EAA045B661E96C5BDD148 /* DeepDiff */ = {
+			isa = PBXGroup;
+			children = (
+				13A9D12E4FCDD299EDDB9F2CA32F6106 /* Array+Extensions.swift */,
+				3D87FDE9F42E5D72F7A59830651A727F /* Change.swift */,
+				DE9B743B5922B6D14B227077F37BA5AA /* DeepDiff.swift */,
+				352CC0A6ACC39189D5D749124A64448C /* DiffAware.swift */,
+				B390A2559210C8C78B47200F5EC8A5A3 /* Heckel.swift */,
+				B57CAA7F5009E0A6582AB3D098EDE84B /* IndexPathConverter.swift */,
+				2E3A621601A8C501FDDA92B26BCE885C /* MoveReducer.swift */,
+				C7292A1209DC41D7723432721811D011 /* UICollectionView+Extensions.swift */,
+				3F35617E6AB9E68848DB2F1D41EB1169 /* UITableView+Extensions.swift */,
+				615F6F68E72889227012B0434A9964DF /* WagnerFischer.swift */,
+				B56FD491BF66A65C4329C1BDC596124C /* Support Files */,
+			);
+			name = DeepDiff;
+			path = DeepDiff;
+			sourceTree = "<group>";
+		};
+		DFD8E0D437D8A89644EA67C9639DD2FF /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				990611A4442B4094B93AD62776C57001 /* Info.plist */,
+				CFF9CA9AF9E5658C3569D2A49490B2B1 /* Siren.modulemap */,
+				B60B3FBAC1EDEEE51E1766822FA08931 /* Siren.xcconfig */,
+				F14698E864A3933B9AB83757CB49A4D8 /* Siren-dummy.m */,
+				07508EE4A191E582CAE5AEF12662EEC3 /* Siren-prefix.pch */,
+				3C9B6C78D1B9B1D9D098EF597CB2D03A /* Siren-umbrella.h */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/Siren";
+			sourceTree = "<group>";
+		};
+		F2FE5BFCE99D6E4AD044E4CCC9B1E539 /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				B40243D92B4643B73066ADB8D8C1AD7B /* Info.plist */,
+				92D765F78E4067F875E5E13C1D0BFDDA /* Starscream.modulemap */,
+				1F7505DE3323D3C5B6CCC34ABCE858F7 /* Starscream.xcconfig */,
+				EF1F97EDE3A19124CAB7345AE230D044 /* Starscream-dummy.m */,
+				F59E8596F348E6771BC9C31DCD808577 /* Starscream-prefix.pch */,
+				B7678F5C2428E39997ACCEBE4013C3E1 /* Starscream-umbrella.h */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/Starscream";
+			sourceTree = "<group>";
+		};
+		F98B93F09F25967F765C199A8F958C4B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				2707E7FB0AED2E658FF176F506560810 /* Bugly.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1019,7 +1038,7 @@
 		};
 		36B8CAF5BB7FB191FC2365FF8D061E4F /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 037EAA2307B448319D3A29E4D89F94AF /* Starscream.xcconfig */;
+			baseConfigurationReference = 1F7505DE3323D3C5B6CCC34ABCE858F7 /* Starscream.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
@@ -1051,7 +1070,7 @@
 		};
 		3E5C98714068F712977A35BFDEACDDA1 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4010AFA6A2BF5194C7EB305FE5EA4851 /* Siren.xcconfig */;
+			baseConfigurationReference = B60B3FBAC1EDEEE51E1766822FA08931 /* Siren.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
@@ -1084,7 +1103,7 @@
 		};
 		47E3795B66E12770E443FB91C8130248 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4010AFA6A2BF5194C7EB305FE5EA4851 /* Siren.xcconfig */;
+			baseConfigurationReference = B60B3FBAC1EDEEE51E1766822FA08931 /* Siren.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
@@ -1116,7 +1135,7 @@
 		};
 		50ACF17AAB1AD679A796DA396EA78405 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C30E303FF1AED6C9BDBA8F61786D632D /* SwiftyJSON.xcconfig */;
+			baseConfigurationReference = 057C9EE11874F659F23CE20FB81C2B1E /* SwiftyJSON.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
@@ -1183,7 +1202,7 @@
 		};
 		8437135167091F3DA72B2BFA5EF37610 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4360068EA775035502FAB721CFFBF88E /* DeepDiff.xcconfig */;
+			baseConfigurationReference = 44733C4BEBBD88E066C92E8FB5EC7242 /* DeepDiff.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
@@ -1215,7 +1234,7 @@
 		};
 		9C62D0862FF3867A369AFA3BAAD001CC /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C30E303FF1AED6C9BDBA8F61786D632D /* SwiftyJSON.xcconfig */;
+			baseConfigurationReference = 057C9EE11874F659F23CE20FB81C2B1E /* SwiftyJSON.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
@@ -1310,7 +1329,7 @@
 		};
 		A9B00215E23CF9B3EE9DD5EC577C7A41 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 037EAA2307B448319D3A29E4D89F94AF /* Starscream.xcconfig */;
+			baseConfigurationReference = 1F7505DE3323D3C5B6CCC34ABCE858F7 /* Starscream.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
@@ -1414,7 +1433,7 @@
 		};
 		C8307BE31E29F90D5B0C439047F353D3 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4360068EA775035502FAB721CFFBF88E /* DeepDiff.xcconfig */;
+			baseConfigurationReference = 44733C4BEBBD88E066C92E8FB5EC7242 /* DeepDiff.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
