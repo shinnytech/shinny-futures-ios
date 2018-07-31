@@ -16,8 +16,8 @@ class TransactionViewController: UIViewController, PriceKeyboardViewDelegate, Vo
     let dataManager = DataManager.getInstance()
     var priceType = "最新价"
     var direction = ""
-    var key = ""
     var exchange_id = ""
+    var instrument_id = ""
     var isClosePriceShow = false
 
     @IBOutlet weak var balance: UILabel!
@@ -96,12 +96,10 @@ class TransactionViewController: UIViewController, PriceKeyboardViewDelegate, Vo
         price.text = "最新价"
         priceType = "最新价"
         var position: JSON?
-        let instrumentId = dataManager.sInstrumentId
-        if let exchange_id = (dataManager.sSearchEntities[instrumentId]?.exchange_id) {
-            self.key = exchange_id + "." + instrumentId
-            self.exchange_id = exchange_id
-            position = dataManager.sRtnPositions[key]
-        }
+        instrument_id = String(dataManager.sInstrumentId.split(separator: ".")[1])
+        exchange_id = String(dataManager.sInstrumentId.split(separator: ".")[0])
+        position = dataManager.sRtnPositions[dataManager.sInstrumentId]
+
         if let position = position {
             let available_long = position[PositionConstants.volume_long_today].intValue + position[PositionConstants.volume_long_his].intValue
             let volume_long = available_long + position[PositionConstants.volume_long_frozen].intValue
@@ -150,12 +148,10 @@ class TransactionViewController: UIViewController, PriceKeyboardViewDelegate, Vo
 
     func refreshPosition() {
         var position: JSON?
-        let instrumentId = dataManager.sInstrumentId
-        if let exchange_id = (dataManager.sSearchEntities[instrumentId]?.exchange_id) {
-            self.key = exchange_id + "." + instrumentId
-            self.exchange_id = exchange_id
-            position = dataManager.sRtnPositions[key]
-        }
+        instrument_id = String(dataManager.sInstrumentId.split(separator: ".")[1])
+        exchange_id = String(dataManager.sInstrumentId.split(separator: ".")[0])
+        position = dataManager.sRtnPositions[dataManager.sInstrumentId]
+
         if let position = position {
             let available_long = position[PositionConstants.volume_long_today].intValue + position[PositionConstants.volume_long_his].intValue
             let volume_long = available_long + position[PositionConstants.volume_long_frozen].intValue
@@ -293,7 +289,7 @@ class TransactionViewController: UIViewController, PriceKeyboardViewDelegate, Vo
             let message_history = "\(dataManager.sInstrumentId), \(price), 平昨, \(volume)手"
             let searchEntity = dataManager.sSearchEntities[dataManager.sInstrumentId]
             if searchEntity != nil, let exchange_name = searchEntity?.exchange_name, "上海国际能源交易中心".elementsEqual(exchange_name) || "上海国际能源交易中心".elementsEqual(exchange_name) {
-                guard let position = dataManager.sRtnPositions[key] else {return}
+                guard let position = dataManager.sRtnPositions[dataManager.sInstrumentId] else {return}
                 var volumre_today = 0
                 var volume_history = 0
                 if "多".elementsEqual(direction) {
@@ -308,27 +304,27 @@ class TransactionViewController: UIViewController, PriceKeyboardViewDelegate, Vo
                     if volume <= volumre_today || volume <= volume_history {
                         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
                         alert.addAction(UIAlertAction(title: "平今", style: .default) { _ in
-                            self.initOrderAlert(title: title, message: message_today, orderId: "\(order_id)", exchangeId: self.exchange_id, instrumentId: self.dataManager.sInstrumentId, direction: direction, offset: "CLOSETODAY", volume: volume, priceType: "LIMIT", price: price)
+                            self.initOrderAlert(title: title, message: message_today, orderId: "\(order_id)", exchangeId: self.exchange_id, instrumentId: self.instrument_id, direction: direction, offset: "CLOSETODAY", volume: volume, priceType: "LIMIT", price: price)
                         })
                         alert.addAction(UIAlertAction(title: "平昨", style: .default) { _ in
-                            self.initOrderAlert(title: title, message: message_history, orderId: "\(order_id)", exchangeId: self.exchange_id, instrumentId: self.dataManager.sInstrumentId, direction: direction, offset: "CLOSE", volume: volume, priceType: "LIMIT", price: price)
+                            self.initOrderAlert(title: title, message: message_history, orderId: "\(order_id)", exchangeId: self.exchange_id, instrumentId: self.instrument_id, direction: direction, offset: "CLOSE", volume: volume, priceType: "LIMIT", price: price)
                         })
                         present(alert, animated: true)
                     } else if volume > volumre_today || volume > volume_history {
                         let volume_sub = volume - volumre_today
                         let message1 = "\(dataManager.sInstrumentId), \(price), 平今, \(volumre_today)手"
                         let message2 = "\(dataManager.sInstrumentId), \(price), 平昨, \(volume_sub)手"
-                        initOrderAlert(title: title, message1: message1, message2: message2, orderId: "\(order_id)", exchangeId: exchange_id, instrumentId: dataManager.sInstrumentId, direction: direction, offset1: "CLOSETODAY", offset2: "CLOSE", volume1: volumre_today, volume2: volume_sub, priceType: "LIMIT", price: price)
+                        initOrderAlert(title: title, message1: message1, message2: message2, orderId: "\(order_id)", exchangeId: exchange_id, instrumentId: instrument_id, direction: direction, offset1: "CLOSETODAY", offset2: "CLOSE", volume1: volumre_today, volume2: volume_sub, priceType: "LIMIT", price: price)
                     }
                 } else if volumre_today == 0 && volume_history > 0 {
-                    initOrderAlert(title: title, message: message_history, orderId: "\(order_id)", exchangeId: exchange_id, instrumentId: dataManager.sInstrumentId, direction: direction, offset: "CLOSE", volume: volume, priceType: "LIMIT", price: price)
+                    initOrderAlert(title: title, message: message_history, orderId: "\(order_id)", exchangeId: exchange_id, instrumentId: instrument_id, direction: direction, offset: "CLOSE", volume: volume, priceType: "LIMIT", price: price)
                 } else if volumre_today > 0 && volume_history == 0 {
-                    initOrderAlert(title: title, message: message_today, orderId: "\(order_id)", exchangeId: exchange_id, instrumentId: dataManager.sInstrumentId, direction: direction, offset: "CLOSETODAY", volume: volume, priceType: "LIMIT", price: price)
+                    initOrderAlert(title: title, message: message_today, orderId: "\(order_id)", exchangeId: exchange_id, instrumentId: instrument_id, direction: direction, offset: "CLOSETODAY", volume: volume, priceType: "LIMIT", price: price)
                 }
 
             } else {
                 let message = "\(dataManager.sInstrumentId), \(price), 平仓, \(volume)手"
-                initOrderAlert(title: title, message: message, orderId: "\(order_id)", exchangeId: exchange_id, instrumentId: dataManager.sInstrumentId, direction: direction, offset: "CLOSE", volume: volume, priceType: "LIMIT", price: price)
+                initOrderAlert(title: title, message: message, orderId: "\(order_id)", exchangeId: exchange_id, instrumentId: instrument_id, direction: direction, offset: "CLOSE", volume: volume, priceType: "LIMIT", price: price)
             }
         }
     }
@@ -443,6 +439,7 @@ class TransactionViewController: UIViewController, PriceKeyboardViewDelegate, Vo
 
     //买开仓
     @objc func bidInsertOrder() {
+        self.view.endEditing(true)
         if let price = self.bid_order_price.text, let volume = self.volume.text {
             if price.elementsEqual("0") || price.elementsEqual(".") {
                 ToastUtils.showNegativeMessage(message: "价格输入不合法～")
@@ -458,12 +455,13 @@ class TransactionViewController: UIViewController, PriceKeyboardViewDelegate, Vo
             let title = "确认下单吗？"
             let order_id = Int(Date().timeIntervalSince1970)
             let message = "\(dataManager.sInstrumentId), \(price), 买开, \(volume)手"
-            initOrderAlert(title: title, message: message, orderId: "\(order_id)", exchangeId: exchange_id, instrumentId: dataManager.sInstrumentId, direction: "BUY", offset: "OPEN", volume: volume, priceType: "LIMIT", price: price)
+            initOrderAlert(title: title, message: message, orderId: "\(order_id)", exchangeId: exchange_id, instrumentId: instrument_id, direction: "BUY", offset: "OPEN", volume: volume, priceType: "LIMIT", price: price)
         }
     }
 
     //卖开仓
     @objc func askInsertOrder() {
+        self.view.endEditing(true)
         if let price = self.ask_order_price.text, let volume = self.volume.text {
             if price.elementsEqual("0") || price.elementsEqual(".") {
                 ToastUtils.showNegativeMessage(message: "价格输入不合法～")
@@ -479,12 +477,13 @@ class TransactionViewController: UIViewController, PriceKeyboardViewDelegate, Vo
             let title = "确认下单吗？"
             let order_id = Int(Date().timeIntervalSince1970)
             let message = "\(dataManager.sInstrumentId), \(price), 卖开, \(volume)手"
-            initOrderAlert(title: title, message: message, orderId: "\(order_id)", exchangeId: exchange_id, instrumentId: dataManager.sInstrumentId, direction: "SELL", offset: "OPEN", volume: volume, priceType: "LIMIT", price: price)
+            initOrderAlert(title: title, message: message, orderId: "\(order_id)", exchangeId: exchange_id, instrumentId: instrument_id, direction: "SELL", offset: "OPEN", volume: volume, priceType: "LIMIT", price: price)
         }
     }
 
     //平仓
     @objc func closeInsertOrder() {
+        self.view.endEditing(true)
         if let close_order_price = close_order_price.text {
             switch close_order_price {
             case "锁仓状态":

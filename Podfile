@@ -11,8 +11,6 @@ target 'shinnyfutures' do
   
   pod 'DeepDiff'
 
-  pod 'Bugly'
-
   pod 'Siren'
   
   # Pods for shinnyfutures

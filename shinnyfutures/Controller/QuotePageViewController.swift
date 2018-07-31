@@ -86,7 +86,7 @@ class QuotePageViewController: UIPageViewController, UIPageViewControllerDataSou
             return nil
         }
         // create a new view comtroller and pass suitable data
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let storyboard = UIStoryboard(name: "Main", bundle: Bundle(identifier: "com.shinnytech.futures"))
         if let contentViewController = storyboard.instantiateViewController(withIdentifier: CommonConstants.QuoteTableViewController) as? QuoteTableViewController {
             contentViewController.index = index
             return contentViewController

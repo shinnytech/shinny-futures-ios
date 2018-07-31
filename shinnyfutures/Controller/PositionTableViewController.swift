@@ -138,7 +138,7 @@ class PositionTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
-        let instrumentId = positions[indexPath.row][PositionConstants.instrument_id].stringValue
+        let instrumentId = positions[indexPath.row][PositionConstants.exchange_id].stringValue + "." + positions[indexPath.row][PositionConstants.instrument_id].stringValue
         if !dataManager.sInstrumentId.elementsEqual(instrumentId){
             dataManager.sInstrumentId = instrumentId
             NotificationCenter.default.post(name: Notification.Name(CommonConstants.SwitchQuoteNotification), object: nil)

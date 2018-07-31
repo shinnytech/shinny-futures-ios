@@ -7,8 +7,9 @@
 //
 
 import UIKit
+import SwiftyJSON
 
-class MainViewController: UIViewController {
+class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocketUtilsDelegate {
     // MARK: Properties
     @IBOutlet weak var slideMenuConstraint: NSLayoutConstraint!
     @IBOutlet weak var menu: UIStackView!
@@ -34,11 +35,140 @@ class MainViewController: UIViewController {
     var quotePageViewController: QuotePageViewController!
     var quoteNavigationCollectionViewController: QuoteNavigationCollectionViewController!
 
+    let mdWebSocketUtils = MDWebSocketUtils.getInstance()
+    let transactionWebSocketUtils = TDWebSocketUtils.getInstance()
+    var isMDClose = false
+    var isTDClose = false
+
+    func websocketDidConnect(socket: TDWebSocketUtils) {
+        NSLog("交易服务器连接成功～")
+        if isTDClose {
+            ToastUtils.showPositiveMessage(message: "交易服务器连接成功～")
+            isTDClose = false
+        }
+    }
+
+    func websocketDidDisconnect(socket: TDWebSocketUtils, error: Error?) {
+        NSLog("交易服务器连接断开，正在重连～")
+        isTDClose = true
+        ToastUtils.showNegativeMessage(message: "交易服务器连接断开，正在重连～")
+        DispatchQueue.global().asyncAfter(deadline: DispatchTime.now() + 10, execute: {
+            self.transactionWebSocketUtils.connect()
+        })
+    }
+
+    func websocketDidReceiveMessage(socket: TDWebSocketUtils, text: String) {
+        DispatchQueue.global().async {
+            let json = JSON(parseJSON: text)
+            let aid = json["aid"].stringValue
+            switch aid {
+            case "rtn_brokers":
+                DataManager.getInstance().parseBrokers(brokers: json)
+            case "rtn_data":
+                DataManager.getInstance().parseRtnTD(transactionData: json)
+            default:
+                return
+            }
+        }
+    }
+
+    func websocketDidReceiveData(socket: TDWebSocketUtils, data: Data) {
+        NSLog("交易服务器接收二进制数据")
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+
+    func websocketDidConnect(socket: MDWebSocketUtils) {
+        NSLog("行情服务器连接成功～")
+        if isMDClose {
+            ToastUtils.showPositiveMessage(message: "行情服务器连接成功～")
+            isMDClose = false
+        }
+    }
+
+    func websocketDidDisconnect(socket: MDWebSocketUtils, error: Error?) {
+        NSLog("行情服务器连接断开，正在重连～")
+        isMDClose = true
+        ToastUtils.showNegativeMessage(message: "行情服务器连接断开，正在重连～")
+        DispatchQueue.global().asyncAfter(deadline: DispatchTime.now() + 10, execute: {
+            self.mdWebSocketUtils.connect()
+        })
+    }
+
+    func websocketDidReceiveData(socket: MDWebSocketUtils, data: Data) {
+        NSLog("行情服务器接受二进制数据")
+    }
+
+    func websocketDidReceiveMessage(socket: MDWebSocketUtils, text: String) {
+        DispatchQueue.global().async {
+            let json = JSON(parseJSON: text)
+            let aid = json["aid"].stringValue
+            switch aid {
+            case "rsp_login":
+                socket.sendSubscribeQuote(insList: DataManager.getInstance().sQuotes[1].sorted(by: {$0.key < $1.key}).map {$0.key}[0..<CommonConstants.MAX_SUBSCRIBE_QUOTES].joined(separator: ","))
+            case "rtn_data":
+                DataManager.getInstance().parseRtnMD(rtnData: json)
+            default:
+                return
+            }
+            socket.sendPeekMessage()
+        }
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+
+    func sessionSimpleDownload(urlString: String, fileName: String) {
+        //下载地址
+        let url = URL(string: urlString)
+        //请求
+        let request = URLRequest(url: url!)
+        let session = URLSession.shared
+        let handler = { (location: URL?, _: URLResponse?, error: Error?) -> Void in
+            if error != nil {
+                print(error.debugDescription)
+                return
+            }
+            do {
+                let documentsURL = try
+                    FileManager.default.url(for: .documentDirectory,
+                                            in: .userDomainMask,
+                                            appropriateFor: nil,
+                                            create: false)
+                let savedURL = documentsURL.appendingPathComponent(fileName)
+                if FileManager.default.fileExists(atPath: savedURL.path) {
+                    try FileManager.default.removeItem(at: savedURL)
+                }
+                try FileManager.default.copyItem(at: location!, to: savedURL)
+                DataManager.getInstance().parseLatestFile()
+                NSLog("合约列表解析完毕")
+                DispatchQueue.main.async {
+                    NotificationCenter.default.post(name: Notification.Name(CommonConstants.LatestFileParsedNotification), object: nil)
+                }
+                self.mdWebSocketUtils.connect()
+                self.transactionWebSocketUtils.connect()
+            } catch {
+                print ("file error: \(error)")
+            }
+        }
+        //下载任务
+        let downloadTask = session.downloadTask(with: request, completionHandler: handler)
+        //使用resume方法启动任务
+        downloadTask.resume()
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+
+
     override func viewDidLoad() {
         super.viewDidLoad()
+        UIApplication.shared.statusBarStyle = .lightContent
         let dict: NSDictionary = [NSAttributedStringKey.foregroundColor: UIColor.white, NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 18)]
-        self.navigationController?.navigationBar.barTintColor = UIColor.black
         self.navigationController?.navigationBar.titleTextAttributes = dict as? [NSAttributedStringKey: Any]
+        self.navigationController?.navigationBar.barTintColor = UIColor.black
+        self.navigationController?.navigationBar.tintColor = UIColor.white
+        self.mdWebSocketUtils.mdWebSocketUtilsDelegate = self
+        self.transactionWebSocketUtils.tdWebSocketUtilsDelegate = self
+        sessionSimpleDownload(urlString: CommonConstants.LATEST_FILE_URL, fileName: "latest.json")
         initSlideMenuWidth()
     }
 
@@ -106,7 +236,7 @@ class MainViewController: UIViewController {
             performSegue(withIdentifier: CommonConstants.LoginViewController, sender: sender)
         } else {
             performSegue(withIdentifier: CommonConstants.QuoteViewController, sender: sender)
-            let instrumentId = DataManager.getInstance().sQuotes[1].sorted(by: {$0.key < $1.key}).map {$0.key}[0]
+            let instrumentId = DataManager.getInstance().sQuotes[1].sorted(by: {$0.key.split(separator: ".")[1] < $1.key.split(separator: ".")[1]}).map {$0.key}[0]
             //进入合约详情页的入口有：合约列表页，登陆页，搜索页，主页
             DataManager.getInstance().sPreInsList = DataManager.getInstance().sRtnMD[RtnMDConstants.ins_list].stringValue
             DataManager.getInstance().sInstrumentId = instrumentId

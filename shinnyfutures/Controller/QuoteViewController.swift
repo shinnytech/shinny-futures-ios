@@ -32,7 +32,7 @@ class QuoteViewController: UIViewController, UIPopoverPresentationControllerDele
         let title = dataManager.sSearchEntities[dataManager.sInstrumentId]?.instrument_name
         button.frame = CGRect(x: 0, y: 0, width: 100, height: 40)
         button.setTitle(title, for: .normal)
-        button.setImage(UIImage(named: "down"), for: .normal)
+          button.setImage(UIImage(named: "down", in: Bundle(identifier: "com.shinnytech.futures"), compatibleWith: nil), for: .normal)
         button.layoutIfNeeded()
         button.imageEdgeInsets = UIEdgeInsetsMake(0, (button.titleLabel?.frame.size.width)!, 0, -(button.titleLabel?.frame.size.width)!)
         button.titleEdgeInsets = UIEdgeInsetsMake(0, -(button.titleLabel?.frame.origin.x)!, 0, (button.titleLabel?.frame.origin.x)!)
@@ -42,7 +42,7 @@ class QuoteViewController: UIViewController, UIPopoverPresentationControllerDele
         //设置按钮背景
         let optional = FileUtils.getOptional()
         if optional.contains(dataManager.sInstrumentId){
-            save.image = UIImage(named: "heart")
+            save.image = UIImage(named: "heart", in: Bundle(identifier: "com.shinnytech.futures"), compatibleWith: nil)
         }
         // Do any additional setup after loading the view, typically from a nib.
         currentDay.setTitleColor(UIColor.yellow, for: .normal)
@@ -109,9 +109,9 @@ class QuoteViewController: UIViewController, UIPopoverPresentationControllerDele
         //设置按钮背景
         let optional = FileUtils.getOptional()
         if optional.contains(dataManager.sInstrumentId){
-            save.image = UIImage(named: "heart")
+            save.image = UIImage(named: "heart", in: Bundle(identifier: "com.shinnytech.futures"), compatibleWith: nil)
         }else{
-            save.image = UIImage(named: "heart_outline")
+            save.image = UIImage(named: "heart_outline", in: Bundle(identifier: "com.shinnytech.futures"), compatibleWith: nil)
         }
     }
 
@@ -230,7 +230,7 @@ class QuoteViewController: UIViewController, UIPopoverPresentationControllerDele
 
     // MARK: objc methods
     @objc func optionalInsListPopup() {
-        if let optionalPopupView = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: CommonConstants.OptionalPopupCollectionViewController) as? OptionalPopupCollectionViewController {
+        if let optionalPopupView = UIStoryboard(name: "Main", bundle: Bundle(identifier: "com.shinnytech.futures")).instantiateViewController(withIdentifier: CommonConstants.OptionalPopupCollectionViewController) as? OptionalPopupCollectionViewController {
             optionalPopupView.modalPresentationStyle = .popover
             //箭头所指向的区域
             optionalPopupView.popoverPresentationController?.sourceView = self.navigationItem.titleView
@@ -266,6 +266,14 @@ class QuoteViewController: UIViewController, UIPopoverPresentationControllerDele
     @objc func sendSuscribeQuote(){
         let instrumentId = dataManager.sInstrumentId
         MDWebSocketUtils.getInstance().sendSubscribeQuote(insList: instrumentId)
+        //设置按钮背景
+        let optional = FileUtils.getOptional()
+        if optional.contains(instrumentId){
+            save.image = UIImage(named: "heart", in: Bundle(identifier: "com.shinnytech.futures"), compatibleWith: nil)
+        }else{
+            save.image = UIImage(named: "heart_outline", in: Bundle(identifier: "com.shinnytech.futures"), compatibleWith: nil)
+        }
+
     }
 
 }

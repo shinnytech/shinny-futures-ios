@@ -173,7 +173,6 @@
 		D420B2ED20E2207E0045B6AF /* MyCandleStickChartRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyCandleStickChartRenderer.swift; sourceTree = "<group>"; };
 		D420B2EE20E2207F0045B6AF /* MyCombinedChartRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyCombinedChartRenderer.swift; sourceTree = "<group>"; };
 		D420B2EF20E2207F0045B6AF /* KlineXAxisRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KlineXAxisRenderer.swift; sourceTree = "<group>"; };
-		D420B30320E9C2790045B6AF /* shinnyfutures-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "shinnyfutures-Bridging-Header.h"; sourceTree = "<group>"; };
 		D42EE5272071D3C600EF8066 /* Search.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Search.swift; sourceTree = "<group>"; };
 		D42EE5292071D55700EF8066 /* SearchTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTableViewCell.swift; sourceTree = "<group>"; };
 		D42EE52B20721ED000EF8066 /* SearchTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTableViewController.swift; sourceTree = "<group>"; };
@@ -309,7 +308,6 @@
 		D480224D20688A180033E202 = {
 			isa = PBXGroup;
 			children = (
-				D420B30320E9C2790045B6AF /* shinnyfutures-Bridging-Header.h */,
 				D420B27E20DD00090045B6AF /* Charts.xcodeproj */,
 				D480225820688A180033E202 /* shinnyfutures */,
 				D480226D20688A180033E202 /* shinnyfuturesTests */,
@@ -543,7 +541,7 @@
 				TargetAttributes = {
 					D480225520688A180033E202 = {
 						CreatedOnToolsVersion = 9.2;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 					};
 					D480226920688A180033E202 = {
 						CreatedOnToolsVersion = 9.2;
@@ -974,8 +972,8 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = ETY2JG84H2;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -986,8 +984,9 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.shinnytech.futures;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE = "d39e462c-8999-45f5-a92b-85fd3ec25c48";
+				PROVISIONING_PROFILE_SPECIFIER = futures;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "";
@@ -1001,8 +1000,8 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = ETY2JG84H2;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1014,8 +1013,9 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.shinnytech.futures;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE = "d39e462c-8999-45f5-a92b-85fd3ec25c48";
+				PROVISIONING_PROFILE_SPECIFIER = futures;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "";

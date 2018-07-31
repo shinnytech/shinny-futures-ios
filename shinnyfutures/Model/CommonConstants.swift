@@ -10,7 +10,7 @@ import Foundation
 
 class CommonConstants {
     public static let LATEST_FILE_URL = "http://ins.shinnytech.com/publicdata/latest.json"
-    public static let QUOTE_URL = "ws://mdapi.shinnytech.com/t/md/front/mobile"
+    public static let QUOTE_URL = "ws://openmd.shinnytech.com/t/md/front/mobile"
     public static let TRANSACTION_URL = "ws://118.31.237.98:3918"
     public static let REDMINE_URL = "http://redmine.kuaiqi.net/src/"
     public static let KLINE_MINUTE = "300000000000"

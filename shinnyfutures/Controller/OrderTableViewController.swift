@@ -196,11 +196,12 @@ class OrderTableViewController: UIViewController, UITableViewDataSource, UITable
     
     // MARK: objc Methods
     @objc private func loadData() {
+        let orders_tmp = dataManager.sRtnOrders.sorted{ $0.value[OrderConstants.insert_date_time].stringValue > $1.value[OrderConstants.insert_date_time].stringValue }.map {$0.value}
         if orders.count == 0 {
             if segmentControl.selectedSegmentIndex == 0 {
-                orders = dataManager.sRtnOrders.sorted(by: >).map {$0.value}
+                orders = orders_tmp
             } else {
-                for order in dataManager.sRtnOrders.sorted(by: >).map({$0.value}) {
+                for order in orders_tmp {
                     let status = order[OrderConstants.status].stringValue
                     if "ALIVE".elementsEqual(status){
                         orders.append(order)
@@ -211,10 +212,10 @@ class OrderTableViewController: UIViewController, UITableViewDataSource, UITable
         } else {
             let oldData = orders
             if segmentControl.selectedSegmentIndex == 0 {
-                orders = dataManager.sRtnOrders.sorted(by: >).map {$0.value}
+                orders = orders_tmp
             } else {
                 orders.removeAll()
-                for order in dataManager.sRtnOrders.sorted(by: >).map({$0.value}) {
+                for order in orders_tmp {
                     let status = order[OrderConstants.status].stringValue
                     if "ALIVE".elementsEqual(status) {
                         orders.append(order)

@@ -18,6 +18,7 @@ class QuoteTableViewController: UITableViewController, UIPopoverPresentationCont
     var index = 1
     var isChangePercent = true
     var isOpenInterest = true
+    var isUpperLimit = true
     var isRefresh = true
     var quotes = [Quote]()
     var insList = [String]()
@@ -29,8 +30,8 @@ class QuoteTableViewController: UITableViewController, UIPopoverPresentationCont
         let longPressGusture = UILongPressGestureRecognizer(target: self, action: #selector(QuoteTableViewController.longPress(longPressGestureRecognizer:)))
         tableView.addGestureRecognizer(longPressGusture)
         NotificationCenter.default.addObserver(self, selector: #selector(initInsList), name: Notification.Name(CommonConstants.RefreshOptionalInsListNotification), object: nil)
-        quotes = dataManager.sQuotes[self.index].sorted(by: {$0.key < $1.key}).map {$0.value}
-        insList = dataManager.sQuotes[self.index].sorted(by: {$0.key < $1.key}).map {$0.key}
+        quotes = dataManager.sQuotes[self.index].sorted(by: {$0.key.split(separator: ".")[1] < $1.key.split(separator: ".")[1]}).map {$0.value}
+        insList = dataManager.sQuotes[self.index].sorted(by: {$0.key.split(separator: ".")[1] < $1.key.split(separator: ".")[1]}).map {$0.key}
     }
     
     //iPhone下默认是.overFullScreen(全屏显示)，需要返回.none，否则没有弹出框效果，iPad则不需要
@@ -77,25 +78,53 @@ class QuoteTableViewController: UITableViewController, UIPopoverPresentationCont
         let quote = quotes[indexPath.row]
         let instrumentId = quote.instrument_id
         let decimal = dataManager.getDecimalByPtick(instrumentId: instrumentId)
-
         cell.name.text = quote.instrument_name
-        let last = quote.last_price
-        if last.contains("-") {cell.last.textColor = UIColor.green} else {cell.last.textColor = UIColor.red}
-        cell.last.text = dataManager.saveDecimalByPtick(decimal: decimal, data: last)
-        if isChangePercent {
-            let change_percent = quote.change_percent
-            if change_percent.contains("-") {cell.changePercent.textColor = UIColor.green} else {cell.changePercent.textColor = UIColor.red}
-            cell.changePercent.text = dataManager.saveDecimalByPtick(decimal: 2, data: change_percent)
-        } else {
-            let change = quote.change
-            if change.contains("-") {cell.changePercent.textColor = UIColor.green} else {cell.changePercent.textColor = UIColor.red}
-            cell.changePercent.text = dataManager.saveDecimalByPtick(decimal: decimal, data: change)
+
+        if index == 7 || index == 8 {
+            if isUpperLimit {
+                let upper_limit = quote.upper_limit
+                if upper_limit.contains("-") {cell.last.textColor = UIColor.green} else {cell.last.textColor = UIColor.red}
+                cell.last.text = dataManager.saveDecimalByPtick(decimal: decimal, data: upper_limit)
+            }else{
+                let lower_limit = quote.lower_limit
+                if lower_limit.contains("-") {cell.last.textColor = UIColor.green} else {cell.last.textColor = UIColor.red}
+                cell.last.text = dataManager.saveDecimalByPtick(decimal: decimal, data: lower_limit)
+            }
+
+            if isChangePercent {
+                let bid_price1 = quote.bid_price1
+                if bid_price1.contains("-") {cell.changePercent.textColor = UIColor.green} else {cell.changePercent.textColor = UIColor.red}
+                cell.changePercent.text = dataManager.saveDecimalByPtick(decimal: decimal, data: bid_price1)
+            } else {
+                let ask_price1 = quote.ask_price1
+                if ask_price1.contains("-") {cell.changePercent.textColor = UIColor.green} else {cell.changePercent.textColor = UIColor.red}
+                cell.changePercent.text = dataManager.saveDecimalByPtick(decimal: decimal, data: ask_price1)
+            }
+            if isOpenInterest {
+                cell.openInterest.text = quote.bid_volume1
+            } else {
+                cell.openInterest.text = quote.ask_volume1
+            }
+        }else{
+            let last = quote.last_price
+            if last.contains("-") {cell.last.textColor = UIColor.green} else {cell.last.textColor = UIColor.red}
+            cell.last.text = dataManager.saveDecimalByPtick(decimal: decimal, data: last)
+            if isChangePercent {
+                let change_percent = quote.change_percent
+                if change_percent.contains("-") {cell.changePercent.textColor = UIColor.green} else {cell.changePercent.textColor = UIColor.red}
+                cell.changePercent.text = dataManager.saveDecimalByPtick(decimal: 2, data: change_percent)
+            } else {
+                let change = quote.change
+                if change.contains("-") {cell.changePercent.textColor = UIColor.green} else {cell.changePercent.textColor = UIColor.red}
+                cell.changePercent.text = dataManager.saveDecimalByPtick(decimal: decimal, data: change)
+            }
+            if isOpenInterest {
+                cell.openInterest.text = quote.open_interest
+            } else {
+                cell.openInterest.text = quote.volume
+            }
         }
-        if isOpenInterest {
-            cell.openInterest.text = quote.open_interest
-        } else {
-            cell.openInterest.text = quote.volume
-        }
+
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -117,32 +146,60 @@ class QuoteTableViewController: UITableViewController, UIPopoverPresentationCont
         name.textAlignment = .center
         let last = UILabel()
         last.textColor = UIColor.white
-        last.text = "最新价"
         last.textAlignment = .center
+        let tapUpperLimit = UITapGestureRecognizer(target: self, action: #selector(QuoteTableViewController.tapUpperLimit))
+        last.isUserInteractionEnabled = true
+        last.addGestureRecognizer(tapUpperLimit)
+
         let changePercent = UILabel()
         changePercent.textColor = UIColor.white
-        if isChangePercent {
-            changePercent.text = "涨跌幅%⇲"
-        } else {
-            changePercent.text = "涨跌⇲"
-        }
         changePercent.backgroundColor = UIColor(red: 51/255, green: 51/255, blue: 51/255, alpha: 1.0)
         changePercent.textAlignment = .center
         let tapChangePercent = UITapGestureRecognizer(target: self, action: #selector(QuoteTableViewController.tapChangePercent))
         changePercent.isUserInteractionEnabled = true
         changePercent.addGestureRecognizer(tapChangePercent)
+
         let openInterest = UILabel()
         openInterest.backgroundColor = UIColor(red: 31/255, green:31/255, blue: 31/255, alpha: 1.0)
         openInterest.textColor = UIColor.white
-        if isOpenInterest {
-            openInterest.text = "持仓量⇲"
-        } else {
-            openInterest.text = "成交量⇲"
-        }
         openInterest.textAlignment = .center
         let tapOpenInterest = UITapGestureRecognizer(target: self, action: #selector(QuoteTableViewController.tapOpenInterest))
         openInterest.isUserInteractionEnabled = true
         openInterest.addGestureRecognizer(tapOpenInterest)
+
+        if index == 7 || index == 8 {
+            if isUpperLimit {
+                last.text = "涨停价⇲"
+            }else{
+                last.text = "跌停价⇲"
+            }
+
+            if isChangePercent {
+                changePercent.text = "买价⇲"
+            } else {
+                changePercent.text = "卖价⇲"
+            }
+
+            if isOpenInterest {
+                openInterest.text = "买量⇲"
+            } else {
+                openInterest.text = "卖量⇲"
+            }
+        }else {
+            last.text = "最新价"
+            if isChangePercent {
+                changePercent.text = "涨跌幅%⇲"
+            } else {
+                changePercent.text = "涨跌⇲"
+            }
+
+            if isOpenInterest {
+                openInterest.text = "持仓量⇲"
+            } else {
+                openInterest.text = "成交量⇲"
+            }
+        }
+
         stackView.addArrangedSubview(name)
         stackView.addArrangedSubview(last)
         stackView.addArrangedSubview(changePercent)
@@ -257,6 +314,11 @@ class QuoteTableViewController: UITableViewController, UIPopoverPresentationCont
         }
     }
     
+    @objc func tapUpperLimit() {
+        isUpperLimit = !isUpperLimit
+        tableView.reloadData()
+    }
+
     @objc func tapChangePercent() {
         isChangePercent = !isChangePercent
         tableView.reloadData()
@@ -291,6 +353,12 @@ class QuoteTableViewController: UITableViewController, UIPopoverPresentationCont
                         }
                         quote?.open_interest = quoteJson[QuoteConstants.open_interest].stringValue
                         quote?.volume = quoteJson[QuoteConstants.volume].stringValue
+                        quote?.ask_volume1 = quoteJson[QuoteConstants.ask_volume1].stringValue
+                        quote?.ask_price1 = quoteJson[QuoteConstants.ask_price1].stringValue
+                        quote?.bid_volume1 = quoteJson[QuoteConstants.bid_volume1].stringValue
+                        quote?.bid_price1 = quoteJson[QuoteConstants.bid_price1].stringValue
+                        quote?.upper_limit = quoteJson[QuoteConstants.upper_limit].stringValue
+                        quote?.lower_limit = quoteJson[QuoteConstants.lower_limit].stringValue
                         quotes[index] = quote!
                     }
                 }
@@ -306,8 +374,8 @@ class QuoteTableViewController: UITableViewController, UIPopoverPresentationCont
 
     @objc func initInsList(){
         if index == 0 {
-            quotes = dataManager.sQuotes[self.index].sorted(by: {$0.key < $1.key}).map {$0.value}
-            insList = dataManager.sQuotes[self.index].sorted(by: {$0.key < $1.key}).map {$0.key}
+            quotes = dataManager.sQuotes[self.index].sorted(by: {$0.key.split(separator: ".")[1] < $1.key.split(separator: ".")[1]}).map {$0.value}
+            insList = dataManager.sQuotes[self.index].sorted(by: {$0.key.split(separator: ".")[1] < $1.key.split(separator: ".")[1]}).map {$0.key}
         }
     }
 }

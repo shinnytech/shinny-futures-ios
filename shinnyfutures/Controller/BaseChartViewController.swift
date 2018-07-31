@@ -45,7 +45,6 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
     var xVals = [Int: Int]()
     var dataEntities = [String: JSON]()
     var klineType = ""
-    var exchange_id = ""
     var doubleTap: UITapGestureRecognizer!
 
     override func viewDidLoad() {
@@ -149,10 +148,6 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
             self.preSettlement = 1.0
         }
 
-        if let exchange_id = dataManager.sSearchEntities[dataManager.sInstrumentId]?.exchange_id {
-            self.exchange_id = exchange_id
-        }
-
         isShowOrderLine = UserDefaults.standard.bool(forKey: "orderLine")
         isShowPositionLine = UserDefaults.standard.bool(forKey: "positionLine")
 
@@ -187,7 +182,7 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
     }
 
     func addLongPositionLimitLine() {
-        let key = exchange_id + "." + dataManager.sInstrumentId
+        let key = dataManager.sInstrumentId
         var vm = "1"
         if let search = dataManager.sSearchEntities[dataManager.sInstrumentId] {
             vm = search.vm
@@ -205,7 +200,7 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
     }
 
     func addShortPositionLimitLine() {
-        let key = exchange_id + "." + dataManager.sInstrumentId
+        let key = dataManager.sInstrumentId
         var vm = "1"
         if let search = dataManager.sSearchEntities[dataManager.sInstrumentId] {
             vm = search.vm
@@ -223,7 +218,7 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
     }
 
     func refreshLongPositionLimitLine() {
-        let key = exchange_id + "." + dataManager.sInstrumentId
+        let key = dataManager.sInstrumentId
         var vm = "1"
         if let search = dataManager.sSearchEntities[dataManager.sInstrumentId] {
             vm = search.vm
@@ -250,7 +245,7 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
     }
 
     func refreshShortPositionLimitLine() {
-        let key = exchange_id + "." + dataManager.sInstrumentId
+        let key = dataManager.sInstrumentId
         var vm = "1"
         if let search = dataManager.sSearchEntities[dataManager.sInstrumentId] {
             vm = search.vm
@@ -330,7 +325,7 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
     // MARK: objc methods
     @objc func refreshPositionLine() {
         if dataManager.sIsLogin && isShowPositionLine {
-            let key = exchange_id + "." + dataManager.sInstrumentId
+            let key = dataManager.sInstrumentId
             let position0 = positionLimitLines[key + "0"]
             let position1 = positionLimitLines[key + "1"]
             if position0 == nil {
@@ -413,10 +408,7 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
         removeOrderLimitLines()
         removePositionLimitLines()
         chartView.clear()
-        
-        if let exchange_id = dataManager.sSearchEntities[dataManager.sInstrumentId]?.exchange_id {
-            self.exchange_id = exchange_id
-        }
+   
         addOrderLimitLines()
         addPositionLimitLines()
     }

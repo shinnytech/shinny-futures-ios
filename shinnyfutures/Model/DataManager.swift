@@ -77,12 +77,13 @@ class DataManager {
                     var aRepeat = 0
                     for instrumentId in insJson.dictionaryValue.keys.sorted(by: <) {
                         let instrumentName = sn + instrumentId.suffix(instrumentId.count - futureId.count)
-                        let searchEntity = Search(instrument_id: instrumentId, instrument_name: instrumentName, exchange_name: "", exchange_id: ei, py: py, p_tick: pTick, vm: vm)
+                        let ins = ei + "." + instrumentId
+                        let searchEntity = Search(instrument_id: ins, instrument_name: instrumentName, exchange_name: "", exchange_id: ei, py: py, p_tick: pTick, vm: vm)
                         let quote = Quote()
-                        quote?.instrument_id = instrumentId
+                        quote?.instrument_id = ins
                         quote?.instrument_name = instrumentName
                         if (mainIns.contains(instrumentId)) {
-                            sMainQuotes[instrumentId] = quote
+                            sMainQuotes[ins] = quote
                             if aRepeat == 0 {
                                 sMainInsListNameNav.append(sn)
                                 aRepeat += 1
@@ -90,35 +91,35 @@ class DataManager {
                         }
                         switch ei {
                         case "SHFE":
-                            sShangqiQuotes[instrumentId] = quote
+                            sShangqiQuotes[ins] = quote
                             if bRepeat == 0 {
                                 sShangqiInsListNameNav.append(sn)
                                 bRepeat += 1
                             }
                             searchEntity.exchange_name = "上海期货交易所"
                         case "CZCE":
-                            sZhengzhouQuotes[instrumentId] = quote
+                            sZhengzhouQuotes[ins] = quote
                             if bRepeat == 0 {
                                 sZhengzhouInsListNameNav.append(sn)
                                 bRepeat += 1
                             }
                             searchEntity.exchange_name = "郑州商品交易所"
                         case "DCE":
-                            sDalianQuotes[instrumentId] = quote
+                            sDalianQuotes[ins] = quote
                             if bRepeat == 0 {
                                 sDalianInsListNameNav.append(sn)
                                 bRepeat += 1
                             }
                             searchEntity.exchange_name = "大连商品交易所"
                         case "CFFEX":
-                            sZhongjinQuotes[instrumentId] = quote
+                            sZhongjinQuotes[ins] = quote
                             if bRepeat == 0 {
                                 sZhongjinInsListNameNav.append(sn)
                                 bRepeat += 1
                             }
                             searchEntity.exchange_name = "中国金融期货交易所"
                         case "INE":
-                            sNengyuanQuotes[instrumentId] = quote
+                            sNengyuanQuotes[ins] = quote
                             if bRepeat == 0 {
                                 sNengyuanInsListNameNav.append(sn)
                                 bRepeat += 1
@@ -127,7 +128,7 @@ class DataManager {
                         default:
                             return
                         }
-                        sSearchEntities[instrumentId] = searchEntity
+                        sSearchEntities[ins] = searchEntity
                     }
                 }
 
@@ -141,29 +142,30 @@ class DataManager {
                     var bRepeat = 0
                     for (instrumentId, subJson): (String, JSON) in insJson.sorted(by: <) {
                         if subJson.count == 0 {
-                            let searchEntity = Search(instrument_id: instrumentId, instrument_name: instrumentId, exchange_name: "", exchange_id: ei, py: "", p_tick: pTick, vm: vm)
+                            let ins = ei + "." + instrumentId
+                            let searchEntity = Search(instrument_id: ins, instrument_name: instrumentId, exchange_name: "", exchange_id: ei, py: "", p_tick: pTick, vm: vm)
                             let quote = Quote()
-                            quote?.instrument_id = instrumentId
+                            quote?.instrument_id = ins
                             quote?.instrument_name = instrumentId
                             switch ei {
                             case "CZCE":
-                                sZhengzhouzeheQuotes[instrumentId] = quote
+                                sZhengzhouzeheQuotes[ins] = quote
                                 if bRepeat == 0 {
-                                    sZhengzhouzeheInsListNameNav.append(instrumentId)
+                                    sZhengzhouzeheInsListNameNav.append(ins)
                                     bRepeat += 1
                                 }
                                 searchEntity.exchange_name = "郑州商品交易所"
                             case "DCE":
-                                sDalianzuheQuotes[instrumentId] = quote
+                                sDalianzuheQuotes[ins] = quote
                                 if bRepeat == 0 {
-                                    sDalianzuheInsListNameNav.append(instrumentId)
+                                    sDalianzuheInsListNameNav.append(ins)
                                     bRepeat += 1
                                 }
                                 searchEntity.exchange_name = "大连商品交易所"
                             default:
                                 return
                             }
-                            sSearchEntities[instrumentId] = searchEntity
+                            sSearchEntities[ins] = searchEntity
                         }
                     }
                 }
@@ -259,6 +261,7 @@ class DataManager {
 
     func parseRtnMD(rtnData: JSON) {
         do {
+            print(rtnData)
 //            NSLog("解析开始")
             let dataArray = rtnData[RtnMDConstants.data].arrayValue
             for dataJson in dataArray {
@@ -308,6 +311,7 @@ class DataManager {
                                     NotificationCenter.default.post(name: Notification.Name(CommonConstants.TradeNotification), object: nil)
                                 }
                             case RtnTDConstants.positions:
+                                print(value.dictionaryValue)
                                 for (positionKey, position) in value.dictionaryValue {
                                     sRtnPositions[positionKey] = position
                                 }

@@ -14,10 +14,10 @@ class TransactionPageViewController: UIPageViewController, UIPageViewControllerD
     weak var quoteViewController: QuoteViewController?
     lazy var subViewControllers: [UIViewController] = {
         return [
-            UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: CommonConstants.HandicapViewController) as! HandicapViewController,
-            UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: CommonConstants.PositionTableViewController) as! PositionTableViewController,
-            UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: CommonConstants.OrderTableViewController) as! OrderTableViewController,
-            UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: CommonConstants.TransactionViewController) as! TransactionViewController]
+            UIStoryboard(name: "Main", bundle: Bundle(identifier: "com.shinnytech.futures")).instantiateViewController(withIdentifier: CommonConstants.HandicapViewController) as! HandicapViewController,
+            UIStoryboard(name: "Main", bundle: Bundle(identifier: "com.shinnytech.futures")).instantiateViewController(withIdentifier: CommonConstants.PositionTableViewController) as! PositionTableViewController,
+            UIStoryboard(name: "Main", bundle: Bundle(identifier: "com.shinnytech.futures")).instantiateViewController(withIdentifier: CommonConstants.OrderTableViewController) as! OrderTableViewController,
+            UIStoryboard(name: "Main", bundle: Bundle(identifier: "com.shinnytech.futures")).instantiateViewController(withIdentifier: CommonConstants.TransactionViewController) as! TransactionViewController]
     }()
 
     override func viewDidLoad() {

@@ -14,17 +14,6 @@
 		</dict>
 		<dict>
 			<key>FooterText</key>
-			<string>Copyright (C) 2017 Tencent Bugly, Inc. All rights reserved.
-</string>
-			<key>License</key>
-			<string>Copyright</string>
-			<key>Title</key>
-			<string>Bugly</string>
-			<key>Type</key>
-			<string>PSGroupSpecifier</string>
-		</dict>
-		<dict>
-			<key>FooterText</key>
 			<string>Licensed under the **MIT** license
 
 &gt; Copyright (c) 2015 Khoa Pham

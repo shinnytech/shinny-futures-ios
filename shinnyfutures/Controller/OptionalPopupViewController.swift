@@ -20,9 +20,9 @@ class OptionalPopupViewController: UIViewController {
         super.viewDidLoad()
         let optional = FileUtils.getOptional()
         if let ins = instrumentId, !optional.contains(ins) {
-            save.setImage(UIImage(named: "heart_outline"), for: .normal)
+            save.setImage(UIImage(named: "heart_outline", in: Bundle(identifier: "com.shinnytech.futures"), compatibleWith: nil), for: .normal)
         }else{
-            save.setImage(UIImage(named: "heart"), for: .normal)
+            save.setImage(UIImage(named: "heart", in: Bundle(identifier: "com.shinnytech.futures"), compatibleWith: nil), for: .normal)
         }
         // Do any additional setup after loading the view.
     }
@@ -38,9 +38,9 @@ class OptionalPopupViewController: UIViewController {
             manager.saveOrRemoveIns(ins: ins)
             let optional = FileUtils.getOptional()
             if let ins = instrumentId, !optional.contains(ins) {
-                save.setImage(UIImage(named: "heart_outline"), for: .normal)
+                save.setImage(UIImage(named: "heart_outline", in: Bundle(identifier: "com.shinnytech.futures"), compatibleWith: nil), for: .normal)
             }else{
-                save.setImage(UIImage(named: "heart"), for: .normal)
+                save.setImage(UIImage(named: "heart", in: Bundle(identifier: "com.shinnytech.futures"), compatibleWith: nil), for: .normal)
             }
             if isOptional {
                 MDWebSocketUtils.getInstance().sendSubscribeQuote(insList: FileUtils.getOptional().joined(separator: ","))

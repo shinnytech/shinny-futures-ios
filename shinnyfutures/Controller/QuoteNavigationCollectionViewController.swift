@@ -46,29 +46,39 @@ class QuoteNavigationCollectionViewController: UICollectionViewController {
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "QuoteNavigationCollectionViewCell", for: indexPath) as! QuoteNavigationCollectionViewCell
-
-        cell.quote.text = quotes[indexPath.row]
+        let instrumentName = quotes[indexPath.row]
+        if instrumentName.contains("&") {
+            let combineName = DataManager.getInstance().sSearchEntities[String(instrumentName.split(separator: ".")[0]) + "." + String(instrumentName.split(separator: " ")[1].split(separator: "&")[0])]?.instrument_name
+            let pattern = "\\d+"
+            let regex = try? NSRegularExpression(pattern: pattern, options: NSRegularExpression.Options(rawValue: 0))
+            let results = regex?.matches(in: combineName!, options: NSRegularExpression.MatchingOptions(rawValue: 0), range: NSRange(location: 0, length: combineName!.count))
+            for result in results! {
+                cell.quote.text = combineName!.replacingOccurrences(of: (combineName! as NSString).substring(with: result.range), with: "")
+            }
+        }else{
+            cell.quote.text = instrumentName
+        }
 
         return cell
     }
 
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if let cell = collectionView.cellForItem(at: indexPath) as? QuoteNavigationCollectionViewCell {
-            if let instrumentName = cell.quote.text {
-                if let quoteTableViewController = mainViewController.quotePageViewController.viewControllers?.first as? QuoteTableViewController {
-                    var count = 0
-                    let quotes = DataManager.getInstance().sQuotes[quoteTableViewController.index].sorted(by: {$0.key < $1.key}).map {$0.value}
-                    for quote in quotes {
-                        if quote.instrument_name.contains(instrumentName) {
-                            quoteTableViewController.tableView.scrollToRow(at: IndexPath(row: count, section: 0), at: .top, animated: false)
-                            quoteTableViewController.sendSubscribeQuotes()
-                        }
-                        count += 1
-                    }
-                }
-            }
-
+        var instrumentName = quotes[indexPath.row]
+        if instrumentName.contains("&"){
+            instrumentName = String(instrumentName.split(separator: ".")[1])
         }
+        if let quoteTableViewController = mainViewController.quotePageViewController.viewControllers?.first as? QuoteTableViewController {
+            var count = 0
+            let quotes = DataManager.getInstance().sQuotes[quoteTableViewController.index].sorted(by: {$0.key.split(separator: ".")[1] < $1.key.split(separator: ".")[1]}).map {$0.value}
+            for quote in quotes {
+                if quote.instrument_name.contains(instrumentName) {
+                    quoteTableViewController.tableView.scrollToRow(at: IndexPath(row: count, section: 0), at: .top, animated: false)
+                    quoteTableViewController.sendSubscribeQuotes()
+                }
+                count += 1
+            }
+        }
+
     }
 
     // MARK: Public Methods
@@ -78,19 +88,7 @@ class QuoteNavigationCollectionViewController: UICollectionViewController {
             return
         }
         for instrumentName in mananger.sInsListNames[index] {
-            if instrumentName.contains("&") {
-                let combineName = DataManager.getInstance().sSearchEntities[String(instrumentName.split(separator: " ")[1].split(separator: "&")[0])]?.instrument_name
-                let pattern = "\\d+"
-                guard let regex = try? NSRegularExpression(pattern: pattern, options: NSRegularExpression.Options(rawValue: 0)) else {
-                    return
-                }
-                let results = regex.matches(in: combineName!, options: NSRegularExpression.MatchingOptions(rawValue: 0), range: NSRange(location: 0, length: combineName!.count))
-                for result in results {
-                    quotes.append(combineName!.replacingOccurrences(of: (combineName! as NSString).substring(with: result.range), with: ""))
-                }
-            } else {
-                quotes.append(instrumentName)
-            }
+            quotes.append(instrumentName)
         }
         collectionView?.reloadData()
         //collectionView更改数据源清空collectionviewLayout的缓存，让autolayout重新计算UICollectionView的cell的size，防止崩溃
@@ -106,19 +104,7 @@ class QuoteNavigationCollectionViewController: UICollectionViewController {
             return
         }
         for instrumentName in mananger.sInsListNames[index] {
-            if instrumentName.contains("&") {
-                let combineName = DataManager.getInstance().sSearchEntities[String(instrumentName.split(separator: " ")[1].split(separator: "&")[0])]?.instrument_name
-                let pattern = "\\d+"
-                guard let regex = try? NSRegularExpression(pattern: pattern, options: NSRegularExpression.Options(rawValue: 0)) else {
-                    return
-                }
-                let results = regex.matches(in: combineName!, options: NSRegularExpression.MatchingOptions(rawValue: 0), range: NSRange(location: 0, length: combineName!.count))
-                for result in results {
-                    quotes.append(combineName!.replacingOccurrences(of: (combineName! as NSString).substring(with: result.range), with: ""))
-                }
-            } else {
-                quotes.append(instrumentName)
-            }
+            quotes.append(instrumentName)
         }
         self.collectionView?.reloadData()
         //collectionView更改数据源清空collectionviewLayout的缓存，让autolayout重新计算UICollectionView的cell的size，防止崩溃

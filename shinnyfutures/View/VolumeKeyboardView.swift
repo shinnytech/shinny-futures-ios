@@ -115,7 +115,7 @@ class VolumeKeyboardViewProcessor {
     }
 
     func clearAll() -> String {
-        currentOperand = resetOperand()
+        currentOperand = ""
         return currentOperand
     }
 
