@@ -16,8 +16,9 @@ class Search {
     var py: String
     var p_tick: String
     var vm: String
+    var sort_key: Int
 
-    init(instrument_id: String, instrument_name: String, exchange_name: String, exchange_id: String, py: String, p_tick: String, vm: String) {
+    init(instrument_id: String, instrument_name: String, exchange_name: String, exchange_id: String, py: String, p_tick: String, vm: String, sort_key: Int) {
         self.instrument_id = instrument_id
         self.instrument_name = instrument_name
         self.exchange_name = exchange_name
@@ -25,6 +26,7 @@ class Search {
         self.py = py
         self.p_tick = p_tick
         self.vm = vm
+        self.sort_key = sort_key
     }
 
     required init?() {
@@ -34,7 +36,8 @@ class Search {
         self.exchange_id = ""
         self.py = ""
         self.p_tick = ""
-        vm = ""
+        self.vm = ""
+        self.sort_key = 0
     }
 
 }

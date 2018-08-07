@@ -108,7 +108,8 @@ class SearchTableViewController: UITableViewController, UISearchResultsUpdating 
 
     func filterContent(for searchText: String) {
         searchResults = dataManager.sSearchEntities.filter({ (_, search) -> Bool in
-            let isMatch = search.instrument_id.localizedCaseInsensitiveContains(searchText) || search.instrument_name.localizedCaseInsensitiveContains(searchText)
+            let isMatch = search.instrument_id.localizedCaseInsensitiveContains(searchText) || search.instrument_name.localizedCaseInsensitiveContains(searchText) ||
+            search.py.localizedCaseInsensitiveContains(searchText)
             return isMatch
         }).map {$0.value}.sorted(by: {$0.instrument_id < $1.instrument_id })
     }

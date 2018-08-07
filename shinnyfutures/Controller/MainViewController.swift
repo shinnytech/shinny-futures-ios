@@ -39,6 +39,8 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
     let transactionWebSocketUtils = TDWebSocketUtils.getInstance()
     var isMDClose = false
     var isTDClose = false
+    var mdURLs = [String]()
+    var index = 0
 
     func websocketDidConnect(socket: TDWebSocketUtils) {
         NSLog("交易服务器连接成功～")
@@ -52,7 +54,7 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
         NSLog("交易服务器连接断开，正在重连～")
         isTDClose = true
         ToastUtils.showNegativeMessage(message: "交易服务器连接断开，正在重连～")
-        DispatchQueue.global().asyncAfter(deadline: DispatchTime.now() + 10, execute: {
+        DispatchQueue.global().asyncAfter(deadline: DispatchTime.now() + 2, execute: {
             self.transactionWebSocketUtils.connect()
         })
     }
@@ -90,8 +92,8 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
         NSLog("行情服务器连接断开，正在重连～")
         isMDClose = true
         ToastUtils.showNegativeMessage(message: "行情服务器连接断开，正在重连～")
-        DispatchQueue.global().asyncAfter(deadline: DispatchTime.now() + 10, execute: {
-            self.mdWebSocketUtils.connect()
+        DispatchQueue.global().asyncAfter(deadline: DispatchTime.now() + 2, execute: {
+            self.index = self.mdWebSocketUtils.connect(url: self.mdURLs[self.index], index: self.index)
         })
     }
 
@@ -105,8 +107,19 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
             let aid = json["aid"].stringValue
             switch aid {
             case "rsp_login":
-                socket.sendSubscribeQuote(insList: DataManager.getInstance().sQuotes[1].sorted(by: {$0.key < $1.key}).map {$0.key}[0..<CommonConstants.MAX_SUBSCRIBE_QUOTES].joined(separator: ","))
+                socket.sendSubscribeQuote(insList: DataManager.getInstance().sQuotes[1].sorted(by: {
+                    if let sortKey0 = (DataManager.getInstance().sSearchEntities[$0.key]?.sort_key), let sortKey1 = (DataManager.getInstance().sSearchEntities[$1.key]?.sort_key){
+                    if sortKey0 != sortKey1{
+                        return sortKey0 < sortKey1
+                    }else{
+                        return $0.key < $1.key
+                    }
+                    }
+                    return $0.key < $1.key
+
+                }).map {$0.key}[0..<CommonConstants.MAX_SUBSCRIBE_QUOTES].joined(separator: ","))
             case "rtn_data":
+                self.index = 0
                 DataManager.getInstance().parseRtnMD(rtnData: json)
             default:
                 return
@@ -118,12 +131,15 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
     ////////////////////////////////////////////////////////////////////////////////
 
     func sessionSimpleDownload(urlString: String, fileName: String) {
+        NSLog("合约列表开始下载")
         //下载地址
         let url = URL(string: urlString)
         //请求
-        let request = URLRequest(url: url!)
+        var request = URLRequest(url: url!)
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
         let session = URLSession.shared
         let handler = { (location: URL?, _: URLResponse?, error: Error?) -> Void in
+            NSLog("合约列表下载结束")
             if error != nil {
                 print(error.debugDescription)
                 return
@@ -140,11 +156,10 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
                 }
                 try FileManager.default.copyItem(at: location!, to: savedURL)
                 DataManager.getInstance().parseLatestFile()
-                NSLog("合约列表解析完毕")
                 DispatchQueue.main.async {
                     NotificationCenter.default.post(name: Notification.Name(CommonConstants.LatestFileParsedNotification), object: nil)
                 }
-                self.mdWebSocketUtils.connect()
+                self.index = self.mdWebSocketUtils.connect(url: self.mdURLs[self.index], index: self.index)
                 self.transactionWebSocketUtils.connect()
             } catch {
                 print ("file error: \(error)")
@@ -154,6 +169,26 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
         let downloadTask = session.downloadTask(with: request, completionHandler: handler)
         //使用resume方法启动任务
         downloadTask.resume()
+    }
+
+    func initMDURLs(){
+        let mdURLGroup1 = shuffle(group: [CommonConstants.MARKET_URL_2, CommonConstants.MARKET_URL_3])
+        let mdURLGroup2 = shuffle(group: [CommonConstants.MARKET_URL_4, CommonConstants.MARKET_URL_5, CommonConstants.MARKET_URL_6, CommonConstants.MARKET_URL_7, CommonConstants.MARKET_URL_8, CommonConstants.MARKET_URL_9])
+        mdURLs.append(CommonConstants.MARKET_URL_1)
+        mdURLs += mdURLGroup1
+        mdURLs += mdURLGroup2
+    }
+
+    func shuffle(group: [String]) -> [String] {
+        var items = group
+        var last = items.count - 1
+        while(last > 0)
+        {
+            let rand = Int(arc4random_uniform(UInt32(last)))
+            items.swapAt(last, rand)
+            last -= 1
+        }
+        return items
     }
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -166,6 +201,7 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
         self.navigationController?.navigationBar.titleTextAttributes = dict as? [NSAttributedStringKey: Any]
         self.navigationController?.navigationBar.barTintColor = UIColor.black
         self.navigationController?.navigationBar.tintColor = UIColor.white
+        initMDURLs()
         self.mdWebSocketUtils.mdWebSocketUtilsDelegate = self
         self.transactionWebSocketUtils.tdWebSocketUtilsDelegate = self
         sessionSimpleDownload(urlString: CommonConstants.LATEST_FILE_URL, fileName: "latest.json")

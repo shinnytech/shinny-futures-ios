@@ -37,10 +37,12 @@ class MDWebSocketUtils: NSObject, WebSocketDelegate {
     }()
 
     // MARK: 连接服务器
-    func connect() {
-        socket = WebSocket(url: URL(string: CommonConstants.QUOTE_URL)!)
+    func connect(url: String, index: Int) -> Int{
+        socket = WebSocket(url: URL(string: url)!)
         socket.delegate = self
+        socket.request.addValue("shinnyfutures-iOS", forHTTPHeaderField: "User-Agent")
         socket.connect()
+        return index + 1
     }
 
     // MARK: 断开连接

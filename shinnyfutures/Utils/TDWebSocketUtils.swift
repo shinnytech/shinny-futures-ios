@@ -41,6 +41,7 @@ class TDWebSocketUtils: NSObject, WebSocketDelegate {
     func connect() {
         self.socket = WebSocket(url: URL(string: CommonConstants.TRANSACTION_URL)!)
         self.socket.delegate = self
+        socket.request.addValue("shinnyfutures-iOS", forHTTPHeaderField: "User-Agent")
         self.socket.connect()
     }
 

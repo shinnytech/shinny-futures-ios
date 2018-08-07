@@ -30,8 +30,28 @@ class QuoteTableViewController: UITableViewController, UIPopoverPresentationCont
         let longPressGusture = UILongPressGestureRecognizer(target: self, action: #selector(QuoteTableViewController.longPress(longPressGestureRecognizer:)))
         tableView.addGestureRecognizer(longPressGusture)
         NotificationCenter.default.addObserver(self, selector: #selector(initInsList), name: Notification.Name(CommonConstants.RefreshOptionalInsListNotification), object: nil)
-        quotes = dataManager.sQuotes[self.index].sorted(by: {$0.key.split(separator: ".")[1] < $1.key.split(separator: ".")[1]}).map {$0.value}
-        insList = dataManager.sQuotes[self.index].sorted(by: {$0.key.split(separator: ".")[1] < $1.key.split(separator: ".")[1]}).map {$0.key}
+        quotes = dataManager.sQuotes[self.index].sorted(by: {
+            if let sortKey0 = (dataManager.sSearchEntities[$0.key]?.sort_key), let sortKey1 = (dataManager.sSearchEntities[$1.key]?.sort_key){
+                if sortKey0 != sortKey1{
+                    return sortKey0 < sortKey1
+                }else{
+                    return $0.key < $1.key
+                }
+            }
+            return $0.key < $1.key
+        }).map {$0.value}
+        
+        insList = dataManager.sQuotes[self.index].sorted(by: {
+            if let sortKey0 = (dataManager.sSearchEntities[$0.key]?.sort_key), let sortKey1 = (dataManager.sSearchEntities[$1.key]?.sort_key){
+                if sortKey0 != sortKey1{
+                    return sortKey0 < sortKey1
+                }else{
+                    return $0.key < $1.key
+                }
+            }
+            return $0.key < $1.key
+
+        }).map {$0.key}
     }
     
     //iPhone下默认是.overFullScreen(全屏显示)，需要返回.none，否则没有弹出框效果，iPad则不需要
@@ -374,8 +394,28 @@ class QuoteTableViewController: UITableViewController, UIPopoverPresentationCont
 
     @objc func initInsList(){
         if index == 0 {
-            quotes = dataManager.sQuotes[self.index].sorted(by: {$0.key.split(separator: ".")[1] < $1.key.split(separator: ".")[1]}).map {$0.value}
-            insList = dataManager.sQuotes[self.index].sorted(by: {$0.key.split(separator: ".")[1] < $1.key.split(separator: ".")[1]}).map {$0.key}
+            quotes = dataManager.sQuotes[self.index].sorted(by: {
+                if let sortKey0 = (dataManager.sSearchEntities[$0.key]?.sort_key), let sortKey1 = (dataManager.sSearchEntities[$1.key]?.sort_key){
+                    if sortKey0 != sortKey1{
+                        return sortKey0 < sortKey1
+                    }else{
+                        return $0.key < $1.key
+                    }
+                }
+                return $0.key < $1.key
+            }).map {$0.value}
+
+            insList = dataManager.sQuotes[self.index].sorted(by: {
+                if let sortKey0 = (dataManager.sSearchEntities[$0.key]?.sort_key), let sortKey1 = (dataManager.sSearchEntities[$1.key]?.sort_key){
+                    if sortKey0 != sortKey1{
+                        return sortKey0 < sortKey1
+                    }else{
+                        return $0.key < $1.key
+                    }
+                }
+                return $0.key < $1.key
+
+            }).map {$0.key}
         }
     }
 }

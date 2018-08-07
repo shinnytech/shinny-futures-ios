@@ -9,8 +9,16 @@
 import Foundation
 
 class CommonConstants {
-    public static let LATEST_FILE_URL = "http://ins.shinnytech.com/publicdata/latest.json"
-    public static let QUOTE_URL = "ws://openmd.shinnytech.com/t/md/front/mobile"
+    public static let LATEST_FILE_URL = "http://openmd.shinnytech.com/t/md/symbols/latest.json"
+    public static let MARKET_URL_1 = "ws://u.shinnytech.com/t/md/front/mobile";
+    public static let MARKET_URL_2 = "ws://sh.u.shinnytech.com/t/md/front/mobile";
+    public static let MARKET_URL_3 = "ws://gz.u.shinnytech.com/t/md/front/mobile";
+    public static let MARKET_URL_4 = "ws://139.198.126.116/t/md/front/mobile";
+    public static let MARKET_URL_5 = "ws://139.198.122.80/t/md/front/mobile";
+    public static let MARKET_URL_6 = "ws://139.198.123.206/t/md/front/mobile";
+    public static let MARKET_URL_7 = "ws://106.15.82.247/t/md/front/mobile";
+    public static let MARKET_URL_8 = "ws://106.15.82.189/t/md/front/mobile";
+    public static let MARKET_URL_9 = "ws://106.15.219.160/t/md/front/mobile";
     public static let TRANSACTION_URL = "ws://118.31.237.98:3918"
     public static let REDMINE_URL = "http://redmine.kuaiqi.net/src/"
     public static let KLINE_MINUTE = "300000000000"
