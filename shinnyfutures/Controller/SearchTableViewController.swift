@@ -103,7 +103,17 @@ class SearchTableViewController: UITableViewController, UISearchResultsUpdating 
 
     // MARK: Private Methods
     private func loadData() {
-        searchHistory = DataManager.getInstance().sSearchHistoryEntities.map {$0.value}
+        searchHistory = dataManager.sSearchHistoryEntities.sorted(by: {
+            if let sortKey0 = (dataManager.sSearchEntities[$0.key]?.sort_key), let sortKey1 = (dataManager.sSearchEntities[$1.key]?.sort_key){
+                if sortKey0 != sortKey1{
+                    return sortKey0 < sortKey1
+                }else{
+                    return $0.key < $1.key
+                }
+            }
+            return $0.key < $1.key
+
+        }).map {$0.value}
     }
 
     func filterContent(for searchText: String) {
@@ -111,7 +121,17 @@ class SearchTableViewController: UITableViewController, UISearchResultsUpdating 
             let isMatch = search.instrument_id.localizedCaseInsensitiveContains(searchText) || search.instrument_name.localizedCaseInsensitiveContains(searchText) ||
             search.py.localizedCaseInsensitiveContains(searchText)
             return isMatch
-        }).map {$0.value}.sorted(by: {$0.instrument_id < $1.instrument_id })
+        }).sorted(by: {
+            if let sortKey0 = (dataManager.sSearchEntities[$0.key]?.sort_key), let sortKey1 = (dataManager.sSearchEntities[$1.key]?.sort_key){
+                if sortKey0 != sortKey1{
+                    return sortKey0 < sortKey1
+                }else{
+                    return $0.key < $1.key
+                }
+            }
+            return $0.key < $1.key
+
+        }).map {$0.value}
     }
 
     func updateSearchResults(for searchController: UISearchController) {
