@@ -79,6 +79,8 @@ class DataManager {
                     let searchEntity = Search(instrument_id: instrument_id, instrument_name: ins_name, exchange_name: "", exchange_id: exchange_id, py: "", p_tick: price_tick, vm: volume_multiple, sort_key: sort_key)
 
                     if "FUTURE_CONT".elementsEqual(classN){
+                        let py = subJson["py"] as! String
+                        searchEntity.py = py
                         sMainQuotes[instrument_id] = quote
                         sMainInsListNameNav[ins_name.replacingOccurrences(of: "主连", with: "")] = instrument_id
                     }
