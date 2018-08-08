@@ -78,7 +78,7 @@
                                 </constraints>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" textContentType="password"/>
+                                <textInputTraits key="textInputTraits" secureTextEntry="YES" textContentType="password"/>
                             </textField>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Gyx-Bq-MsD">
                                 <rect key="frame" x="0.0" y="218" width="414" height="1"/>
@@ -2465,8 +2465,8 @@
         <image name="right" width="16" height="16"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="krQ-8f-Gm2"/>
-        <segue reference="H5o-SO-Mhj"/>
-        <segue reference="VXl-yc-akt"/>
+        <segue reference="uwS-z8-hDC"/>
+        <segue reference="dAc-fS-Cr1"/>
+        <segue reference="6yN-PO-9VS"/>
     </inferredMetricsTieBreakers>
 </document>

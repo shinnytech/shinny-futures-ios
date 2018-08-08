@@ -23,6 +23,10 @@ class LoginViewController: UIViewController {
             self.userName.text = userName
         }
 
+        if let userPassword = UserDefaults.standard.string(forKey: "userPassword") {
+            self.userPassword.text = userPassword
+        }
+
         //Configure the button
         let button = DropDownBtn.init(frame: CGRect(x: 120, y: 94, width: 0, height: 0))
         button.setTitle("期货公司列表加载中...", for: .normal)
@@ -116,6 +120,7 @@ class LoginViewController: UIViewController {
                 //登陆成功的提示在DataManager中的showMessage解析中弹出
                 DataManager.getInstance().sIsLogin = true
                 UserDefaults.standard.set(self.userName.text!, forKey: "userName")
+                UserDefaults.standard.set(self.userPassword.text!, forKey: "userPassword")
                 UserDefaults.standard.set(String(button.dropView.broker_info), forKey: "brokerInfo")
                 //手动式segue，代码触发；自动式指通过点击某个按钮出发
                 switch DataManager.getInstance().sToLoginTarget {
