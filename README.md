@@ -24,12 +24,8 @@
     - 委托：显示账户下单情况
     - 交易：三键下单板进行交易
 ## 安装运行
-*快速点亮:* 您可以在AppStore中搜索`快期小Q`进行安装<br>
-当然，您也可以下载导入`XCode`中运行安装，下面着重介绍一下开发配置：
 - XCode版本：9.4
 - bugly：项目中嵌入了bugly平台，具体使用见[bugly文档中心](https://bugly.qq.com/docs/)
-- 行情服务器地址：项目中的CommonConstants中的QUOTE_URL
-- 交易服务器地址：项目中的CommonConstants中的TRANSACTION_URL
 ## 代码架构
 ### 数据层面
 根据websocket协议进行实时数据更新
