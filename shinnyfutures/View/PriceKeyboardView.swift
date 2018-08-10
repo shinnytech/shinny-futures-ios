@@ -39,6 +39,10 @@ open class PriceKeyboardView: UIView {
     open weak var delegate: PriceKeyboardViewDelegate?
     var view: UIView!
     var processor = PriceKeyboardViewProcessor()
+    @IBOutlet weak var priceTick: UILabel!
+    @IBOutlet weak var openVolume: UILabel!
+    @IBOutlet weak var upperLimit: UILabel!
+    @IBOutlet weak var lowerLimit: UILabel!
 
     public required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -59,6 +63,22 @@ open class PriceKeyboardView: UIView {
         view.frame = bounds
         view.autoresizingMask = [UIViewAutoresizing.flexibleWidth, UIViewAutoresizing.flexibleHeight]
         addSubview(view)
+        priceTick.text = DataManager.getInstance().sSearchEntities[DataManager.getInstance().sInstrumentId]?.p_tick
+        let margin = (DataManager.getInstance().sSearchEntities[DataManager.getInstance().sInstrumentId]?.margin)!
+        print(margin)
+        if margin == 0{
+            openVolume.text = "0"
+        }else {
+            for (_, account) in DataManager.getInstance().sRtnAcounts {
+                let available = account[AccountConstants.available].intValue
+                openVolume.text = "\(available / margin)"
+            }
+        }
+
+        let quote = DataManager.getInstance().sRtnMD[RtnMDConstants.quotes][DataManager.getInstance().sInstrumentId]
+        upperLimit.text = quote[QuoteConstants.upper_limit].stringValue
+        lowerLimit.text = quote[QuoteConstants.lower_limit].stringValue
+
     }
 
     fileprivate func loadViewFromNib() -> UIView {

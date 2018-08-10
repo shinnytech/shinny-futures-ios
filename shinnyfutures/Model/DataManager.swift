@@ -76,18 +76,27 @@ class DataManager {
                     let quote = Quote()
                     quote?.instrument_id = instrument_id
                     quote?.instrument_name = ins_name
-                    let searchEntity = Search(instrument_id: instrument_id, instrument_name: ins_name, exchange_name: "", exchange_id: exchange_id, py: "", p_tick: price_tick, vm: volume_multiple, sort_key: sort_key)
+                    let searchEntity = Search(instrument_id: instrument_id, instrument_name: ins_name, exchange_name: "", exchange_id: exchange_id, py: "", p_tick: price_tick, vm: volume_multiple, sort_key: sort_key, margin: 0)
 
                     if "FUTURE_CONT".elementsEqual(classN){
                         let py = subJson["py"] as! String
                         searchEntity.py = py
-                        sMainQuotes[instrument_id] = quote
-                        sMainInsListNameNav[ins_name.replacingOccurrences(of: "主连", with: "")] = instrument_id
+                        let underlying_symbol = subJson["underlying_symbol"] as! String
+                        let subJsonFuture = latestJson[underlying_symbol] as! [String: Any]
+                        let margin = (subJsonFuture["margin"] as! NSNumber).intValue
+                        searchEntity.margin = margin
+                        quote?.instrument_id = underlying_symbol
+                        searchEntity.instrument_id = underlying_symbol
+                        sMainQuotes[underlying_symbol] = quote
+                        sMainInsListNameNav[ins_name.replacingOccurrences(of: "主连", with: "")] = underlying_symbol
                     }
 
                     if "FUTURE".elementsEqual(classN){
                         let product_short_name = subJson["product_short_name"] as! String
                         let py = subJson["py"] as! String
+                        let margin = (subJson["margin"] as! NSNumber).intValue
+                        searchEntity.py = py
+                        searchEntity.margin = margin
                         switch exchange_id {
                         case "SHFE":
                             sShangqiQuotes[instrument_id] = quote
@@ -112,7 +121,6 @@ class DataManager {
                         default:
                             return
                         }
-                        searchEntity.py = py
                     }
 
                     if "FUTURE_COMBINE".elementsEqual(classN){
@@ -120,6 +128,7 @@ class DataManager {
                         let subJsonFuture = latestJson[leg1_symbol] as! [String: Any]
                         let product_short_name = subJsonFuture["product_short_name"] as! String
                         let py = subJsonFuture["py"] as! String
+                        searchEntity.py = py
                         switch exchange_id {
                         case "CZCE":
                             sZhengzhouzeheQuotes[instrument_id] = quote
@@ -132,7 +141,6 @@ class DataManager {
                         default:
                             return
                         }
-                        searchEntity.py = py
                     }
                     sSearchEntities[instrument_id] = searchEntity
                 }
@@ -280,7 +288,6 @@ class DataManager {
                                     NotificationCenter.default.post(name: Notification.Name(CommonConstants.TradeNotification), object: nil)
                                 }
                             case RtnTDConstants.positions:
-                                print(value.dictionaryValue)
                                 for (positionKey, position) in value.dictionaryValue {
                                     sRtnPositions[positionKey] = position
                                 }
