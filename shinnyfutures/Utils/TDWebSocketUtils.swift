@@ -50,6 +50,12 @@ class TDWebSocketUtils: NSObject, WebSocketDelegate {
         socket.disconnect()
     }
 
+    // MARK: 获取信息
+    func sendPeekMessage() {
+        let peekMessage = "{\"aid\":\"peek_message\"}"
+        socket.write(string: peekMessage)
+    }
+
     // MARK: 用户登录
     func sendReqLogin(bid: String, user_name: String, password: String) {
         let reqLogin = "{\"aid\":\"req_login\",\"bid\":\"\(bid)\",\"user_name\":\"\(user_name)\",\"password\":\"\(password)\"}"
@@ -66,7 +72,7 @@ class TDWebSocketUtils: NSObject, WebSocketDelegate {
 
     // MARK: 挂单
     func sendReqInsertOrder(order_id: String, exchange_id: String, instrument_id: String, direction: String, offset: String, volume: Int, priceType: String, price: Double) {
-        let reqInsertOrder = "{\"aid\":\"insert_order\",\"order_id\":\"\(order_id)\",\"exchange_id\":\"\(exchange_id)\",\"instrument_id\":\"\(instrument_id)\",\"direction\":\"\(direction)\",\"offset\":\"\(offset)\",\"volume\":\(volume),\"price_type\":\"\(priceType)\",\"limit_price\":\(price)}"
+        let reqInsertOrder = "{\"aid\":\"insert_order\",\"order_id\":\"\(order_id)\",\"exchange_id\":\"\(exchange_id)\",\"instrument_id\":\"\(instrument_id)\",\"direction\":\"\(direction)\",\"offset\":\"\(offset)\",\"volume\":\(volume),\"price_type\":\"\(priceType)\",\"limit_price\":\(price),\"volume_condition\":\"ANY\", \"time_condition\":\"GFD\"}"
         NSLog(reqInsertOrder)
         socket.write(string: reqInsertOrder)
     }

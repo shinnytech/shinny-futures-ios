@@ -18,8 +18,9 @@ class Search {
     var vm: String
     var sort_key: Int
     var margin: Int
+    var underlying_symbol: String
 
-    init(instrument_id: String, instrument_name: String, exchange_name: String, exchange_id: String, py: String, p_tick: String, vm: String, sort_key: Int, margin: Int) {
+    init(instrument_id: String, instrument_name: String, exchange_name: String, exchange_id: String, py: String, p_tick: String, vm: String, sort_key: Int, margin: Int, underlying_symbol: String) {
         self.instrument_id = instrument_id
         self.instrument_name = instrument_name
         self.exchange_name = exchange_name
@@ -29,6 +30,7 @@ class Search {
         self.vm = vm
         self.sort_key = sort_key
         self.margin = margin
+        self.underlying_symbol = underlying_symbol
     }
 
     required init?() {
@@ -41,6 +43,7 @@ class Search {
         self.vm = ""
         self.sort_key = 0
         self.margin = 0
+        self.underlying_symbol = ""
     }
 
 }

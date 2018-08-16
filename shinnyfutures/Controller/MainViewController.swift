@@ -71,6 +71,7 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
             default:
                 return
             }
+            self.transactionWebSocketUtils.sendPeekMessage()
         }
     }
 
@@ -272,7 +273,17 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
             performSegue(withIdentifier: CommonConstants.LoginViewController, sender: sender)
         } else {
             performSegue(withIdentifier: CommonConstants.QuoteViewController, sender: sender)
-            let instrumentId = DataManager.getInstance().sQuotes[1].sorted(by: {$0.key.split(separator: ".")[1] < $1.key.split(separator: ".")[1]}).map {$0.key}[0]
+            let instrumentId = DataManager.getInstance().sQuotes[1].sorted(by: {
+                if let sortKey0 = (DataManager.getInstance().sSearchEntities[$0.key]?.sort_key), let sortKey1 = (DataManager.getInstance().sSearchEntities[$1.key]?.sort_key){
+                    if sortKey0 != sortKey1{
+                        return sortKey0 < sortKey1
+                    }else{
+                        return $0.key < $1.key
+                    }
+                }
+                return $0.key < $1.key
+
+            }).map {$0.key}[0]
             //进入合约详情页的入口有：合约列表页，登陆页，搜索页，主页
             DataManager.getInstance().sPreInsList = DataManager.getInstance().sRtnMD[RtnMDConstants.ins_list].stringValue
             DataManager.getInstance().sInstrumentId = instrumentId

@@ -182,9 +182,12 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
     }
 
     func addLongPositionLimitLine() {
-        let key = dataManager.sInstrumentId
+        var key = dataManager.sInstrumentId
+        if key.contains("KQ") {
+            key = (dataManager.sSearchEntities[key]?.underlying_symbol)!
+        }
         var vm = "1"
-        if let search = dataManager.sSearchEntities[dataManager.sInstrumentId] {
+        if let search = dataManager.sSearchEntities[key] {
             vm = search.vm
         }
         guard let position = dataManager.sRtnPositions[key] else {return}
@@ -200,9 +203,12 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
     }
 
     func addShortPositionLimitLine() {
-        let key = dataManager.sInstrumentId
+        var key = dataManager.sInstrumentId
+        if key.contains("KQ") {
+            key = (dataManager.sSearchEntities[key]?.underlying_symbol)!
+        }
         var vm = "1"
-        if let search = dataManager.sSearchEntities[dataManager.sInstrumentId] {
+        if let search = dataManager.sSearchEntities[key] {
             vm = search.vm
         }
         guard let position = dataManager.sRtnPositions[key] else {return}
@@ -218,9 +224,12 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
     }
 
     func refreshLongPositionLimitLine() {
-        let key = dataManager.sInstrumentId
+        var key = dataManager.sInstrumentId
+        if key.contains("KQ") {
+            key = (dataManager.sSearchEntities[key]?.underlying_symbol)!
+        }
         var vm = "1"
-        if let search = dataManager.sSearchEntities[dataManager.sInstrumentId] {
+        if let search = dataManager.sSearchEntities[key] {
             vm = search.vm
         }
         let limitKey = key + "0"
@@ -245,9 +254,12 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
     }
 
     func refreshShortPositionLimitLine() {
-        let key = dataManager.sInstrumentId
+        var key = dataManager.sInstrumentId
+        if key.contains("KQ") {
+            key = (dataManager.sSearchEntities[key]?.underlying_symbol)!
+        }
         var vm = "1"
-        if let search = dataManager.sSearchEntities[dataManager.sInstrumentId] {
+        if let search = dataManager.sSearchEntities[key] {
             vm = search.vm
         }
         let limitKey = key + "1"
@@ -280,9 +292,13 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
     //挂单线增删操作
     func addOrderLimitLines() {
         for orderEntity in dataManager.sRtnOrders.map({$0.value}) {
-            let instrumentId = orderEntity[OrderConstants.instrument_id].stringValue
+            let instrumentId = orderEntity[OrderConstants.exchange_id].stringValue + "." + orderEntity[OrderConstants.instrument_id].stringValue
             let status = orderEntity[OrderConstants.status].stringValue
-            if instrumentId.elementsEqual(dataManager.sInstrumentId) && "ALIVE".elementsEqual(status) {
+            var ins = dataManager.sInstrumentId
+            if ins.contains("KQ") {
+                ins = (dataManager.sSearchEntities[ins]?.underlying_symbol)!
+            }
+            if instrumentId.elementsEqual(ins) && "ALIVE".elementsEqual(status) {
                 addOneOrderLimitLine(orderEntity: orderEntity)
             }
         }
@@ -325,7 +341,10 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
     // MARK: objc methods
     @objc func refreshPositionLine() {
         if dataManager.sIsLogin && isShowPositionLine {
-            let key = dataManager.sInstrumentId
+            var key = dataManager.sInstrumentId
+            if key.contains("KQ") {
+                key = (dataManager.sSearchEntities[key]?.underlying_symbol)!
+            }
             let position0 = positionLimitLines[key + "0"]
             let position1 = positionLimitLines[key + "1"]
             if position0 == nil {
@@ -350,8 +369,12 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
     @objc func refreshOrderLine() {
         if dataManager.sIsLogin && isShowOrderLine {
             for (orderId, orderEntity): (String, JSON) in dataManager.sRtnOrders {
-                let instrumentId = orderEntity[OrderConstants.instrument_id].stringValue
-                if instrumentId.elementsEqual(dataManager.sInstrumentId) {
+                let instrumentId = orderEntity[OrderConstants.exchange_id].stringValue + "." + orderEntity[OrderConstants.instrument_id].stringValue
+                var ins = dataManager.sInstrumentId
+                if ins.contains("KQ") {
+                    ins = (dataManager.sSearchEntities[ins]?.underlying_symbol)!
+                }
+                if instrumentId.elementsEqual(ins) {
                     let status = orderEntity[OrderConstants.status].stringValue
                     let limitLine = orderLimitLines[orderId]
                     if limitLine ==  nil {
@@ -408,9 +431,16 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
         removeOrderLimitLines()
         removePositionLimitLines()
         chartView.clear()
-   
-        addOrderLimitLines()
-        addPositionLimitLines()
+
+        if dataManager.sIsLogin {
+            if isShowPositionLine {
+                addPositionLimitLines()
+            }
+            if isShowOrderLine {
+                addOrderLimitLines()
+            }
+        }
+
     }
 
     //隐藏十字光标

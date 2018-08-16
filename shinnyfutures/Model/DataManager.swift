@@ -76,19 +76,16 @@ class DataManager {
                     let quote = Quote()
                     quote?.instrument_id = instrument_id
                     quote?.instrument_name = ins_name
-                    let searchEntity = Search(instrument_id: instrument_id, instrument_name: ins_name, exchange_name: "", exchange_id: exchange_id, py: "", p_tick: price_tick, vm: volume_multiple, sort_key: sort_key, margin: 0)
+                    let searchEntity = Search(instrument_id: instrument_id, instrument_name: ins_name, exchange_name: "", exchange_id: exchange_id, py: "", p_tick: price_tick, vm: volume_multiple, sort_key: sort_key, margin: 0, underlying_symbol: "")
 
                     if "FUTURE_CONT".elementsEqual(classN){
                         let py = subJson["py"] as! String
                         searchEntity.py = py
                         let underlying_symbol = subJson["underlying_symbol"] as! String
-                        let subJsonFuture = latestJson[underlying_symbol] as! [String: Any]
-                        let margin = (subJsonFuture["margin"] as! NSNumber).intValue
-                        searchEntity.margin = margin
-                        quote?.instrument_id = underlying_symbol
-                        searchEntity.instrument_id = underlying_symbol
-                        sMainQuotes[underlying_symbol] = quote
-                        sMainInsListNameNav[ins_name.replacingOccurrences(of: "主连", with: "")] = underlying_symbol
+                        if "".elementsEqual(underlying_symbol){continue}
+                        searchEntity.underlying_symbol = underlying_symbol
+                        sMainQuotes[instrument_id] = quote
+                        sMainInsListNameNav[ins_name.replacingOccurrences(of: "主连", with: "")] = instrument_id
                     }
 
                     if "FUTURE".elementsEqual(classN){

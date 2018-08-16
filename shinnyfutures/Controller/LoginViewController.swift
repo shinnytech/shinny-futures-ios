@@ -101,7 +101,10 @@ class LoginViewController: UIViewController {
         }
         if jsonArray.count != 0 {
             if let brokerInfo = UserDefaults.standard.string(forKey: "brokerInfo") {
-                let index = Int(brokerInfo)!
+                var index = Int(brokerInfo)!
+                if index > button.dropView.dropDownOptions.count {
+                    index = 0
+                }
                 button.dropView.broker_info = index
                 button.setTitle(button.dropView.dropDownOptions[index], for: .normal)
             } else {
