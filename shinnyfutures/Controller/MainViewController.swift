@@ -108,17 +108,7 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
             let aid = json["aid"].stringValue
             switch aid {
             case "rsp_login":
-                socket.sendSubscribeQuote(insList: DataManager.getInstance().sQuotes[1].sorted(by: {
-                    if let sortKey0 = (DataManager.getInstance().sSearchEntities[$0.key]?.sort_key), let sortKey1 = (DataManager.getInstance().sSearchEntities[$1.key]?.sort_key){
-                    if sortKey0 != sortKey1{
-                        return sortKey0 < sortKey1
-                    }else{
-                        return $0.key < $1.key
-                    }
-                    }
-                    return $0.key < $1.key
-
-                }).map {$0.key}[0..<CommonConstants.MAX_SUBSCRIBE_QUOTES].joined(separator: ","))
+                socket.sendSubscribeQuote(insList: DataManager.getInstance().sQuotes[1].map {$0.key}[0..<CommonConstants.MAX_SUBSCRIBE_QUOTES].joined(separator: ","))
             case "rtn_data":
                 self.index = 0
                 DataManager.getInstance().parseRtnMD(rtnData: json)

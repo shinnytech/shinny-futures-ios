@@ -182,8 +182,7 @@ class CurrentDayViewController: BaseChartViewController {
             let dateEnd = Date(timeIntervalSince1970: TimeInterval(dateTime + 60))
             let timeEnd = simpleDateFormat.string(from: dateEnd)
             labels[index] = timeEnd
-        }else {
-            let dateTimePre = xVals[index - 1]!
+        }else if let dateTimePre = xVals[index - 1]{
             if (dateTime - dateTimePre) != 60 {
                 labels[index] = time
             }

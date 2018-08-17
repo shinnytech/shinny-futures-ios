@@ -79,27 +79,9 @@ class QuoteNavigationCollectionViewController: UICollectionViewController {
             return
         }
 
-        insList = mananger.sInsListNames[index].sorted(by: {
-            if let sortKey0 = (mananger.sSearchEntities[$0.value]?.sort_key), let sortKey1 = (mananger.sSearchEntities[$1.value]?.sort_key){
-                if sortKey0 != sortKey1{
-                    return sortKey0 < sortKey1
-                }else{
-                    return $0.value < $1.value
-                }
-            }
-            return $0.value < $1.value
-        }).map{$0.value}
+        insList = mananger.sInsListNames[index].map{$0.value}
 
-        nameList = mananger.sInsListNames[index].sorted(by: {
-            if let sortKey0 = (mananger.sSearchEntities[$0.value]?.sort_key), let sortKey1 = (mananger.sSearchEntities[$1.value]?.sort_key){
-                if sortKey0 != sortKey1{
-                    return sortKey0 < sortKey1
-                }else{
-                    return $0.value < $1.value
-                }
-            }
-            return $0.value < $1.value
-        }).map{$0.key}
+        nameList = mananger.sInsListNames[index].map{$0.key}
 
         collectionView?.reloadData()
         //collectionView更改数据源清空collectionviewLayout的缓存，让autolayout重新计算UICollectionView的cell的size，防止崩溃
@@ -115,27 +97,9 @@ class QuoteNavigationCollectionViewController: UICollectionViewController {
             return
         }
 
-        insList = mananger.sInsListNames[index].sorted(by: {
-            if let sortKey0 = (mananger.sSearchEntities[$0.value]?.sort_key), let sortKey1 = (mananger.sSearchEntities[$1.value]?.sort_key){
-                if sortKey0 != sortKey1{
-                    return sortKey0 < sortKey1
-                }else{
-                    return $0.value < $1.value
-                }
-            }
-            return $0.value < $1.value
-        }).map{$0.value}
+        insList = mananger.sInsListNames[index].map{$0.value}
 
-        nameList = mananger.sInsListNames[index].sorted(by: {
-            if let sortKey0 = (mananger.sSearchEntities[$0.value]?.sort_key), let sortKey1 = (mananger.sSearchEntities[$1.value]?.sort_key){
-                if sortKey0 != sortKey1{
-                    return sortKey0 < sortKey1
-                }else{
-                    return $0.value < $1.value
-                }
-            }
-            return $0.value < $1.value
-        }).map{$0.key}
+        nameList = mananger.sInsListNames[index].map{$0.key}
 
         self.collectionView?.reloadData()
         //collectionView更改数据源清空collectionviewLayout的缓存，让autolayout重新计算UICollectionView的cell的size，防止崩溃

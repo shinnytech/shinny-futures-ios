@@ -20,28 +20,11 @@ class DataManager {
     class func getInstance() -> DataManager {
         return instance
     }
-    private var sOptionalQuotes = [String: Quote]()
-    private var sMainQuotes = [String: Quote]()
-    private var sMainInsListNameNav = [String: String]()
-    private var sShangqiQuotes = [String: Quote]()
-    private var sShangqiInsListNameNav = [String: String]()
-    private var sDalianQuotes = [String: Quote]()
-    private var sDalianInsListNameNav = [String: String]()
-    private var sZhengzhouQuotes = [String: Quote]()
-    private var sZhengzhouInsListNameNav = [String: String]()
-    private var sZhongjinQuotes = [String: Quote]()
-    private var sZhongjinInsListNameNav = [String: String]()
-    private var sNengyuanQuotes = [String: Quote]()
-    private var sNengyuanInsListNameNav = [String: String]()
-    private var sDalianzuheQuotes = [String: Quote]()
-    private var sDalianzuheInsListNameNav = [String: String]()
-    private var sZhengzhouzeheQuotes = [String: Quote]()
-    private var sZhengzhouzeheInsListNameNav = [String: String]()
 
     var sSearchHistoryEntities = [String: Search]()
     var sSearchEntities = [String: Search]()
-    var sQuotes = [[String: Quote]]()
-    var sInsListNames = [[String: String]]()
+    var sQuotes = [[(key: String, value: Quote)]]()
+    var sInsListNames = [[(key: String, value: String)]]()
     var sPreInsList = ""
     var sInstrumentId = ""
     var sIsLogin = false
@@ -60,6 +43,23 @@ class DataManager {
 
     func parseLatestFile() {
         NSLog("解析开始")
+        var sOptionalQuotes = [String: Quote]()
+        var sMainQuotes = [String: Quote]()
+        var sMainInsListNameNav = [String: String]()
+        var sShangqiQuotes = [String: Quote]()
+        var sShangqiInsListNameNav = [String: String]()
+        var sDalianQuotes = [String: Quote]()
+        var sDalianInsListNameNav = [String: String]()
+        var sZhengzhouQuotes = [String: Quote]()
+        var sZhengzhouInsListNameNav = [String: String]()
+        var sZhongjinQuotes = [String: Quote]()
+        var sZhongjinInsListNameNav = [String: String]()
+        var sNengyuanQuotes = [String: Quote]()
+        var sNengyuanInsListNameNav = [String: String]()
+        var sDalianzuheQuotes = [String: Quote]()
+        var sDalianzuheInsListNameNav = [String: String]()
+        var sZhengzhouzeheQuotes = [String: Quote]()
+        var sZhengzhouzeheInsListNameNav = [String: String]()
         let latestString = FileUtils.readLatestFile()
         if let latestData = latestString?.data(using: .utf8) {
             do {
@@ -154,25 +154,25 @@ class DataManager {
                     sOptionalQuotes[ins] = quote
                 }
 
-                sQuotes.append(sOptionalQuotes)
-                sQuotes.append(sMainQuotes)
-                sQuotes.append(sShangqiQuotes)
-                sQuotes.append(sNengyuanQuotes)
-                sQuotes.append(sDalianQuotes)
-                sQuotes.append(sZhengzhouQuotes)
-                sQuotes.append(sZhongjinQuotes)
-                sQuotes.append(sDalianzuheQuotes)
-                sQuotes.append(sZhengzhouzeheQuotes)
+                sQuotes.append(sortByKey(insList: sOptionalQuotes))
+                sQuotes.append(sortByKey(insList: sMainQuotes))
+                sQuotes.append(sortByKey(insList: sShangqiQuotes))
+                sQuotes.append(sortByKey(insList: sNengyuanQuotes))
+                sQuotes.append(sortByKey(insList: sDalianQuotes))
+                sQuotes.append(sortByKey(insList: sZhengzhouQuotes))
+                sQuotes.append(sortByKey(insList: sZhongjinQuotes))
+                sQuotes.append(sortByKey(insList: sDalianzuheQuotes))
+                sQuotes.append(sortByKey(insList: sZhengzhouzeheQuotes))
 
-                sInsListNames.append([String: String]())
-                sInsListNames.append(sMainInsListNameNav)
-                sInsListNames.append(sShangqiInsListNameNav)
-                sInsListNames.append(sNengyuanInsListNameNav)
-                sInsListNames.append(sDalianInsListNameNav)
-                sInsListNames.append(sZhengzhouInsListNameNav)
-                sInsListNames.append(sZhongjinInsListNameNav)
-                sInsListNames.append(sDalianzuheInsListNameNav)
-                sInsListNames.append(sZhengzhouzeheInsListNameNav)
+                sInsListNames.append([(key: String, value: String)]())
+                sInsListNames.append(sortByValue(insList: sMainInsListNameNav))
+                sInsListNames.append(sortByValue(insList: sShangqiInsListNameNav))
+                sInsListNames.append(sortByValue(insList: sNengyuanInsListNameNav))
+                sInsListNames.append(sortByValue(insList: sDalianInsListNameNav))
+                sInsListNames.append(sortByValue(insList: sZhengzhouInsListNameNav))
+                sInsListNames.append(sortByValue(insList: sZhongjinInsListNameNav))
+                sInsListNames.append(sortByValue(insList: sDalianzuheInsListNameNav))
+                sInsListNames.append(sortByValue(insList: sZhengzhouzeheInsListNameNav))
 
                 
             } catch {
@@ -180,6 +180,32 @@ class DataManager {
             }
         }
         NSLog("解析结束")
+    }
+
+    func sortByKey(insList: [String: Quote]) -> [(key: String, value: Quote)] {
+        return insList.sorted(by: {
+            if let sortKey0 = (sSearchEntities[$0.key]?.sort_key), let sortKey1 = (sSearchEntities[$1.key]?.sort_key){
+                if sortKey0 != sortKey1{
+                    return sortKey0 < sortKey1
+                }else{
+                    return $0.key < $1.key
+                }
+            }
+            return $0.key < $1.key
+        })
+    }
+
+    func sortByValue(insList: [String: String]) -> [(key: String, value: String)] {
+        return insList.sorted(by: {
+            if let sortKey0 = (sSearchEntities[$0.value]?.sort_key), let sortKey1 = (sSearchEntities[$1.value]?.sort_key){
+                if sortKey0 != sortKey1{
+                    return sortKey0 < sortKey1
+                }else{
+                    return $0.value < $1.value
+                }
+            }
+            return $0.value < $1.value
+        })
     }
 
     func saveOrRemoveIns(ins: String) {
@@ -194,13 +220,13 @@ class DataManager {
             } else {
                 quote?.instrument_name = ins
             }
-            sQuotes[0][ins] = quote
+            sQuotes[0].append((key: ins, value: quote!))
             ToastUtils.showPositiveMessage(message: "合约\(ins)已添加到自选～")
-        } else if let index = optional.index(of: ins) {
+        } else if let index = optional.index(of: ins), let index1 = sQuotes[0].index(where: {$0.key.elementsEqual(ins)}){
             optional.remove(at: index)
             FileUtils.saveOptional(ins: optional)
             //如果三个数据集之间不同步,删除会有崩溃的危险
-            sQuotes[0].removeValue(forKey: ins)
+            sQuotes[0].remove(at: index1)
             ToastUtils.showNegativeMessage(message: "合约\(ins)被踢出自选～")
         }
         NotificationCenter.default.post(name: Notification.Name(CommonConstants.RefreshOptionalInsListNotification), object: nil)
