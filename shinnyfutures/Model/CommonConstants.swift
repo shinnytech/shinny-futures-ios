@@ -19,7 +19,7 @@ class CommonConstants {
     public static let MARKET_URL_7 = "ws://106.15.82.247/t/md/front/mobile";
     public static let MARKET_URL_8 = "ws://106.15.82.189/t/md/front/mobile";
     public static let MARKET_URL_9 = "ws://106.15.219.160/t/md/front/mobile";
-    public static let TRANSACTION_URL = "ws://118.31.237.98:3918"
+    public static let TRANSACTION_URL = "ws://opentd.shinnytech.com"
     public static let REDMINE_URL = "http://redmine.kuaiqi.net/src/"
     public static let KLINE_MINUTE = "300000000000"
     public static let KLINE_HOUR = "3600000000000"
