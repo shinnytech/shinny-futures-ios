@@ -17,7 +17,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.1.8</string>
+	<string>1.1.9</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -32,7 +32,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>329</string>
+	<string>331</string>
 	<key>Channel</key>
 	<string></string>
 	<key>LSRequiresIPhoneOS</key>

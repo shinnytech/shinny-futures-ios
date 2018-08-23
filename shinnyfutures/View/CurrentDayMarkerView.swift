@@ -35,12 +35,12 @@ open class CurrentDayMarkerView: MarkerView {
 
     open override func refreshContent(entry: ChartDataEntry, highlight: Highlight) {
         let x = Int(entry.x)
-        let preSettlement = dataManager.sRtnMD[RtnMDConstants.quotes][dataManager.sInstrumentId][QuoteConstants.pre_settlement].floatValue
         let data = dataManager.sRtnMD[RtnMDConstants.klines][dataManager.sInstrumentId][klineType][KlineConstants.data]["\(x)"]
         let chart = self.chartView as! CurrentDayCombinedChartView
         guard let averageEntry = chart.lineData?.dataSets[1].entryForXValue(entry.x, closestToY: entry.y) else {return}
         let dataPre = dataManager.sRtnMD[RtnMDConstants.klines][dataManager.sInstrumentId][klineType][KlineConstants.data]["\(x-1)"]
-        if !data.isEmpty && preSettlement != 0 {
+        if !data.isEmpty && !dataPre.isEmpty {
+            let closePre = dataPre[KlineConstants.close].floatValue
             let close = data[KlineConstants.close].floatValue
             let dateTime = Date(timeIntervalSince1970: TimeInterval(data[KlineConstants.datetime].intValue / 1000000000))
             let dateformatter = DateFormatter()
@@ -51,8 +51,8 @@ open class CurrentDayMarkerView: MarkerView {
             let decimal = dataManager.getDecimalByPtick(instrumentId: dataManager.sInstrumentId)
             let price = String(format: "%.\(decimal)f", data[KlineConstants.close].floatValue)
             let average = String(format: "%.\(decimal)f", averageEntry.y)
-            let change = String(format: "%.\(decimal)f", close - preSettlement)
-            let changePercent = String(format: "%.2f", (close - preSettlement) / preSettlement * 100) + "%"
+            let change = String(format: "%.\(decimal)f", close - closePre)
+            let changePercent = String(format: "%.2f", (close - closePre) / closePre * 100) + "%"
             let volume = data[KlineConstants.volume].intValue
             let closeOi = data[KlineConstants.close_oi].intValue
             self.yValue.text = yValue

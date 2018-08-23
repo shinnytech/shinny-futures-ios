@@ -39,8 +39,8 @@ open class KlineMarkerView: MarkerView {
         klineType = chart.klineType
         let data = dataManager.sRtnMD[RtnMDConstants.klines][dataManager.sInstrumentId][klineType][KlineConstants.data]["\(x)"]
         let dataPre = dataManager.sRtnMD[RtnMDConstants.klines][dataManager.sInstrumentId][klineType][KlineConstants.data]["\(x-1)"]
-        let preSettlement = dataManager.sRtnMD[RtnMDConstants.quotes][dataManager.sInstrumentId][QuoteConstants.pre_settlement].floatValue
-        if !data.isEmpty && preSettlement != 0{
+        if !data.isEmpty && !dataPre.isEmpty{
+            let closePre = dataPre[KlineConstants.close].floatValue
             let close = data[KlineConstants.close].floatValue
             let open = data[KlineConstants.open].floatValue
             let high = data[KlineConstants.high].floatValue
@@ -52,8 +52,8 @@ open class KlineMarkerView: MarkerView {
             dateformatter.dateFormat = "HH:mm"
             let xValue = dateformatter.string(from: dateTime)
             let decimal = dataManager.getDecimalByPtick(instrumentId: dataManager.sInstrumentId)
-            let change = String(format: "%.\(decimal)f", close - preSettlement)
-            let changePercent = String(format: "%.\(decimal)f", (close - preSettlement) / preSettlement * 100) + "%"
+            let change = String(format: "%.\(decimal)f", close - closePre)
+            let changePercent = String(format: "%.2f", (close - closePre) / closePre * 100) + "%"
             let volume = data[KlineConstants.volume].intValue
             let closeOi = data[KlineConstants.close_oi].intValue
             self.yValue.text = yValue
