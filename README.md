@@ -12,6 +12,7 @@
 ![image-20180815164052756](https://ws4.sinaimg.cn/large/006tNbRwgy1fuah6rgybvj30ym0b2my1.jpg)
 - `Command R`进行编译打包安装
 - 模拟账号获取：[simnow账号注册](http://www.simnow.com.cn/)
+- 提问：您可以在`issue`中给我们留言，也可以加入QQ群`611806823`交流讨论
 ### Function
 软件的主要功能：查看行情以及进行交易<br>
 - 首页
