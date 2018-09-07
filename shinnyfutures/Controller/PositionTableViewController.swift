@@ -14,6 +14,7 @@ class PositionTableViewController: UITableViewController {
     // MARK: Properties
     var positions = [JSON]()
     let dataManager = DataManager.getInstance()
+    var isRefresh = true
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,7 +25,7 @@ class PositionTableViewController: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         refreshPage()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(loadData), name: Notification.Name(CommonConstants.PositionNotification), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(loadData), name: Notification.Name(CommonConstants.RtnTDNotification), object: nil)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -60,19 +61,21 @@ class PositionTableViewController: UITableViewController {
 
         // Fetches the appropriate quote for the data source layout.
         let position = positions[indexPath.row]
-        let instrumentId = position[PositionConstants.instrument_id].stringValue
-        var vm = 1
+        let instrumentId = position[PositionConstants.exchange_id].stringValue + "." + position[PositionConstants.instrument_id].stringValue
         if let search = dataManager.sSearchEntities[instrumentId] {
             cell.name.text = search.instrument_name
-            vm = Int(search.vm)!
         } else {
             cell.name.text = instrumentId
         }
+
         let decimal = dataManager.getDecimalByPtick(instrumentId: instrumentId) + 1
-        let available_long = position[PositionConstants.volume_long_today].intValue + position[PositionConstants.volume_long_his].intValue
-        let volume_long = available_long + position[PositionConstants.volume_long_frozen].intValue
-        let available_short = position[PositionConstants.volume_short_today].intValue + position[PositionConstants.volume_short_his].intValue
-        let volume_short = available_short + position[PositionConstants.volume_short_frozen].intValue
+
+        let volume_long = position[PositionConstants.volume_long].intValue
+        let available_long = volume_long - position[PositionConstants.volume_long_frozen_today].intValue - position[PositionConstants.volume_long_frozen_his].intValue
+
+        let volume_short = position[PositionConstants.volume_short].intValue
+        let available_short = volume_short - position[PositionConstants.volume_short_frozen_his].intValue - position[PositionConstants.volume_short_frozen_today].intValue
+
         var profit = 0.0
 
         if volume_long != 0 && volume_short == 0 {
@@ -80,49 +83,33 @@ class PositionTableViewController: UITableViewController {
             cell.direction.textColor = UIColor.red
             cell.available.text = "\(available_long)"
             cell.volume.text = "\(volume_long)"
-            let open_cost_long = position[PositionConstants.open_cost_long].floatValue
-            var open_price_long = position[PositionConstants.open_price_long].floatValue
-            open_price_long = dataManager.getPrice(open_cost: open_cost_long, open_price: open_price_long, vm: vm, volume: volume_long)
+            let open_price_long = position[PositionConstants.open_price_long].floatValue
             cell.openPrice.text = dataManager.saveDecimalByPtick(decimal: decimal, data: "\(open_price_long)")
             profit = position[PositionConstants.float_profit_long].doubleValue
-            cell.profit.text = "\(profit)"
+            cell.profit.text = dataManager.saveDecimalByPtick(decimal: 2, data: "\(profit)")
         } else if volume_long == 0 && volume_short != 0 {
             cell.direction.text = "空"
             cell.direction.textColor = UIColor.green
             cell.available.text = "\(available_short)"
             cell.volume.text = "\(volume_short)"
-            let open_cost_short = position[PositionConstants.open_cost_short].floatValue
-            var open_price_short = position[PositionConstants.open_price_short].floatValue
-            open_price_short = dataManager.getPrice(open_cost: open_cost_short, open_price: open_price_short, vm: vm, volume: volume_short)
+            let open_price_short = position[PositionConstants.open_price_short].floatValue
             cell.openPrice.text = dataManager.saveDecimalByPtick(decimal: decimal, data: "\(open_price_short)")
             profit = position[PositionConstants.float_profit_short].doubleValue
-            cell.profit.text = "\(profit)"
+            cell.profit.text = dataManager.saveDecimalByPtick(decimal: 2, data: "\(profit)")
         } else if volume_long != 0 && volume_short != 0 {
             cell.direction.text = "双向"
             cell.direction.textColor = UIColor.white
             cell.available.text = "\(available_long)" + "/" + "\(available_short)"
             cell.volume.text = "\(volume_long)" + "/" + "\(volume_short)"
-            let open_cost_long = position[PositionConstants.open_cost_long].floatValue
-            var open_price_long = position[PositionConstants.open_price_long].floatValue
-            open_price_long = dataManager.getPrice(open_cost: open_cost_long, open_price: open_price_long, vm: vm, volume: volume_long)
+            let open_price_long = position[PositionConstants.open_price_long].floatValue
             let open_price_long_s = dataManager.saveDecimalByPtick(decimal: decimal, data: "\(open_price_long)")
-            let open_cost_short = position[PositionConstants.open_cost_short].floatValue
-            var open_price_short = position[PositionConstants.open_price_short].floatValue
-            open_price_short = dataManager.getPrice(open_cost: open_cost_short, open_price: open_price_short, vm: vm, volume: volume_short)
+            let open_price_short = position[PositionConstants.open_price_short].floatValue
             let open_price_short_s = dataManager.saveDecimalByPtick(decimal: decimal, data: "\(open_price_short)")
             cell.openPrice.text = open_price_long_s + "/" + open_price_short_s
-            let profit_long = position[PositionConstants.float_profit_long].stringValue
-            let profit_short = position[PositionConstants.float_profit_short].stringValue
+            let profit_long = dataManager.saveDecimalByPtick(decimal: 2, data: position[PositionConstants.float_profit_long].stringValue)
+            let profit_short = dataManager.saveDecimalByPtick(decimal: 2, data: position[PositionConstants.float_profit_short].stringValue)
             cell.profit.text = profit_long + "/" + profit_short
             profit = position[PositionConstants.float_profit_long].doubleValue
-        }else{
-            cell.direction.text = "--"
-            cell.direction.textColor = UIColor.white
-            cell.available.text = "--"
-            cell.volume.text = "--"
-            cell.openPrice.text = "--"
-            cell.profit.text = "--"
-            cell.profit.textColor = UIColor.white
         }
 
         if profit > 0 {
@@ -148,7 +135,7 @@ class PositionTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 44.0
+        return 35.0
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -158,34 +145,28 @@ class PositionTableViewController: UITableViewController {
         stackView.distribution = .fillEqually
         let name = UILabel()
         name.adjustsFontSizeToFitWidth = true
-        name.textColor = UIColor.white
         name.text = "合约"
         name.textAlignment = .center
         let direction = UILabel()
         direction.adjustsFontSizeToFitWidth = true
-        direction.textColor = UIColor.white
         direction.text = "多空"
         direction.textAlignment = .center
         let volume = UILabel()
         volume.adjustsFontSizeToFitWidth = true
-        volume.textColor = UIColor.white
         volume.text = "手数"
         volume.textAlignment = .center
         let available = UILabel()
         available.adjustsFontSizeToFitWidth = true
-        available.textColor = UIColor.white
         available.text = "可用"
         available.textAlignment = .center
         let openInterest = UILabel()
         openInterest.adjustsFontSizeToFitWidth = true
-        openInterest.textColor = UIColor.white
         openInterest.text = "开仓均价"
-        openInterest.textAlignment = .center
+        openInterest.textAlignment = .right
         let profit = UILabel()
         profit.adjustsFontSizeToFitWidth = true
-        profit.textColor = UIColor.white
         profit.text = "逐笔盈亏"
-        profit.textAlignment = .center
+        profit.textAlignment = .right
         stackView.addArrangedSubview(name)
         stackView.addArrangedSubview(direction)
         stackView.addArrangedSubview(volume)
@@ -200,51 +181,43 @@ class PositionTableViewController: UITableViewController {
         return 35.0
     }
 
+    override func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        let scrollToScrollStop = !scrollView.isTracking && !scrollView.isDragging && !scrollView.isDecelerating
+        if scrollToScrollStop { isRefresh = true }
+    }
+
+    override func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if !decelerate {
+            let dragToDragStop = scrollView.isTracking && !scrollView.isDragging && !scrollView.isDecelerating
+            if dragToDragStop { isRefresh = true }
+        }
+    }
+
+    override func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        isRefresh = false
+    }
+
     // MARK: objc Methods
     @objc private func loadData() {
-        if positions.count == 0 {
-            positions = dataManager.sRtnPositions.sorted(by: <).map {$0.value}
+        if !isRefresh {return}
+        let user = dataManager.sRtnTD[dataManager.sUser_id]
+        let rtnPositions = user[RtnTDConstants.positions].dictionaryValue.sorted(by: <).map({$0.value})
+        let oldData = positions
+        positions.removeAll()
+        for position in rtnPositions{
+            let volume_long = position[PositionConstants.volume_long].intValue
+            let volume_short = position[PositionConstants.volume_short].intValue
+            if volume_long != 0 || volume_short != 0{
+                positions.append(position)
+            }
+        }
+        if oldData.count == 0 {
             tableView.reloadData()
         } else {
-            let oldData = positions
-            positions = dataManager.sRtnPositions.sorted(by: <).map {$0.value}
-
             let change = diff(old: oldData, new: positions)
-
             tableView.reload(changes: change, section: 0, insertionAnimation: .none, deletionAnimation: .none, replacementAnimation: .none, completion: {_ in})
         }
     }
 
 }
 
-extension JSON: Hashable {
-
-    public var hashValue: Int {
-
-        if (self.dictionaryValue.map {$0.key}).contains(OrderConstants.order_type) {
-            return self[OrderConstants.order_id].stringValue.hashValue
-        }
-
-        if (self.dictionaryValue.map {$0.key}).contains(TradeConstants.exchange_trade_id) {
-            return (self[TradeConstants.order_id].stringValue + "|" + self[TradeConstants.exchange_trade_id].stringValue).hashValue
-        }
-
-        if (self.dictionaryValue.map {$0.key}).contains(PositionConstants.position_cost_long) {
-            return (self[PositionConstants.exchange_id].stringValue + "." + self[PositionConstants.exchange_id].stringValue).hashValue
-        }
-        return self.count
-    }
-
-    static func == (lhs: JSON, rhs: JSON) -> Bool {
-        if (lhs.dictionaryValue.map {$0.key}).contains(PositionConstants.position_cost_long) {
-            return lhs[PositionConstants.exchange_id].stringValue == rhs[PositionConstants.exchange_id].stringValue && lhs[PositionConstants.instrument_id].stringValue == rhs[PositionConstants.instrument_id].stringValue && lhs[PositionConstants.volume_long_frozen].stringValue == rhs[PositionConstants.volume_long_frozen].stringValue && lhs[PositionConstants.volume_long_his].stringValue == rhs[PositionConstants.volume_long_his].stringValue && lhs[PositionConstants.volume_long_today].stringValue == rhs[PositionConstants.volume_long_today].stringValue && lhs[PositionConstants.open_price_long].stringValue == rhs[PositionConstants.open_price_long].stringValue && lhs[PositionConstants.open_cost_long].stringValue == rhs[PositionConstants.open_cost_long].stringValue && lhs[PositionConstants.float_profit_long].stringValue == rhs[PositionConstants.float_profit_long].stringValue && lhs[PositionConstants.volume_short_his].stringValue == rhs[PositionConstants.volume_short_his].stringValue && lhs[PositionConstants.volume_short_today].stringValue == rhs[PositionConstants.volume_short_today].stringValue && lhs[PositionConstants.open_price_short].stringValue == rhs[PositionConstants.open_price_short].stringValue && lhs[PositionConstants.open_cost_short].stringValue == rhs[PositionConstants.open_cost_short].stringValue && lhs[PositionConstants.float_profit_short].stringValue == rhs[PositionConstants.float_profit_short].stringValue
-
-        }
-
-        if (lhs.dictionaryValue.map {$0.key}).contains(OrderConstants.order_type) {
-            return lhs[OrderConstants.order_id].stringValue == rhs[OrderConstants.order_id].stringValue && lhs[OrderConstants.last_msg].stringValue == rhs[OrderConstants.last_msg].stringValue && lhs[OrderConstants.status].stringValue == rhs[OrderConstants.status].stringValue && lhs[OrderConstants.volume_left].stringValue == rhs[OrderConstants.volume_left].stringValue
-        }
-        return lhs.hashValue == rhs.hashValue
-    }
-
-}

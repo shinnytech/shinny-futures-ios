@@ -71,7 +71,7 @@ class TransactionViewController: UIViewController, PriceKeyboardViewDelegate, Vo
     override func viewWillAppear(_ animated: Bool) {
         refreshPage()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(refreshAccount), name: Notification.Name(CommonConstants.AccountNotification), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(refreshAccount), name: Notification.Name(CommonConstants.RtnTDNotification), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(refreshPrice), name: Notification.Name(CommonConstants.RtnMDNotification), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(refreshPage), name: Notification.Name(CommonConstants.SwitchQuoteNotification), object: nil)
     }
@@ -102,13 +102,16 @@ class TransactionViewController: UIViewController, PriceKeyboardViewDelegate, Vo
             instrument_id_transaction = dataManager.sInstrumentId
         }
         exchange_id = String(instrument_id_transaction.split(separator: ".")[0])
-        position = dataManager.sRtnPositions[instrument_id_transaction]
+        let user = dataManager.sRtnTD[dataManager.sUser_id]
+        position = user[RtnTDConstants.positions].dictionaryValue[instrument_id_transaction]
 
         if let position = position {
-            let available_long = position[PositionConstants.volume_long_today].intValue + position[PositionConstants.volume_long_his].intValue
-            let volume_long = available_long + position[PositionConstants.volume_long_frozen].intValue
-            let available_short = position[PositionConstants.volume_short_today].intValue + position[PositionConstants.volume_short_his].intValue
-            let volume_short = available_short + position[PositionConstants.volume_short_frozen].intValue
+
+            let volume_long = position[PositionConstants.volume_long].intValue
+            let volume_short = position[PositionConstants.volume_short].intValue
+            let available_long = volume_long - position[PositionConstants.volume_long_frozen_today].intValue - position[PositionConstants.volume_long_frozen_his].intValue
+            let available_short = volume_short - position[PositionConstants.volume_short_frozen_today].intValue - position[PositionConstants.volume_short_frozen_his].intValue
+
             if volume_long != 0 && volume_short == 0 {
                 direction = "多"
                 volume.text = "\(available_long)"
@@ -158,13 +161,14 @@ class TransactionViewController: UIViewController, PriceKeyboardViewDelegate, Vo
             instrument_id_transaction = dataManager.sInstrumentId
         }
         exchange_id = String(instrument_id_transaction.split(separator: ".")[0])
-        position = dataManager.sRtnPositions[instrument_id_transaction]
+        let user = dataManager.sRtnTD[dataManager.sUser_id]
+        position = user[RtnTDConstants.positions].dictionaryValue[instrument_id_transaction]
 
         if let position = position {
-            let available_long = position[PositionConstants.volume_long_today].intValue + position[PositionConstants.volume_long_his].intValue
-            let volume_long = available_long + position[PositionConstants.volume_long_frozen].intValue
-            let available_short = position[PositionConstants.volume_short_today].intValue + position[PositionConstants.volume_short_his].intValue
-            let volume_short = available_short + position[PositionConstants.volume_short_frozen].intValue
+
+            let volume_long = position[PositionConstants.volume_long].intValue
+            let volume_short = position[PositionConstants.volume_short].intValue
+
             if volume_long != 0 && volume_short == 0 {
                 direction = "多"
                 isClosePriceShow = true
@@ -298,7 +302,8 @@ class TransactionViewController: UIViewController, PriceKeyboardViewDelegate, Vo
             let message_history = "\(instrument_id_transaction), \(price), 平昨, \(volume)手"
             let searchEntity = dataManager.sSearchEntities[instrument_id_transaction]
             if searchEntity != nil, let exchange_name = searchEntity?.exchange_name, "上海期货交易所".elementsEqual(exchange_name) || "上海国际能源交易中心".elementsEqual(exchange_name) {
-                guard let position = dataManager.sRtnPositions[instrument_id_transaction] else {return}
+                let user = dataManager.sRtnTD[dataManager.sUser_id]
+                guard let position = user[RtnTDConstants.positions].dictionaryValue[instrument_id_transaction] else {return}
                 var volumre_today = 0
                 var volume_history = 0
                 if "多".elementsEqual(direction) {
@@ -370,7 +375,8 @@ class TransactionViewController: UIViewController, PriceKeyboardViewDelegate, Vo
 
     // MARK: objc methods
     @objc func refreshAccount() {
-        for (_, account) in dataManager.sRtnAcounts {
+        let user = dataManager.sRtnTD[dataManager.sUser_id]
+        for (_, account) in user[RtnTDConstants.accounts].dictionaryValue {
             let balance = account[AccountConstants.balance].floatValue
             let margin = account[AccountConstants.margin].floatValue
             let available = account[AccountConstants.available].floatValue

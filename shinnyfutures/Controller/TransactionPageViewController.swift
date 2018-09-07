@@ -11,13 +11,14 @@ import UIKit
 class TransactionPageViewController: UIPageViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate {
     // MARK: Properties
     var currentIndex = 0
+    var identifiers = [CommonConstants.HandicapViewController, CommonConstants.PositionTableViewController, CommonConstants.OrderTableViewController, CommonConstants.TransactionViewController]
     weak var quoteViewController: QuoteViewController?
     lazy var subViewControllers: [UIViewController] = {
         return [
-            UIStoryboard(name: "Main", bundle: Bundle(identifier: "com.shinnytech.futures")).instantiateViewController(withIdentifier: CommonConstants.HandicapViewController) as! HandicapViewController,
-            UIStoryboard(name: "Main", bundle: Bundle(identifier: "com.shinnytech.futures")).instantiateViewController(withIdentifier: CommonConstants.PositionTableViewController) as! PositionTableViewController,
-            UIStoryboard(name: "Main", bundle: Bundle(identifier: "com.shinnytech.futures")).instantiateViewController(withIdentifier: CommonConstants.OrderTableViewController) as! OrderTableViewController,
-            UIStoryboard(name: "Main", bundle: Bundle(identifier: "com.shinnytech.futures")).instantiateViewController(withIdentifier: CommonConstants.TransactionViewController) as! TransactionViewController]
+            UIStoryboard(name: "Main", bundle: Bundle(identifier: "com.shinnytech.futures")).instantiateViewController(withIdentifier: identifiers[0]) as! HandicapViewController,
+            UIStoryboard(name: "Main", bundle: Bundle(identifier: "com.shinnytech.futures")).instantiateViewController(withIdentifier: identifiers[1]) as! PositionTableViewController,
+            UIStoryboard(name: "Main", bundle: Bundle(identifier: "com.shinnytech.futures")).instantiateViewController(withIdentifier: identifiers[2]) as! OrderTableViewController,
+            UIStoryboard(name: "Main", bundle: Bundle(identifier: "com.shinnytech.futures")).instantiateViewController(withIdentifier: identifiers[3]) as! TransactionViewController]
     }()
 
     override func viewDidLoad() {
@@ -41,7 +42,10 @@ class TransactionPageViewController: UIPageViewController, UIPageViewControllerD
     //滑动切换合约
     func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
         if completed {
-            quoteViewController?.controlTransactionVisibility(index: currentIndex)
+            if let contentViewController = pageViewController.viewControllers?.first {
+                let index = identifiers.index(of: contentViewController.restorationIdentifier!)
+                quoteViewController?.controlTransactionVisibility(index: index ?? 0)
+            }
         }
     }
 
@@ -51,18 +55,15 @@ class TransactionPageViewController: UIPageViewController, UIPageViewControllerD
 
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
         let index: Int = subViewControllers.index(of: viewController) ?? 0
-        if index <= 0 {
-            return nil
-        }
+        if index <= 0 {return nil}
+        if index > subViewControllers.count {return nil}
         currentIndex = index - 1
         return subViewControllers[currentIndex]
     }
 
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
         let index: Int = subViewControllers.index(of: viewController) ?? 0
-        if index >= subViewControllers.count - 1 {
-            return nil
-        }
+        if index >= subViewControllers.count - 1 {return nil}
         currentIndex = index + 1
         return subViewControllers[currentIndex]
     }

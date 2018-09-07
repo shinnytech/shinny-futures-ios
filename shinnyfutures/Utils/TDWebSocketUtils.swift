@@ -38,8 +38,8 @@ class TDWebSocketUtils: NSObject, WebSocketDelegate {
     }()
 
     // MARK: 连接服务器
-    func connect() {
-        self.socket = WebSocket(url: URL(string: CommonConstants.TRANSACTION_URL)!)
+    func connect(url: String) {
+        self.socket = WebSocket(url: URL(string: url)!)
         self.socket.delegate = self
         socket.request.addValue("shinnyfutures-iOS", forHTTPHeaderField: "User-Agent")
         self.socket.connect()
@@ -53,35 +53,45 @@ class TDWebSocketUtils: NSObject, WebSocketDelegate {
     // MARK: 获取信息
     func sendPeekMessage() {
         let peekMessage = "{\"aid\":\"peek_message\"}"
+//        NSLog(peekMessage)
         socket.write(string: peekMessage)
     }
 
     // MARK: 用户登录
     func sendReqLogin(bid: String, user_name: String, password: String) {
         let reqLogin = "{\"aid\":\"req_login\",\"bid\":\"\(bid)\",\"user_name\":\"\(user_name)\",\"password\":\"\(password)\"}"
-        NSLog(reqLogin)
+//        NSLog(reqLogin)
         socket.write(string: reqLogin)
     }
 
     // MARK: 确认结算单
     func sendReqConfirmSettlement(reqId: String, msg: String) {
         let confirmSettlement = "{\"aid\":\"MobileConfirmSettlement\",\"req_id\":\"\(reqId)\",\"msg\":\"\(msg)\"}"
-        NSLog(confirmSettlement)
+//        NSLog(confirmSettlement)
         socket.write(string: confirmSettlement)
     }
 
     // MARK: 挂单
     func sendReqInsertOrder(order_id: String, exchange_id: String, instrument_id: String, direction: String, offset: String, volume: Int, priceType: String, price: Double) {
-        let reqInsertOrder = "{\"aid\":\"insert_order\",\"order_id\":\"\(order_id)\",\"exchange_id\":\"\(exchange_id)\",\"instrument_id\":\"\(instrument_id)\",\"direction\":\"\(direction)\",\"offset\":\"\(offset)\",\"volume\":\(volume),\"price_type\":\"\(priceType)\",\"limit_price\":\(price),\"volume_condition\":\"ANY\", \"time_condition\":\"GFD\"}"
-        NSLog(reqInsertOrder)
+        let user_id = DataManager.getInstance().sUser_id
+        let reqInsertOrder = "{\"aid\":\"insert_order\",\"user_id\":\"\(user_id)\",\"order_id\":\"\(order_id)\",\"exchange_id\":\"\(exchange_id)\",\"instrument_id\":\"\(instrument_id)\",\"direction\":\"\(direction)\",\"offset\":\"\(offset)\",\"volume\":\(volume),\"price_type\":\"\(priceType)\",\"limit_price\":\(price),\"volume_condition\":\"ANY\", \"time_condition\":\"GFD\"}"
+//        NSLog(reqInsertOrder)
         socket.write(string: reqInsertOrder)
     }
 
     // MARK: 撤单
     func sendReqCancelOrder(orderId: String) {
-        let reqCancelOrder = "{\"aid\":\"cancel_order\",\"order_id\":\"\(orderId)\"}"
-        NSLog(reqCancelOrder)
+        let user_id = DataManager.getInstance().sUser_id
+        let reqCancelOrder = "{\"aid\":\"cancel_order\",\"user_id\":\"\(user_id)\",\"order_id\":\"\(orderId)\"}"
+//        NSLog(reqCancelOrder)
         socket.write(string: reqCancelOrder)
+    }
+
+    // MARK: 银期转帐
+    func sendReqBankTransfer(future_account: String, future_password: String, bank_id: String, bank_password: String, currency: String, amount: Float) {
+        let sendReqBankTransfer = "{\"aid\":\"req_transfer\",\"future_account\":\"\(future_account)\",\"future_password\":\"\(future_password)\",\"bank_id\":\"\(bank_id)\",\"bank_password\":\"\(bank_password)\",\"currency\":\"\(currency)\",\"amount\":\(amount)}"
+//        NSLog(sendReqBankTransfer)
+        socket.write(string: sendReqBankTransfer)
     }
 
     // MARK: WebSocketDelegate

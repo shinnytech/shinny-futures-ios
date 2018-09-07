@@ -36,7 +36,7 @@ class HandicapViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         refreshPage()
-        
+
         NotificationCenter.default.addObserver(self, selector: #selector(refreshDatas), name: Notification.Name(CommonConstants.RtnMDNotification), object: nil)
     }
     
@@ -54,7 +54,7 @@ class HandicapViewController: UIViewController {
     
     // MARK: objc methods
     @objc private func refreshDatas() {
-        let instrumentId = dataManager.sRtnMD[RtnMDConstants.ins_list].stringValue
+        let instrumentId = dataManager.sInstrumentId
         let decimal = dataManager.getDecimalByPtick(instrumentId: instrumentId)
         let quoteJson = dataManager.sRtnMD[RtnMDConstants.quotes][instrumentId]
         let ask_price1 = quoteJson[QuoteConstants.ask_price1].floatValue

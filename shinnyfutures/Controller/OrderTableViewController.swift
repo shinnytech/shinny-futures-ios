@@ -10,11 +10,12 @@ import UIKit
 import SwiftyJSON
 import DeepDiff
 
-class OrderTableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class OrderTableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate {
     // MARK: Properties
     var orders = [JSON]()
     let dataManager = DataManager.getInstance()
     let dateFormat = DateFormatter()
+    var isRefresh = true
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var segmentControl: UISegmentedControl!
 
@@ -27,7 +28,7 @@ class OrderTableViewController: UIViewController, UITableViewDataSource, UITable
     override func viewWillAppear(_ animated: Bool) {
         refreshPage()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(loadData), name: Notification.Name(CommonConstants.OrderNotification), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(loadData), name: Notification.Name(CommonConstants.RtnTDNotification), object: nil)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -67,7 +68,7 @@ class OrderTableViewController: UIViewController, UITableViewDataSource, UITable
         if orders.count != 0 {
             let order = orders[indexPath.row]
 
-            let instrumentId = order[OrderConstants.instrument_id].stringValue
+            let instrumentId = order[OrderConstants.exchange_id].stringValue + "." + order[OrderConstants.instrument_id].stringValue
             if let search = dataManager.sSearchEntities[instrumentId] {
                 cell.name.text = search.instrument_name
             } else {
@@ -99,7 +100,8 @@ class OrderTableViewController: UIViewController, UITableViewDataSource, UITable
             default:
                 cell.offset.textColor = UIColor.red
             }
-            let decimal = dataManager.getDecimalByPtick(instrumentId: instrumentId) + 1
+            let decimal = dataManager.getDecimalByPtick(instrumentId: instrumentId)
+
             let price = order[OrderConstants.limit_price].stringValue
             cell.price.text = dataManager.saveDecimalByPtick(decimal: decimal, data: price)
             let volume_left = order[OrderConstants.volume_left].intValue
@@ -142,7 +144,7 @@ class OrderTableViewController: UIViewController, UITableViewDataSource, UITable
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 44.0
+        return 35.0
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -151,27 +153,21 @@ class OrderTableViewController: UIViewController, UITableViewDataSource, UITable
         let stackView = UIStackView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 35.0))
         stackView.distribution = .fillEqually
         let name = UILabel()
-        name.textColor = UIColor.white
         name.text = "合约"
         name.textAlignment = .center
         let state = UILabel()
-        state.textColor = UIColor.white
         state.text = "状态"
         state.textAlignment = .center
         let direction = UILabel()
-        direction.textColor = UIColor.white
         direction.text = "开平"
         direction.textAlignment = .center
         let price = UILabel()
-        price.textColor = UIColor.white
         price.text = "委托价"
-        price.textAlignment = .center
+        price.textAlignment = .right
         let volume = UILabel()
-        volume.textColor = UIColor.white
         volume.text = "数量"
         volume.textAlignment = .center
         let time = UILabel()
-        time.textColor = UIColor.white
         time.text = "时间"
         time.textAlignment = .center
         stackView.addArrangedSubview(name)
@@ -188,6 +184,23 @@ class OrderTableViewController: UIViewController, UITableViewDataSource, UITable
         return 35.0
     }
 
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        let scrollToScrollStop = !scrollView.isTracking && !scrollView.isDragging && !scrollView.isDecelerating
+        if scrollToScrollStop { isRefresh = true }
+    }
+
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if !decelerate {
+            let dragToDragStop = scrollView.isTracking && !scrollView.isDragging && !scrollView.isDecelerating
+            if dragToDragStop { isRefresh = true }
+        }
+    }
+
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        isRefresh = false
+    }
+
+
     @objc func segmentValueChange() {
         orders.removeAll()
         tableView.reloadData()
@@ -196,32 +209,24 @@ class OrderTableViewController: UIViewController, UITableViewDataSource, UITable
     
     // MARK: objc Methods
     @objc private func loadData() {
-        let orders_tmp = dataManager.sRtnOrders.sorted{ $0.value[OrderConstants.insert_date_time].stringValue > $1.value[OrderConstants.insert_date_time].stringValue }.map {$0.value}
-        if orders.count == 0 {
-            if segmentControl.selectedSegmentIndex == 0 {
-                orders = orders_tmp
-            } else {
-                for order in orders_tmp {
-                    let status = order[OrderConstants.status].stringValue
-                    if "ALIVE".elementsEqual(status){
-                        orders.append(order)
-                    }
+        if !isRefresh{return}
+        let user = dataManager.sRtnTD[dataManager.sUser_id]
+        let orders_tmp = user[RtnTDConstants.orders].dictionaryValue.sorted{ $0.value[OrderConstants.insert_date_time].stringValue > $1.value[OrderConstants.insert_date_time].stringValue }.map {$0.value}
+        let oldData = orders
+        if segmentControl.selectedSegmentIndex == 1 {
+            orders = orders_tmp
+        } else {
+            orders.removeAll()
+            for order in orders_tmp {
+                let status = order[OrderConstants.status].stringValue
+                if "ALIVE".elementsEqual(status) {
+                    orders.append(order)
                 }
             }
+        }
+        if oldData.count == 0 {
             tableView.reloadData()
         } else {
-            let oldData = orders
-            if segmentControl.selectedSegmentIndex == 0 {
-                orders = orders_tmp
-            } else {
-                orders.removeAll()
-                for order in orders_tmp {
-                    let status = order[OrderConstants.status].stringValue
-                    if "ALIVE".elementsEqual(status) {
-                        orders.append(order)
-                    }
-                }
-            }
             let change = diff(old: oldData, new: orders)
             tableView.reload(changes: change, section: 0, insertionAnimation: .none, deletionAnimation: .none, replacementAnimation: .none, completion: {_ in})
         }

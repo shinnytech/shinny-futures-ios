@@ -108,7 +108,6 @@ class KlineViewController: BaseChartViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         scaleX = CGFloat(UserDefaults.standard.double(forKey: "scaleX"))
-        print(scaleX)
         if chartView.scaleX != scaleX {
             chartView.fitScreen()
             chartView.zoom(scaleX: scaleX, scaleY: 1, x: CGFloat(last_id), y: 0)
@@ -126,23 +125,21 @@ class KlineViewController: BaseChartViewController {
     }
 
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        let touch = (touches as NSSet).allObjects[0] as! UITouch
-        let location = touch.location(in: chartView)
-        if abs(location.x - startX) > 10 {
-            if (Int(chartView.lowestVisibleX + 0.5) == left_id) {
-                if xVals.count >= viewWidth {
-                    viewWidth = viewWidth + 100
-                    let instrumentId = dataManager.sInstrumentId
-                    switch klineType {
-                    case CommonConstants.KLINE_DAY:
-                        MDWebSocketUtils.getInstance().sendSetChartDay(insList: instrumentId, viewWidth: viewWidth)
-                    case CommonConstants.KLINE_HOUR:
-                        MDWebSocketUtils.getInstance().sendSetChartHour(insList: instrumentId, viewWidth: viewWidth)
-                    case CommonConstants.KLINE_MINUTE:
-                        MDWebSocketUtils.getInstance().sendSetChartMinute(insList: instrumentId, viewWidth: viewWidth)
-                    default:
-                        break
-                    }
+        if !isMoveHighlight {
+            let touch = (touches as NSSet).allObjects[0] as! UITouch
+            let location = touch.location(in: chartView)
+            if abs(location.x - startX) > 10 && Int(chartView.lowestVisibleX + 0.5) == left_id && xVals.count >= viewWidth {
+                viewWidth = viewWidth + 100
+                let instrumentId = dataManager.sInstrumentId
+                switch klineType {
+                case CommonConstants.KLINE_DAY:
+                    MDWebSocketUtils.getInstance().sendSetChartDay(insList: instrumentId, viewWidth: viewWidth)
+                case CommonConstants.KLINE_HOUR:
+                    MDWebSocketUtils.getInstance().sendSetChartHour(insList: instrumentId, viewWidth: viewWidth)
+                case CommonConstants.KLINE_MINUTE:
+                    MDWebSocketUtils.getInstance().sendSetChartMinute(insList: instrumentId, viewWidth: viewWidth)
+                default:
+                    break
                 }
             }
         }
@@ -155,13 +152,15 @@ class KlineViewController: BaseChartViewController {
         let highlight = chartView.getHighlightByTouchPoint(position)
         chartView.highlightValue(highlight)
         chartView.addGestureRecognizer(moveGesture)
+        chartView.addGestureRecognizer(singleTap)
     }
 
     override func Unhighlight() {
-        chartView.highlightValues(nil)
+        chartView.highlightValue(nil)
         chartView.dragEnabled = true
         isMoveHighlight = false
         chartView.removeGestureRecognizer(moveGesture)
+        chartView.removeGestureRecognizer(singleTap)
     }
 
     @objc func movePan(){
@@ -186,7 +185,7 @@ class KlineViewController: BaseChartViewController {
                 let itemCount = datas.count
                 let entryCount = candleData?.getDataSetByIndex(0).entryCount
                 if itemCount == entryCount {
-//                    print("k线图刷新")
+                    //                    print("k线图刷新")
                     let xValue = Double(last_id)
                     candleData?.removeEntry(xValue: xValue, dataSetIndex: 0)
                     lineData.removeEntry(xValue: xValue, dataSetIndex: 0)
@@ -198,7 +197,7 @@ class KlineViewController: BaseChartViewController {
                     let right_index = chart[ChartConstants.right_id].intValue
                     if left_index < 0 {left_index = 0}
                     if left_index < left_id {
-//                        NSLog("向前添加柱子")
+                        //                        NSLog("向前添加柱子")
                         var index = left_id - 1
                         while index >= left_index {
                             generateLineCandleDataEntry(candleData: candleData!, left_id: left_index, index: index, datas: datas)
@@ -206,7 +205,7 @@ class KlineViewController: BaseChartViewController {
                         }
                         left_id = left_index
                     } else if right_index > right_id {
-//                        NSLog("向后添加柱子")
+                        //                        NSLog("向后添加柱子")
                         for index in (right_id + 1)...right_index {
                             generateLineCandleDataEntry(candleData: candleData!, left_id: left_id, index: index, datas: datas)
                         }
@@ -217,8 +216,6 @@ class KlineViewController: BaseChartViewController {
                 chartView.notifyDataSetChanged()
                 chartView.xAxis.axisMaximum = (combineData?.xMax)! + 0.5
                 chartView.xAxis.axisMinimum = (combineData?.xMin)! - 0.5
-                chartView.setVisibleXRangeMaximum(200)
-                chartView.setVisibleXRangeMinimum(7)
             } else {
                 NSLog("k线图初始化")
                 left_id = chart[ChartConstants.left_id].intValue
@@ -252,6 +249,7 @@ class KlineViewController: BaseChartViewController {
                 chartView.xAxis.axisMinimum = combineData.xMin - 0.5
                 chartView.setVisibleXRangeMaximum(200)
                 chartView.setVisibleXRangeMinimum(7)
+                chartView.zoom(scaleX: scaleX, scaleY: 1.0, xValue: Double(last_id), yValue: 0.0, axis: YAxis.AxisDependency.left)
             }
         }
     }

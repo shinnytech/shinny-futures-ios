@@ -40,6 +40,7 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
     var isMDClose = false
     var isTDClose = false
     var mdURLs = [String]()
+    var tdUrl = CommonConstants.TRANSACTION_URL + "0"
     var index = 0
 
     func websocketDidConnect(socket: TDWebSocketUtils) {
@@ -52,10 +53,11 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
 
     func websocketDidDisconnect(socket: TDWebSocketUtils, error: Error?) {
         NSLog("交易服务器连接断开，正在重连～")
+        DataManager.getInstance().sIsLogin = false
         isTDClose = true
         ToastUtils.showNegativeMessage(message: "交易服务器连接断开，正在重连～")
         DispatchQueue.global().asyncAfter(deadline: DispatchTime.now() + 2, execute: {
-            self.transactionWebSocketUtils.connect()
+            self.transactionWebSocketUtils.connect(url: self.tdUrl)
         })
     }
 
@@ -151,7 +153,7 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
                     NotificationCenter.default.post(name: Notification.Name(CommonConstants.LatestFileParsedNotification), object: nil)
                 }
                 self.index = self.mdWebSocketUtils.connect(url: self.mdURLs[self.index], index: self.index)
-                self.transactionWebSocketUtils.connect()
+                self.transactionWebSocketUtils.connect(url: self.tdUrl)
             } catch {
                 print ("file error: \(error)")
             }
@@ -162,12 +164,20 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
         downloadTask.resume()
     }
 
+    func initTDUrl() {
+        if let tdUrlPath = UserDefaults.standard.string(forKey: "tdUrlPath") {
+            tdUrl = CommonConstants.TRANSACTION_URL + tdUrlPath
+        }else{
+            let tdUrlPath = "\(abs(UUID.init().hashValue % 10))"
+            tdUrl = CommonConstants.TRANSACTION_URL + tdUrlPath
+            UserDefaults.standard.set(tdUrlPath, forKey: "tdUrlPath")
+        }
+    }
+
     func initMDURLs(){
-        let mdURLGroup1 = shuffle(group: [CommonConstants.MARKET_URL_2, CommonConstants.MARKET_URL_3])
-        let mdURLGroup2 = shuffle(group: [CommonConstants.MARKET_URL_4, CommonConstants.MARKET_URL_5, CommonConstants.MARKET_URL_6, CommonConstants.MARKET_URL_7, CommonConstants.MARKET_URL_8, CommonConstants.MARKET_URL_9])
+        let mdURLGroup = shuffle(group: [CommonConstants.MARKET_URL_2, CommonConstants.MARKET_URL_3, CommonConstants.MARKET_URL_4, CommonConstants.MARKET_URL_5, CommonConstants.MARKET_URL_6, CommonConstants.MARKET_URL_7])
         mdURLs.append(CommonConstants.MARKET_URL_1)
-        mdURLs += mdURLGroup1
-        mdURLs += mdURLGroup2
+        mdURLs += mdURLGroup
     }
 
     func shuffle(group: [String]) -> [String] {
@@ -193,6 +203,7 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
         self.navigationController?.navigationBar.barTintColor = UIColor.black
         self.navigationController?.navigationBar.tintColor = UIColor.white
         initMDURLs()
+        initTDUrl()
         self.mdWebSocketUtils.mdWebSocketUtilsDelegate = self
         self.transactionWebSocketUtils.tdWebSocketUtilsDelegate = self
         sessionSimpleDownload(urlString: CommonConstants.LATEST_FILE_URL, fileName: "latest.json")
@@ -296,6 +307,20 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
             performSegue(withIdentifier: CommonConstants.LoginViewController, sender: sender)
         } else {
             performSegue(withIdentifier: CommonConstants.TradeTableViewController, sender: sender)
+        }
+    }
+
+    @IBAction func bankTransferViewControllerUnwindSegue(segue: UIStoryboardSegue){
+        print("我从银期转帐来～")
+    }
+
+    @IBAction func toBankTransfer(_ sender: UIButton){
+        controlSlideMenuVisibility()
+        if !DataManager.getInstance().sIsLogin {
+            DataManager.getInstance().sToLoginTarget = "BankTransfer"
+            performSegue(withIdentifier: CommonConstants.LoginViewController, sender: sender)
+        } else {
+            performSegue(withIdentifier: CommonConstants.BankTransferViewController, sender: sender)
         }
     }
 

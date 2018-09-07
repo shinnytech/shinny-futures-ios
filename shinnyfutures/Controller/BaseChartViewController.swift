@@ -46,6 +46,7 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
     var dataEntities = [String: JSON]()
     var klineType = ""
     var doubleTap: UITapGestureRecognizer!
+    var singleTap: UITapGestureRecognizer!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,8 +60,7 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
     override func viewWillAppear(_ animated: Bool) {
         refreshPage()
 
-        NotificationCenter.default.addObserver(self, selector: #selector(refreshPositionLine), name: Notification.Name(CommonConstants.PositionNotification), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(refreshOrderLine), name: Notification.Name(CommonConstants.OrderNotification), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(refreshTradeLine), name: Notification.Name(CommonConstants.RtnTDNotification), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(refreshKline), name: Notification.Name(CommonConstants.RtnMDNotification), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(sendChart), name: Notification.Name(CommonConstants.SwitchQuoteNotification), object: nil)
     }
@@ -68,8 +68,7 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
     override func viewWillDisappear(_ animated: Bool) {
         cancelChart()
 
-        NotificationCenter.default.removeObserver(self, name: Notification.Name(CommonConstants.PositionNotification), object: nil)
-        NotificationCenter.default.removeObserver(self, name: Notification.Name(CommonConstants.OrderNotification), object: nil)
+        NotificationCenter.default.removeObserver(self, name: Notification.Name(CommonConstants.RtnTDNotification), object: nil)
         NotificationCenter.default.removeObserver(self, name: Notification.Name(CommonConstants.RtnMDNotification), object: nil)
         NotificationCenter.default.removeObserver(self, name: Notification.Name(CommonConstants.SwitchQuoteNotification), object: nil)
     }
@@ -135,8 +134,9 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
         chartView.drawBordersEnabled = true
         chartView.borderColor = colorGrid!
         chartView.setViewPortOffsets(left: 0, top: 15, right: 0, bottom: 15)
-        let tap = UITapGestureRecognizer(target: self, action: #selector(Unhighlight))
-        chartView.addGestureRecognizer(tap)
+
+        singleTap = UITapGestureRecognizer(target: self, action: #selector(Unhighlight))
+        
         doubleTap = UITapGestureRecognizer(target: self, action: #selector(highlight))
         doubleTap.numberOfTapsRequired = 2
         chartView.addGestureRecognizer(doubleTap)
@@ -186,19 +186,14 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
         if key.contains("KQ") {
             key = (dataManager.sSearchEntities[key]?.underlying_symbol)!
         }
-        var vm = "1"
-        if let search = dataManager.sSearchEntities[key] {
-            vm = search.vm
-        }
-        guard let position = dataManager.sRtnPositions[key] else {return}
-        let available_long = position[PositionConstants.volume_long_his].intValue + position[PositionConstants.volume_long_today].intValue
-        let volume_long = available_long + position[PositionConstants.volume_long_frozen].intValue
+
+        let user = dataManager.sRtnTD[dataManager.sUser_id]
+        guard let position = user[RtnTDConstants.positions].dictionaryValue[key] else {return}
+        let volume_long = position[PositionConstants.volume_long].intValue
         if volume_long != 0 {
-            let open_cost_long = position[PositionConstants.open_cost_long].floatValue
-            let open_price_long = position[PositionConstants.open_price_long].floatValue
-            let limit_long = dataManager.getPrice(open_cost: open_cost_long, open_price: open_price_long, vm: Int(vm)!, volume: volume_long)
+            let limit_long =  position[PositionConstants.open_price_long].doubleValue
             let label_long = position[PositionConstants.instrument_id].stringValue + " " + "\(limit_long)"
-            generatePositionLimitLine(limit: Double(limit_long), label: label_long, color: colorBuy!, limitKey: key + "0")
+            generatePositionLimitLine(limit: limit_long, label: label_long, color: colorBuy!, limitKey: key + "0")
         }
     }
 
@@ -207,19 +202,14 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
         if key.contains("KQ") {
             key = (dataManager.sSearchEntities[key]?.underlying_symbol)!
         }
-        var vm = "1"
-        if let search = dataManager.sSearchEntities[key] {
-            vm = search.vm
-        }
-        guard let position = dataManager.sRtnPositions[key] else {return}
-        let available_short = position[PositionConstants.volume_short_his].intValue + position[PositionConstants.volume_short_today].intValue
-        let volume_short = available_short + position[PositionConstants.volume_short_frozen].intValue
+
+        let user = dataManager.sRtnTD[dataManager.sUser_id]
+        guard let position = user[RtnTDConstants.positions].dictionaryValue[key] else {return}
+        let volume_short = position[PositionConstants.volume_short].intValue
         if volume_short != 0 {
-            let open_cost_short = position[PositionConstants.open_cost_short].floatValue
-            let open_price_short = position[PositionConstants.open_price_short].floatValue
-            let limit_short = dataManager.getPrice(open_cost: open_cost_short, open_price: open_price_short, vm: Int(vm)!, volume: volume_short)
+            let limit_short = position[PositionConstants.open_price_short].doubleValue
             let label_short = position[PositionConstants.instrument_id].stringValue + " " + "\(limit_short)"
-            generatePositionLimitLine(limit: Double(limit_short), label: label_short, color: colorSell!, limitKey: key + "1")
+            generatePositionLimitLine(limit: limit_short, label: label_short, color: colorSell!, limitKey: key + "1")
         }
     }
 
@@ -228,23 +218,18 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
         if key.contains("KQ") {
             key = (dataManager.sSearchEntities[key]?.underlying_symbol)!
         }
-        var vm = "1"
-        if let search = dataManager.sSearchEntities[key] {
-            vm = search.vm
-        }
+
         let limitKey = key + "0"
-        guard let position = dataManager.sRtnPositions[key] else {return}
-        let available_long = position[PositionConstants.volume_long_his].intValue + position[PositionConstants.volume_long_today].intValue
-        let volume_long = available_long + position[PositionConstants.volume_long_frozen].intValue
+        let user = dataManager.sRtnTD[dataManager.sUser_id]
+        guard let position = user[RtnTDConstants.positions].dictionaryValue[key] else {return}
+        let volume_long = position[PositionConstants.volume_long].intValue
         if volume_long != 0 {
-            let open_cost_long = position[PositionConstants.open_cost_long].floatValue
-            let open_price_long = position[PositionConstants.open_price_long].floatValue
-            let limit_long = dataManager.getPrice(open_cost: open_cost_long, open_price: open_price_long, vm: Int(vm)!, volume: volume_long)
+            let limit_long = position[PositionConstants.open_price_long].doubleValue
             let limitLine = positionLimitLines[limitKey]
-            if limitLine?.limit != Double(limit_long) {
+            if limitLine?.limit != limit_long {
                 let label_long = position[PositionConstants.instrument_id].stringValue + " " + "\(limit_long)"
                 chartView.leftAxis.removeLimitLine(positionLimitLines[limitKey]!)
-                generatePositionLimitLine(limit: Double(limit_long), label: label_long, color: colorBuy!, limitKey: limitKey)
+                generatePositionLimitLine(limit: limit_long, label: label_long, color: colorBuy!, limitKey: limitKey)
             }
         } else {
             chartView.leftAxis.removeLimitLine(positionLimitLines[limitKey]!)
@@ -258,23 +243,18 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
         if key.contains("KQ") {
             key = (dataManager.sSearchEntities[key]?.underlying_symbol)!
         }
-        var vm = "1"
-        if let search = dataManager.sSearchEntities[key] {
-            vm = search.vm
-        }
+
         let limitKey = key + "1"
-        guard let position = dataManager.sRtnPositions[key] else {return}
-        let available_short = position[PositionConstants.volume_short_his].intValue + position[PositionConstants.volume_short_today].intValue
-        let volume_short = available_short + position[PositionConstants.volume_short_frozen].intValue
+        let user = dataManager.sRtnTD[dataManager.sUser_id]
+        guard let position = user[RtnTDConstants.positions].dictionaryValue[key] else {return}
+        let volume_short = position[PositionConstants.volume_short].intValue
         if volume_short != 0 {
-            let open_cost_short = position[PositionConstants.open_cost_short].floatValue
-            let open_price_short = position[PositionConstants.open_price_short].floatValue
-            let limit_short = dataManager.getPrice(open_cost: open_cost_short, open_price: open_price_short, vm: Int(vm)!, volume: volume_short)
+            let limit_short = position[PositionConstants.open_price_short].doubleValue
             let limitLine = positionLimitLines[limitKey]
-            if limitLine?.limit != Double(limit_short) {
+            if limitLine?.limit != limit_short {
                 let label_short = position[PositionConstants.instrument_id].stringValue + " " + "\(limit_short)"
                 chartView.leftAxis.removeLimitLine(positionLimitLines[limitKey]!)
-                generatePositionLimitLine(limit: Double(limit_short), label: label_short, color: colorSell!, limitKey: limitKey)
+                generatePositionLimitLine(limit: limit_short, label: label_short, color: colorSell!, limitKey: limitKey)
             }
         } else {
             chartView.leftAxis.removeLimitLine(positionLimitLines[limitKey]!)
@@ -283,6 +263,7 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
     }
 
     func removePositionLimitLines() {
+        if positionLimitLines.isEmpty {return}
         for value in positionLimitLines.map({$0.value}) {
             chartView.leftAxis.removeLimitLine(value)
         }
@@ -291,7 +272,10 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
 
     //挂单线增删操作
     func addOrderLimitLines() {
-        for orderEntity in dataManager.sRtnOrders.map({$0.value}) {
+        let user = dataManager.sRtnTD[dataManager.sUser_id]
+        let orders = user[RtnTDConstants.orders].dictionaryValue
+        if orders.isEmpty{return}
+        for orderEntity in orders.map({$0.value}) {
             let instrumentId = orderEntity[OrderConstants.exchange_id].stringValue + "." + orderEntity[OrderConstants.instrument_id].stringValue
             let status = orderEntity[OrderConstants.status].stringValue
             var ins = dataManager.sInstrumentId
@@ -305,6 +289,7 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
     }
 
     func removeOrderLimitLines() {
+        if orderLimitLines.isEmpty {return}
         for key in orderLimitLines.map({$0.key}) {
             removeOneOrderLimitLine(key: key)
         }
@@ -339,7 +324,7 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
     }
 
     // MARK: objc methods
-    @objc func refreshPositionLine() {
+    @objc func refreshTradeLine() {
         if dataManager.sIsLogin && isShowPositionLine {
             var key = dataManager.sInstrumentId
             if key.contains("KQ") {
@@ -362,13 +347,12 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
                 //刷新空头持仓
                 refreshShortPositionLimitLine()
             }
-
         }
-    }
 
-    @objc func refreshOrderLine() {
         if dataManager.sIsLogin && isShowOrderLine {
-            for (orderId, orderEntity): (String, JSON) in dataManager.sRtnOrders {
+            let user = dataManager.sRtnTD[dataManager.sUser_id]
+            let orders = user[RtnTDConstants.orders].dictionaryValue
+            for (orderId, orderEntity): (String, JSON) in orders{
                 let instrumentId = orderEntity[OrderConstants.exchange_id].stringValue + "." + orderEntity[OrderConstants.instrument_id].stringValue
                 var ins = dataManager.sInstrumentId
                 if ins.contains("KQ") {

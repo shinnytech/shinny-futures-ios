@@ -53,7 +53,7 @@ class MDWebSocketUtils: NSObject, WebSocketDelegate {
     // MARK: 行情订阅
     func sendSubscribeQuote(insList: String) {
         let subscribeQuote = "{\"aid\":\"subscribe_quote\",\"ins_list\":\"\(insList)\"}"
-        NSLog(subscribeQuote)
+//        NSLog(subscribeQuote)
         socket.write(string: subscribeQuote)
     }
 
@@ -67,28 +67,28 @@ class MDWebSocketUtils: NSObject, WebSocketDelegate {
     // MARK: 分时图
     func sendSetChart(insList: String) {
         let setChart = "{\"aid\":\"set_chart\",\"chart_id\":\"\(CommonConstants.CURRENT_DAY)\",\"ins_list\":\"\(insList)\",\"duration\":\"60000000000\",\"trading_day_start\":\"0\",\"trading_day_count\":\"86400000000000\"}"
-        NSLog(setChart)
+//        NSLog(setChart)
         socket.write(string: setChart)
     }
 
     // MARK: 日线
     func sendSetChartDay(insList: String, viewWidth: Int) {
         let setChart = "{\"aid\":\"set_chart\",\"chart_id\":\"\(CommonConstants.KLINE_DAY)\",\"ins_list\":\"\(insList)\",\"duration\":\"86400000000000\",\"view_width\":\"\(viewWidth)\"}"
-        NSLog(setChart)
+//        NSLog(setChart)
         socket.write(string: setChart)
     }
 
     // MARK: 小时线
     func sendSetChartHour(insList: String, viewWidth: Int) {
         let setChart = "{\"aid\":\"set_chart\",\"chart_id\":\"\(CommonConstants.KLINE_HOUR)\",\"ins_list\":\"\(insList)\",\"duration\":\"3600000000000\",\"view_width\":\"\(viewWidth)\"}"
-        NSLog(setChart)
+//        NSLog(setChart)
         socket.write(string: setChart)
     }
 
     // MARK: 分钟线
     func sendSetChartMinute(insList: String, viewWidth: Int) {
         let setChart = "{\"aid\":\"set_chart\",\"chart_id\":\"\(CommonConstants.KLINE_MINUTE)\",\"ins_list\":\"\(insList)\",\"duration\":\"300000000000\",\"view_width\":\"\(viewWidth)\"}"
-        NSLog(setChart)
+//        NSLog(setChart)
         socket.write(string: setChart)
     }
 

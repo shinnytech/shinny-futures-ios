@@ -63,7 +63,8 @@ open class VolumeKeyboardView: UIView {
         if margin == 0{
             openVolume.text = "0"
         }else {
-            for (_, account) in DataManager.getInstance().sRtnAcounts {
+            let user = DataManager.getInstance().sRtnTD[DataManager.getInstance().sUser_id]
+            for (_, account) in user[RtnTDConstants.accounts].dictionaryValue {
                 let available = account[AccountConstants.available].intValue
                 openVolume.text = "\(available / margin)"
             }

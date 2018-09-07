@@ -12,7 +12,7 @@ class AccountViewController: UIViewController {
 
     // MARK: Properties
     @IBOutlet weak var date: UILabel!
-    @IBOutlet weak var pre_balance: UILabel!
+    @IBOutlet weak var static_balance: UILabel!
     @IBOutlet weak var close_profit: UILabel!
     @IBOutlet weak var position_profit: UILabel!
     @IBOutlet weak var commission: UILabel!
@@ -36,7 +36,7 @@ class AccountViewController: UIViewController {
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        NotificationCenter.default.addObserver(self, selector: #selector(loadData), name: Notification.Name(CommonConstants.AccountNotification), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(loadData), name: Notification.Name(CommonConstants.RtnTDNotification), object: nil)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -49,8 +49,10 @@ class AccountViewController: UIViewController {
 
     // MARK: objc methods
     @objc func loadData() {
-        for (_, account) in dataManager.sRtnAcounts {
-            let pre_balance = account[AccountConstants.pre_balance].doubleValue
+        let user = dataManager.sRtnTD[dataManager.sUser_id]
+        let acounts = user[RtnTDConstants.accounts].dictionaryValue
+        for (_, account) in acounts {
+            let static_balance = account[AccountConstants.static_balance].doubleValue
             let close_profit = account[AccountConstants.close_profit].doubleValue
             let position_profit = account[AccountConstants.position_profit].doubleValue
             let commission = account[AccountConstants.commission].doubleValue
@@ -63,7 +65,7 @@ class AccountViewController: UIViewController {
             let deposit = account[AccountConstants.deposit].doubleValue
             let withdraw = account[AccountConstants.withdraw].doubleValue
 
-            self.pre_balance.text = String(format: "%.2f", pre_balance)
+            self.static_balance.text = String(format: "%.2f", static_balance)
             self.close_profit.text = String(format: "%.2f", close_profit)
             self.position_profit.text = String(format: "%.2f", position_profit)
             self.commission.text = String(format: "%.2f", commission)

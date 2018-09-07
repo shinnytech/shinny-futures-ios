@@ -17,9 +17,9 @@ class KlinePopupViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        position.setOn(UserDefaults.standard.bool(forKey: "positionLine"), animated: true)
-        order.setOn(UserDefaults.standard.bool(forKey: "orderLine"), animated: true)
-        averageLine.setOn(UserDefaults.standard.bool(forKey: "averageLine"), animated: true)
+        position.setOn(UserDefaults.standard.bool(forKey: "positionLine"), animated: false)
+        order.setOn(UserDefaults.standard.bool(forKey: "orderLine"), animated: false)
+        averageLine.setOn(UserDefaults.standard.bool(forKey: "averageLine"), animated: false)
     }
 
     // MARK: Actions

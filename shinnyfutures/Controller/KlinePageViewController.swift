@@ -8,7 +8,7 @@
 
 import UIKit
 
-class KlinePageViewController: UIPageViewController, UIPageViewControllerDelegate {
+class KlinePageViewController: UIPageViewController {
     // MARK: Properties
     var currentIndex = 0
 
@@ -26,7 +26,6 @@ class KlinePageViewController: UIPageViewController, UIPageViewControllerDelegat
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.delegate = self
         setViewControllers([subViewControllers[0]], direction: .forward, animated: false, completion: nil)
         // Do any additional setup after loading the view.
     }

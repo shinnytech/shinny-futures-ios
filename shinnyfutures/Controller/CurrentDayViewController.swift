@@ -85,10 +85,12 @@ class CurrentDayViewController: BaseChartViewController {
         let position = doubleTap.location(in: chartView)
         let highlight = chartView.getHighlightByTouchPoint(position)
         chartView.highlightValue(highlight)
+        chartView.addGestureRecognizer(singleTap)
     }
 
     override func Unhighlight() {
-        chartView.highlightValues(nil)
+        chartView.highlightValue(nil)
+        chartView.removeGestureRecognizer(singleTap)
     }
 
     override func refreshKline() {

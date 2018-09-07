@@ -29,6 +29,11 @@
 		D42EE5282071D3C600EF8066 /* Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = D42EE5272071D3C600EF8066 /* Search.swift */; };
 		D42EE52A2071D55700EF8066 /* SearchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D42EE5292071D55700EF8066 /* SearchTableViewCell.swift */; };
 		D42EE52C20721ED000EF8066 /* SearchTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D42EE52B20721ED000EF8066 /* SearchTableViewController.swift */; };
+		D466D4CF2137D47500FD6FBA /* BankTransferViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D466D4CE2137D47500FD6FBA /* BankTransferViewController.swift */; };
+		D466D4D32138225200FD6FBA /* BankTransferTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D466D4D22138225200FD6FBA /* BankTransferTableViewCell.swift */; };
+		D466D4D62138D4B300FD6FBA /* BankConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D466D4D52138D4B300FD6FBA /* BankConstants.swift */; };
+		D466D4D82138D4F000FD6FBA /* TransferConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D466D4D72138D4F000FD6FBA /* TransferConstants.swift */; };
+		D466D4DA2138DE5F00FD6FBA /* DropDownBtn.swift in Sources */ = {isa = PBXBuildFile; fileRef = D466D4D92138DE5F00FD6FBA /* DropDownBtn.swift */; };
 		D47A4E772085D0FF00255276 /* QuoteNavigationCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47A4E762085D0FF00255276 /* QuoteNavigationCollectionViewCell.swift */; };
 		D47A4E792085D1A700255276 /* QuoteNavigationCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47A4E782085D1A700255276 /* QuoteNavigationCollectionViewController.swift */; };
 		D47A4E7B20871F7A00255276 /* KlinePopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47A4E7A20871F7A00255276 /* KlinePopupViewController.swift */; };
@@ -43,7 +48,6 @@
 		D480226420688A180033E202 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D480226220688A180033E202 /* LaunchScreen.storyboard */; };
 		D480226F20688A180033E202 /* shinnyfuturesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D480226E20688A180033E202 /* shinnyfuturesTests.swift */; };
 		D480227A20688A180033E202 /* shinnyfuturesUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D480227920688A180033E202 /* shinnyfuturesUITests.swift */; };
-		D48022882068995F0033E202 /* Quote.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48022872068995F0033E202 /* Quote.swift */; };
 		D480228A2068C0240033E202 /* QuoteTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48022892068C0240033E202 /* QuoteTableViewCell.swift */; };
 		D480228C2068D52C0033E202 /* QuoteTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D480228B2068D52C0033E202 /* QuoteTableViewController.swift */; };
 		D48022902069116F0033E202 /* QuotePageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D480228F2069116F0033E202 /* QuotePageViewController.swift */; };
@@ -176,6 +180,11 @@
 		D42EE5272071D3C600EF8066 /* Search.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Search.swift; sourceTree = "<group>"; };
 		D42EE5292071D55700EF8066 /* SearchTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTableViewCell.swift; sourceTree = "<group>"; };
 		D42EE52B20721ED000EF8066 /* SearchTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTableViewController.swift; sourceTree = "<group>"; };
+		D466D4CE2137D47500FD6FBA /* BankTransferViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankTransferViewController.swift; sourceTree = "<group>"; };
+		D466D4D22138225200FD6FBA /* BankTransferTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankTransferTableViewCell.swift; sourceTree = "<group>"; };
+		D466D4D52138D4B300FD6FBA /* BankConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankConstants.swift; sourceTree = "<group>"; };
+		D466D4D72138D4F000FD6FBA /* TransferConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferConstants.swift; sourceTree = "<group>"; };
+		D466D4D92138DE5F00FD6FBA /* DropDownBtn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropDownBtn.swift; sourceTree = "<group>"; };
 		D47A4E762085D0FF00255276 /* QuoteNavigationCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuoteNavigationCollectionViewCell.swift; sourceTree = "<group>"; };
 		D47A4E782085D1A700255276 /* QuoteNavigationCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuoteNavigationCollectionViewController.swift; sourceTree = "<group>"; };
 		D47A4E7A20871F7A00255276 /* KlinePopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KlinePopupViewController.swift; sourceTree = "<group>"; };
@@ -196,7 +205,6 @@
 		D480227520688A180033E202 /* shinnyfuturesUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = shinnyfuturesUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D480227920688A180033E202 /* shinnyfuturesUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = shinnyfuturesUITests.swift; sourceTree = "<group>"; };
 		D480227B20688A180033E202 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D48022872068995F0033E202 /* Quote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Quote.swift; sourceTree = "<group>"; };
 		D48022892068C0240033E202 /* QuoteTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuoteTableViewCell.swift; sourceTree = "<group>"; };
 		D480228B2068D52C0033E202 /* QuoteTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuoteTableViewController.swift; sourceTree = "<group>"; };
 		D480228F2069116F0033E202 /* QuotePageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuotePageViewController.swift; sourceTree = "<group>"; };
@@ -392,7 +400,8 @@
 				D48606B320A5285600C4FEB5 /* PositionConstants.swift */,
 				D48606B520A5286E00C4FEB5 /* OrderConstants.swift */,
 				D4195FCE20994D560072C021 /* TradeConstants.swift */,
-				D48022872068995F0033E202 /* Quote.swift */,
+				D466D4D52138D4B300FD6FBA /* BankConstants.swift */,
+				D466D4D72138D4F000FD6FBA /* TransferConstants.swift */,
 				D42EE5272071D3C600EF8066 /* Search.swift */,
 			);
 			path = Model;
@@ -406,6 +415,7 @@
 				D48606A120A3EA8100C4FEB5 /* OptionalCollectionViewCell.swift */,
 				D42EE5292071D55700EF8066 /* SearchTableViewCell.swift */,
 				D49A7186207399C000AA947A /* TradeTableViewCell.swift */,
+				D466D4D22138225200FD6FBA /* BankTransferTableViewCell.swift */,
 				D4B3DBC42074C54F00545376 /* PositionTableViewCell.swift */,
 				D4B3DBC62074C55A00545376 /* OrderTableViewCell.swift */,
 				D47A4E7C2087353100255276 /* DrawerStackView.swift */,
@@ -424,6 +434,7 @@
 				D420B2EE20E2207F0045B6AF /* MyCombinedChartRenderer.swift */,
 				D420B2ED20E2207E0045B6AF /* MyCandleStickChartRenderer.swift */,
 				D415D0C420DCD6F700EA8DA3 /* KlineMarkerView.swift */,
+				D466D4D92138DE5F00FD6FBA /* DropDownBtn.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -440,6 +451,7 @@
 				D49A718020738A9B00AA947A /* TradeTableViewController.swift */,
 				D4802297206B67650033E202 /* AccountViewController.swift */,
 				D480229B206B67C70033E202 /* FeedbackViewController.swift */,
+				D466D4CE2137D47500FD6FBA /* BankTransferViewController.swift */,
 				D480229D206B67FE0033E202 /* LoginViewController.swift */,
 				D480225B20688A180033E202 /* QuoteViewController.swift */,
 				D486069F20A3E0BC00C4FEB5 /* OptionalPopupCollectionViewController.swift */,
@@ -746,8 +758,10 @@
 				D48606A020A3E0BC00C4FEB5 /* OptionalPopupCollectionViewController.swift in Sources */,
 				D415D0C520DCD6F700EA8DA3 /* CurrentDayMarkerView.swift in Sources */,
 				D4F4E18920AEA080007A2975 /* PriceKeyboardView.swift in Sources */,
+				D466D4CF2137D47500FD6FBA /* BankTransferViewController.swift in Sources */,
 				D48606AE20A444BA00C4FEB5 /* ChartConstants.swift in Sources */,
 				D485107B20CB7C8E00EC0B19 /* NotifyConstants.swift in Sources */,
+				D466D4D32138225200FD6FBA /* BankTransferTableViewCell.swift in Sources */,
 				D48E662F20B4235A00C808C2 /* BaseChartViewController.swift in Sources */,
 				D48606A220A3EA8100C4FEB5 /* OptionalCollectionViewCell.swift in Sources */,
 				D4B3DBCB2074C59300545376 /* OrderTableViewController.swift in Sources */,
@@ -759,16 +773,17 @@
 				D48606B620A5286E00C4FEB5 /* OrderConstants.swift in Sources */,
 				D4B3DBC72074C55A00545376 /* OrderTableViewCell.swift in Sources */,
 				D420B2F020E2207F0045B6AF /* KlineYAxisRenderer.swift in Sources */,
+				D466D4D62138D4B300FD6FBA /* BankConstants.swift in Sources */,
 				D480225C20688A180033E202 /* QuoteViewController.swift in Sources */,
 				D420B2F220E2207F0045B6AF /* MyCandleStickChartRenderer.swift in Sources */,
 				D47A4E7B20871F7A00255276 /* KlinePopupViewController.swift in Sources */,
 				D4B3DBD1207CB47400545376 /* TransactionPageViewController.swift in Sources */,
-				D48022882068995F0033E202 /* Quote.swift in Sources */,
 				D48022902069116F0033E202 /* QuotePageViewController.swift in Sources */,
 				D420B2F320E2207F0045B6AF /* MyCombinedChartRenderer.swift in Sources */,
 				D48606AC20A444A700C4FEB5 /* TickConstants.swift in Sources */,
 				D42EE52C20721ED000EF8066 /* SearchTableViewController.swift in Sources */,
 				D480225A20688A180033E202 /* AppDelegate.swift in Sources */,
+				D466D4D82138D4F000FD6FBA /* TransferConstants.swift in Sources */,
 				D42EE52A2071D55700EF8066 /* SearchTableViewCell.swift in Sources */,
 				D48606A620A43FFA00C4FEB5 /* RtnMDConstants.swift in Sources */,
 				D4B3DBD5207CB80400545376 /* CurrentDayViewController.swift in Sources */,
@@ -789,6 +804,7 @@
 				D4B3DBCD207B65AB00545376 /* HandicapViewController.swift in Sources */,
 				D48606B420A5285600C4FEB5 /* PositionConstants.swift in Sources */,
 				D4EBC92220AEB71A00A9163F /* VolumeKeyboardView.swift in Sources */,
+				D466D4DA2138DE5F00FD6FBA /* DropDownBtn.swift in Sources */,
 				D42EE5282071D3C600EF8066 /* Search.swift in Sources */,
 				D47A4E792085D1A700255276 /* QuoteNavigationCollectionViewController.swift in Sources */,
 				D4B1F7B9209020E800BCAD2C /* MDWebSocketUtils.swift in Sources */,
@@ -984,13 +1000,13 @@
 				INFOPLIST_FILE = shinnyfutures/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.shinnytech.futures;
+				PRODUCT_BUNDLE_IDENTIFIER = com.shinnytech.zhongqihuo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/shinnyfutures/shinnyfutures-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "";
 			};
 			name = Debug;
@@ -1013,13 +1029,13 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = com.shinnytech.futures;
+				PRODUCT_BUNDLE_IDENTIFIER = com.shinnytech.zhongqihuo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/shinnyfutures/shinnyfutures-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "";
 			};
 			name = Release;

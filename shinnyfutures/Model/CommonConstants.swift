@@ -10,16 +10,14 @@ import Foundation
 
 class CommonConstants {
     public static let LATEST_FILE_URL = "http://openmd.shinnytech.com/t/md/symbols/latest.json"
-    public static let MARKET_URL_1 = "ws://u.shinnytech.com/t/md/front/mobile";
-    public static let MARKET_URL_2 = "ws://sh.u.shinnytech.com/t/md/front/mobile";
-    public static let MARKET_URL_3 = "ws://gz.u.shinnytech.com/t/md/front/mobile";
-    public static let MARKET_URL_4 = "ws://139.198.126.116/t/md/front/mobile";
-    public static let MARKET_URL_5 = "ws://139.198.122.80/t/md/front/mobile";
-    public static let MARKET_URL_6 = "ws://139.198.123.206/t/md/front/mobile";
-    public static let MARKET_URL_7 = "ws://106.15.82.247/t/md/front/mobile";
-    public static let MARKET_URL_8 = "ws://106.15.82.189/t/md/front/mobile";
-    public static let MARKET_URL_9 = "ws://106.15.219.160/t/md/front/mobile";
-    public static let TRANSACTION_URL = "ws://opentd.shinnytech.com"
+    public static let MARKET_URL_1 = "ws://u.shinnytech.com/t/md/front/mobile"
+    public static let MARKET_URL_2 = "ws://139.198.126.116/t/md/front/mobile"
+    public static let MARKET_URL_3 = "ws://139.198.122.80/t/md/front/mobile"
+    public static let MARKET_URL_4 = "ws://139.198.123.206/t/md/front/mobile"
+    public static let MARKET_URL_5 = "ws://106.15.82.247/t/md/front/mobile"
+    public static let MARKET_URL_6 = "ws://106.15.82.189/t/md/front/mobile"
+    public static let MARKET_URL_7 = "ws://106.15.219.160/t/md/front/mobile"
+    public static let TRANSACTION_URL = "ws://opentd.shinnytech.com/trade/user"
     public static let REDMINE_URL = "http://redmine.kuaiqi.net/src/"
     public static let KLINE_MINUTE = "300000000000"
     public static let KLINE_HOUR = "3600000000000"
@@ -33,10 +31,10 @@ class CommonConstants {
     public static let RtnMDNotification = "RtnMDNotification"
     public static let BrokerInfoNotification = "BrokerInfoNotification"
     public static let LoginNotification = "LoginNotification"
-    public static let AccountNotification = "AccountNotification"
-    public static let TradeNotification = "TradeNotification"
-    public static let PositionNotification = "PositionNotification"
-    public static let OrderNotification = "OrderNotification"
+    public static let RtnTDNotification = "RtnTDNotification"
+//    public static let TradeNotification = "TradeNotification"
+//    public static let PositionNotification = "PositionNotification"
+//    public static let OrderNotification = "OrderNotification"
     public static let SwitchQuoteNotification = "SwitchQuoteNotification"
     public static let ClearChartViewNotification = "ClearChartViewNotification"
     public static let SwitchToTransactionNotification = "SwitchToTransactionNotification"
@@ -53,11 +51,13 @@ class CommonConstants {
     public static let LoginViewController = "LoginViewController"
     public static let AccountViewController = "AccountViewController"
     public static let TradeTableViewController = "TradeTableViewController"
+    public static let BankTransferViewController = "BankTransferViewController"
     public static let SearchTableViewController = "SearchTableViewController"
     public static let FeedbackViewController = "FeedbackViewController"
     public static let LoginToQuote = "LoginToQuote"
     public static let LoginToAccount = "LoginToAccount"
     public static let LoginToTrade = "LoginToTrade"
+    public static let LoginToBankTransfer = "LoginToBankTransfer"
     public static let SearchToQuote = "SearchToQuote"
     public static let KlinePageViewController = "KlinePageViewController"
     public static let CurrentDayViewController = "CurrentDayViewController"

@@ -15,6 +15,7 @@ class TradeTableViewController: UITableViewController {
     // MARK: Properties
     var trades = [JSON]()
     let dataManager = DataManager.getInstance()
+    var isRefresh = true
     let dateFormat = DateFormatter()
 
     override func viewDidLoad() {
@@ -26,7 +27,7 @@ class TradeTableViewController: UITableViewController {
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        NotificationCenter.default.addObserver(self, selector: #selector(loadData), name: Notification.Name(CommonConstants.TradeNotification), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(loadData), name: Notification.Name(CommonConstants.RtnTDNotification), object: nil)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -59,7 +60,7 @@ class TradeTableViewController: UITableViewController {
 
         // Fetches the appropriate quote for the data source layout.
         let trade = trades[indexPath.row]
-        let instrumentId = trade[TradeConstants.instrument_id].stringValue
+        let instrumentId = trade[TradeConstants.exchange_id].stringValue + "." +  trade[TradeConstants.instrument_id].stringValue
         if let search = dataManager.sSearchEntities[instrumentId] {
             cell.name.text = search.instrument_name
         } else {
@@ -87,7 +88,9 @@ class TradeTableViewController: UITableViewController {
         default:
             cell.offset.textColor = UIColor.red
         }
-        cell.price.text = trade[TradeConstants.price].stringValue
+        let decimal = dataManager.getDecimalByPtick(instrumentId: instrumentId)
+        let price = trade[TradeConstants.price].stringValue
+        cell.price.text = dataManager.saveDecimalByPtick(decimal: decimal, data: price)
         cell.volume.text = trade[TradeConstants.volume].stringValue
         let trade_time = trade[TradeConstants.trade_date_time].doubleValue
         let date = Date(timeIntervalSince1970: (trade_time / 1000000000))
@@ -106,7 +109,7 @@ class TradeTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 44.0))
         headerView.backgroundColor = UIColor.darkGray
-        let stackView = UIStackView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 44.0))
+        let stackView = UIStackView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width - 10, height: 44.0))
         stackView.distribution = .fillEqually
         let name = UILabel()
         name.text = "合约名称"
@@ -116,7 +119,7 @@ class TradeTableViewController: UITableViewController {
         direction.textAlignment = .center
         let price = UILabel()
         price.text = "成交价"
-        price.textAlignment = .center
+        price.textAlignment = .right
         let volume = UILabel()
         volume.text = "成交量"
         volume.textAlignment = .center
@@ -136,17 +139,34 @@ class TradeTableViewController: UITableViewController {
         return 44.0
     }
 
+    override func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        let scrollToScrollStop = !scrollView.isTracking && !scrollView.isDragging && !scrollView.isDecelerating
+        if scrollToScrollStop { isRefresh = true }
+    }
+
+    override func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if !decelerate {
+            let dragToDragStop = scrollView.isTracking && !scrollView.isDragging && !scrollView.isDecelerating
+            if dragToDragStop { isRefresh = true }
+        }
+    }
+
+    override func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        isRefresh = false
+    }
+
+
     // MARK: objc Methods
     @objc private func loadData() {
-        if trades.count == 0 {
-            trades = dataManager.sRtnTrades.sorted(by: >).map {$0.value}
+        if !isRefresh {return}
+        let user = dataManager.sRtnTD[dataManager.sUser_id]
+        let rtnTrades = user[RtnTDConstants.trades].dictionaryValue.sorted(by: >).map {$0.value}
+        let oldData = trades
+        trades = rtnTrades
+        if oldData.count == 0 {
             tableView.reloadData()
         } else {
-            let oldData = trades
-            trades = dataManager.sRtnTrades.sorted(by: >).map {$0.value}
-
             let change = diff(old: oldData, new: trades)
-
             tableView.reload(changes: change, section: 0, insertionAnimation: .none, deletionAnimation: .none, replacementAnimation: .none, completion: {_ in})
         }
 

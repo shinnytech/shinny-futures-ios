@@ -23,42 +23,40 @@ class DataManager {
 
     var sSearchHistoryEntities = [String: Search]()
     var sSearchEntities = [String: Search]()
-    var sQuotes = [[(key: String, value: Quote)]]()
+    var sQuotes = [[(key: String, value: JSON)]]()
     var sInsListNames = [[(key: String, value: String)]]()
-    var sPreInsList = ""
-    var sInstrumentId = ""
-    var sIsLogin = false
-    //进入登陆页的来源
-    var sToLoginTarget = ""
 
     //////////////////////////////////////////////////////////////
     var sRtnMD = JSON()
     var sRtnBrokers = JSON()
     var sRtnLogin = JSON()
-    var sRtnAcounts = [String: JSON]()
-    var sRtnTrades = [String: JSON]()
-    var sRtnPositions = [String: JSON]()
-    var sRtnOrders = [String: JSON]()
+    var sRtnTD = JSON()
     var sMobileConfirmSettlement = JSON()
+    var sPreInsList = ""
+    var sInstrumentId = ""
+    var sIsLogin = false
+    var sUser_id = ""
+    //进入登陆页的来源
+    var sToLoginTarget = ""
 
     func parseLatestFile() {
         NSLog("解析开始")
-        var sOptionalQuotes = [String: Quote]()
-        var sMainQuotes = [String: Quote]()
+        var sOptionalQuotes = [String: JSON]()
+        var sMainQuotes = [String: JSON]()
         var sMainInsListNameNav = [String: String]()
-        var sShangqiQuotes = [String: Quote]()
+        var sShangqiQuotes = [String: JSON]()
         var sShangqiInsListNameNav = [String: String]()
-        var sDalianQuotes = [String: Quote]()
+        var sDalianQuotes = [String: JSON]()
         var sDalianInsListNameNav = [String: String]()
-        var sZhengzhouQuotes = [String: Quote]()
+        var sZhengzhouQuotes = [String: JSON]()
         var sZhengzhouInsListNameNav = [String: String]()
-        var sZhongjinQuotes = [String: Quote]()
+        var sZhongjinQuotes = [String: JSON]()
         var sZhongjinInsListNameNav = [String: String]()
-        var sNengyuanQuotes = [String: Quote]()
+        var sNengyuanQuotes = [String: JSON]()
         var sNengyuanInsListNameNav = [String: String]()
-        var sDalianzuheQuotes = [String: Quote]()
+        var sDalianzuheQuotes = [String: JSON]()
         var sDalianzuheInsListNameNav = [String: String]()
-        var sZhengzhouzeheQuotes = [String: Quote]()
+        var sZhengzhouzeheQuotes = [String: JSON]()
         var sZhengzhouzeheInsListNameNav = [String: String]()
         let latestString = FileUtils.readLatestFile()
         if let latestData = latestString?.data(using: .utf8) {
@@ -69,13 +67,12 @@ class DataManager {
                     let classN = subJson["class"] as! String
                     if !"FUTURE_CONT".elementsEqual(classN) && !"FUTURE".elementsEqual(classN) && !"FUTURE_COMBINE".elementsEqual(classN){continue}
                     let ins_name = subJson["ins_name"] as! String
+                    let expired = subJson["expired"] as! Bool
                     let exchange_id = subJson["exchange_id"] as! String
                     let price_tick = (subJson["price_tick"] as! NSNumber).stringValue
                     let volume_multiple = (subJson["volume_multiple"] as! NSNumber).stringValue
                     let sort_key = (subJson["sort_key"] as! NSNumber).intValue
-                    let quote = Quote()
-                    quote?.instrument_id = instrument_id
-                    quote?.instrument_name = ins_name
+
                     let searchEntity = Search(instrument_id: instrument_id, instrument_name: ins_name, exchange_name: "", exchange_id: exchange_id, py: "", p_tick: price_tick, vm: volume_multiple, sort_key: sort_key, margin: 0, underlying_symbol: "")
 
                     if "FUTURE_CONT".elementsEqual(classN){
@@ -84,7 +81,7 @@ class DataManager {
                         let underlying_symbol = subJson["underlying_symbol"] as! String
                         if "".elementsEqual(underlying_symbol){continue}
                         searchEntity.underlying_symbol = underlying_symbol
-                        sMainQuotes[instrument_id] = quote
+                        sMainQuotes[instrument_id] = JSON(parseJSON: "{\"instrument_id\":\"\(instrument_id)\", \"instrument_name\":\"\(ins_name)\"}")
                         sMainInsListNameNav[ins_name.replacingOccurrences(of: "主连", with: "")] = instrument_id
                     }
 
@@ -96,24 +93,34 @@ class DataManager {
                         searchEntity.margin = margin
                         switch exchange_id {
                         case "SHFE":
-                            sShangqiQuotes[instrument_id] = quote
-                            sShangqiInsListNameNav[product_short_name] = instrument_id
+                            if !expired{
+                                sShangqiQuotes[instrument_id] = JSON(parseJSON: "{\"instrument_id\":\"\(instrument_id)\", \"instrument_name\":\"\(ins_name)\"}")
+                                sShangqiInsListNameNav[product_short_name] = instrument_id
+                            }
                             searchEntity.exchange_name = "上海期货交易所"
                         case "CZCE":
-                            sZhengzhouQuotes[instrument_id] = quote
-                            sZhengzhouInsListNameNav[product_short_name] = instrument_id
+                            if !expired{
+                                sZhengzhouQuotes[instrument_id] = JSON(parseJSON: "{\"instrument_id\":\"\(instrument_id)\", \"instrument_name\":\"\(ins_name)\"}")
+                                sZhengzhouInsListNameNav[product_short_name] = instrument_id
+                            }
                             searchEntity.exchange_name = "郑州商品交易所"
                         case "DCE":
-                            sDalianQuotes[instrument_id] = quote
-                            sDalianInsListNameNav[product_short_name] = instrument_id
+                            if !expired {
+                                sDalianQuotes[instrument_id] = JSON(parseJSON: "{\"instrument_id\":\"\(instrument_id)\", \"instrument_name\":\"\(ins_name)\"}")
+                                sDalianInsListNameNav[product_short_name] = instrument_id
+                            }
                             searchEntity.exchange_name = "大连商品交易所"
                         case "CFFEX":
-                            sZhongjinQuotes[instrument_id] = quote
-                            sZhongjinInsListNameNav[product_short_name] = instrument_id
+                            if !expired {
+                                sZhongjinQuotes[instrument_id] = JSON(parseJSON: "{\"instrument_id\":\"\(instrument_id)\", \"instrument_name\":\"\(ins_name)\"}")
+                                sZhongjinInsListNameNav[product_short_name] = instrument_id
+                            }
                             searchEntity.exchange_name = "中国金融期货交易所"
                         case "INE":
-                            sNengyuanQuotes[instrument_id] = quote
-                            sNengyuanInsListNameNav[product_short_name] = instrument_id
+                            if !expired{
+                                sNengyuanQuotes[instrument_id] = JSON(parseJSON: "{\"instrument_id\":\"\(instrument_id)\", \"instrument_name\":\"\(ins_name)\"}")
+                                sNengyuanInsListNameNav[product_short_name] = instrument_id
+                            }
                             searchEntity.exchange_name = "上海国际能源交易中心"
                         default:
                             return
@@ -128,12 +135,16 @@ class DataManager {
                         searchEntity.py = py
                         switch exchange_id {
                         case "CZCE":
-                            sZhengzhouzeheQuotes[instrument_id] = quote
-                            sZhengzhouzeheInsListNameNav[product_short_name] = instrument_id
+                            if !expired{
+                                sZhengzhouzeheQuotes[instrument_id] = JSON(parseJSON: "{\"instrument_id\":\"\(instrument_id)\", \"instrument_name\":\"\(ins_name)\"}")
+                                sZhengzhouzeheInsListNameNav[product_short_name] = instrument_id
+                            }
                             searchEntity.exchange_name = "郑州商品交易所"
                         case "DCE":
-                            sDalianzuheQuotes[instrument_id] = quote
-                            sDalianzuheInsListNameNav[product_short_name] = instrument_id
+                            if !expired{
+                                sDalianzuheQuotes[instrument_id] = JSON(parseJSON: "{\"instrument_id\":\"\(instrument_id)\", \"instrument_name\":\"\(ins_name)\"}")
+                                sDalianzuheInsListNameNav[product_short_name] = instrument_id
+                            }
                             searchEntity.exchange_name = "大连商品交易所"
                         default:
                             return
@@ -144,14 +155,11 @@ class DataManager {
 
                 //考虑到合约下架或合约列表中不存在，自选合约自建loop，反映到自选列表上让用户删除
                 for ins in FileUtils.getOptional() {
-                    let quote = Quote()
-                    quote?.instrument_id = ins
-                    if let instrumentName = sSearchEntities[ins]?.instrument_name {
-                        quote?.instrument_name = instrumentName
-                    } else {
-                        quote?.instrument_name = ins
+                    if let ins_name = sSearchEntities[ins]?.instrument_name {
+                        sOptionalQuotes[ins] = JSON(parseJSON: "{\"instrument_id\":\"\(ins)\", \"instrument_name\":\"\(ins_name)\"}")
+                    }else{
+                        sOptionalQuotes[ins] = JSON(parseJSON: "{\"instrument_id\":\"\(ins)\", \"instrument_name\":\"\(ins)\"}")
                     }
-                    sOptionalQuotes[ins] = quote
                 }
 
                 sQuotes.append(sortByKey(insList: sOptionalQuotes))
@@ -182,7 +190,7 @@ class DataManager {
         NSLog("解析结束")
     }
 
-    func sortByKey(insList: [String: Quote]) -> [(key: String, value: Quote)] {
+    func sortByKey(insList: [String: JSON]) -> [(key: String, value: JSON)] {
         return insList.sorted(by: {
             if let sortKey0 = (sSearchEntities[$0.key]?.sort_key), let sortKey1 = (sSearchEntities[$1.key]?.sort_key){
                 if sortKey0 != sortKey1{
@@ -213,14 +221,13 @@ class DataManager {
         if !optional.contains(ins) {
             optional.append(ins)
             FileUtils.saveOptional(ins: optional)
-            let quote = Quote()
-            quote?.instrument_id = ins
-            if let instrumentName = sSearchEntities[ins]?.instrument_name {
-                quote?.instrument_name = instrumentName
-            } else {
-                quote?.instrument_name = ins
+            var quote: JSON!
+            if let ins_name = sSearchEntities[ins]?.instrument_name {
+                quote = JSON(parseJSON: "{\"instrument_id\":\"\(ins)\", \"instrument_name\":\"\(ins_name)\"}")
+            }else{
+                quote = JSON(parseJSON: "{\"instrument_id\":\"\(ins)\", \"instrument_name\":\"\(ins)\"}")
             }
-            sQuotes[0].append((key: ins, value: quote!))
+            sQuotes[0].append((key: ins, value: quote))
             ToastUtils.showPositiveMessage(message: "合约\(ins)已添加到自选～")
         } else if let index = optional.index(of: ins), let index1 = sQuotes[0].index(where: {$0.key.elementsEqual(ins)}){
             optional.remove(at: index)
@@ -250,24 +257,12 @@ class DataManager {
         return 0
     }
 
-    func getPrice(open_cost: Float, open_price: Float, vm: Int, volume: Int) -> Float {
-        if open_price != 0 {
-            return open_price
-        } else if open_cost != 0 {
-            return open_cost / Float(volume * vm)
-        } else {
-            return 0.0
-        }
-    }
-
     func parseRtnMD(rtnData: JSON) {
         do {
-//            NSLog("解析开始")
             let dataArray = rtnData[RtnMDConstants.data].arrayValue
             for dataJson in dataArray {
                 try sRtnMD.merge(with: dataJson)
             }
-//            NSLog("解析完毕")
             DispatchQueue.main.async {
                 NotificationCenter.default.post(name: Notification.Name(CommonConstants.RtnMDNotification), object: nil)
             }
@@ -293,40 +288,17 @@ class DataManager {
             for dataJson in dataArray {
                 let tradeJson = dataJson[RtnTDConstants.trade]
                 if !tradeJson.isEmpty {
-                    for (_, accountJson) in tradeJson.dictionaryValue {
-                        for (key, value) in accountJson.dictionaryValue {
-                            switch key {
-                            case RtnTDConstants.accounts:
-                                for (accountKey, account) in value.dictionaryValue {
-                                    sRtnAcounts[accountKey] = account
-                                }
-                                DispatchQueue.main.async {
-                                    NotificationCenter.default.post(name: Notification.Name(CommonConstants.AccountNotification), object: nil)
-                                }
-                            case RtnTDConstants.trades:
-                                for (tradeKey, trade) in value.dictionaryValue {
-                                    sRtnTrades[tradeKey] = trade
-                                }
-                                DispatchQueue.main.async {
-                                    NotificationCenter.default.post(name: Notification.Name(CommonConstants.TradeNotification), object: nil)
-                                }
-                            case RtnTDConstants.positions:
-                                for (positionKey, position) in value.dictionaryValue {
-                                    sRtnPositions[positionKey] = position
-                                }
-                                DispatchQueue.main.async {
-                                    NotificationCenter.default.post(name: Notification.Name(CommonConstants.PositionNotification), object: nil)
-                                }
-                            case RtnTDConstants.orders:
-                                for (orderKey, order) in value.dictionaryValue {
-                                    sRtnOrders[orderKey] = order
-                                }
-                                DispatchQueue.main.async {
-                                    NotificationCenter.default.post(name: Notification.Name(CommonConstants.OrderNotification), object: nil)
-                                }
-                            default:
-                                break
-                            }
+                    try sRtnTD.merge(with: tradeJson)
+                    DispatchQueue.main.async {
+                        NotificationCenter.default.post(name: Notification.Name(CommonConstants.RtnTDNotification), object: nil)
+                    }
+                }
+
+                if !sIsLogin{
+                    let session = tradeJson[sUser_id][RtnTDConstants.session]
+                    if !session.isEmpty {
+                        DispatchQueue.main.async {
+                            NotificationCenter.default.post(name: Notification.Name(CommonConstants.LoginNotification), object: nil)
                         }
                     }
                 }
@@ -337,13 +309,8 @@ class DataManager {
                         DispatchQueue.main.async {
                             ToastUtils.showPositiveMessage(message: notifyJson[NotifyConstants.content].stringValue)
                         }
-                        try sRtnLogin.merge(with: notifyJson)
                     }
-                    if !DataManager.getInstance().sIsLogin && sRtnLogin[NotifyConstants.content].stringValue.elementsEqual("登录成功") {
-                        DispatchQueue.main.async {
-                            NotificationCenter.default.post(name: Notification.Name(CommonConstants.LoginNotification), object: nil)
-                        }
-                    }
+                    
                 }
             }
 

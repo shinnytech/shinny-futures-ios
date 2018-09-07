@@ -13,10 +13,13 @@ class RtnTDConstants {
     public static let data = "data"
     public static let notify = "notify"
     public static let trade = "trade"
+    public static let session = "session"
     public static let accounts = "accounts"
     public static let positions = "positions"
     public static let orders = "orders"
     public static let trades = "trades"
+    public static let transfers = "transfers"
+    public static let banks = "banks"
     public static let brokers = "brokers"
     public static let ret = "ret"
 }
