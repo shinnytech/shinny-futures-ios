@@ -3,6 +3,7 @@
 ### Preview
 <img src="screenshot/主力合约.jpg" width="280"/> <img src="screenshot/信息.jpg" width="280"/> <img src="screenshot/交易.jpg" width="280"/><br>
 ### Install
+- 您可以在AppStore中搜索`快期小Q`进行安装
 - XCode版本：9.4
 - bugly：项目中嵌入了bugly平台，具体使用见[bugly文档中心](https://bugly.qq.com/docs/)
 - 下载本项目解压，在项目根目录中双击shinnyfutures.xcworkspace文件打开工程
