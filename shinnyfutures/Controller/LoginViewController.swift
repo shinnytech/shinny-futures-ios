@@ -67,13 +67,17 @@ class LoginViewController: UIViewController {
     // MARK: Actions
     @IBAction func login(_ sender: UIButton) {
         let button = self.view.viewWithTag(100) as! DropDownBtn
-        let broker_info = button.dropView.dropDownOptions[button.dropView.selected_index]
-        let user_name = userName.text
-        let password = userPassword.text
-        if broker_info.elementsEqual("-1") {
+        if button.dropView.dropDownOptions.count == 0{
+            ToastUtils.showNegativeMessage(message: "期货公司列表为空～")
+            return
+        }
+        if button.dropView.selected_index == -1 {
             ToastUtils.showNegativeMessage(message: "请先选择期货公司～")
             return
         }
+        let broker_info = button.dropView.dropDownOptions[button.dropView.selected_index]
+        let user_name = userName.text
+        let password = userPassword.text
         if user_name?.count == 0 {
             ToastUtils.showNegativeMessage(message: "用户名为空～")
             return
@@ -85,7 +89,14 @@ class LoginViewController: UIViewController {
         TDWebSocketUtils.getInstance().sendReqLogin(bid: broker_info, user_name: user_name!, password: password!)
         sDataManager.sUser_id = user_name!
     }
-    
+
+
+    @IBAction func back(_ sender: UIBarButtonItem) {
+        if let navigationController = self.navigationController  {
+            navigationController.popViewController(animated: true)
+        }
+    }
+
     //Set the drop down menu's options
     @objc func loadBrokerInfo() {
         let jsonArray = sDataManager.sRtnBrokers[RtnTDConstants.brokers].arrayValue
@@ -105,6 +116,8 @@ class LoginViewController: UIViewController {
             } else {
                 button.setTitle("请选择期货公司", for: .normal)
             }
+        }else{
+            button.setTitle("无", for: .normal)
         }
     }
     
@@ -123,7 +136,7 @@ class LoginViewController: UIViewController {
                 self.performSegue(withIdentifier: CommonConstants.LoginToAccount, sender: self.login)
             case "Position":
                 self.performSegue(withIdentifier: CommonConstants.LoginToQuote, sender: self.login)
-                let instrumentId = self.sDataManager.sQuotes[1].sorted(by: {$0.key < $1.key}).map {$0.key}[0]
+                let instrumentId = self.sDataManager.sQuotes[1].map {$0.key}[0]
                 self.sDataManager.sInstrumentId = instrumentId
                 self.sDataManager.sPreInsList = self.sDataManager.sRtnMD[RtnMDConstants.ins_list].stringValue
                 MDWebSocketUtils.getInstance().sendSubscribeQuote(insList: instrumentId)
@@ -135,6 +148,24 @@ class LoginViewController: UIViewController {
                 self.performSegue(withIdentifier: CommonConstants.LoginToTrade, sender: self.login)
             case "BankTransfer":
                 self.performSegue(withIdentifier: CommonConstants.LoginToBankTransfer, sender: self.login)
+            case "SwitchToPosition":
+                NotificationCenter.default.post(name: Notification.Name(CommonConstants.SwitchToPositionNotification), object: nil)
+                if let navigationController = self.navigationController  {
+                    navigationController.popViewController(animated: true)
+                }
+                break
+            case "SwitchToOrder":
+                NotificationCenter.default.post(name: Notification.Name(CommonConstants.SwitchToOrderNotification), object: nil)
+                if let navigationController = self.navigationController  {
+                    navigationController.popViewController(animated: true)
+                }
+                break
+            case "SwitchToTransaction":
+                NotificationCenter.default.post(name: Notification.Name(CommonConstants.SwitchToTransactionNotification), object: nil)
+                if let navigationController = self.navigationController  {
+                    navigationController.popViewController(animated: true)
+                }
+                break
             default:
                 break
             }

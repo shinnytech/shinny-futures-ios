@@ -47,25 +47,24 @@ class QuoteViewController: UIViewController, UIPopoverPresentationControllerDele
         // Do any additional setup after loading the view, typically from a nib.
         currentDay.setTitleColor(UIColor.yellow, for: .normal)
         handicap.setTitleColor(UIColor.yellow, for: .normal)
+
+        NotificationCenter.default.addObserver(self, selector: #selector(setButtonTitle), name: Notification.Name(CommonConstants.SwitchToTransactionNotification), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(showUpView), name: Notification.Name(CommonConstants.ShowUpViewNotification), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(hideUpView), name: Notification.Name(CommonConstants.HideUpViewNotification), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(switchToPosition), name: Notification.Name(CommonConstants.SwitchToPositionNotification), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(switchToOrder), name: Notification.Name(CommonConstants.SwitchToOrderNotification), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(switchToTransaction), name: Notification.Name(CommonConstants.SwitchToTransactionNotification), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(sendSuscribeQuote), name: Notification.Name(CommonConstants.SwitchQuoteNotification), object: nil)
     }
 
     override func viewWillAppear(_ animated: Bool) {
         //从合约列表页过来订阅合约行情
         sendSuscribeQuote()
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(setButtonTitle), name: Notification.Name(CommonConstants.SwitchToTransactionNotification), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(showUpView), name: Notification.Name(CommonConstants.ShowUpViewNotification), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(hideUpView), name: Notification.Name(CommonConstants.HideUpViewNotification), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(switchToTransaction), name: Notification.Name(CommonConstants.SwitchToTransactionNotification), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(sendSuscribeQuote), name: Notification.Name(CommonConstants.SwitchQuoteNotification), object: nil)
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        NotificationCenter.default.removeObserver(self)
     }
 
     deinit {
         print("合约详情页销毁")
+        NotificationCenter.default.removeObserver(self)
     }
 
     //iPhone下默认是.overFullScreen(全屏显示)，需要返回.none，否则没有弹出框效果，iPad则不需要
@@ -136,15 +135,30 @@ class QuoteViewController: UIViewController, UIPopoverPresentationControllerDele
     }
 
     @IBAction func position(_ sender: UIButton) {
-        switchTransactionPage(index: 1)
+        if !DataManager.getInstance().sIsLogin {
+            DataManager.getInstance().sToLoginTarget = "SwitchToPosition"
+            performSegue(withIdentifier: CommonConstants.QuoteToLogin, sender: sender)
+        } else {
+            switchTransactionPage(index: 1)
+        }
     }
 
     @IBAction func order(_ sender: UIButton) {
-        switchTransactionPage(index: 2)
+        if !DataManager.getInstance().sIsLogin {
+            DataManager.getInstance().sToLoginTarget = "SwitchToOrder"
+            performSegue(withIdentifier: CommonConstants.QuoteToLogin, sender: sender)
+        } else {
+            switchTransactionPage(index: 2)
+        }
     }
 
     @IBAction func transaction(_ sender: UIButton) {
-        switchTransactionPage(index: 3)
+        if !DataManager.getInstance().sIsLogin {
+            DataManager.getInstance().sToLoginTarget = "SwitchToTransaction"
+            performSegue(withIdentifier: CommonConstants.QuoteToLogin, sender: sender)
+        } else {
+            switchTransactionPage(index: 3)
+        }
     }
 
     // MARK: functions
@@ -257,6 +271,14 @@ class QuoteViewController: UIViewController, UIPopoverPresentationControllerDele
 
     @objc func hideUpView() {
         upView.isHidden = true
+    }
+
+    @objc func switchToPosition() {
+        switchTransactionPage(index: 1)
+    }
+
+    @objc func switchToOrder() {
+        switchTransactionPage(index: 2)
     }
 
     @objc func switchToTransaction() {

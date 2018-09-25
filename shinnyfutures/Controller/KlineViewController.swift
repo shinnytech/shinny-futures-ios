@@ -171,14 +171,12 @@ class KlineViewController: BaseChartViewController {
     }
 
     override func refreshKline() {
-        let quote = dataManager.sRtnMD[RtnMDConstants.quotes][dataManager.sInstrumentId]
         let kline = dataManager.sRtnMD[RtnMDConstants.klines][dataManager.sInstrumentId][klineType]
         let chart = dataManager.sRtnMD[RtnMDConstants.charts][klineType]
         let ins_list = chart[ChartConstants.state][ChartConstants.ins_list].stringValue
-        preSettlement = quote[QuoteConstants.pre_settlement].doubleValue
         last_id = kline[KlineConstants.last_id].intValue
         let datas = kline[KlineConstants.data]
-        if last_id != -1 && !datas.isEmpty && preSettlement != 1.0 && dataManager.sInstrumentId.elementsEqual(ins_list) {
+        if last_id != -1 && !datas.isEmpty && dataManager.sInstrumentId.elementsEqual(ins_list) {
             if chartView.data != nil && (chartView.data?.dataSetCount)! > 0 {
                 let combineData = chartView.combinedData
                 let candleData = combineData?.candleData

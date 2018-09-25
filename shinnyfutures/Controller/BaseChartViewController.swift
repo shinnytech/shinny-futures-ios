@@ -39,7 +39,6 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
     var orderLimitLines = [String: ChartLimitLine]()
 
     let dataManager = DataManager.getInstance()
-    var preSettlement = 0.0
     let calendar = Calendar.autoupdatingCurrent
     var simpleDateFormat = DateFormatter()
     var xVals = [Int: Int]()
@@ -113,6 +112,7 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
     }
 
     func refreshPage() {
+        refreshKline()
         sendChart()
     }
 
@@ -140,13 +140,6 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
         doubleTap = UITapGestureRecognizer(target: self, action: #selector(highlight))
         doubleTap.numberOfTapsRequired = 2
         chartView.addGestureRecognizer(doubleTap)
-
-        let quoteJson = dataManager.sRtnMD[RtnMDConstants.quotes][dataManager.sInstrumentId]
-        if !quoteJson.isEmpty, let preSettlement = Double(quoteJson[QuoteConstants.pre_settlement].stringValue) {
-            self.preSettlement = preSettlement
-        } else {
-            self.preSettlement = 1.0
-        }
 
         isShowOrderLine = UserDefaults.standard.bool(forKey: "orderLine")
         isShowPositionLine = UserDefaults.standard.bool(forKey: "positionLine")
@@ -402,6 +395,7 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
         chartView.setNeedsDisplay()
     }
 
+    //控制均线显示与否
     @objc func controlAverageLine(notification: Notification){
 
     }

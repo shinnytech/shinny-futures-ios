@@ -110,7 +110,9 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
             let aid = json["aid"].stringValue
             switch aid {
             case "rsp_login":
-                socket.sendSubscribeQuote(insList: DataManager.getInstance().sQuotes[1].map {$0.key}[0..<CommonConstants.MAX_SUBSCRIBE_QUOTES].joined(separator: ","))
+                if DataManager.getInstance().sQuotes.count != 0{
+                    socket.sendSubscribeQuote(insList: DataManager.getInstance().sQuotes[1].map {$0.key}[0..<CommonConstants.MAX_SUBSCRIBE_QUOTES].joined(separator: ","))
+                }
             case "rtn_data":
                 self.index = 0
                 DataManager.getInstance().parseRtnMD(rtnData: json)
@@ -221,7 +223,7 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier {
-        case CommonConstants.FeedbackViewController:
+        case CommonConstants.MainToFeedback:
             controlSlideMenuVisibility()
         case CommonConstants.QuotePageViewController:
             quotePageViewController = segue.destination as! QuotePageViewController
@@ -233,9 +235,9 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
     }
 
     // MARK: Actions
-    @IBAction func loginViewControllerUnwindSegue(segue: UIStoryboardSegue) {
-        print("我从登陆页来～")
-    }
+//    @IBAction func loginViewControllerUnwindSegue(segue: UIStoryboardSegue) {
+//        print("我从登陆页来～")
+//    }
 
     @IBAction func accountViewControllerUnwindSegue(segue: UIStoryboardSegue) {
         print("我从账户资金来～")
@@ -245,9 +247,9 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
         controlSlideMenuVisibility()
         if !DataManager.getInstance().sIsLogin {
             DataManager.getInstance().sToLoginTarget = "Account"
-            performSegue(withIdentifier: CommonConstants.LoginViewController, sender: sender)
+            performSegue(withIdentifier: CommonConstants.MainToLogin, sender: sender)
         } else {
-            performSegue(withIdentifier: CommonConstants.AccountViewController, sender: sender)
+            performSegue(withIdentifier: CommonConstants.MainToAccount, sender: sender)
         }
     }
 
@@ -271,20 +273,10 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
         controlSlideMenuVisibility()
         if !DataManager.getInstance().sIsLogin {
             DataManager.getInstance().sToLoginTarget = "Position"
-            performSegue(withIdentifier: CommonConstants.LoginViewController, sender: sender)
+            performSegue(withIdentifier: CommonConstants.MainToLogin, sender: sender)
         } else {
-            performSegue(withIdentifier: CommonConstants.QuoteViewController, sender: sender)
-            let instrumentId = DataManager.getInstance().sQuotes[1].sorted(by: {
-                if let sortKey0 = (DataManager.getInstance().sSearchEntities[$0.key]?.sort_key), let sortKey1 = (DataManager.getInstance().sSearchEntities[$1.key]?.sort_key){
-                    if sortKey0 != sortKey1{
-                        return sortKey0 < sortKey1
-                    }else{
-                        return $0.key < $1.key
-                    }
-                }
-                return $0.key < $1.key
-
-            }).map {$0.key}[0]
+            performSegue(withIdentifier: CommonConstants.MainToQuote, sender: sender)
+            let instrumentId = DataManager.getInstance().sQuotes[1].map {$0.key}[0]
             //进入合约详情页的入口有：合约列表页，登陆页，搜索页，主页
             DataManager.getInstance().sPreInsList = DataManager.getInstance().sRtnMD[RtnMDConstants.ins_list].stringValue
             DataManager.getInstance().sInstrumentId = instrumentId
@@ -304,9 +296,9 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
         controlSlideMenuVisibility()
         if !DataManager.getInstance().sIsLogin {
             DataManager.getInstance().sToLoginTarget = "Trade"
-            performSegue(withIdentifier: CommonConstants.LoginViewController, sender: sender)
+            performSegue(withIdentifier: CommonConstants.MainToLogin, sender: sender)
         } else {
-            performSegue(withIdentifier: CommonConstants.TradeTableViewController, sender: sender)
+            performSegue(withIdentifier: CommonConstants.MainToTrade, sender: sender)
         }
     }
 
@@ -318,9 +310,9 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
         controlSlideMenuVisibility()
         if !DataManager.getInstance().sIsLogin {
             DataManager.getInstance().sToLoginTarget = "BankTransfer"
-            performSegue(withIdentifier: CommonConstants.LoginViewController, sender: sender)
+            performSegue(withIdentifier: CommonConstants.MainToLogin, sender: sender)
         } else {
-            performSegue(withIdentifier: CommonConstants.BankTransferViewController, sender: sender)
+            performSegue(withIdentifier: CommonConstants.MainToBankTransfer, sender: sender)
         }
     }
 
@@ -387,7 +379,7 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
             var indexPaths = collectionView.indexPathsForVisibleItems
             indexPaths.sort(by: <)
             if let index = indexPaths.first?.row {
-                collectionView.scrollToItem(at: IndexPath(row: index, section: 0), at: .right, animated: true)
+                collectionView.scrollToItem(at: IndexPath(row: index, section: 0), at: .right, animated: false)
             }
         }
     }
@@ -397,7 +389,7 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
             var indexPaths = collectionView.indexPathsForVisibleItems
             indexPaths.sort(by: <)
             if let index = indexPaths.last?.row {
-                collectionView.scrollToItem(at: IndexPath(row: index, section: 0), at: .left, animated: true)
+                collectionView.scrollToItem(at: IndexPath(row: index, section: 0), at: .left, animated: false)
             }
         }
     }

@@ -282,19 +282,17 @@ class TransactionViewController: UIViewController, PriceKeyboardViewDelegate, Vo
     func closePosition() {
         if let price = close_order_price.text, let volume = volume.text, !"".elementsEqual(direction) {
 
-            if price.elementsEqual("0") || price.elementsEqual(".") {
+            guard let price = Double(price) else {
                 ToastUtils.showNegativeMessage(message: "价格输入不合法～")
                 return
             }
 
-            if volume.elementsEqual("0") || volume.count > 7 {
+            guard let volume = Int(volume) else {
                 ToastUtils.showNegativeMessage(message: "手数输入不合法～")
                 return
             }
 
             let direction = self.direction.elementsEqual("多") ? "SELL" : "BUY"
-            let volume = Int(volume)!
-            let price = Double(price)!
             let order_id = Int(Date().timeIntervalSince1970)
             let title = "确认下单吗？"
             let instrument_id = String(self.instrument_id_transaction.split(separator: ".")[1])
@@ -456,17 +454,17 @@ class TransactionViewController: UIViewController, PriceKeyboardViewDelegate, Vo
     @objc func bidInsertOrder() {
         self.view.endEditing(true)
         if let price = self.bid_order_price.text, let volume = self.volume.text {
-            if price.elementsEqual("0") || price.elementsEqual(".") {
+
+            guard let price = Double(price) else {
                 ToastUtils.showNegativeMessage(message: "价格输入不合法～")
                 return
             }
 
-            if volume.elementsEqual("0") || volume.count > 7 {
+            guard let volume = Int(volume) else {
                 ToastUtils.showNegativeMessage(message: "手数输入不合法～")
                 return
             }
-            let price = Double(price)!
-            let volume = Int(volume)!
+
             let title = "确认下单吗？"
             let order_id = Int(Date().timeIntervalSince1970)
             let message = "\(instrument_id_transaction), \(price), 买开, \(volume)手"
@@ -478,17 +476,17 @@ class TransactionViewController: UIViewController, PriceKeyboardViewDelegate, Vo
     @objc func askInsertOrder() {
         self.view.endEditing(true)
         if let price = self.ask_order_price.text, let volume = self.volume.text {
-            if price.elementsEqual("0") || price.elementsEqual(".") {
+
+            guard let price = Double(price) else {
                 ToastUtils.showNegativeMessage(message: "价格输入不合法～")
                 return
             }
 
-            if volume.elementsEqual("0") || volume.count > 7 {
+            guard let volume = Int(volume) else {
                 ToastUtils.showNegativeMessage(message: "手数输入不合法～")
                 return
             }
-            let price = Double(price)!
-            let volume = Int(volume)!
+
             let title = "确认下单吗？"
             let order_id = Int(Date().timeIntervalSince1970)
             let message = "\(instrument_id_transaction), \(price), 卖开, \(volume)手"
@@ -531,7 +529,34 @@ class TransactionViewController: UIViewController, PriceKeyboardViewDelegate, Vo
                 })
                 present(alert, animated: true)
             case "先开先平":
-                ToastUtils.showNegativeMessage(message: "此合约您还没有持仓～")
+                if instrument_id_transaction.contains("&"){
+                    let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+                    alert.addAction(UIAlertAction(title: "平多", style: .default) { _ in
+                        self.direction  = "多"
+                        self.isClosePriceShow = true
+                        self.close_order_direction.text = "平多"
+                        if "排队价".elementsEqual(self.priceType) {
+                            self.close_order_price.text = self.ask_order_price.text
+                        } else {
+                            self.close_order_price.text = self.bid_order_price.text
+                        }
+                        self.closePosition()
+                    })
+                    alert.addAction(UIAlertAction(title: "平空", style: .default) { _ in
+                        self.direction  = "空"
+                        self.isClosePriceShow = true
+                        self.close_order_direction.text = "平空"
+                        if "对手价".elementsEqual(self.priceType) {
+                            self.close_order_price.text = self.ask_order_price.text
+                        } else {
+                            self.close_order_price.text = self.bid_order_price.text
+                        }
+                        self.closePosition()
+                    })
+                    present(alert, animated: true)
+                }else {
+                    ToastUtils.showNegativeMessage(message: "此合约您还没有持仓～")
+                }
             default:
                 closePosition()
             }

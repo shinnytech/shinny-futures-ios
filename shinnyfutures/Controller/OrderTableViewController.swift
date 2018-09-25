@@ -151,23 +151,35 @@ class OrderTableViewController: UIViewController, UITableViewDataSource, UITable
         let headerView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 35.0))
         headerView.backgroundColor = UIColor.darkGray
         let stackView = UIStackView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 35.0))
-        stackView.distribution = .fillEqually
+        stackView.distribution = .fillProportionally
         let name = UILabel()
+        name.font = UIFont(name: "Helvetica Neue", size: 15.0)
+        name.adjustsFontSizeToFitWidth = true
         name.text = "合约"
         name.textAlignment = .center
         let state = UILabel()
+        state.font = UIFont(name: "Helvetica Neue", size: 15.0)
+        state.adjustsFontSizeToFitWidth = true
         state.text = "状态"
         state.textAlignment = .center
         let direction = UILabel()
+        direction.font = UIFont(name: "Helvetica Neue", size: 15.0)
+        direction.adjustsFontSizeToFitWidth = true
         direction.text = "开平"
         direction.textAlignment = .center
         let price = UILabel()
+        price.font = UIFont(name: "Helvetica Neue", size: 15.0)
+        price.adjustsFontSizeToFitWidth = true
         price.text = "委托价"
         price.textAlignment = .right
         let volume = UILabel()
+        volume.font = UIFont(name: "Helvetica Neue", size: 15.0)
+        volume.adjustsFontSizeToFitWidth = true
         volume.text = "数量"
         volume.textAlignment = .center
         let time = UILabel()
+        time.font = UIFont(name: "Helvetica Neue", size: 15.0)
+        time.adjustsFontSizeToFitWidth = true
         time.text = "时间"
         time.textAlignment = .center
         stackView.addArrangedSubview(name)
@@ -177,6 +189,14 @@ class OrderTableViewController: UIViewController, UITableViewDataSource, UITable
         stackView.addArrangedSubview(volume)
         stackView.addArrangedSubview(time)
         headerView.addSubview(stackView)
+        NSLayoutConstraint.activate([
+            name.widthAnchor.constraint(equalTo: stackView.widthAnchor, multiplier: 0.2),
+            state.widthAnchor.constraint(equalTo: stackView.widthAnchor, multiplier: 0.2),
+            direction.widthAnchor.constraint(equalTo: stackView.widthAnchor, multiplier: 0.1),
+            price.widthAnchor.constraint(equalTo: stackView.widthAnchor, multiplier: 0.2),
+            volume.widthAnchor.constraint(equalTo: stackView.widthAnchor, multiplier: 0.1),
+            time.widthAnchor.constraint(equalTo: stackView.widthAnchor, multiplier: 0.2)
+            ])
         return headerView
     }
 

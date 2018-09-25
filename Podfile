@@ -14,7 +14,7 @@ target 'shinnyfutures' do
   pod 'Siren'
 
   pod 'Bugly'
-  
+
   # Pods for shinnyfutures
 
   target 'shinnyfuturesTests' do

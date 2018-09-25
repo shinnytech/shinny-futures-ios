@@ -25,6 +25,7 @@ class CurrentDayViewController: BaseChartViewController {
     var trading_day_start_id = -1
     var trading_day_end_id = -1
     var labels = [Int: String]()
+    var preSettlement = 1.0
 
     override func viewDidLoad() {
         chartView = currentDayChartView
@@ -99,7 +100,7 @@ class CurrentDayViewController: BaseChartViewController {
         preSettlement = quote[QuoteConstants.pre_settlement].doubleValue
         var last_id = kline[KlineConstants.last_id].intValue
         let datas = kline[KlineConstants.data]
-        if last_id != -1 && datas.count != 0 && preSettlement != 0.0 {
+        if last_id != -1 && datas.count != 0  {
             if chartView.data != nil && (chartView.data?.dataSetCount)! > 0 {
                 let combineData = chartView.combinedData
                 let lineData = combineData?.lineData

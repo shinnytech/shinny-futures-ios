@@ -109,28 +109,33 @@ class TradeTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 44.0))
         headerView.backgroundColor = UIColor.darkGray
-        let stackView = UIStackView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width - 10, height: 44.0))
+        let stackView = UIStackView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 44.0))
         stackView.distribution = .fillEqually
         let name = UILabel()
+        name.adjustsFontSizeToFitWidth = true
         name.text = "合约名称"
         name.textAlignment = .center
         let direction = UILabel()
+        direction.adjustsFontSizeToFitWidth = true
         direction.text = "开平"
         direction.textAlignment = .center
         let price = UILabel()
+        price.adjustsFontSizeToFitWidth = true
         price.text = "成交价"
         price.textAlignment = .right
         let volume = UILabel()
+        volume.adjustsFontSizeToFitWidth = true
         volume.text = "成交量"
-        volume.textAlignment = .center
+        volume.textAlignment = .right
         let datetime = UILabel()
+        datetime.adjustsFontSizeToFitWidth = true
         datetime.text = "成交时间"
         datetime.textAlignment = .center
         stackView.addArrangedSubview(name)
-        stackView.addArrangedSubview(direction)
+        stackView.addArrangedSubview(datetime)
         stackView.addArrangedSubview(price)
         stackView.addArrangedSubview(volume)
-        stackView.addArrangedSubview(datetime)
+        stackView.addArrangedSubview(direction)
         headerView.addSubview(stackView)
         return headerView
     }
@@ -160,7 +165,11 @@ class TradeTableViewController: UITableViewController {
     @objc private func loadData() {
         if !isRefresh {return}
         let user = dataManager.sRtnTD[dataManager.sUser_id]
-        let rtnTrades = user[RtnTDConstants.trades].dictionaryValue.sorted(by: >).map {$0.value}
+        let rtnTrades = user[RtnTDConstants.trades].dictionaryValue.sorted(by:{
+            let time0 = $0.value[TradeConstants.trade_date_time].stringValue
+            let time1 = $1.value[TradeConstants.trade_date_time].stringValue
+            return time0 > time1
+        }).map {$0.value}
         let oldData = trades
         trades = rtnTrades
         if oldData.count == 0 {

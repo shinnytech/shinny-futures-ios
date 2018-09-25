@@ -75,7 +75,7 @@ class TDWebSocketUtils: NSObject, WebSocketDelegate {
     func sendReqInsertOrder(order_id: String, exchange_id: String, instrument_id: String, direction: String, offset: String, volume: Int, priceType: String, price: Double) {
         let user_id = DataManager.getInstance().sUser_id
         let reqInsertOrder = "{\"aid\":\"insert_order\",\"user_id\":\"\(user_id)\",\"order_id\":\"\(order_id)\",\"exchange_id\":\"\(exchange_id)\",\"instrument_id\":\"\(instrument_id)\",\"direction\":\"\(direction)\",\"offset\":\"\(offset)\",\"volume\":\(volume),\"price_type\":\"\(priceType)\",\"limit_price\":\(price),\"volume_condition\":\"ANY\", \"time_condition\":\"GFD\"}"
-//        NSLog(reqInsertOrder)
+        NSLog(reqInsertOrder)
         socket.write(string: reqInsertOrder)
     }
 

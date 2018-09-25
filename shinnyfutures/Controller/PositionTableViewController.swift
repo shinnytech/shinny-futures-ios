@@ -142,28 +142,34 @@ class PositionTableViewController: UITableViewController {
         let headerView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 35.0))
         headerView.backgroundColor = UIColor.darkGray
         let stackView = UIStackView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 35.0))
-        stackView.distribution = .fillEqually
+        stackView.distribution = .fillProportionally
         let name = UILabel()
+        name.font = UIFont(name: "Helvetica Neue", size: 15.0)
         name.adjustsFontSizeToFitWidth = true
         name.text = "合约"
         name.textAlignment = .center
         let direction = UILabel()
+        direction.font = UIFont(name: "Helvetica Neue", size: 15.0)
         direction.adjustsFontSizeToFitWidth = true
         direction.text = "多空"
         direction.textAlignment = .center
         let volume = UILabel()
+        volume.font = UIFont(name: "Helvetica Neue", size: 15.0)
         volume.adjustsFontSizeToFitWidth = true
         volume.text = "手数"
-        volume.textAlignment = .center
+        volume.textAlignment = .right
         let available = UILabel()
+        available.font = UIFont(name: "Helvetica Neue", size: 15.0)
         available.adjustsFontSizeToFitWidth = true
         available.text = "可用"
-        available.textAlignment = .center
+        available.textAlignment = .right
         let openInterest = UILabel()
+        openInterest.font = UIFont(name: "Helvetica Neue", size: 15.0)
         openInterest.adjustsFontSizeToFitWidth = true
         openInterest.text = "开仓均价"
         openInterest.textAlignment = .right
         let profit = UILabel()
+        profit.font = UIFont(name: "Helvetica Neue", size: 15.0)
         profit.adjustsFontSizeToFitWidth = true
         profit.text = "逐笔盈亏"
         profit.textAlignment = .right
@@ -174,6 +180,14 @@ class PositionTableViewController: UITableViewController {
         stackView.addArrangedSubview(openInterest)
         stackView.addArrangedSubview(profit)
         headerView.addSubview(stackView)
+        NSLayoutConstraint.activate([
+            name.widthAnchor.constraint(equalTo: stackView.widthAnchor, multiplier: 0.25),
+            direction.widthAnchor.constraint(equalTo: stackView.widthAnchor, multiplier: 1/12),
+            volume.widthAnchor.constraint(equalTo: stackView.widthAnchor, multiplier: 1/12),
+            available.widthAnchor.constraint(equalTo: stackView.widthAnchor, multiplier: 1/12),
+            openInterest.widthAnchor.constraint(equalTo: stackView.widthAnchor, multiplier: 0.25),
+            profit.widthAnchor.constraint(equalTo: stackView.widthAnchor, multiplier: 0.25)
+            ])
         return headerView
     }
 

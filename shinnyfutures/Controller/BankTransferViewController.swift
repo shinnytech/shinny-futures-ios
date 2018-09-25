@@ -187,6 +187,8 @@ class BankTransferViewController:  UIViewController, UITableViewDataSource, UITa
             if !banks.isEmpty{
                 bank.dropView.selected_index = 0
                 bank.setTitle(bank.dropView.dropDownOptions[0], for: .normal)
+            }else{
+                bank.setTitle("无", for: .normal)
             }
         }
 
@@ -199,6 +201,8 @@ class BankTransferViewController:  UIViewController, UITableViewDataSource, UITa
             if !currencies.isEmpty{
                 currency.dropView.selected_index = 0
                 currency.setTitle(currency.dropView.dropDownOptions[0], for: .normal)
+            }else{
+                currency.setTitle("无", for: .normal)
             }
         }
 

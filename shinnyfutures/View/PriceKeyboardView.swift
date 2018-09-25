@@ -65,7 +65,6 @@ open class PriceKeyboardView: UIView {
         addSubview(view)
         priceTick.text = DataManager.getInstance().sSearchEntities[DataManager.getInstance().sInstrumentId]?.p_tick
         let margin = (DataManager.getInstance().sSearchEntities[DataManager.getInstance().sInstrumentId]?.margin)!
-        print(margin)
         if margin == 0{
             openVolume.text = "0"
         }else {
