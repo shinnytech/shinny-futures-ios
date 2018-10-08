@@ -81,6 +81,12 @@ class BankTransferViewController:  UIViewController, UITableViewDataSource, UITa
         print("银期转帐页销毁")
     }
 
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        future_password.resignFirstResponder()
+        bank_password.resignFirstResponder()
+        amount.resignFirstResponder()
+    }
+
     // MARK: - Table view data source
     func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
@@ -277,5 +283,17 @@ class BankTransferViewController:  UIViewController, UITableViewDataSource, UITa
             TDWebSocketUtils.getInstance().sendReqBankTransfer(future_account: future_account, future_password: future_password, bank_id: bank_id, bank_password: bank_password, currency: currency, amount: -fabsf(amountF))
         }
 
+    }
+
+    @IBAction func futurePasswordDone(_ sender: UITextField) {
+        future_password.resignFirstResponder()
+    }
+
+    @IBAction func bankPasswordDone(_ sender: UITextField) {
+        bank_password.resignFirstResponder()
+    }
+
+    @IBAction func amountDone(_ sender: UITextField) {
+        amount.resignFirstResponder()
     }
 }

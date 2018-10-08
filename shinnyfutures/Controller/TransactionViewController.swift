@@ -293,7 +293,6 @@ class TransactionViewController: UIViewController, PriceKeyboardViewDelegate, Vo
             }
 
             let direction = self.direction.elementsEqual("多") ? "SELL" : "BUY"
-            let order_id = Int(Date().timeIntervalSince1970)
             let title = "确认下单吗？"
             let instrument_id = String(self.instrument_id_transaction.split(separator: ".")[1])
             let message_today = "\(instrument_id_transaction), \(price), 平今, \(volume)手"
@@ -316,38 +315,38 @@ class TransactionViewController: UIViewController, PriceKeyboardViewDelegate, Vo
                     if volume <= volumre_today || volume <= volume_history {
                         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
                         alert.addAction(UIAlertAction(title: "平今", style: .default) { _ in
-                            self.initOrderAlert(title: title, message: message_today, orderId: "\(order_id)", exchangeId: self.exchange_id, instrumentId: instrument_id, direction: direction, offset: "CLOSETODAY", volume: volume, priceType: "LIMIT", price: price)
+                            self.initOrderAlert(title: title, message: message_today, exchangeId: self.exchange_id, instrumentId: instrument_id, direction: direction, offset: "CLOSETODAY", volume: volume, priceType: "LIMIT", price: price)
                         })
                         alert.addAction(UIAlertAction(title: "平昨", style: .default) { _ in
-                            self.initOrderAlert(title: title, message: message_history, orderId: "\(order_id)", exchangeId: self.exchange_id, instrumentId: instrument_id, direction: direction, offset: "CLOSE", volume: volume, priceType: "LIMIT", price: price)
+                            self.initOrderAlert(title: title, message: message_history, exchangeId: self.exchange_id, instrumentId: instrument_id, direction: direction, offset: "CLOSE", volume: volume, priceType: "LIMIT", price: price)
                         })
                         present(alert, animated: true)
                     } else if volume > volumre_today || volume > volume_history {
                         let volume_sub = volume - volumre_today
                         let message1 = "\(instrument_id_transaction), \(price), 平今, \(volumre_today)手"
                         let message2 = "\(instrument_id_transaction), \(price), 平昨, \(volume_sub)手"
-                        initOrderAlert(title: title, message1: message1, message2: message2, orderId: "\(order_id)", exchangeId: exchange_id, instrumentId: instrument_id, direction: direction, offset1: "CLOSETODAY", offset2: "CLOSE", volume1: volumre_today, volume2: volume_sub, priceType: "LIMIT", price: price)
+                        initOrderAlert(title: title, message1: message1, message2: message2,exchangeId: exchange_id, instrumentId: instrument_id, direction: direction, offset1: "CLOSETODAY", offset2: "CLOSE", volume1: volumre_today, volume2: volume_sub, priceType: "LIMIT", price: price)
                     }
                 } else if volumre_today == 0 && volume_history > 0 {
-                    initOrderAlert(title: title, message: message_history, orderId: "\(order_id)", exchangeId: exchange_id, instrumentId: instrument_id, direction: direction, offset: "CLOSE", volume: volume, priceType: "LIMIT", price: price)
+                    initOrderAlert(title: title, message: message_history, exchangeId: exchange_id, instrumentId: instrument_id, direction: direction, offset: "CLOSE", volume: volume, priceType: "LIMIT", price: price)
                 } else if volumre_today > 0 && volume_history == 0 {
-                    initOrderAlert(title: title, message: message_today, orderId: "\(order_id)", exchangeId: exchange_id, instrumentId: instrument_id, direction: direction, offset: "CLOSETODAY", volume: volume, priceType: "LIMIT", price: price)
+                    initOrderAlert(title: title, message: message_today, exchangeId: exchange_id, instrumentId: instrument_id, direction: direction, offset: "CLOSETODAY", volume: volume, priceType: "LIMIT", price: price)
                 }
 
             } else {
                 let message = "\(instrument_id_transaction), \(price), 平仓, \(volume)手"
-                initOrderAlert(title: title, message: message, orderId: "\(order_id)", exchangeId: exchange_id, instrumentId: instrument_id, direction: direction, offset: "CLOSE", volume: volume, priceType: "LIMIT", price: price)
+                initOrderAlert(title: title, message: message, exchangeId: exchange_id, instrumentId: instrument_id, direction: direction, offset: "CLOSE", volume: volume, priceType: "LIMIT", price: price)
             }
         }
     }
 
     //下单对话框
-    func initOrderAlert(title: String, message: String, orderId: String, exchangeId: String, instrumentId: String, direction: String, offset: String, volume: Int, priceType: String, price: Double) {
+    func initOrderAlert(title: String, message: String, exchangeId: String, instrumentId: String, direction: String, offset: String, volume: Int, priceType: String, price: Double) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: {action in
             switch action.style {
             case .default:
-                TDWebSocketUtils.getInstance().sendReqInsertOrder(order_id: orderId, exchange_id: exchangeId, instrument_id: instrumentId, direction: direction, offset: offset, volume: volume, priceType: priceType, price: price)
+                TDWebSocketUtils.getInstance().sendReqInsertOrder(exchange_id: exchangeId, instrument_id: instrumentId, direction: direction, offset: offset, volume: volume, priceType: priceType, price: price)
                 self.refreshPosition()
             default:
                 break
@@ -356,13 +355,13 @@ class TransactionViewController: UIViewController, PriceKeyboardViewDelegate, Vo
         present(alert, animated: true, completion: nil)
     }
     //平今平昨对话框
-    func initOrderAlert(title: String, message1: String, message2: String, orderId: String, exchangeId: String, instrumentId: String, direction: String, offset1: String, offset2: String, volume1: Int, volume2: Int, priceType: String, price: Double) {
+    func initOrderAlert(title: String, message1: String, message2: String, exchangeId: String, instrumentId: String, direction: String, offset1: String, offset2: String, volume1: Int, volume2: Int, priceType: String, price: Double) {
         let alert = UIAlertController(title: title, message: "\(message1)\n\(message2)", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: {action in
             switch action.style {
             case .default:
-                TDWebSocketUtils.getInstance().sendReqInsertOrder(order_id: orderId, exchange_id: exchangeId, instrument_id: instrumentId, direction: direction, offset: offset1, volume: volume1, priceType: priceType, price: price)
-                TDWebSocketUtils.getInstance().sendReqInsertOrder(order_id: orderId, exchange_id: exchangeId, instrument_id: instrumentId, direction: direction, offset: offset2, volume: volume2, priceType: priceType, price: price)
+                TDWebSocketUtils.getInstance().sendReqInsertOrder(exchange_id: exchangeId, instrument_id: instrumentId, direction: direction, offset: offset1, volume: volume1, priceType: priceType, price: price)
+                TDWebSocketUtils.getInstance().sendReqInsertOrder(exchange_id: exchangeId, instrument_id: instrumentId, direction: direction, offset: offset2, volume: volume2, priceType: priceType, price: price)
                 self.refreshPosition()
             default:
                 break
@@ -466,9 +465,8 @@ class TransactionViewController: UIViewController, PriceKeyboardViewDelegate, Vo
             }
 
             let title = "确认下单吗？"
-            let order_id = Int(Date().timeIntervalSince1970)
             let message = "\(instrument_id_transaction), \(price), 买开, \(volume)手"
-            initOrderAlert(title: title, message: message, orderId: "\(order_id)", exchangeId: exchange_id, instrumentId: String(instrument_id_transaction.split(separator: ".")[1]), direction: "BUY", offset: "OPEN", volume: volume, priceType: "LIMIT", price: price)
+            initOrderAlert(title: title, message: message, exchangeId: exchange_id, instrumentId: String(instrument_id_transaction.split(separator: ".")[1]), direction: "BUY", offset: "OPEN", volume: volume, priceType: "LIMIT", price: price)
         }
     }
 
@@ -488,9 +486,8 @@ class TransactionViewController: UIViewController, PriceKeyboardViewDelegate, Vo
             }
 
             let title = "确认下单吗？"
-            let order_id = Int(Date().timeIntervalSince1970)
             let message = "\(instrument_id_transaction), \(price), 卖开, \(volume)手"
-            initOrderAlert(title: title, message: message, orderId: "\(order_id)", exchangeId: exchange_id, instrumentId: String(instrument_id_transaction.split(separator: ".")[1]), direction: "SELL", offset: "OPEN", volume: volume, priceType: "LIMIT", price: price)
+            initOrderAlert(title: title, message: message,exchangeId: exchange_id, instrumentId: String(instrument_id_transaction.split(separator: ".")[1]), direction: "SELL", offset: "OPEN", volume: volume, priceType: "LIMIT", price: price)
         }
     }
 

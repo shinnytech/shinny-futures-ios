@@ -40,11 +40,9 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
     var isMDClose = false
     var isTDClose = false
     var mdURLs = [String]()
-    var tdUrl = CommonConstants.TRANSACTION_URL + "0"
     var index = 0
 
     func websocketDidConnect(socket: TDWebSocketUtils) {
-        NSLog("交易服务器连接成功～")
         if isTDClose {
             ToastUtils.showPositiveMessage(message: "交易服务器连接成功～")
             isTDClose = false
@@ -52,12 +50,13 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
     }
 
     func websocketDidDisconnect(socket: TDWebSocketUtils, error: Error?) {
-        NSLog("交易服务器连接断开，正在重连～")
         DataManager.getInstance().sIsLogin = false
-        isTDClose = true
-        ToastUtils.showNegativeMessage(message: "交易服务器连接断开，正在重连～")
+        if !isTDClose {
+            ToastUtils.showNegativeMessage(message: "交易服务器连接断开，正在重连～")
+            isTDClose = true
+        }
         DispatchQueue.global().asyncAfter(deadline: DispatchTime.now() + 2, execute: {
-            self.transactionWebSocketUtils.connect(url: self.tdUrl)
+            self.transactionWebSocketUtils.connect(url: CommonConstants.TRANSACTION_URL)
         })
     }
 
@@ -84,7 +83,6 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
     ////////////////////////////////////////////////////////////////////////////////
 
     func websocketDidConnect(socket: MDWebSocketUtils) {
-        NSLog("行情服务器连接成功～")
         if isMDClose {
             ToastUtils.showPositiveMessage(message: "行情服务器连接成功～")
             isMDClose = false
@@ -92,9 +90,10 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
     }
 
     func websocketDidDisconnect(socket: MDWebSocketUtils, error: Error?) {
-        NSLog("行情服务器连接断开，正在重连～")
-        isMDClose = true
-        ToastUtils.showNegativeMessage(message: "行情服务器连接断开，正在重连～")
+        if !isMDClose {
+            ToastUtils.showNegativeMessage(message: "行情服务器连接断开，正在重连～")
+            isMDClose = true
+        }
         DispatchQueue.global().asyncAfter(deadline: DispatchTime.now() + 2, execute: {
             self.index = self.mdWebSocketUtils.connect(url: self.mdURLs[self.index], index: self.index)
         })
@@ -117,6 +116,8 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
                 self.index = 0
                 DataManager.getInstance().parseRtnMD(rtnData: json)
             default:
+                self.mdWebSocketUtils.disconnect()
+                self.index = self.mdWebSocketUtils.connect(url: self.mdURLs[self.index], index: self.index)
                 return
             }
             socket.sendPeekMessage()
@@ -155,7 +156,7 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
                     NotificationCenter.default.post(name: Notification.Name(CommonConstants.LatestFileParsedNotification), object: nil)
                 }
                 self.index = self.mdWebSocketUtils.connect(url: self.mdURLs[self.index], index: self.index)
-                self.transactionWebSocketUtils.connect(url: self.tdUrl)
+                self.transactionWebSocketUtils.connect(url: CommonConstants.TRANSACTION_URL)
             } catch {
                 print ("file error: \(error)")
             }
@@ -166,20 +167,19 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
         downloadTask.resume()
     }
 
-    func initTDUrl() {
-        if let tdUrlPath = UserDefaults.standard.string(forKey: "tdUrlPath") {
-            tdUrl = CommonConstants.TRANSACTION_URL + tdUrlPath
-        }else{
-            let tdUrlPath = "\(abs(UUID.init().hashValue % 10))"
-            tdUrl = CommonConstants.TRANSACTION_URL + tdUrlPath
-            UserDefaults.standard.set(tdUrlPath, forKey: "tdUrlPath")
-        }
-    }
-
     func initMDURLs(){
         let mdURLGroup = shuffle(group: [CommonConstants.MARKET_URL_2, CommonConstants.MARKET_URL_3, CommonConstants.MARKET_URL_4, CommonConstants.MARKET_URL_5, CommonConstants.MARKET_URL_6, CommonConstants.MARKET_URL_7])
-        mdURLs.append(CommonConstants.MARKET_URL_1)
+
+         if let myClass = objc_getClass("shinnyfutures.LocalCommonConstants"){
+            let myClassType = myClass as! NSObject.Type
+            let cl = myClassType.init()
+            let url = cl.value(forKey: "MARKET_URL_8") as! String
+            mdURLs.append(url)
+        }else{
+            mdURLs.append(CommonConstants.MARKET_URL_1)
+        }
         mdURLs += mdURLGroup
+        print(mdURLs)
     }
 
     func shuffle(group: [String]) -> [String] {
@@ -205,11 +205,11 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
         self.navigationController?.navigationBar.barTintColor = UIColor.black
         self.navigationController?.navigationBar.tintColor = UIColor.white
         initMDURLs()
-        initTDUrl()
         self.mdWebSocketUtils.mdWebSocketUtilsDelegate = self
         self.transactionWebSocketUtils.tdWebSocketUtilsDelegate = self
         sessionSimpleDownload(urlString: CommonConstants.LATEST_FILE_URL, fileName: "latest.json")
         initSlideMenuWidth()
+        checkResponsibility()
     }
 
     deinit {
@@ -235,10 +235,6 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
     }
 
     // MARK: Actions
-//    @IBAction func loginViewControllerUnwindSegue(segue: UIStoryboardSegue) {
-//        print("我从登陆页来～")
-//    }
-
     @IBAction func accountViewControllerUnwindSegue(segue: UIStoryboardSegue) {
         print("我从账户资金来～")
     }
@@ -462,6 +458,17 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
             quoteNavigationConstraint.constant = -44
         }
         quoteNavigationCollectionViewController.loadDatas(index: index)
+    }
+
+    private func checkResponsibility(){
+        let versionCode = UserDefaults.standard.integer(forKey: "versionCode")
+        if let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String, let versionCodeNow = Int(build) {
+            if versionCode < versionCodeNow {
+                ResponsibilityView.getInstance().showResponsibility()
+                UserDefaults.standard.set(versionCodeNow, forKey: "versionCode")
+            }
+        }
+
     }
 
 }

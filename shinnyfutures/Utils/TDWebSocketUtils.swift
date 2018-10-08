@@ -65,16 +65,16 @@ class TDWebSocketUtils: NSObject, WebSocketDelegate {
     }
 
     // MARK: 确认结算单
-    func sendReqConfirmSettlement(reqId: String, msg: String) {
-        let confirmSettlement = "{\"aid\":\"MobileConfirmSettlement\",\"req_id\":\"\(reqId)\",\"msg\":\"\(msg)\"}"
+    func sendReqConfirmSettlement() {
+        let confirmSettlement = "{\"aid\":\"confirm_settlement\"}"
 //        NSLog(confirmSettlement)
         socket.write(string: confirmSettlement)
     }
 
     // MARK: 挂单
-    func sendReqInsertOrder(order_id: String, exchange_id: String, instrument_id: String, direction: String, offset: String, volume: Int, priceType: String, price: Double) {
+    func sendReqInsertOrder(exchange_id: String, instrument_id: String, direction: String, offset: String, volume: Int, priceType: String, price: Double) {
         let user_id = DataManager.getInstance().sUser_id
-        let reqInsertOrder = "{\"aid\":\"insert_order\",\"user_id\":\"\(user_id)\",\"order_id\":\"\(order_id)\",\"exchange_id\":\"\(exchange_id)\",\"instrument_id\":\"\(instrument_id)\",\"direction\":\"\(direction)\",\"offset\":\"\(offset)\",\"volume\":\(volume),\"price_type\":\"\(priceType)\",\"limit_price\":\(price),\"volume_condition\":\"ANY\", \"time_condition\":\"GFD\"}"
+        let reqInsertOrder = "{\"aid\":\"insert_order\",\"user_id\":\"\(user_id)\",\"order_id\":\"\",\"exchange_id\":\"\(exchange_id)\",\"instrument_id\":\"\(instrument_id)\",\"direction\":\"\(direction)\",\"offset\":\"\(offset)\",\"volume\":\(volume),\"price_type\":\"\(priceType)\",\"limit_price\":\(price),\"volume_condition\":\"ANY\", \"time_condition\":\"GFD\"}"
         NSLog(reqInsertOrder)
         socket.write(string: reqInsertOrder)
     }

@@ -42,7 +42,11 @@ class MDWebSocketUtils: NSObject, WebSocketDelegate {
         socket.delegate = self
         socket.request.addValue("shinnyfutures-iOS", forHTTPHeaderField: "User-Agent")
         socket.connect()
-        return index + 1
+        var indexNext = index + 1
+        if indexNext == 7 {
+            indexNext = 0
+        }
+        return indexNext
     }
 
     // MARK: 断开连接

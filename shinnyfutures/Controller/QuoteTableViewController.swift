@@ -120,7 +120,7 @@ class QuoteTableViewController: UITableViewController, UIPopoverPresentationCont
                 let change = last - pre_settlement
                 if change < 0 {cell.changePercent.textColor = UIColor.green} else {cell.changePercent.textColor = UIColor.red}
                 if isChangePercent {
-                    let change_percent = change / pre_settlement
+                    let change_percent = change / pre_settlement * 100
                     cell.changePercent.text = dataManager.saveDecimalByPtick(decimal: 2, data: "\(change_percent)")
                 } else {
                     cell.changePercent.text = dataManager.saveDecimalByPtick(decimal: decimal, data: "\(change)")

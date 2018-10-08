@@ -52,6 +52,7 @@ class LoginViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(loadBrokerInfo), name: Notification.Name(CommonConstants.BrokerInfoNotification), object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(loginResult), name: Notification.Name(CommonConstants.LoginNotification), object: nil)
+
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -62,6 +63,11 @@ class LoginViewController: UIViewController {
         let button = self.view.viewWithTag(100)
         button?.removeFromSuperview()
         print("登陆页销毁")
+    }
+
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        userName.resignFirstResponder()
+        userPassword.resignFirstResponder()
     }
     
     // MARK: Actions
@@ -172,7 +178,13 @@ class LoginViewController: UIViewController {
             
         })
     }
-    
+    @IBAction func userNameDone(_ sender: UITextField) {
+        userName.resignFirstResponder()
+    }
+
+    @IBAction func passwordDone(_ sender: UITextField) {
+        userPassword.resignFirstResponder()
+    }
 }
 
 

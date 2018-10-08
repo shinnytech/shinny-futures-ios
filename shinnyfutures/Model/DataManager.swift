@@ -306,9 +306,18 @@ class DataManager {
                 let notifyArray = dataJson[RtnTDConstants.notify]
                 if !notifyArray.isEmpty {
                     for (_, notifyJson) in notifyArray.dictionaryValue {
-                        DispatchQueue.main.async {
-                            ToastUtils.showPositiveMessage(message: notifyJson[NotifyConstants.content].stringValue)
+                        let content = notifyJson[NotifyConstants.content].stringValue
+                        let type = notifyJson[NotifyConstants.type].stringValue
+                        if "SETTLEMENT".elementsEqual(type){
+                            DispatchQueue.main.async {
+                                ConfirmSettlementView.getInstance().showConfirmSettlement(message: content)
+                            }
+                        }else{
+                            DispatchQueue.main.async {
+                                ToastUtils.showPositiveMessage(message: content)
+                            }
                         }
+
                     }
                     
                 }

@@ -41,6 +41,8 @@
 		D47A4E812088928300255276 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47A4E802088928300255276 /* DataManager.swift */; };
 		D47A4E852089958A00255276 /* FileUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47A4E842089958A00255276 /* FileUtils.swift */; };
 		D47A4E872089BBF100255276 /* CommonConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47A4E862089BBF100255276 /* CommonConstants.swift */; };
+		D47F66E7215BA7110068C853 /* ResponsibilityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47F66E6215BA7110068C853 /* ResponsibilityView.swift */; };
+		D47F66F1216B58010068C853 /* LocalCommonConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47F66F0216B58010068C853 /* LocalCommonConstants.swift */; };
 		D480225A20688A180033E202 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D480225920688A180033E202 /* AppDelegate.swift */; };
 		D480225C20688A180033E202 /* QuoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D480225B20688A180033E202 /* QuoteViewController.swift */; };
 		D480225F20688A180033E202 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D480225D20688A180033E202 /* Main.storyboard */; };
@@ -192,6 +194,8 @@
 		D47A4E802088928300255276 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		D47A4E842089958A00255276 /* FileUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileUtils.swift; sourceTree = "<group>"; };
 		D47A4E862089BBF100255276 /* CommonConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonConstants.swift; sourceTree = "<group>"; };
+		D47F66E6215BA7110068C853 /* ResponsibilityView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResponsibilityView.swift; sourceTree = "<group>"; };
+		D47F66F0216B58010068C853 /* LocalCommonConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalCommonConstants.swift; sourceTree = "<group>"; };
 		D480225620688A180033E202 /* shinnyfutures.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = shinnyfutures.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D480225920688A180033E202 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D480225B20688A180033E202 /* QuoteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuoteViewController.swift; sourceTree = "<group>"; };
@@ -389,6 +393,7 @@
 			children = (
 				D47A4E802088928300255276 /* DataManager.swift */,
 				D47A4E862089BBF100255276 /* CommonConstants.swift */,
+				D47F66F0216B58010068C853 /* LocalCommonConstants.swift */,
 				D48606A520A43FFA00C4FEB5 /* RtnMDConstants.swift */,
 				D48606A720A4429200C4FEB5 /* QuoteConstants.swift */,
 				D48606A920A442E200C4FEB5 /* KlineConstants.swift */,
@@ -420,6 +425,7 @@
 				D4B3DBC62074C55A00545376 /* OrderTableViewCell.swift */,
 				D47A4E7C2087353100255276 /* DrawerStackView.swift */,
 				D4F10EA220A5780000DC9E1C /* ConfirmSettlementView.swift */,
+				D47F66E6215BA7110068C853 /* ResponsibilityView.swift */,
 				D4F4E18820AEA080007A2975 /* PriceKeyboardView.swift */,
 				D4EBC92120AEB71A00A9163F /* VolumeKeyboardView.swift */,
 				D420B2E520E0964E0045B6AF /* MyXAxis.swift */,
@@ -746,6 +752,7 @@
 				D4195FC120907C550072C021 /* TDWebSocketUtils.swift in Sources */,
 				D4F10EA320A5780000DC9E1C /* ConfirmSettlementView.swift in Sources */,
 				D415D0C620DCD6F700EA8DA3 /* KlineMarkerView.swift in Sources */,
+				D47F66E7215BA7110068C853 /* ResponsibilityView.swift in Sources */,
 				D420B2EA20E0964E0045B6AF /* MyYAxis.swift in Sources */,
 				D4B3DBC92074C58200545376 /* PositionTableViewController.swift in Sources */,
 				D49A718120738A9B00AA947A /* TradeTableViewController.swift in Sources */,
@@ -798,6 +805,7 @@
 				D47A4E812088928300255276 /* DataManager.swift in Sources */,
 				D4B3DBD7207CB82C00545376 /* KlineViewController.swift in Sources */,
 				D420B2DD20E091300045B6AF /* CurrentDayCombinedChartView.swift in Sources */,
+				D47F66F1216B58010068C853 /* LocalCommonConstants.swift in Sources */,
 				D47A4E772085D0FF00255276 /* QuoteNavigationCollectionViewCell.swift in Sources */,
 				D4802296206B375E0033E202 /* MainViewController.swift in Sources */,
 				D4802298206B67650033E202 /* AccountViewController.swift in Sources */,
