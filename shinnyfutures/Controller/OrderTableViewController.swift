@@ -123,9 +123,11 @@ class OrderTableViewController: UIViewController, UITableViewDataSource, UITable
             if "ALIVE".elementsEqual(status) {
                 let order_id = order[OrderConstants.order_id].stringValue
                 let instrument_id = order[OrderConstants.instrument_id].stringValue
+                let exchange_id = order[OrderConstants.exchange_id].stringValue
                 let direction_title = order[OrderConstants.direction].stringValue
                 let volume = order[OrderConstants.volume_left].stringValue
-                let price = order[OrderConstants.limit_price].stringValue
+                let p_decs = dataManager.getDecimalByPtick(instrumentId: exchange_id + "." + instrument_id)
+                let price = dataManager.saveDecimalByPtick(decimal: p_decs, data: order[OrderConstants.limit_price].stringValue)
                 let title = "您确定要撤单吗？"
                 let message = "合约：\(instrument_id), 价格：\(price), 方向：\(direction_title), 手数：\(volume)手"
                 let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)

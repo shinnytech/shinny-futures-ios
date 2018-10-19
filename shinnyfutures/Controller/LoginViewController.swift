@@ -30,7 +30,7 @@ class LoginViewController: UIViewController {
         //Configure the button
         let button = DropDownBtn.init(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
-        button.setTitle("期货公司列表加载中...", for: .normal)
+        button.setTitle("", for: .normal)
         button.contentHorizontalAlignment = .left
         button.translatesAutoresizingMaskIntoConstraints = false
         button.tag = 100
@@ -45,7 +45,7 @@ class LoginViewController: UIViewController {
         button.heightAnchor.constraint(equalToConstant: 30).isActive = true
         
         loadBrokerInfo()
-        
+
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -123,7 +123,7 @@ class LoginViewController: UIViewController {
                 button.setTitle("请选择期货公司", for: .normal)
             }
         }else{
-            button.setTitle("无", for: .normal)
+            TDWebSocketUtils.getInstance().disconnect()
         }
     }
     

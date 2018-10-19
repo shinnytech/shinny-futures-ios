@@ -41,7 +41,11 @@ class TDWebSocketUtils: NSObject, WebSocketDelegate {
     func connect(url: String) {
         self.socket = WebSocket(url: URL(string: url)!)
         self.socket.delegate = self
-        socket.request.addValue("shinnyfutures-iOS", forHTTPHeaderField: "User-Agent")
+        if let appVersion = Bundle.main.infoDictionary!["CFBundleShortVersionString"] as? String, let appBuild = Bundle.main.infoDictionary!["CFBundleVersion"] as? String{
+            socket.request.addValue("shinnyfutures-iOS \(appVersion)(\(appBuild))", forHTTPHeaderField: "User-Agent")
+        }else{
+            socket.request.addValue("shinnyfutures-iOS", forHTTPHeaderField: "User-Agent")
+        }
         self.socket.connect()
     }
 

@@ -35,6 +35,7 @@ class DataManager {
     var sPreInsList = ""
     var sInstrumentId = ""
     var sIsLogin = false
+    var sIsEmpty = false
     var sUser_id = ""
     //进入登陆页的来源
     var sToLoginTarget = ""
@@ -70,10 +71,11 @@ class DataManager {
                     let expired = subJson["expired"] as! Bool
                     let exchange_id = subJson["exchange_id"] as! String
                     let price_tick = (subJson["price_tick"] as! NSNumber).stringValue
+                    let price_decs = (subJson["price_decs"] as! NSNumber).intValue
                     let volume_multiple = (subJson["volume_multiple"] as! NSNumber).stringValue
                     let sort_key = (subJson["sort_key"] as! NSNumber).intValue
 
-                    let searchEntity = Search(instrument_id: instrument_id, instrument_name: ins_name, exchange_name: "", exchange_id: exchange_id, py: "", p_tick: price_tick, vm: volume_multiple, sort_key: sort_key, margin: 0, underlying_symbol: "")
+                    let searchEntity = Search(instrument_id: instrument_id, instrument_name: ins_name, exchange_name: "", exchange_id: exchange_id, py: "", p_tick: price_tick, p_decs: price_decs, vm: volume_multiple, sort_key: sort_key, margin: 0, underlying_symbol: "")
 
                     if "FUTURE_CONT".elementsEqual(classN){
                         let py = subJson["py"] as! String
@@ -246,13 +248,8 @@ class DataManager {
 
     func getDecimalByPtick(instrumentId: String) -> Int {
         if let search = sSearchEntities[instrumentId] {
-            let ptick = search.p_tick
-            if ptick.contains("."), let index = ptick.index(of: ".")?.encodedOffset {
-                let decimal = ptick.count - index - 1
-                return decimal
-            } else {
-                return 0
-            }
+            let p_decs = search.p_decs
+            return p_decs
         }
         return 0
     }
@@ -273,6 +270,13 @@ class DataManager {
 
     func parseBrokers(brokers: JSON) {
         do {
+            if !brokers.dictionaryValue.keys.contains(RtnTDConstants.brokers) {
+                sIsLogin = true
+                sIsEmpty = true
+                DispatchQueue.main.async {
+                    NotificationCenter.default.post(name: Notification.Name(CommonConstants.BrokerInfoEmptyNotification), object: nil)
+                }
+            }
             try sRtnBrokers.merge(with: brokers)
             DispatchQueue.main.async {
                 NotificationCenter.default.post(name: Notification.Name(CommonConstants.BrokerInfoNotification), object: nil)

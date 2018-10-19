@@ -25,6 +25,7 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
     @IBOutlet weak var account: UIButton!
     @IBOutlet weak var position: UIButton!
     @IBOutlet weak var trade: UIButton!
+    @IBOutlet weak var transfer: UIButton!
     @IBOutlet weak var feedback: UIButton!
     @IBOutlet weak var background: UIButton!
     @IBOutlet weak var left: UIButton!
@@ -34,9 +35,8 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
     var isSlideMenuHidden = true
     var quotePageViewController: QuotePageViewController!
     var quoteNavigationCollectionViewController: QuoteNavigationCollectionViewController!
-
     let mdWebSocketUtils = MDWebSocketUtils.getInstance()
-    let transactionWebSocketUtils = TDWebSocketUtils.getInstance()
+    let tdWebSocketUtils = TDWebSocketUtils.getInstance()
     var isMDClose = false
     var isTDClose = false
     var mdURLs = [String]()
@@ -56,7 +56,7 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
             isTDClose = true
         }
         DispatchQueue.global().asyncAfter(deadline: DispatchTime.now() + 2, execute: {
-            self.transactionWebSocketUtils.connect(url: CommonConstants.TRANSACTION_URL)
+            self.tdWebSocketUtils.connect(url: CommonConstants.TRANSACTION_URL)
         })
     }
 
@@ -72,7 +72,7 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
             default:
                 return
             }
-            self.transactionWebSocketUtils.sendPeekMessage()
+            self.tdWebSocketUtils.sendPeekMessage()
         }
     }
 
@@ -156,7 +156,7 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
                     NotificationCenter.default.post(name: Notification.Name(CommonConstants.LatestFileParsedNotification), object: nil)
                 }
                 self.index = self.mdWebSocketUtils.connect(url: self.mdURLs[self.index], index: self.index)
-                self.transactionWebSocketUtils.connect(url: CommonConstants.TRANSACTION_URL)
+                self.tdWebSocketUtils.connect(url: CommonConstants.TRANSACTION_URL)
             } catch {
                 print ("file error: \(error)")
             }
@@ -179,7 +179,6 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
             mdURLs.append(CommonConstants.MARKET_URL_1)
         }
         mdURLs += mdURLGroup
-        print(mdURLs)
     }
 
     func shuffle(group: [String]) -> [String] {
@@ -206,14 +205,17 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
         self.navigationController?.navigationBar.tintColor = UIColor.white
         initMDURLs()
         self.mdWebSocketUtils.mdWebSocketUtilsDelegate = self
-        self.transactionWebSocketUtils.tdWebSocketUtilsDelegate = self
+        self.tdWebSocketUtils.tdWebSocketUtilsDelegate = self
         sessionSimpleDownload(urlString: CommonConstants.LATEST_FILE_URL, fileName: "latest.json")
         initSlideMenuWidth()
         checkResponsibility()
+        NotificationCenter.default.addObserver(self, selector: #selector(refreshMenu), name: Notification.Name(CommonConstants.BrokerInfoEmptyNotification), object: nil)
     }
 
     deinit {
         print("主页销毁")
+        NotificationCenter.default.removeObserver(self)
+
     }
 
     // change the width of slide menu when the orientation changes
@@ -469,6 +471,13 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
             }
         }
 
+    }
+
+    @objc func refreshMenu(){
+        menu.removeArrangedSubview(account)
+        menu.removeArrangedSubview(position)
+        menu.removeArrangedSubview(trade)
+        menu.removeArrangedSubview(transfer)
     }
 
 }

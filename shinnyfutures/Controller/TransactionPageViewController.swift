@@ -14,11 +14,18 @@ class TransactionPageViewController: UIPageViewController, UIPageViewControllerD
     var identifiers = [CommonConstants.HandicapViewController, CommonConstants.PositionTableViewController, CommonConstants.OrderTableViewController, CommonConstants.TransactionViewController]
     weak var quoteViewController: QuoteViewController?
     lazy var subViewControllers: [UIViewController] = {
-        return [
-            UIStoryboard(name: "Main", bundle: Bundle(identifier: "com.shinnytech.futures")).instantiateViewController(withIdentifier: identifiers[0]) as! HandicapViewController,
-            UIStoryboard(name: "Main", bundle: Bundle(identifier: "com.shinnytech.futures")).instantiateViewController(withIdentifier: identifiers[1]) as! PositionTableViewController,
-            UIStoryboard(name: "Main", bundle: Bundle(identifier: "com.shinnytech.futures")).instantiateViewController(withIdentifier: identifiers[2]) as! OrderTableViewController,
-            UIStoryboard(name: "Main", bundle: Bundle(identifier: "com.shinnytech.futures")).instantiateViewController(withIdentifier: identifiers[3]) as! TransactionViewController]
+        if DataManager.getInstance().sIsEmpty{
+            return [
+                UIStoryboard(name: "Main", bundle: Bundle(identifier: "com.shinnytech.futures")).instantiateViewController(withIdentifier: identifiers[0]) as! HandicapViewController]
+        }else{
+            return [
+                UIStoryboard(name: "Main", bundle: Bundle(identifier: "com.shinnytech.futures")).instantiateViewController(withIdentifier: identifiers[0]) as! HandicapViewController,
+                UIStoryboard(name: "Main", bundle: Bundle(identifier: "com.shinnytech.futures")).instantiateViewController(withIdentifier: identifiers[1]) as! PositionTableViewController,
+                UIStoryboard(name: "Main", bundle: Bundle(identifier: "com.shinnytech.futures")).instantiateViewController(withIdentifier: identifiers[2]) as! OrderTableViewController,
+                UIStoryboard(name: "Main", bundle: Bundle(identifier: "com.shinnytech.futures")).instantiateViewController(withIdentifier: identifiers[3]) as! TransactionViewController]
+            
+        }
+
     }()
 
     override func viewDidLoad() {

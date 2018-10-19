@@ -425,6 +425,7 @@
                         <outlet property="shanghai" destination="0Gr-Yh-a5t" id="TFk-xp-3ri"/>
                         <outlet property="slideMenuConstraint" destination="AxG-2w-Hwb" id="i7Y-in-Ey7"/>
                         <outlet property="trade" destination="nFn-AQ-XlG" id="2xE-gn-Vk4"/>
+                        <outlet property="transfer" destination="mj8-kI-IeG" id="Otd-9I-WtO"/>
                         <outlet property="zhengzhou" destination="LeQ-Oc-Jj1" id="sz7-XP-2rT"/>
                         <outlet property="zhengzhouzuhe" destination="lWF-1F-sVw" id="iAV-zS-PoY"/>
                         <outlet property="zhongjin" destination="f7r-0f-Ti0" id="2AI-V9-zPu"/>
@@ -688,6 +689,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="currentDay" destination="H67-I4-Ieg" id="6fw-Cr-JQ0"/>
+                        <outlet property="downStackView" destination="wpi-5Z-PxG" id="wmU-jU-hfH"/>
                         <outlet property="handicap" destination="H9d-yf-rr0" id="rBc-9I-yYK"/>
                         <outlet property="klineDay" destination="Gh8-JW-d6z" id="x0d-X3-L2U"/>
                         <outlet property="klineHour" destination="Frd-aU-Wqp" id="ZfR-bW-qvG"/>
@@ -1322,7 +1324,7 @@
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="--" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="AgY-7e-2Lj">
-                                                            <rect key="frame" x="82.666666666666686" y="0.0" width="83.000000000000014" height="43.666666666666664"/>
+                                                            <rect key="frame" x="82.666666666666671" y="0.0" width="83.000000000000014" height="43.666666666666664"/>
                                                             <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
                                                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <nil key="highlightedColor"/>
@@ -2779,10 +2781,10 @@
         <image name="right" width="16" height="16"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="TV2-LR-8Lh"/>
-        <segue reference="uwS-z8-hDC"/>
-        <segue reference="dAc-fS-Cr1"/>
-        <segue reference="6yN-PO-9VS"/>
+        <segue reference="RNW-8o-0up"/>
+        <segue reference="krQ-8f-Gm2"/>
+        <segue reference="H5o-SO-Mhj"/>
+        <segue reference="VXl-yc-akt"/>
         <segue reference="rXr-vc-b2I"/>
     </inferredMetricsTieBreakers>
 </document>

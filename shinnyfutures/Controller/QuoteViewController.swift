@@ -13,6 +13,7 @@ class QuoteViewController: UIViewController, UIPopoverPresentationControllerDele
     // MARK: Properties
     let button =  UIButton(type: .custom)
     let dataManager = DataManager.getInstance()
+    var instrument_id = ""
     var transactionPageViewController: TransactionPageViewController!
     var klinePageViewController: KlinePageViewController!
     @IBOutlet weak var setup: UIButton!
@@ -26,10 +27,11 @@ class QuoteViewController: UIViewController, UIPopoverPresentationControllerDele
     @IBOutlet weak var position: UIButton!
     @IBOutlet weak var order: UIButton!
     @IBOutlet weak var transaction: UIButton!
+    @IBOutlet weak var downStackView: UIStackView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        var instrument_id = dataManager.sInstrumentId
+        instrument_id = dataManager.sInstrumentId
         if instrument_id.contains("KQ"), let underlying_name = dataManager.sSearchEntities[instrument_id]?.underlying_symbol{
             instrument_id = underlying_name
         }
@@ -52,7 +54,12 @@ class QuoteViewController: UIViewController, UIPopoverPresentationControllerDele
         currentDay.setTitleColor(UIColor.yellow, for: .normal)
         handicap.setTitleColor(UIColor.yellow, for: .normal)
 
-        NotificationCenter.default.addObserver(self, selector: #selector(setButtonTitle), name: Notification.Name(CommonConstants.SwitchToTransactionNotification), object: nil)
+        if dataManager.sIsEmpty {
+            downStackView.removeArrangedSubview(position)
+            downStackView.removeArrangedSubview(order)
+            downStackView.removeArrangedSubview(transaction)
+        }
+
         NotificationCenter.default.addObserver(self, selector: #selector(showUpView), name: Notification.Name(CommonConstants.ShowUpViewNotification), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(hideUpView), name: Notification.Name(CommonConstants.HideUpViewNotification), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(switchToPosition), name: Notification.Name(CommonConstants.SwitchToPositionNotification), object: nil)
@@ -264,11 +271,6 @@ class QuoteViewController: UIViewController, UIPopoverPresentationControllerDele
 
     }
 
-    @objc func setButtonTitle() {
-        let title = dataManager.sSearchEntities[dataManager.sInstrumentId]?.instrument_name
-        button.setTitle(title, for: .normal)
-    }
-
     @objc func showUpView() {
         upView.isHidden = false
     }
@@ -287,6 +289,15 @@ class QuoteViewController: UIViewController, UIPopoverPresentationControllerDele
 
     @objc func switchToTransaction() {
         switchTransactionPage(index: 3)
+        if !instrument_id.elementsEqual(dataManager.sInstrumentId) {
+            instrument_id = dataManager.sInstrumentId
+            if instrument_id.contains("KQ"), let underlying_name = dataManager.sSearchEntities[instrument_id]?.underlying_symbol{
+                instrument_id = underlying_name
+            }
+            let name = dataManager.sSearchEntities[instrument_id]?.instrument_name
+            button.setTitle(name, for: .normal)
+        }
+
     }
 
     @objc func sendSuscribeQuote(){

@@ -282,12 +282,12 @@ class TransactionViewController: UIViewController, PriceKeyboardViewDelegate, Vo
     func closePosition() {
         if let price = close_order_price.text, let volume = volume.text, !"".elementsEqual(direction) {
 
-            guard let price = Double(price) else {
+            guard let price_d = Double(price) else {
                 ToastUtils.showNegativeMessage(message: "价格输入不合法～")
                 return
             }
 
-            guard let volume = Int(volume) else {
+            guard let volume_d = Int(volume) else {
                 ToastUtils.showNegativeMessage(message: "手数输入不合法～")
                 return
             }
@@ -303,39 +303,39 @@ class TransactionViewController: UIViewController, PriceKeyboardViewDelegate, Vo
                 guard let position = user[RtnTDConstants.positions].dictionaryValue[instrument_id_transaction] else {return}
                 var volumre_today = 0
                 var volume_history = 0
-                if "多".elementsEqual(direction) {
+                if "SELL".elementsEqual(direction) {
                     volumre_today = position[PositionConstants.volume_long_today].intValue
                     volume_history = position[PositionConstants.volume_long_his].intValue
-                } else if "空".elementsEqual(direction) {
+                } else if "BUY".elementsEqual(direction) {
                     volumre_today = position[PositionConstants.volume_short_today].intValue
                     volume_history = position[PositionConstants.volume_short_his].intValue
                 }
 
                 if volumre_today > 0 && volume_history > 0 {
-                    if volume <= volumre_today || volume <= volume_history {
+                    if volume_d <= volumre_today || volume_d <= volume_history {
                         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
                         alert.addAction(UIAlertAction(title: "平今", style: .default) { _ in
-                            self.initOrderAlert(title: title, message: message_today, exchangeId: self.exchange_id, instrumentId: instrument_id, direction: direction, offset: "CLOSETODAY", volume: volume, priceType: "LIMIT", price: price)
+                            self.initOrderAlert(title: title, message: message_today, exchangeId: self.exchange_id, instrumentId: instrument_id, direction: direction, offset: "CLOSETODAY", volume: volume_d, priceType: "LIMIT", price: price_d)
                         })
                         alert.addAction(UIAlertAction(title: "平昨", style: .default) { _ in
-                            self.initOrderAlert(title: title, message: message_history, exchangeId: self.exchange_id, instrumentId: instrument_id, direction: direction, offset: "CLOSE", volume: volume, priceType: "LIMIT", price: price)
+                            self.initOrderAlert(title: title, message: message_history, exchangeId: self.exchange_id, instrumentId: instrument_id, direction: direction, offset: "CLOSE", volume: volume_d, priceType: "LIMIT", price: price_d)
                         })
                         present(alert, animated: true)
-                    } else if volume > volumre_today || volume > volume_history {
-                        let volume_sub = volume - volumre_today
+                    } else if volume_d > volumre_today || volume_d > volume_history {
+                        let volume_sub = volume_d - volumre_today
                         let message1 = "\(instrument_id_transaction), \(price), 平今, \(volumre_today)手"
                         let message2 = "\(instrument_id_transaction), \(price), 平昨, \(volume_sub)手"
-                        initOrderAlert(title: title, message1: message1, message2: message2,exchangeId: exchange_id, instrumentId: instrument_id, direction: direction, offset1: "CLOSETODAY", offset2: "CLOSE", volume1: volumre_today, volume2: volume_sub, priceType: "LIMIT", price: price)
+                        initOrderAlert(title: title, message1: message1, message2: message2,exchangeId: exchange_id, instrumentId: instrument_id, direction: direction, offset1: "CLOSETODAY", offset2: "CLOSE", volume1: volumre_today, volume2: volume_sub, priceType: "LIMIT", price: price_d)
                     }
                 } else if volumre_today == 0 && volume_history > 0 {
-                    initOrderAlert(title: title, message: message_history, exchangeId: exchange_id, instrumentId: instrument_id, direction: direction, offset: "CLOSE", volume: volume, priceType: "LIMIT", price: price)
+                    initOrderAlert(title: title, message: message_history, exchangeId: exchange_id, instrumentId: instrument_id, direction: direction, offset: "CLOSE", volume: volume_d, priceType: "LIMIT", price: price_d)
                 } else if volumre_today > 0 && volume_history == 0 {
-                    initOrderAlert(title: title, message: message_today, exchangeId: exchange_id, instrumentId: instrument_id, direction: direction, offset: "CLOSETODAY", volume: volume, priceType: "LIMIT", price: price)
+                    initOrderAlert(title: title, message: message_today, exchangeId: exchange_id, instrumentId: instrument_id, direction: direction, offset: "CLOSETODAY", volume: volume_d, priceType: "LIMIT", price: price_d)
                 }
 
             } else {
                 let message = "\(instrument_id_transaction), \(price), 平仓, \(volume)手"
-                initOrderAlert(title: title, message: message, exchangeId: exchange_id, instrumentId: instrument_id, direction: direction, offset: "CLOSE", volume: volume, priceType: "LIMIT", price: price)
+                initOrderAlert(title: title, message: message, exchangeId: exchange_id, instrumentId: instrument_id, direction: direction, offset: "CLOSE", volume: volume_d, priceType: "LIMIT", price: price_d)
             }
         }
     }
@@ -354,6 +354,7 @@ class TransactionViewController: UIViewController, PriceKeyboardViewDelegate, Vo
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         present(alert, animated: true, completion: nil)
     }
+    
     //平今平昨对话框
     func initOrderAlert(title: String, message1: String, message2: String, exchangeId: String, instrumentId: String, direction: String, offset1: String, offset2: String, volume1: Int, volume2: Int, priceType: String, price: Double) {
         let alert = UIAlertController(title: title, message: "\(message1)\n\(message2)", preferredStyle: .alert)
@@ -386,6 +387,8 @@ class TransactionViewController: UIViewController, PriceKeyboardViewDelegate, Vo
                 self.usingRate.text = "0%"
             }
         }
+        (price.inputView as! PriceKeyboardView).refreshAccount()
+        (volume.inputView as! VolumeKeyboardView).refreshAccount()
     }
 
     @objc func refreshPrice() {
@@ -447,6 +450,8 @@ class TransactionViewController: UIViewController, PriceKeyboardViewDelegate, Vo
             }
         }
 
+        (price.inputView as! PriceKeyboardView).refreshPrice()
+        (volume.inputView as! VolumeKeyboardView).refreshPrice()
     }
 
     //买开仓
@@ -454,19 +459,19 @@ class TransactionViewController: UIViewController, PriceKeyboardViewDelegate, Vo
         self.view.endEditing(true)
         if let price = self.bid_order_price.text, let volume = self.volume.text {
 
-            guard let price = Double(price) else {
+            guard let price_d = Double(price) else {
                 ToastUtils.showNegativeMessage(message: "价格输入不合法～")
                 return
             }
 
-            guard let volume = Int(volume) else {
+            guard let volume_d = Int(volume) else {
                 ToastUtils.showNegativeMessage(message: "手数输入不合法～")
                 return
             }
 
             let title = "确认下单吗？"
             let message = "\(instrument_id_transaction), \(price), 买开, \(volume)手"
-            initOrderAlert(title: title, message: message, exchangeId: exchange_id, instrumentId: String(instrument_id_transaction.split(separator: ".")[1]), direction: "BUY", offset: "OPEN", volume: volume, priceType: "LIMIT", price: price)
+            initOrderAlert(title: title, message: message, exchangeId: exchange_id, instrumentId: String(instrument_id_transaction.split(separator: ".")[1]), direction: "BUY", offset: "OPEN", volume: volume_d, priceType: "LIMIT", price: price_d)
         }
     }
 
@@ -475,19 +480,19 @@ class TransactionViewController: UIViewController, PriceKeyboardViewDelegate, Vo
         self.view.endEditing(true)
         if let price = self.ask_order_price.text, let volume = self.volume.text {
 
-            guard let price = Double(price) else {
+            guard let price_d = Double(price) else {
                 ToastUtils.showNegativeMessage(message: "价格输入不合法～")
                 return
             }
 
-            guard let volume = Int(volume) else {
+            guard let volume_d = Int(volume) else {
                 ToastUtils.showNegativeMessage(message: "手数输入不合法～")
                 return
             }
 
             let title = "确认下单吗？"
             let message = "\(instrument_id_transaction), \(price), 卖开, \(volume)手"
-            initOrderAlert(title: title, message: message,exchangeId: exchange_id, instrumentId: String(instrument_id_transaction.split(separator: ".")[1]), direction: "SELL", offset: "OPEN", volume: volume, priceType: "LIMIT", price: price)
+            initOrderAlert(title: title, message: message,exchangeId: exchange_id, instrumentId: String(instrument_id_transaction.split(separator: ".")[1]), direction: "SELL", offset: "OPEN", volume: volume_d, priceType: "LIMIT", price: price_d)
         }
     }
 

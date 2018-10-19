@@ -58,21 +58,46 @@ open class VolumeKeyboardView: UIView {
         view.frame = bounds
         view.autoresizingMask = [UIViewAutoresizing.flexibleWidth, UIViewAutoresizing.flexibleHeight]
         addSubview(view)
-        priceTick.text = DataManager.getInstance().sSearchEntities[DataManager.getInstance().sInstrumentId]?.p_tick
-        let margin = (DataManager.getInstance().sSearchEntities[DataManager.getInstance().sInstrumentId]?.margin)!
+        initData()
+    }
+
+
+    func initData() {
+        refreshPrice()
+        refreshAccount()
+    }
+
+    func refreshPrice() {
+        let dataManager = DataManager.getInstance()
+        let instrument_id = dataManager.sInstrumentId
+
+        priceTick.text = dataManager.sSearchEntities[instrument_id]?.p_tick
+
+        let decimal = dataManager.getDecimalByPtick(instrumentId: instrument_id)
+        let quote = dataManager.sRtnMD[RtnMDConstants.quotes][instrument_id]
+        let upper = quote[QuoteConstants.upper_limit].stringValue
+        let lower = quote[QuoteConstants.lower_limit].stringValue
+        upperLimit.text = dataManager.saveDecimalByPtick(decimal: decimal, data: upper)
+        lowerLimit.text = dataManager.saveDecimalByPtick(decimal: decimal, data: lower)
+    }
+
+    func refreshAccount() {
+        let dataManager = DataManager.getInstance()
+        var instrument_id = dataManager.sInstrumentId
+
+        if instrument_id.contains("KQ"){
+            instrument_id = (dataManager.sSearchEntities[instrument_id]?.underlying_symbol)!
+        }
+        let margin = (dataManager.sSearchEntities[instrument_id]?.margin)!
         if margin == 0{
             openVolume.text = "0"
         }else {
-            let user = DataManager.getInstance().sRtnTD[DataManager.getInstance().sUser_id]
+            let user = dataManager.sRtnTD[dataManager.sUser_id]
             for (_, account) in user[RtnTDConstants.accounts].dictionaryValue {
                 let available = account[AccountConstants.available].intValue
                 openVolume.text = "\(available / margin)"
             }
         }
-
-        let quote = DataManager.getInstance().sRtnMD[RtnMDConstants.quotes][DataManager.getInstance().sInstrumentId]
-        upperLimit.text = quote[QuoteConstants.upper_limit].stringValue
-        lowerLimit.text = quote[QuoteConstants.lower_limit].stringValue
     }
 
     fileprivate func loadViewFromNib() -> UIView {
@@ -123,7 +148,9 @@ class VolumeKeyboardViewProcessor {
         var output = 0
         switch tag {
         case VolumeKey.subtract.rawValue:
-            output = value - 1
+            if output >= 1{
+                output = value - 1
+            }
         case VolumeKey.add.rawValue:
             output = value + 1
         default:

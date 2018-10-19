@@ -39,13 +39,13 @@ class QuotePageViewController: UIPageViewController, UIPageViewControllerDataSou
     }
 
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-        var index = (viewController as! QuoteTableViewController).index
+        guard var index = (viewController as? QuoteTableViewController)?.index else {return contentViewController(at: 1)}
         index -= 1
         return contentViewController(at: index)
     }
 
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-        var index = (viewController as! QuoteTableViewController).index
+        guard var index = (viewController as? QuoteTableViewController)?.index else {return contentViewController(at: 1)}
         index += 1
         return contentViewController(at: index)
     }

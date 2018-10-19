@@ -17,7 +17,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        #if DEBUG // 判断是否在测试环境下
+        // TODO
+        #else
         Bugly.start(withAppId: "0027757d18")
+        #endif
         Siren.shared.checkVersion(checkType: .immediately)
         return true
     }
