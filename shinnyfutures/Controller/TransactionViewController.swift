@@ -14,7 +14,7 @@ class TransactionViewController: UIViewController, PriceKeyboardViewDelegate, Vo
     // MARK: Properties
     var isVisible = false
     let dataManager = DataManager.getInstance()
-    var priceType = "最新价"
+    var priceType = "对手价"
     var direction = ""
     var exchange_id = ""
     var instrument_id_transaction = ""
@@ -93,8 +93,8 @@ class TransactionViewController: UIViewController, PriceKeyboardViewDelegate, Vo
     }
 
     func initPosition() {
-        price.text = "最新价"
-        priceType = "最新价"
+        price.text = "对手价"
+        priceType = "对手价"
         var position: JSON?
         if dataManager.sInstrumentId.contains("KQ") {
             instrument_id_transaction = (dataManager.sSearchEntities[dataManager.sInstrumentId]?.underlying_symbol)!
@@ -118,7 +118,7 @@ class TransactionViewController: UIViewController, PriceKeyboardViewDelegate, Vo
                 isClosePriceShow = true
                 bid_order_direction.text = "加多"
                 ask_order_direction.text = "锁仓"
-                close_order_price.text = bid_order_price.text
+                close_order_price.text = ask_order_price.text
             } else if volume_long == 0 && volume_short != 0 {
                 direction = "空"
                 volume.text = "\(available_short)"
@@ -174,7 +174,7 @@ class TransactionViewController: UIViewController, PriceKeyboardViewDelegate, Vo
                 isClosePriceShow = true
                 bid_order_direction.text = "加多"
                 ask_order_direction.text = "锁仓"
-                close_order_price.text = bid_order_price.text
+                close_order_price.text = ask_order_price.text
             } else if volume_long == 0 && volume_short != 0 {
                 direction = "空"
                 isClosePriceShow = true
@@ -245,7 +245,11 @@ class TransactionViewController: UIViewController, PriceKeyboardViewDelegate, Vo
                 bid_order_price.text = upper_limit
                 ask_order_price.text = lower_limit
                 if isClosePriceShow {
-                    close_order_price.text = upper_limit
+                    if "多".elementsEqual(direction) {
+                        close_order_price.text = lower_limit
+                    } else if "空".elementsEqual(direction) {
+                        close_order_price.text = upper_limit
+                    }
                 }
             case "最新价":
                 priceType = "最新价"
@@ -437,7 +441,11 @@ class TransactionViewController: UIViewController, PriceKeyboardViewDelegate, Vo
                 bid_order_price.text = upper_limit
                 ask_order_price.text = lower_limit
                 if isClosePriceShow {
-                    close_order_price.text = upper_limit
+                    if "多".elementsEqual(direction) {
+                        close_order_price.text = lower_limit
+                    } else if "空".elementsEqual(direction) {
+                        close_order_price.text = upper_limit
+                    }
                 }
             case "最新价":
                 bid_order_price.text = last_price

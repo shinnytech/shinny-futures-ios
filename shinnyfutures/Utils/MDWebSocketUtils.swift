@@ -10,20 +10,15 @@ import UIKit
 import Starscream
 
 protocol MDWebSocketUtilsDelegate: NSObjectProtocol {
-    //websocet连接成功
-    func websocketDidConnect(socket: MDWebSocketUtils)
-
-    //websocket连接失败
-    func websocketDidDisconnect(socket: MDWebSocketUtils, error: Error?)
-
     //websocket接受文字信息
     func websocketDidReceiveMessage(socket: MDWebSocketUtils, text: String)
 
-    //websocket接受二进制信息
-    func websocketDidReceiveData(socket: MDWebSocketUtils, data: Data)
+    //websocket接受Pong信息
+    func websocketDidReceivePong(socket: MDWebSocketUtils, data: Data?)
 }
 
-class MDWebSocketUtils: NSObject, WebSocketDelegate {
+class MDWebSocketUtils: NSObject, WebSocketDelegate, WebSocketPongDelegate {
+
     var socket: WebSocket!
     weak var mdWebSocketUtilsDelegate: MDWebSocketUtilsDelegate?
 
@@ -40,6 +35,7 @@ class MDWebSocketUtils: NSObject, WebSocketDelegate {
     func connect(url: String, index: Int) -> Int{
         socket = WebSocket(url: URL(string: url)!)
         socket.delegate = self
+        socket.pongDelegate = self
         if let appVersion = Bundle.main.infoDictionary!["CFBundleShortVersionString"] as? String, let appBuild = Bundle.main.infoDictionary!["CFBundleVersion"] as? String{
             socket.request.addValue("shinnyfutures-iOS \(appVersion)(\(appBuild))", forHTTPHeaderField: "User-Agent")
         }else{
@@ -51,6 +47,11 @@ class MDWebSocketUtils: NSObject, WebSocketDelegate {
             indexNext = 0
         }
         return indexNext
+    }
+
+    // MARK: 发送ping
+    func ping() {
+        socket.write(ping: Data())
     }
 
     // MARK: 断开连接
@@ -101,20 +102,22 @@ class MDWebSocketUtils: NSObject, WebSocketDelegate {
     }
 
     // MARK: WebSocketDelegate
-    public func websocketDidConnect(socket: WebSocketClient) {
-        mdWebSocketUtilsDelegate?.websocketDidConnect(socket: self)
+    func websocketDidConnect(socket: WebSocketClient) {
     }
 
-    public func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
-        mdWebSocketUtilsDelegate?.websocketDidDisconnect(socket: self, error: error)
+    func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
     }
 
-    public func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {
+    func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {
         mdWebSocketUtilsDelegate?.websocketDidReceiveMessage(socket: self, text: text)
     }
 
-    public func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
-        mdWebSocketUtilsDelegate?.websocketDidReceiveData(socket: self, data: data)
+    func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
+    }
+
+     // MARK: WebSocketPongDelegate
+    func websocketDidReceivePong(socket: WebSocketClient, data: Data?) {
+        mdWebSocketUtilsDelegate?.websocketDidReceivePong(socket: self, data: data)
     }
 
 }

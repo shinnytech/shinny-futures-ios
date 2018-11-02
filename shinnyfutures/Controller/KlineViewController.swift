@@ -212,7 +212,7 @@ class KlineViewController: BaseChartViewController {
                 }
                 combineData?.notifyDataChanged()
                 chartView.notifyDataSetChanged()
-                chartView.xAxis.axisMaximum = (combineData?.xMax)! + 0.5
+                chartView.xAxis.axisMaximum = (combineData?.xMax)! + 2.5
                 chartView.xAxis.axisMinimum = (combineData?.xMin)! - 0.5
             } else {
                 NSLog("k线图初始化")
@@ -243,7 +243,7 @@ class KlineViewController: BaseChartViewController {
                 lineData = generateLineData(ma5Datas: ma5Datas, ma10Datas: ma10Datas, ma20Datas: ma20Datas)
                 if isShowAverageLine {combineData.lineData = lineData } else {combineData.lineData = LineChartData()}
                 chartView.data = combineData
-                chartView.xAxis.axisMaximum = combineData.xMax + 0.5
+                chartView.xAxis.axisMaximum = combineData.xMax + 2.5
                 chartView.xAxis.axisMinimum = combineData.xMin - 0.5
                 chartView.setVisibleXRangeMaximum(200)
                 chartView.setVisibleXRangeMinimum(7)

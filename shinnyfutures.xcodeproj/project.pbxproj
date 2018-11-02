@@ -76,6 +76,7 @@
 		D48E663A20B5672800C808C2 /* CurrentDayMarkerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D48E663920B5672800C808C2 /* CurrentDayMarkerView.xib */; };
 		D49A718120738A9B00AA947A /* TradeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D49A718020738A9B00AA947A /* TradeTableViewController.swift */; };
 		D49A7187207399C000AA947A /* TradeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D49A7186207399C000AA947A /* TradeTableViewCell.swift */; };
+		D4A2B2D021893E3A008536F7 /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4A2B2CF21893E3A008536F7 /* AboutViewController.swift */; };
 		D4B1F7B9209020E800BCAD2C /* MDWebSocketUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B1F7B8209020E800BCAD2C /* MDWebSocketUtils.swift */; };
 		D4B3DBC52074C54F00545376 /* PositionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B3DBC42074C54F00545376 /* PositionTableViewCell.swift */; };
 		D4B3DBC72074C55A00545376 /* OrderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B3DBC62074C55A00545376 /* OrderTableViewCell.swift */; };
@@ -236,6 +237,7 @@
 		D4910C4F21106412007E236B /* shinnyfutures-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "shinnyfutures-Bridging-Header.h"; sourceTree = "<group>"; };
 		D49A718020738A9B00AA947A /* TradeTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TradeTableViewController.swift; sourceTree = "<group>"; };
 		D49A7186207399C000AA947A /* TradeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TradeTableViewCell.swift; sourceTree = "<group>"; };
+		D4A2B2CF21893E3A008536F7 /* AboutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
 		D4B1F7B8209020E800BCAD2C /* MDWebSocketUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MDWebSocketUtils.swift; sourceTree = "<group>"; };
 		D4B3DBC42074C54F00545376 /* PositionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PositionTableViewCell.swift; sourceTree = "<group>"; };
 		D4B3DBC62074C55A00545376 /* OrderTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderTableViewCell.swift; sourceTree = "<group>"; };
@@ -457,6 +459,7 @@
 				D49A718020738A9B00AA947A /* TradeTableViewController.swift */,
 				D4802297206B67650033E202 /* AccountViewController.swift */,
 				D480229B206B67C70033E202 /* FeedbackViewController.swift */,
+				D4A2B2CF21893E3A008536F7 /* AboutViewController.swift */,
 				D466D4CE2137D47500FD6FBA /* BankTransferViewController.swift */,
 				D480229D206B67FE0033E202 /* LoginViewController.swift */,
 				D480225B20688A180033E202 /* QuoteViewController.swift */,
@@ -561,7 +564,7 @@
 				TargetAttributes = {
 					D480225520688A180033E202 = {
 						CreatedOnToolsVersion = 9.2;
-						ProvisioningStyle = Manual;
+						ProvisioningStyle = Automatic;
 					};
 					D480226920688A180033E202 = {
 						CreatedOnToolsVersion = 9.2;
@@ -778,6 +781,7 @@
 				D47A4E7D2087353100255276 /* DrawerStackView.swift in Sources */,
 				D47A4E872089BBF100255276 /* CommonConstants.swift in Sources */,
 				D48606B620A5286E00C4FEB5 /* OrderConstants.swift in Sources */,
+				D4A2B2D021893E3A008536F7 /* AboutViewController.swift in Sources */,
 				D4B3DBC72074C55A00545376 /* OrderTableViewCell.swift in Sources */,
 				D420B2F020E2207F0045B6AF /* KlineYAxisRenderer.swift in Sources */,
 				D466D4D62138D4B300FD6FBA /* BankConstants.swift in Sources */,
@@ -999,8 +1003,8 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = ETY2JG84H2;
 				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1012,8 +1016,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.shinnytech.zhongqihuo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "953163f4-e6ea-4d7b-aed0-7e4edcad19c6";
-				PROVISIONING_PROFILE_SPECIFIER = zhongqihuo;
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/shinnyfutures/shinnyfutures-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1028,8 +1032,8 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = ETY2JG84H2;
 				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1043,8 +1047,8 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.shinnytech.zhongqihuo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "953163f4-e6ea-4d7b-aed0-7e4edcad19c6";
-				PROVISIONING_PROFILE_SPECIFIER = zhongqihuo;
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/shinnyfutures/shinnyfutures-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

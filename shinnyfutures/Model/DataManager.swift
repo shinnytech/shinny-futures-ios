@@ -34,9 +34,11 @@ class DataManager {
     var sMobileConfirmSettlement = JSON()
     var sPreInsList = ""
     var sInstrumentId = ""
+    var isBackground = false
     var sIsLogin = false
     var sIsEmpty = false
     var sUser_id = ""
+    var sVersion = ""
     //进入登陆页的来源
     var sToLoginTarget = ""
 

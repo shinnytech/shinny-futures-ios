@@ -61,13 +61,13 @@ class OptionalPopupCollectionViewController: UICollectionViewController {
 
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let index = indexPath.row
-        var instrumentId = insList[index]
+        let instrumentId = insList[index]
         if let button = self.popoverPresentationController?.sourceView as? UIButton {
-            if instrumentId.contains("KQ"), let underlying_name = dataManager.sSearchEntities[instrumentId]?.underlying_symbol{
-                instrumentId = underlying_name
+            if let name = dataManager.sSearchEntities[instrumentId]?.instrument_name {
+                button.setTitle(name, for: .normal)
+            } else {
+                button.setTitle(instrumentId, for: .normal)
             }
-            let name = dataManager.sSearchEntities[instrumentId]?.instrument_name
-            button.setTitle(name, for: .normal)
             dataManager.sInstrumentId = instrumentId
         }
         NotificationCenter.default.post(name: Notification.Name(CommonConstants.SwitchQuoteNotification), object: nil)

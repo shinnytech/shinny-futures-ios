@@ -164,7 +164,7 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
     func generatePositionLimitLine(limit: String, label: String, color: UIColor, limitKey: String) {
         if let limit = Double(limit) {
             let chartLimitLine = ChartLimitLine(limit: limit, label: label)
-            chartLimitLine.lineWidth = 2.0
+            chartLimitLine.lineWidth = 1.0
             chartLimitLine.lineDashLengths = [10.0, 10.0]
             chartLimitLine.lineDashPhase = 0.0
             chartLimitLine.lineColor = color
@@ -189,7 +189,7 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
             let limit_long =  position[PositionConstants.open_price_long].stringValue
             let p_decs = dataManager.getDecimalByPtick(instrumentId: key)
             let limit_long_p = dataManager.saveDecimalByPtick(decimal: p_decs, data: limit_long)
-            let label_long = position[PositionConstants.instrument_id].stringValue + "@" + limit_long_p
+            let label_long = "\(position[PositionConstants.instrument_id].stringValue)@\(limit_long_p)/\(volume_long)手"
             generatePositionLimitLine(limit: limit_long_p, label: label_long, color: colorBuy!, limitKey: key + "0")
         }
     }
@@ -207,7 +207,7 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
             let limit_short = position[PositionConstants.open_price_short].stringValue
             let p_decs = dataManager.getDecimalByPtick(instrumentId: key)
             let limit_short_p = dataManager.saveDecimalByPtick(decimal: p_decs, data: limit_short)
-            let label_short = position[PositionConstants.instrument_id].stringValue + "@" + limit_short_p
+            let label_short = "\(position[PositionConstants.instrument_id].stringValue)@\(limit_short_p)/\(volume_short)手"
             generatePositionLimitLine(limit: limit_short_p, label: label_short, color: colorSell!, limitKey: key + "1")
         }
     }
@@ -229,7 +229,7 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
             guard let limit_long_p_d = Double(limit_long_p) else{return}
             let limitLine = positionLimitLines[limitKey]
             if limitLine?.limit != limit_long_p_d {
-                let label_long = position[PositionConstants.instrument_id].stringValue + "@" + limit_long_p
+                let label_long = "\(position[PositionConstants.instrument_id].stringValue)@\(limit_long_p)/\(volume_long)手"
                 chartView.leftAxis.removeLimitLine(positionLimitLines[limitKey]!)
                 generatePositionLimitLine(limit: limit_long_p, label: label_long, color: colorBuy!, limitKey: limitKey)
             }
@@ -257,7 +257,7 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
             guard let limit_short_p_d = Double(limit_short_p) else{return}
             let limitLine = positionLimitLines[limitKey]
             if limitLine?.limit != limit_short_p_d {
-                let label_short = position[PositionConstants.instrument_id].stringValue + "@" + limit_short_p
+                let label_short = "\(position[PositionConstants.instrument_id].stringValue)@\(limit_short_p)/\(volume_short)手"
                 chartView.leftAxis.removeLimitLine(positionLimitLines[limitKey]!)
                 generatePositionLimitLine(limit: limit_short_p, label: label_short, color: colorSell!, limitKey: limitKey)
             }
@@ -304,14 +304,14 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
         let direction = orderEntity[OrderConstants.direction].stringValue
         let p_decs = dataManager.getDecimalByPtick(instrumentId: dataManager.sInstrumentId)
         let price = dataManager.saveDecimalByPtick(decimal: p_decs, data: orderEntity[OrderConstants.limit_price].stringValue)
-        let OrderId = orderEntity[OrderConstants.order_id].stringValue
+        let order_id = orderEntity[OrderConstants.order_id].stringValue
+        let instrument_id = orderEntity[OrderConstants.instrument_id].stringValue
+        let volume = orderEntity[OrderConstants.volume_orign].stringValue
         let limit = Double(price)!
-        let label = "\(OrderId)@\(price)"
+        let label = "\(instrument_id)@\(price)/\(volume)手"
         let chartLimitLine = ChartLimitLine(limit: limit, label: label)
-        orderLimitLines[OrderId] = chartLimitLine
-        chartLimitLine.lineWidth = 2.0
-        chartLimitLine.lineDashLengths = [10.0, 10.0]
-        chartLimitLine.lineDashPhase = 0.0
+        orderLimitLines[order_id] = chartLimitLine
+        chartLimitLine.lineWidth = 1.0
         if "BUY".elementsEqual(direction) {
             chartLimitLine.lineColor = colorBuy!
         } else {

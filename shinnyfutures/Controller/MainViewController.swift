@@ -37,28 +37,12 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
     var quoteNavigationCollectionViewController: QuoteNavigationCollectionViewController!
     let mdWebSocketUtils = MDWebSocketUtils.getInstance()
     let tdWebSocketUtils = TDWebSocketUtils.getInstance()
-    var isMDClose = false
-    var isTDClose = false
+    var isMDOnline = false
+    var lastMDTime = CACurrentMediaTime()
+    var isTDOnline = false
+    var lastTDTime = CACurrentMediaTime()
     var mdURLs = [String]()
     var index = 0
-
-    func websocketDidConnect(socket: TDWebSocketUtils) {
-        if isTDClose {
-            ToastUtils.showPositiveMessage(message: "交易服务器连接成功～")
-            isTDClose = false
-        }
-    }
-
-    func websocketDidDisconnect(socket: TDWebSocketUtils, error: Error?) {
-        DataManager.getInstance().sIsLogin = false
-        if !isTDClose {
-            ToastUtils.showNegativeMessage(message: "交易服务器连接断开，正在重连～")
-            isTDClose = true
-        }
-        DispatchQueue.global().asyncAfter(deadline: DispatchTime.now() + 2, execute: {
-            self.tdWebSocketUtils.connect(url: CommonConstants.TRANSACTION_URL)
-        })
-    }
 
     func websocketDidReceiveMessage(socket: TDWebSocketUtils, text: String) {
         DispatchQueue.global().async {
@@ -66,42 +50,35 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
             let aid = json["aid"].stringValue
             switch aid {
             case "rtn_brokers":
+                self.DispatchTimer(timeInterval: 15){ timer in
+                    socket.ping()
+                    if (CACurrentMediaTime() - self.lastTDTime) > 20 {
+                        self.isTDOnline = false
+                        self.tdWebSocketUtils.disconnect()
+                        self.tdWebSocketUtils.connect(url: CommonConstants.TRANSACTION_URL)
+                    }
+                }
                 DataManager.getInstance().parseBrokers(brokers: json)
             case "rtn_data":
                 DataManager.getInstance().parseRtnTD(transactionData: json)
             default:
+                self.tdWebSocketUtils.disconnect()
+                self.tdWebSocketUtils.connect(url: CommonConstants.TRANSACTION_URL)
                 return
             }
-            self.tdWebSocketUtils.sendPeekMessage()
+
+            if (!DataManager.getInstance().isBackground){
+                socket.sendPeekMessage()
+            }
+
         }
     }
 
-    func websocketDidReceiveData(socket: TDWebSocketUtils, data: Data) {
-        NSLog("交易服务器接收二进制数据")
+    func websocketDidReceivePong(socket: TDWebSocketUtils, data: Data?) {
+        self.lastTDTime = CACurrentMediaTime()
     }
 
     ////////////////////////////////////////////////////////////////////////////////
-
-    func websocketDidConnect(socket: MDWebSocketUtils) {
-        if isMDClose {
-            ToastUtils.showPositiveMessage(message: "行情服务器连接成功～")
-            isMDClose = false
-        }
-    }
-
-    func websocketDidDisconnect(socket: MDWebSocketUtils, error: Error?) {
-        if !isMDClose {
-            ToastUtils.showNegativeMessage(message: "行情服务器连接断开，正在重连～")
-            isMDClose = true
-        }
-        DispatchQueue.global().asyncAfter(deadline: DispatchTime.now() + 2, execute: {
-            self.index = self.mdWebSocketUtils.connect(url: self.mdURLs[self.index], index: self.index)
-        })
-    }
-
-    func websocketDidReceiveData(socket: MDWebSocketUtils, data: Data) {
-        NSLog("行情服务器接受二进制数据")
-    }
 
     func websocketDidReceiveMessage(socket: MDWebSocketUtils, text: String) {
         DispatchQueue.global().async {
@@ -109,10 +86,19 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
             let aid = json["aid"].stringValue
             switch aid {
             case "rsp_login":
+                self.DispatchTimer(timeInterval: 15){ timer in
+                    socket.ping()
+                    if (CACurrentMediaTime() - self.lastMDTime) > 20 {
+                        self.isMDOnline = false
+                        self.mdWebSocketUtils.disconnect()
+                        self.index = self.mdWebSocketUtils.connect(url: self.mdURLs[self.index], index: self.index)
+                    }
+                }
                 if DataManager.getInstance().sQuotes.count != 0{
                     socket.sendSubscribeQuote(insList: DataManager.getInstance().sQuotes[1].map {$0.key}[0..<CommonConstants.MAX_SUBSCRIBE_QUOTES].joined(separator: ","))
                 }
             case "rtn_data":
+                self.isMDOnline = true
                 self.index = 0
                 DataManager.getInstance().parseRtnMD(rtnData: json)
             default:
@@ -120,8 +106,16 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
                 self.index = self.mdWebSocketUtils.connect(url: self.mdURLs[self.index], index: self.index)
                 return
             }
-            socket.sendPeekMessage()
+
+            if (!DataManager.getInstance().isBackground){
+                socket.sendPeekMessage()
+            }
+            
         }
+    }
+
+    func websocketDidReceivePong(socket: MDWebSocketUtils, data: Data?) {
+        self.lastMDTime = CACurrentMediaTime()
     }
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -167,13 +161,15 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
         downloadTask.resume()
     }
 
-    func initMDURLs(){
+    func initTMDURLs(){
         let mdURLGroup = shuffle(group: [CommonConstants.MARKET_URL_2, CommonConstants.MARKET_URL_3, CommonConstants.MARKET_URL_4, CommonConstants.MARKET_URL_5, CommonConstants.MARKET_URL_6, CommonConstants.MARKET_URL_7])
 
          if let myClass = objc_getClass("shinnyfutures.LocalCommonConstants"){
             let myClassType = myClass as! NSObject.Type
             let cl = myClassType.init()
             let url = cl.value(forKey: "MARKET_URL_8") as! String
+            let transaction_url = cl.value(forKey: "TRANSACTION_URL") as! String
+            CommonConstants.TRANSACTION_URL = transaction_url
             mdURLs.append(url)
         }else{
             mdURLs.append(CommonConstants.MARKET_URL_1)
@@ -193,6 +189,21 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
         return items
     }
 
+    /// GCD定时器循环操作
+    ///   - timeInterval: 循环间隔时间
+    ///   - handler: 循环事件
+    public func DispatchTimer(timeInterval: Double, handler:@escaping (DispatchSourceTimer?)->())
+    {
+        let timer = DispatchSource.makeTimerSource(flags: [], queue: DispatchQueue.main)
+        timer.schedule(deadline: .now(), repeating: timeInterval)
+        timer.setEventHandler {
+            DispatchQueue.main.async {
+                handler(timer)
+            }
+        }
+        timer.resume()
+    }
+
     ////////////////////////////////////////////////////////////////////////////////
 
 
@@ -203,7 +214,7 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
         self.navigationController?.navigationBar.titleTextAttributes = dict as? [NSAttributedStringKey: Any]
         self.navigationController?.navigationBar.barTintColor = UIColor.black
         self.navigationController?.navigationBar.tintColor = UIColor.white
-        initMDURLs()
+        initTMDURLs()
         self.mdWebSocketUtils.mdWebSocketUtilsDelegate = self
         self.tdWebSocketUtils.tdWebSocketUtilsDelegate = self
         sessionSimpleDownload(urlString: CommonConstants.LATEST_FILE_URL, fileName: "latest.json")
@@ -215,7 +226,6 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
     deinit {
         print("主页销毁")
         NotificationCenter.default.removeObserver(self)
-
     }
 
     // change the width of slide menu when the orientation changes
@@ -226,6 +236,8 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier {
         case CommonConstants.MainToFeedback:
+            controlSlideMenuVisibility()
+        case CommonConstants.MainToAbout:
             controlSlideMenuVisibility()
         case CommonConstants.QuotePageViewController:
             quotePageViewController = segue.destination as! QuotePageViewController

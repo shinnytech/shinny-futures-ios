@@ -81,4 +81,9 @@ class AccountViewController: UIViewController {
 
     }
 
+
+    @IBAction func logout(_ sender: UIButton) {
+        dataManager.sIsLogin = false
+    }
+
 }

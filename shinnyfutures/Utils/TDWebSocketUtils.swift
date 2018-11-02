@@ -11,20 +11,15 @@ import Starscream
 import SwiftyJSON
 
 protocol TDWebSocketUtilsDelegate: NSObjectProtocol {
-    //websocet连接成功
-    func websocketDidConnect(socket: TDWebSocketUtils)
-
-    //websocket连接失败
-    func websocketDidDisconnect(socket: TDWebSocketUtils, error: Error?)
 
     //websocket接受文字信息
     func websocketDidReceiveMessage(socket: TDWebSocketUtils, text: String)
 
-    //websocket接受二进制信息
-    func websocketDidReceiveData(socket: TDWebSocketUtils, data: Data)
+    //websocket接受Pong信息
+    func websocketDidReceivePong(socket: TDWebSocketUtils, data: Data?)
 }
 
-class TDWebSocketUtils: NSObject, WebSocketDelegate {
+class TDWebSocketUtils: NSObject, WebSocketDelegate, WebSocketPongDelegate {
     var socket: WebSocket!
     weak var tdWebSocketUtilsDelegate: TDWebSocketUtilsDelegate?
 
@@ -41,13 +36,21 @@ class TDWebSocketUtils: NSObject, WebSocketDelegate {
     func connect(url: String) {
         self.socket = WebSocket(url: URL(string: url)!)
         self.socket.delegate = self
+        self.socket.pongDelegate = self
         if let appVersion = Bundle.main.infoDictionary!["CFBundleShortVersionString"] as? String, let appBuild = Bundle.main.infoDictionary!["CFBundleVersion"] as? String{
+            DataManager.getInstance().sVersion = appVersion
             socket.request.addValue("shinnyfutures-iOS \(appVersion)(\(appBuild))", forHTTPHeaderField: "User-Agent")
         }else{
             socket.request.addValue("shinnyfutures-iOS", forHTTPHeaderField: "User-Agent")
         }
         self.socket.connect()
     }
+
+    // MARK: 发送ping
+    func ping() {
+        socket.write(ping: Data())
+    }
+
 
     // MARK: 断开连接
     func disconnect() {
@@ -100,11 +103,9 @@ class TDWebSocketUtils: NSObject, WebSocketDelegate {
 
     // MARK: WebSocketDelegate
     public func websocketDidConnect(socket: WebSocketClient) {
-        tdWebSocketUtilsDelegate?.websocketDidConnect(socket: self)
     }
 
     public func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
-        tdWebSocketUtilsDelegate?.websocketDidDisconnect(socket: self, error: error)
     }
 
     public func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {
@@ -112,7 +113,10 @@ class TDWebSocketUtils: NSObject, WebSocketDelegate {
     }
 
     public func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
-        tdWebSocketUtilsDelegate?.websocketDidReceiveData(socket: self, data: data)
+    }
+
+    func websocketDidReceivePong(socket: WebSocketClient, data: Data?) {
+        tdWebSocketUtilsDelegate?.websocketDidReceivePong(socket: self, data: data)
     }
 
 }

@@ -13,7 +13,6 @@ class QuoteViewController: UIViewController, UIPopoverPresentationControllerDele
     // MARK: Properties
     let button =  UIButton(type: .custom)
     let dataManager = DataManager.getInstance()
-    var instrument_id = ""
     var transactionPageViewController: TransactionPageViewController!
     var klinePageViewController: KlinePageViewController!
     @IBOutlet weak var setup: UIButton!
@@ -31,13 +30,9 @@ class QuoteViewController: UIViewController, UIPopoverPresentationControllerDele
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        instrument_id = dataManager.sInstrumentId
-        if instrument_id.contains("KQ"), let underlying_name = dataManager.sSearchEntities[instrument_id]?.underlying_symbol{
-            instrument_id = underlying_name
-        }
-        let name = dataManager.sSearchEntities[instrument_id]?.instrument_name
+        let title = dataManager.sSearchEntities[dataManager.sInstrumentId]?.instrument_name
         button.frame = CGRect(x: 0, y: 0, width: 100, height: 40)
-        button.setTitle(name, for: .normal)
+        button.setTitle(title, for: .normal)
         button.setImage(UIImage(named: "down", in: Bundle(identifier: "com.shinnytech.futures"), compatibleWith: nil), for: .normal)
         button.layoutIfNeeded()
         button.imageEdgeInsets = UIEdgeInsetsMake(0, (button.titleLabel?.frame.size.width)!, 0, -(button.titleLabel?.frame.size.width)!)
@@ -289,15 +284,8 @@ class QuoteViewController: UIViewController, UIPopoverPresentationControllerDele
 
     @objc func switchToTransaction() {
         switchTransactionPage(index: 3)
-        if !instrument_id.elementsEqual(dataManager.sInstrumentId) {
-            instrument_id = dataManager.sInstrumentId
-            if instrument_id.contains("KQ"), let underlying_name = dataManager.sSearchEntities[instrument_id]?.underlying_symbol{
-                instrument_id = underlying_name
-            }
-            let name = dataManager.sSearchEntities[instrument_id]?.instrument_name
-            button.setTitle(name, for: .normal)
-        }
-
+        let title = dataManager.sSearchEntities[dataManager.sInstrumentId]?.instrument_name
+        button.setTitle(title, for: .normal)
     }
 
     @objc func sendSuscribeQuote(){
