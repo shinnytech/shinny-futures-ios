@@ -38,7 +38,8 @@ class DataManager {
     var sIsLogin = false
     var sIsEmpty = false
     var sUser_id = ""
-    var sVersion = ""
+    var sAppVersion = ""
+    var sAppBuild = ""
     //进入登陆页的来源
     var sToLoginTarget = ""
 

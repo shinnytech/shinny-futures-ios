@@ -14,7 +14,7 @@ class AboutViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        version.text = DataManager.getInstance().sVersion
+        version.text = DataManager.getInstance().sAppVersion
     }
 
     //MARK: actions

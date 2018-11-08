@@ -123,7 +123,7 @@ class LoginViewController: UIViewController {
                 button.setTitle("请选择期货公司", for: .normal)
             }
         }else{
-            TDWebSocketUtils.getInstance().disconnect()
+            TDWebSocketUtils.getInstance().reconnectTD(url: CommonConstants.TRANSACTION_URL)
         }
     }
     

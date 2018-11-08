@@ -24,6 +24,7 @@ class BankTransferViewController:  UIViewController, UITableViewDataSource, UITa
     @IBOutlet weak var amount: UITextField!
     @IBOutlet weak var bank_label: UILabel!
     @IBOutlet weak var currency_label: UILabel!
+    @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -71,6 +72,8 @@ class BankTransferViewController:  UIViewController, UITableViewDataSource, UITa
         NotificationCenter.default.addObserver(self, selector: #selector(loadData), name: Notification.Name(CommonConstants.RtnTDNotification), object: nil)
 
         NotificationCenter.default.addObserver(self, selector: #selector(loadData), name: Notification.Name(CommonConstants.RtnTDNotification), object: nil)
+
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(_:)), name: .UIKeyboardWillChangeFrame, object: nil)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -115,7 +118,7 @@ class BankTransferViewController:  UIViewController, UITableViewDataSource, UITa
             let amount = transfer[TransferConstants.amount].floatValue
             if amount > 0 {cell.amount.textColor = UIColor.red}
             else {cell.amount.textColor = UIColor.green}
-            cell.amount.text = "\(amount)"
+            cell.amount.text = String(format: "%.2f", amount)
             let currency = transfer[TransferConstants.currency].stringValue
             cell.currency.text = currency
             let result = transfer[TransferConstants.error_msg].stringValue
@@ -227,13 +230,37 @@ class BankTransferViewController:  UIViewController, UITableViewDataSource, UITa
 
     }
 
+    // 键盘改变
+    @objc func keyboardWillChange(_ notification: Notification) {
+        if let userInfo = notification.userInfo,
+            let value = userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue,
+            let duration = userInfo[UIKeyboardAnimationDurationUserInfoKey] as? Double,
+            let curve = userInfo[UIKeyboardAnimationCurveUserInfoKey] as? UInt {
+
+            let frame = value.cgRectValue
+            let intersection = frame.intersection(self.view.frame)
+
+            //self.view.setNeedsLayout()
+            //改变下约束
+            self.bottomConstraint.constant = -intersection.height
+
+            UIView.animate(withDuration: duration, delay: 0.0,
+                           options: UIViewAnimationOptions(rawValue: curve), animations: {
+
+                            self.view.layoutIfNeeded()
+            }, completion: nil)
+        }
+    }
+
     //MARK: Actions
     @IBAction func future_bank(_ sender: UIButton) {
         transfer(direction: false)
+        self.view.endEditing(true)
     }
 
     @IBAction func bank_future(_ sender: UIButton) {
         transfer(direction: true)
+        self.view.endEditing(true)
     }
 
     func transfer(direction: Bool) {

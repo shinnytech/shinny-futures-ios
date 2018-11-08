@@ -17,7 +17,7 @@ class CommonConstants {
     public static let MARKET_URL_5 = "ws://106.15.82.247/t/md/front/mobile"
     public static let MARKET_URL_6 = "ws://106.15.82.189/t/md/front/mobile"
     public static let MARKET_URL_7 = "ws://106.15.219.160/t/md/front/mobile"
-    public static var TRANSACTION_URL = "ws://opentd.shinnytech.com/trade/shinny"
+    public static var TRANSACTION_URL = "ws://opentd.shinnytech.com/trade/user0"
     public static let REDMINE_URL = "http://ask.shinnytech.com/src/indexm.html"
     public static let KLINE_MINUTE = "300000000000"
     public static let KLINE_HOUR = "3600000000000"

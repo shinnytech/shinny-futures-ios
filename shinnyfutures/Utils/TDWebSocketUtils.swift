@@ -37,12 +37,9 @@ class TDWebSocketUtils: NSObject, WebSocketDelegate, WebSocketPongDelegate {
         self.socket = WebSocket(url: URL(string: url)!)
         self.socket.delegate = self
         self.socket.pongDelegate = self
-        if let appVersion = Bundle.main.infoDictionary!["CFBundleShortVersionString"] as? String, let appBuild = Bundle.main.infoDictionary!["CFBundleVersion"] as? String{
-            DataManager.getInstance().sVersion = appVersion
-            socket.request.addValue("shinnyfutures-iOS \(appVersion)(\(appBuild))", forHTTPHeaderField: "User-Agent")
-        }else{
-            socket.request.addValue("shinnyfutures-iOS", forHTTPHeaderField: "User-Agent")
-        }
+        let appVersion = DataManager.getInstance().sAppVersion
+        let appBuild = DataManager.getInstance().sAppBuild
+        socket.request.addValue("shinnyfutures-iOS \(appVersion)(\(appBuild))", forHTTPHeaderField: "User-Agent")
         self.socket.connect()
     }
 
@@ -51,6 +48,11 @@ class TDWebSocketUtils: NSObject, WebSocketDelegate, WebSocketPongDelegate {
         socket.write(ping: Data())
     }
 
+    //MARK: 断线重连
+    func reconnectTD(url: String) {
+        disconnect()
+        connect(url: url)
+    }
 
     // MARK: 断开连接
     func disconnect() {

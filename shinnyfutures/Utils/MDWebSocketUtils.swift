@@ -36,11 +36,9 @@ class MDWebSocketUtils: NSObject, WebSocketDelegate, WebSocketPongDelegate {
         socket = WebSocket(url: URL(string: url)!)
         socket.delegate = self
         socket.pongDelegate = self
-        if let appVersion = Bundle.main.infoDictionary!["CFBundleShortVersionString"] as? String, let appBuild = Bundle.main.infoDictionary!["CFBundleVersion"] as? String{
-            socket.request.addValue("shinnyfutures-iOS \(appVersion)(\(appBuild))", forHTTPHeaderField: "User-Agent")
-        }else{
-            socket.request.addValue("shinnyfutures-iOS", forHTTPHeaderField: "User-Agent")
-        }
+        let appVersion = DataManager.getInstance().sAppVersion
+        let appBuild = DataManager.getInstance().sAppBuild
+        socket.request.addValue("shinnyfutures-iOS \(appVersion)(\(appBuild))", forHTTPHeaderField: "User-Agent")
         socket.connect()
         var indexNext = index + 1
         if indexNext == 7 {
@@ -52,6 +50,12 @@ class MDWebSocketUtils: NSObject, WebSocketDelegate, WebSocketPongDelegate {
     // MARK: 发送ping
     func ping() {
         socket.write(ping: Data())
+    }
+
+    //MARK: 断线重连
+    func reconnectMD(url: String, index: Int) -> Int {
+        disconnect()
+        return connect(url:url, index: index)
     }
 
     // MARK: 断开连接

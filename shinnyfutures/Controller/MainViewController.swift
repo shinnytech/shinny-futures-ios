@@ -45,25 +45,17 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
     var index = 0
 
     func websocketDidReceiveMessage(socket: TDWebSocketUtils, text: String) {
+        NSLog(text)
         DispatchQueue.global().async {
             let json = JSON(parseJSON: text)
             let aid = json["aid"].stringValue
             switch aid {
             case "rtn_brokers":
-                self.DispatchTimer(timeInterval: 15){ timer in
-                    socket.ping()
-                    if (CACurrentMediaTime() - self.lastTDTime) > 20 {
-                        self.isTDOnline = false
-                        self.tdWebSocketUtils.disconnect()
-                        self.tdWebSocketUtils.connect(url: CommonConstants.TRANSACTION_URL)
-                    }
-                }
                 DataManager.getInstance().parseBrokers(brokers: json)
             case "rtn_data":
                 DataManager.getInstance().parseRtnTD(transactionData: json)
             default:
-                self.tdWebSocketUtils.disconnect()
-                self.tdWebSocketUtils.connect(url: CommonConstants.TRANSACTION_URL)
+                self.tdWebSocketUtils.reconnectTD(url: CommonConstants.TRANSACTION_URL)
                 return
             }
 
@@ -76,6 +68,7 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
 
     func websocketDidReceivePong(socket: TDWebSocketUtils, data: Data?) {
         self.lastTDTime = CACurrentMediaTime()
+        NSLog("TDPong")
     }
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -86,14 +79,6 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
             let aid = json["aid"].stringValue
             switch aid {
             case "rsp_login":
-                self.DispatchTimer(timeInterval: 15){ timer in
-                    socket.ping()
-                    if (CACurrentMediaTime() - self.lastMDTime) > 20 {
-                        self.isMDOnline = false
-                        self.mdWebSocketUtils.disconnect()
-                        self.index = self.mdWebSocketUtils.connect(url: self.mdURLs[self.index], index: self.index)
-                    }
-                }
                 if DataManager.getInstance().sQuotes.count != 0{
                     socket.sendSubscribeQuote(insList: DataManager.getInstance().sQuotes[1].map {$0.key}[0..<CommonConstants.MAX_SUBSCRIBE_QUOTES].joined(separator: ","))
                 }
@@ -102,8 +87,7 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
                 self.index = 0
                 DataManager.getInstance().parseRtnMD(rtnData: json)
             default:
-                self.mdWebSocketUtils.disconnect()
-                self.index = self.mdWebSocketUtils.connect(url: self.mdURLs[self.index], index: self.index)
+                self.index = self.mdWebSocketUtils.reconnectMD(url: self.mdURLs[self.index], index: self.index)
                 return
             }
 
@@ -116,6 +100,7 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
 
     func websocketDidReceivePong(socket: MDWebSocketUtils, data: Data?) {
         self.lastMDTime = CACurrentMediaTime()
+        NSLog("MDPong")
     }
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -161,6 +146,7 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
         downloadTask.resume()
     }
 
+    //初始化服务器地址
     func initTMDURLs(){
         let mdURLGroup = shuffle(group: [CommonConstants.MARKET_URL_2, CommonConstants.MARKET_URL_3, CommonConstants.MARKET_URL_4, CommonConstants.MARKET_URL_5, CommonConstants.MARKET_URL_6, CommonConstants.MARKET_URL_7])
 
@@ -189,13 +175,21 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
         return items
     }
 
+    //获取软件版本
+    func getAppVersion() {
+        if let appVersion = Bundle.main.infoDictionary!["CFBundleShortVersionString"] as? String, let appBuild = Bundle.main.infoDictionary!["CFBundleVersion"] as? String{
+            DataManager.getInstance().sAppVersion = appVersion
+            DataManager.getInstance().sAppBuild = appBuild
+        }
+    }
+
     /// GCD定时器循环操作
     ///   - timeInterval: 循环间隔时间
     ///   - handler: 循环事件
-    public func DispatchTimer(timeInterval: Double, handler:@escaping (DispatchSourceTimer?)->())
+    func DispatchTimer(delay: Double, timeInterval: Double, handler:@escaping (DispatchSourceTimer?)->())
     {
         let timer = DispatchSource.makeTimerSource(flags: [], queue: DispatchQueue.main)
-        timer.schedule(deadline: .now(), repeating: timeInterval)
+        timer.schedule(deadline: .now() + delay, repeating: timeInterval)
         timer.setEventHandler {
             DispatchQueue.main.async {
                 handler(timer)
@@ -218,6 +212,21 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
         self.mdWebSocketUtils.mdWebSocketUtilsDelegate = self
         self.tdWebSocketUtils.tdWebSocketUtilsDelegate = self
         sessionSimpleDownload(urlString: CommonConstants.LATEST_FILE_URL, fileName: "latest.json")
+        self.DispatchTimer(delay: 15, timeInterval: 15){ timer in
+            self.tdWebSocketUtils.ping()
+            if (CACurrentMediaTime() - self.lastTDTime) > 20 {
+                self.isTDOnline = false
+                self.tdWebSocketUtils.reconnectTD(url: CommonConstants.TRANSACTION_URL)
+                NSLog("TD断线重连")
+            }
+
+            self.mdWebSocketUtils.ping()
+            if (CACurrentMediaTime() - self.lastMDTime) > 20 {
+                self.isMDOnline = false
+                self.index = self.mdWebSocketUtils.reconnectMD(url: self.mdURLs[self.index], index: self.index)
+                NSLog("MD断线重连")
+            }
+        }
         initSlideMenuWidth()
         checkResponsibility()
         NotificationCenter.default.addObserver(self, selector: #selector(refreshMenu), name: Notification.Name(CommonConstants.BrokerInfoEmptyNotification), object: nil)
