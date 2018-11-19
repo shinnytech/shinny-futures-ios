@@ -22,6 +22,8 @@ class TradeTableViewController: UITableViewController {
         super.viewDidLoad()
         // make tableview look better in ipad
         tableView.cellLayoutMarginsFollowReadableWidth = true
+        tableView.tableFooterView = UIView()
+
         dateFormat.dateFormat = "HH:mm:ss"
         loadData()
     }
@@ -57,6 +59,11 @@ class TradeTableViewController: UITableViewController {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? TradeTableViewCell  else {
             fatalError("The dequeued cell is not an instance of TradeTableViewCell.")
         }
+
+        //全屏分割线
+        cell.preservesSuperviewLayoutMargins = false
+        cell.separatorInset = UIEdgeInsets.zero
+        cell.layoutMargins = UIEdgeInsets.zero
 
         // Fetches the appropriate quote for the data source layout.
         let trade = trades[indexPath.row]
@@ -107,9 +114,9 @@ class TradeTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 44.0))
-        headerView.backgroundColor = UIColor.darkGray
-        let stackView = UIStackView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 44.0))
+        let headerView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 35.0))
+        headerView.backgroundColor = UIColor(red: 51/255, green:51/255, blue: 51/255, alpha: 1.0)
+        let stackView = UIStackView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 35.0))
         stackView.distribution = .fillEqually
         let name = UILabel()
         name.adjustsFontSizeToFitWidth = true
@@ -141,7 +148,7 @@ class TradeTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 44.0
+        return 35.0
     }
 
     override func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {

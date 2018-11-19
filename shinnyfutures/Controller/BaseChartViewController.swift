@@ -28,11 +28,11 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
     //卖颜色
     var colorSell: UIColor?
     //是否显示持仓线
-    var isShowPositionLine = false
+    var isShowPositionLine = true
     //是否显示挂单线
-    var isShowOrderLine = false
+    var isShowOrderLine = true
     //是否显示均线
-    var isShowAverageLine = false
+    var isShowAverageLine = true
     //持仓线数据
     var positionLimitLines = [String: ChartLimitLine]()
     //挂单数据

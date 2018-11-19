@@ -4,6 +4,10 @@ PODS:
   - Siren (3.3.0)
   - Starscream (3.0.5)
   - SwiftyJSON (4.1.0)
+  - UMCAnalytics (5.5.0):
+    - UMCCommon
+  - UMCCommon (1.5.0)
+  - UMCSecurityPlugins (1.0.6)
 
 DEPENDENCIES:
   - Bugly
@@ -11,6 +15,9 @@ DEPENDENCIES:
   - Siren
   - Starscream
   - SwiftyJSON
+  - UMCAnalytics
+  - UMCCommon
+  - UMCSecurityPlugins
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
@@ -19,6 +26,9 @@ SPEC REPOS:
     - Siren
     - Starscream
     - SwiftyJSON
+    - UMCAnalytics
+    - UMCCommon
+    - UMCSecurityPlugins
 
 SPEC CHECKSUMS:
   Bugly: 3ca9f255c01025582df26f9222893b383c7e4b4e
@@ -26,7 +36,10 @@ SPEC CHECKSUMS:
   Siren: e7183967550b986736103f24ca6c74896a475145
   Starscream: faf918b2f2eff7d5dd21180646bf015a669673bd
   SwiftyJSON: c29297daf073d2aa016295d5809cdd68045c39b3
+  UMCAnalytics: 4667788559a72f2fa5077117d1b8802a3b6eb6bb
+  UMCCommon: 82d21f4bb9532a5472cc533bbd8ed48aff376a14
+  UMCSecurityPlugins: 0831a08f3988f3cea9f1d3a7626cd9bee4fef150
 
-PODFILE CHECKSUM: 32b834de5d80fc8bc0f8bd546dc9325a210d0cb9
+PODFILE CHECKSUM: a7505341d372f159efc2cc69dadacd7ca36f6f83
 
 COCOAPODS: 1.5.0

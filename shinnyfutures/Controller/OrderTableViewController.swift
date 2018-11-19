@@ -23,6 +23,10 @@ class OrderTableViewController: UIViewController, UITableViewDataSource, UITable
         super.viewDidLoad()
         segmentControl.addTarget(self, action: #selector(segmentValueChange), for: .valueChanged)
         dateFormat.dateFormat = "HH:mm:ss"
+
+        // make tableview look better in ipad
+        tableView.cellLayoutMarginsFollowReadableWidth = true
+        tableView.tableFooterView = UIView()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -62,6 +66,11 @@ class OrderTableViewController: UIViewController, UITableViewDataSource, UITable
         guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? OrderTableViewCell  else {
             fatalError("The dequeued cell is not an instance of OrderTableViewCell.")
         }
+
+        //全屏分割线
+        cell.preservesSuperviewLayoutMargins = false
+        cell.separatorInset = UIEdgeInsets.zero
+        cell.layoutMargins = UIEdgeInsets.zero
 
         // Fetches the appropriate quote for the data source layout.
         // 切换挂单种类手动reloadData时需要判空
@@ -109,8 +118,14 @@ class OrderTableViewController: UIViewController, UITableViewDataSource, UITable
             let volume_trade = volume_origin - volume_left
             cell.volume.text = "\(volume_trade)" + "/" + "\(volume_origin)"
             let trade_time = order[OrderConstants.insert_date_time].doubleValue
-            let date = Date(timeIntervalSince1970: (trade_time / 1000000000))
-            cell.time.text = dateFormat.string(from: date)
+            //错单时间为0
+            if trade_time == 0{
+                 cell.time.text = "--"
+            }else {
+                let date = Date(timeIntervalSince1970: (trade_time / 1000000000))
+                cell.time.text = dateFormat.string(from: date)
+            }
+
         }
 
         return cell
@@ -151,7 +166,7 @@ class OrderTableViewController: UIViewController, UITableViewDataSource, UITable
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 35.0))
-        headerView.backgroundColor = UIColor.darkGray
+         headerView.backgroundColor = UIColor(red: 51/255, green:51/255, blue: 51/255, alpha: 1.0)
         let stackView = UIStackView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 35.0))
         stackView.distribution = .fillProportionally
         let name = UILabel()

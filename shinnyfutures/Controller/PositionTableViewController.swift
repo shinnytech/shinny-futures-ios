@@ -20,6 +20,7 @@ class PositionTableViewController: UITableViewController {
         super.viewDidLoad()
         // make tableview look better in ipad
         tableView.cellLayoutMarginsFollowReadableWidth = true
+        tableView.tableFooterView = UIView()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -58,6 +59,11 @@ class PositionTableViewController: UITableViewController {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? PositionTableViewCell  else {
             fatalError("The dequeued cell is not an instance of PositionTableViewCell.")
         }
+
+        //全屏分割线
+        cell.preservesSuperviewLayoutMargins = false
+        cell.separatorInset = UIEdgeInsets.zero
+        cell.layoutMargins = UIEdgeInsets.zero
 
         // Fetches the appropriate quote for the data source layout.
         let position = positions[indexPath.row]
@@ -140,7 +146,7 @@ class PositionTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 35.0))
-        headerView.backgroundColor = UIColor.darkGray
+         headerView.backgroundColor = UIColor(red: 51/255, green:51/255, blue: 51/255, alpha: 1.0)
         let stackView = UIStackView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 35.0))
         stackView.distribution = .fillProportionally
         let name = UILabel()

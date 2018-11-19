@@ -14,7 +14,6 @@ class TransactionViewController: UIViewController, PriceKeyboardViewDelegate, Vo
     // MARK: Properties
     var isVisible = false
     let dataManager = DataManager.getInstance()
-    var priceType = "对手价"
     var direction = ""
     var exchange_id = ""
     var instrument_id_transaction = ""
@@ -87,14 +86,17 @@ class TransactionViewController: UIViewController, PriceKeyboardViewDelegate, Vo
     // MARK: functions
     //刷新页面
     @objc func refreshPage() {
+        initPosition()
         refreshPrice()
         refreshAccount()
-        initPosition()
     }
 
     func initPosition() {
-        price.text = "对手价"
-        priceType = "对手价"
+        if CommonConstants.USER_PRICE.elementsEqual(dataManager.sPriceType){
+            dataManager.sPriceType = CommonConstants.COUNTERPARTY_PRICE
+        }
+        price.text = dataManager.sPriceType
+
         var position: JSON?
         if dataManager.sInstrumentId.contains("KQ") {
             instrument_id_transaction = (dataManager.sSearchEntities[dataManager.sInstrumentId]?.underlying_symbol)!
@@ -153,7 +155,176 @@ class TransactionViewController: UIViewController, PriceKeyboardViewDelegate, Vo
 
     }
 
-    func refreshPosition() {
+    func calculator(_ calculator: PriceKeyboardView, didChangeValue value: String) {
+        price.text = value
+        let instrumentId = dataManager.sInstrumentId
+        let quote = dataManager.sRtnMD[RtnMDConstants.quotes][instrumentId]
+        let decimal = dataManager.getDecimalByPtick(instrumentId: instrumentId)
+        if !quote.isEmpty {
+            //下单板价格显示
+            let last_price = dataManager.saveDecimalByPtick(decimal: decimal, data: quote[QuoteConstants.last_price].stringValue)
+            let ask_price1 = dataManager.saveDecimalByPtick(decimal: decimal, data: quote[QuoteConstants.ask_price1].stringValue)
+            let bid_price1 = dataManager.saveDecimalByPtick(decimal: decimal, data: quote[QuoteConstants.bid_price1].stringValue)
+            switch price.text {
+            case CommonConstants.QUEUED_PRICE:
+                dataManager.sPriceType = CommonConstants.QUEUED_PRICE
+                bid_order_price.text = bid_price1
+                ask_order_price.text = ask_price1
+                if isClosePriceShow {
+                    if "多".elementsEqual(direction) {
+                        close_order_price.text = ask_price1
+                    } else if "空".elementsEqual(direction) {
+                        close_order_price.text = bid_price1
+                    }
+                }
+            case CommonConstants.COUNTERPARTY_PRICE:
+                dataManager.sPriceType = CommonConstants.COUNTERPARTY_PRICE
+                bid_order_price.text = ask_price1
+                ask_order_price.text = bid_price1
+                if isClosePriceShow {
+                    if "多".elementsEqual(direction) {
+                        close_order_price.text = bid_price1
+                    } else if "空".elementsEqual(direction) {
+                        close_order_price.text = ask_price1
+                    }
+                }
+            case CommonConstants.MARKET_PRICE:
+                dataManager.sPriceType = CommonConstants.MARKET_PRICE
+                let upper_limit = dataManager.saveDecimalByPtick(decimal: decimal, data: quote[QuoteConstants.upper_limit].stringValue)
+                let lower_limit = dataManager.saveDecimalByPtick(decimal: decimal, data: quote[QuoteConstants.lower_limit].stringValue)
+
+                bid_order_price.text = upper_limit
+                ask_order_price.text = lower_limit
+                if isClosePriceShow {
+                    if "多".elementsEqual(direction) {
+                        close_order_price.text = lower_limit
+                    } else if "空".elementsEqual(direction) {
+                        close_order_price.text = upper_limit
+                    }
+                }
+            case CommonConstants.LATEST_PRICE:
+                dataManager.sPriceType = CommonConstants.LATEST_PRICE
+                bid_order_price.text = last_price
+                ask_order_price.text = last_price
+                if isClosePriceShow {
+                    close_order_price.text = last_price
+                }
+            default:
+                dataManager.sPriceType = CommonConstants.USER_PRICE
+                bid_order_price.text = price.text
+                ask_order_price.text = price.text
+                if isClosePriceShow {
+                    close_order_price.text = price.text
+                }
+            }
+        }
+    }
+
+    func calculator(_ calculator: VolumeKeyboardView, didChangeValue value: String) {
+        volume.text = value
+    }
+
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        NotificationCenter.default.post(name: Notification.Name(CommonConstants.HideUpViewNotification), object: nil)
+
+    }
+
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        NotificationCenter.default.post(name: Notification.Name(CommonConstants.ShowUpViewNotification), object: nil)
+    }
+
+    // MARK: objc methods
+    @objc func refreshAccount() {
+        let user = dataManager.sRtnTD[dataManager.sUser_id]
+        for (_, account) in user[RtnTDConstants.accounts].dictionaryValue {
+            let balance = account[AccountConstants.balance].floatValue
+            let margin = account[AccountConstants.margin].floatValue
+            let available = account[AccountConstants.available].floatValue
+            self.balance.text = String(format: "%.0f", balance)
+            self.available.text = String(format: "%.0f", available)
+            if balance != 0 {
+                let usingRate = margin / balance * 100
+                self.usingRate.text = String(format: "%.0f", usingRate) + "%"
+            } else {
+                self.usingRate.text = "0%"
+            }
+        }
+
+        (volume.inputView as! VolumeKeyboardView).refreshAccount()
+        (price.inputView as! PriceKeyboardView).refreshAccount()
+
+        refreshPosition()
+    }
+
+    @objc func refreshPrice() {
+        let instrumentId = dataManager.sInstrumentId
+        let quote = dataManager.sRtnMD[RtnMDConstants.quotes][instrumentId]
+        let decimal = dataManager.getDecimalByPtick(instrumentId: instrumentId)
+        if !quote.isEmpty {
+            let last_price = dataManager.saveDecimalByPtick(decimal: decimal, data: quote[QuoteConstants.last_price].stringValue)
+            let last_volume = quote[QuoteConstants.volume].stringValue
+            let ask_price1 = dataManager.saveDecimalByPtick(decimal: decimal, data: quote[QuoteConstants.ask_price1].stringValue)
+            let ask_volume1 = quote[QuoteConstants.ask_volume1].stringValue
+            let bid_price1 = dataManager.saveDecimalByPtick(decimal: decimal, data: quote[QuoteConstants.bid_price1].stringValue)
+            let bid_volume1 = quote[QuoteConstants.bid_volume1].stringValue
+            self.last_price.text = last_price
+            self.last_volume.text = last_volume
+            self.ask_price1.text = ask_price1
+            self.ask_volume1.text = ask_volume1
+            self.bid_price1.text = bid_price1
+            self.bid_volume1.text = bid_volume1
+
+            //下单板价格显示
+            switch dataManager.sPriceType {
+            case CommonConstants.QUEUED_PRICE:
+                bid_order_price.text = bid_price1
+                ask_order_price.text = ask_price1
+                if isClosePriceShow {
+                    if "多".elementsEqual(direction) {
+                        close_order_price.text = ask_price1
+                    } else if "空".elementsEqual(direction) {
+                        close_order_price.text = bid_price1
+                    }
+                }
+            case CommonConstants.COUNTERPARTY_PRICE:
+                bid_order_price.text = ask_price1
+                ask_order_price.text = bid_price1
+                if isClosePriceShow {
+                    if "多".elementsEqual(direction) {
+                        close_order_price.text = bid_price1
+                    } else if "空".elementsEqual(direction) {
+                        close_order_price.text = ask_price1
+                    }
+                }
+            case CommonConstants.MARKET_PRICE:
+                let upper_limit = dataManager.saveDecimalByPtick(decimal: decimal, data: quote[QuoteConstants.upper_limit].stringValue)
+                let lower_limit = dataManager.saveDecimalByPtick(decimal: decimal, data: quote[QuoteConstants.lower_limit].stringValue)
+                bid_order_price.text = upper_limit
+                ask_order_price.text = lower_limit
+                if isClosePriceShow {
+                    if "多".elementsEqual(direction) {
+                        close_order_price.text = lower_limit
+                    } else if "空".elementsEqual(direction) {
+                        close_order_price.text = upper_limit
+                    }
+                }
+            case CommonConstants.LATEST_PRICE:
+                bid_order_price.text = last_price
+                ask_order_price.text = last_price
+                if isClosePriceShow {
+                    close_order_price.text = last_price
+                }
+            default:
+                break
+            }
+        }
+
+        (volume.inputView as! VolumeKeyboardView).refreshPrice()
+        (price.inputView as! PriceKeyboardView).refreshPrice()
+
+    }
+
+    @objc func refreshPosition() {
         var position: JSON?
         if dataManager.sInstrumentId.contains("KQ") {
             instrument_id_transaction = (dataManager.sSearchEntities[dataManager.sInstrumentId]?.underlying_symbol)!
@@ -204,83 +375,163 @@ class TransactionViewController: UIViewController, PriceKeyboardViewDelegate, Vo
         close_order_direction.text = "平仓"
     }
 
-    func calculator(_ calculator: PriceKeyboardView, didChangeValue value: String) {
-        price.text = value
-        let instrumentId = dataManager.sInstrumentId
-        let quote = dataManager.sRtnMD[RtnMDConstants.quotes][instrumentId]
-        let decimal = dataManager.getDecimalByPtick(instrumentId: instrumentId)
-        if !quote.isEmpty {
-            //下单板价格显示
-            let last_price = dataManager.saveDecimalByPtick(decimal: decimal, data: quote[QuoteConstants.last_price].stringValue)
-            let ask_price1 = dataManager.saveDecimalByPtick(decimal: decimal, data: quote[QuoteConstants.ask_price1].stringValue)
-            let bid_price1 = dataManager.saveDecimalByPtick(decimal: decimal, data: quote[QuoteConstants.bid_price1].stringValue)
-            switch price.text {
-            case "排队价":
-                priceType = "排队价"
-                bid_order_price.text = bid_price1
-                ask_order_price.text = ask_price1
-                if isClosePriceShow {
-                    if "多".elementsEqual(direction) {
-                        close_order_price.text = ask_price1
-                    } else if "空".elementsEqual(direction) {
-                        close_order_price.text = bid_price1
-                    }
-                }
-            case "对手价":
-                priceType = "对手价"
-                bid_order_price.text = ask_price1
-                ask_order_price.text = bid_price1
-                if isClosePriceShow {
-                    if "多".elementsEqual(direction) {
-                        close_order_price.text = bid_price1
-                    } else if "空".elementsEqual(direction) {
-                        close_order_price.text = ask_price1
-                    }
-                }
-            case "市价":
-                priceType = "市价"
-                let upper_limit = dataManager.saveDecimalByPtick(decimal: decimal, data: quote[QuoteConstants.upper_limit].stringValue)
-                let lower_limit = dataManager.saveDecimalByPtick(decimal: decimal, data: quote[QuoteConstants.lower_limit].stringValue)
+    //买开仓
+    @objc func bidInsertOrder() {
+        self.view.endEditing(true)
+        if let price = self.bid_order_price.text, let volume = self.volume.text {
 
-                bid_order_price.text = upper_limit
-                ask_order_price.text = lower_limit
-                if isClosePriceShow {
-                    if "多".elementsEqual(direction) {
-                        close_order_price.text = lower_limit
-                    } else if "空".elementsEqual(direction) {
-                        close_order_price.text = upper_limit
-                    }
+            guard let price_d = Double(price) else {
+                ToastUtils.showNegativeMessage(message: "价格输入不合法～")
+                return
+            }
+
+            guard let volume_d = Int(volume) else {
+                ToastUtils.showNegativeMessage(message: "手数输入不合法～")
+                return
+            }
+
+            let title = "确认下单吗？"
+            let message = "\(instrument_id_transaction), \(price), 买开, \(volume)手"
+            initOrderAlert(title: title, message: message, exchangeId: exchange_id, instrumentId: String(instrument_id_transaction.split(separator: ".")[1]), direction: "BUY", offset: "OPEN", volume: volume_d, priceType: "LIMIT", price: price_d)
+        }
+    }
+
+    //卖开仓
+    @objc func askInsertOrder() {
+        self.view.endEditing(true)
+        if let price = self.ask_order_price.text, let volume = self.volume.text {
+
+            guard let price_d = Double(price) else {
+                ToastUtils.showNegativeMessage(message: "价格输入不合法～")
+                return
+            }
+
+            guard let volume_d = Int(volume) else {
+                ToastUtils.showNegativeMessage(message: "手数输入不合法～")
+                return
+            }
+
+            let title = "确认下单吗？"
+            let message = "\(instrument_id_transaction), \(price), 卖开, \(volume)手"
+            initOrderAlert(title: title, message: message,exchangeId: exchange_id, instrumentId: String(instrument_id_transaction.split(separator: ".")[1]), direction: "SELL", offset: "OPEN", volume: volume_d, priceType: "LIMIT", price: price_d)
+        }
+    }
+
+    //平仓
+    @objc func closeInsertOrder() {
+        self.view.endEditing(true)
+        if let close_order_price = close_order_price.text {
+            switch close_order_price {
+            case "锁仓状态":
+                let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+                alert.addAction(UIAlertAction(title: "平多", style: .default) { _ in
+                    self.direction  = "多"
+                    self.isClosePriceShow = true
+                    self.close_order_direction.text = "平多"
+                    self.bid_order_direction.text = "加多"
+                    self.ask_order_direction.text = "锁仓"
+                    self.refreshCloseBidPrice()
+                    self.closePosition()
+                })
+                alert.addAction(UIAlertAction(title: "平空", style: .default) { _ in
+                    self.direction  = "空"
+                    self.isClosePriceShow = true
+                    self.close_order_direction.text = "平空"
+                    self.bid_order_direction.text = "锁仓"
+                    self.ask_order_direction.text = "加空"
+                    self.refreshCloseAskPrice()
+                    self.closePosition()
+                })
+                self.present(alert, animated: true) {
+                    let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.dismissAlertController))
+                    alert.view.superview?.subviews[0].addGestureRecognizer(tapGesture)
                 }
-            case "最新价":
-                priceType = "最新价"
-                bid_order_price.text = last_price
-                ask_order_price.text = last_price
-                if isClosePriceShow {
-                    close_order_price.text = last_price
+            case "先开先平":
+                if instrument_id_transaction.contains("&"){
+                    let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+                    alert.addAction(UIAlertAction(title: "平多", style: .default) { _ in
+                        self.direction  = "多"
+                        self.isClosePriceShow = true
+                        self.close_order_direction.text = "平多"
+                        self.refreshCloseBidPrice()
+                        self.closePosition()
+                    })
+                    alert.addAction(UIAlertAction(title: "平空", style: .default) { _ in
+                        self.direction  = "空"
+                        self.isClosePriceShow = true
+                        self.close_order_direction.text = "平空"
+                        self.refreshCloseAskPrice()
+                        self.closePosition()
+                    })
+                    self.present(alert, animated: true) {
+                        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.dismissAlertController))
+                        alert.view.superview?.subviews[0].addGestureRecognizer(tapGesture)
+                    }
+                }else {
+                    ToastUtils.showNegativeMessage(message: "此合约您还没有持仓～")
                 }
             default:
-                priceType = "用户设置价"
-                bid_order_price.text = price.text
-                ask_order_price.text = price.text
-                if isClosePriceShow {
-                    close_order_price.text = price.text
-                }
+                closePosition()
             }
         }
     }
 
-    func calculator(_ calculator: VolumeKeyboardView, didChangeValue value: String) {
-        volume.text = value
+    //点击空白处alert消失
+    @objc func dismissAlertController(){
+        self.dismiss(animated: true, completion: nil)
     }
 
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        NotificationCenter.default.post(name: Notification.Name(CommonConstants.HideUpViewNotification), object: nil)
+    //刷新平多仓位
+    func refreshCloseBidPrice() {
+        let instrumentId = dataManager.sInstrumentId
+        let quote = dataManager.sRtnMD[RtnMDConstants.quotes][instrumentId]
+        let decimal = dataManager.getDecimalByPtick(instrumentId: instrumentId)
+        if quote.isEmpty {return}
+
+        switch dataManager.sPriceType {
+        case CommonConstants.QUEUED_PRICE:
+            let ask_price1 = dataManager.saveDecimalByPtick(decimal: decimal, data: quote[QuoteConstants.ask_price1].stringValue)
+            close_order_price.text = ask_price1
+        case CommonConstants.COUNTERPARTY_PRICE:
+            let bid_price1 = dataManager.saveDecimalByPtick(decimal: decimal, data: quote[QuoteConstants.bid_price1].stringValue)
+            close_order_price.text = bid_price1
+        case CommonConstants.MARKET_PRICE:
+            let lower_limit = dataManager.saveDecimalByPtick(decimal: decimal, data: quote[QuoteConstants.lower_limit].stringValue)
+            close_order_price.text = lower_limit
+        case CommonConstants.LATEST_PRICE:
+            let last_price = dataManager.saveDecimalByPtick(decimal: decimal, data: quote[QuoteConstants.last_price].stringValue)
+            close_order_price.text = last_price
+        default:
+            break
+        }
 
     }
 
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        NotificationCenter.default.post(name: Notification.Name(CommonConstants.ShowUpViewNotification), object: nil)
+    //刷新平空仓位
+    func refreshCloseAskPrice() {
+        let instrumentId = dataManager.sInstrumentId
+        let quote = dataManager.sRtnMD[RtnMDConstants.quotes][instrumentId]
+        let decimal = dataManager.getDecimalByPtick(instrumentId: instrumentId)
+        if quote.isEmpty {return}
+
+        switch dataManager.sPriceType {
+        case CommonConstants.QUEUED_PRICE:
+            let bid_price1 = dataManager.saveDecimalByPtick(decimal: decimal, data: quote[QuoteConstants.bid_price1].stringValue)
+            close_order_price.text = bid_price1
+        case CommonConstants.COUNTERPARTY_PRICE:
+            let ask_price1 = dataManager.saveDecimalByPtick(decimal: decimal, data: quote[QuoteConstants.ask_price1].stringValue)
+            close_order_price.text = ask_price1
+        case CommonConstants.MARKET_PRICE:
+            let upper_limit = dataManager.saveDecimalByPtick(decimal: decimal, data: quote[QuoteConstants.upper_limit].stringValue)
+            close_order_price.text = upper_limit
+        case CommonConstants.LATEST_PRICE:
+            let last_price = dataManager.saveDecimalByPtick(decimal: decimal, data: quote[QuoteConstants.last_price].stringValue)
+            close_order_price.text = last_price
+        default:
+            break
+        }
     }
+
 
     //平仓处理函数
     func closePosition() {
@@ -344,10 +595,11 @@ class TransactionViewController: UIViewController, PriceKeyboardViewDelegate, Vo
         }
     }
 
+
     //下单对话框
     func initOrderAlert(title: String, message: String, exchangeId: String, instrumentId: String, direction: String, offset: String, volume: Int, priceType: String, price: Double) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: {action in
+        alert.addAction(UIAlertAction(title: "确认", style: .default, handler: {action in
             switch action.style {
             case .default:
                 TDWebSocketUtils.getInstance().sendReqInsertOrder(exchange_id: exchangeId, instrument_id: instrumentId, direction: direction, offset: offset, volume: volume, priceType: priceType, price: price)
@@ -355,14 +607,14 @@ class TransactionViewController: UIViewController, PriceKeyboardViewDelegate, Vo
             default:
                 break
             }}))
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "取消", style: .cancel, handler: nil))
         present(alert, animated: true, completion: nil)
     }
-    
+
     //平今平昨对话框
     func initOrderAlert(title: String, message1: String, message2: String, exchangeId: String, instrumentId: String, direction: String, offset1: String, offset2: String, volume1: Int, volume2: Int, priceType: String, price: Double) {
         let alert = UIAlertController(title: title, message: "\(message1)\n\(message2)", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: {action in
+        alert.addAction(UIAlertAction(title: "确认", style: .default, handler: {action in
             switch action.style {
             case .default:
                 TDWebSocketUtils.getInstance().sendReqInsertOrder(exchange_id: exchangeId, instrument_id: instrumentId, direction: direction, offset: offset1, volume: volume1, priceType: priceType, price: price)
@@ -371,206 +623,8 @@ class TransactionViewController: UIViewController, PriceKeyboardViewDelegate, Vo
             default:
                 break
             }}))
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "取消", style: .cancel, handler: nil))
         present(alert, animated: true, completion: nil)
-    }
-
-    // MARK: objc methods
-    @objc func refreshAccount() {
-        let user = dataManager.sRtnTD[dataManager.sUser_id]
-        for (_, account) in user[RtnTDConstants.accounts].dictionaryValue {
-            let balance = account[AccountConstants.balance].floatValue
-            let margin = account[AccountConstants.margin].floatValue
-            let available = account[AccountConstants.available].floatValue
-            self.balance.text = String(format: "%.0f", balance)
-            self.available.text = String(format: "%.0f", available)
-            if balance != 0 {
-                let usingRate = margin / balance * 100
-                self.usingRate.text = String(format: "%.0f", usingRate) + "%"
-            } else {
-                self.usingRate.text = "0%"
-            }
-        }
-        (price.inputView as! PriceKeyboardView).refreshAccount()
-        (volume.inputView as! VolumeKeyboardView).refreshAccount()
-    }
-
-    @objc func refreshPrice() {
-        let instrumentId = dataManager.sInstrumentId
-        let quote = dataManager.sRtnMD[RtnMDConstants.quotes][instrumentId]
-        let decimal = dataManager.getDecimalByPtick(instrumentId: instrumentId)
-        if !quote.isEmpty {
-            let last_price = dataManager.saveDecimalByPtick(decimal: decimal, data: quote[QuoteConstants.last_price].stringValue)
-            let last_volume = quote[QuoteConstants.volume].stringValue
-            let ask_price1 = dataManager.saveDecimalByPtick(decimal: decimal, data: quote[QuoteConstants.ask_price1].stringValue)
-            let ask_volume1 = quote[QuoteConstants.ask_volume1].stringValue
-            let bid_price1 = dataManager.saveDecimalByPtick(decimal: decimal, data: quote[QuoteConstants.bid_price1].stringValue)
-            let bid_volume1 = quote[QuoteConstants.bid_volume1].stringValue
-            self.last_price.text = last_price
-            self.last_volume.text = last_volume
-            self.ask_price1.text = ask_price1
-            self.ask_volume1.text = ask_volume1
-            self.bid_price1.text = bid_price1
-            self.bid_volume1.text = bid_volume1
-
-            //下单板价格显示
-            switch priceType {
-            case "排队价":
-                bid_order_price.text = bid_price1
-                ask_order_price.text = ask_price1
-                if isClosePriceShow {
-                    if "多".elementsEqual(direction) {
-                        close_order_price.text = ask_price1
-                    } else if "空".elementsEqual(direction) {
-                        close_order_price.text = bid_price1
-                    }
-                }
-            case "对手价":
-                bid_order_price.text = ask_price1
-                ask_order_price.text = bid_price1
-                if isClosePriceShow {
-                    if "多".elementsEqual(direction) {
-                        close_order_price.text = bid_price1
-                    } else if "空".elementsEqual(direction) {
-                        close_order_price.text = ask_price1
-                    }
-                }
-            case "市价":
-                let upper_limit = dataManager.saveDecimalByPtick(decimal: decimal, data: quote[QuoteConstants.upper_limit].stringValue)
-                let lower_limit = dataManager.saveDecimalByPtick(decimal: decimal, data: quote[QuoteConstants.lower_limit].stringValue)
-                bid_order_price.text = upper_limit
-                ask_order_price.text = lower_limit
-                if isClosePriceShow {
-                    if "多".elementsEqual(direction) {
-                        close_order_price.text = lower_limit
-                    } else if "空".elementsEqual(direction) {
-                        close_order_price.text = upper_limit
-                    }
-                }
-            case "最新价":
-                bid_order_price.text = last_price
-                ask_order_price.text = last_price
-                if isClosePriceShow {
-                    close_order_price.text = last_price
-                }
-            default:
-                break
-            }
-        }
-
-        (price.inputView as! PriceKeyboardView).refreshPrice()
-        (volume.inputView as! VolumeKeyboardView).refreshPrice()
-    }
-
-    //买开仓
-    @objc func bidInsertOrder() {
-        self.view.endEditing(true)
-        if let price = self.bid_order_price.text, let volume = self.volume.text {
-
-            guard let price_d = Double(price) else {
-                ToastUtils.showNegativeMessage(message: "价格输入不合法～")
-                return
-            }
-
-            guard let volume_d = Int(volume) else {
-                ToastUtils.showNegativeMessage(message: "手数输入不合法～")
-                return
-            }
-
-            let title = "确认下单吗？"
-            let message = "\(instrument_id_transaction), \(price), 买开, \(volume)手"
-            initOrderAlert(title: title, message: message, exchangeId: exchange_id, instrumentId: String(instrument_id_transaction.split(separator: ".")[1]), direction: "BUY", offset: "OPEN", volume: volume_d, priceType: "LIMIT", price: price_d)
-        }
-    }
-
-    //卖开仓
-    @objc func askInsertOrder() {
-        self.view.endEditing(true)
-        if let price = self.ask_order_price.text, let volume = self.volume.text {
-
-            guard let price_d = Double(price) else {
-                ToastUtils.showNegativeMessage(message: "价格输入不合法～")
-                return
-            }
-
-            guard let volume_d = Int(volume) else {
-                ToastUtils.showNegativeMessage(message: "手数输入不合法～")
-                return
-            }
-
-            let title = "确认下单吗？"
-            let message = "\(instrument_id_transaction), \(price), 卖开, \(volume)手"
-            initOrderAlert(title: title, message: message,exchangeId: exchange_id, instrumentId: String(instrument_id_transaction.split(separator: ".")[1]), direction: "SELL", offset: "OPEN", volume: volume_d, priceType: "LIMIT", price: price_d)
-        }
-    }
-
-    //平仓
-    @objc func closeInsertOrder() {
-        self.view.endEditing(true)
-        if let close_order_price = close_order_price.text {
-            switch close_order_price {
-            case "锁仓状态":
-                let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-                alert.addAction(UIAlertAction(title: "平多", style: .default) { _ in
-                    self.direction  = "多"
-                    self.isClosePriceShow = true
-                    self.close_order_direction.text = "平多"
-                    self.bid_order_direction.text = "加多"
-                    self.ask_order_direction.text = "锁仓"
-                    if "排队价".elementsEqual(self.priceType) {
-                        self.close_order_price.text = self.ask_order_price.text
-                    } else {
-                        self.close_order_price.text = self.bid_order_price.text
-                    }
-                    self.closePosition()
-                })
-                alert.addAction(UIAlertAction(title: "平空", style: .default) { _ in
-                    self.direction  = "空"
-                    self.isClosePriceShow = true
-                    self.close_order_direction.text = "平空"
-                    self.bid_order_direction.text = "锁仓"
-                    self.ask_order_direction.text = "加空"
-                    if "对手价".elementsEqual(self.priceType) {
-                        self.close_order_price.text = self.ask_order_price.text
-                    } else {
-                        self.close_order_price.text = self.bid_order_price.text
-                    }
-                    self.closePosition()
-                })
-                present(alert, animated: true)
-            case "先开先平":
-                if instrument_id_transaction.contains("&"){
-                    let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-                    alert.addAction(UIAlertAction(title: "平多", style: .default) { _ in
-                        self.direction  = "多"
-                        self.isClosePriceShow = true
-                        self.close_order_direction.text = "平多"
-                        if "排队价".elementsEqual(self.priceType) {
-                            self.close_order_price.text = self.ask_order_price.text
-                        } else {
-                            self.close_order_price.text = self.bid_order_price.text
-                        }
-                        self.closePosition()
-                    })
-                    alert.addAction(UIAlertAction(title: "平空", style: .default) { _ in
-                        self.direction  = "空"
-                        self.isClosePriceShow = true
-                        self.close_order_direction.text = "平空"
-                        if "对手价".elementsEqual(self.priceType) {
-                            self.close_order_price.text = self.ask_order_price.text
-                        } else {
-                            self.close_order_price.text = self.bid_order_price.text
-                        }
-                        self.closePosition()
-                    })
-                    present(alert, animated: true)
-                }else {
-                    ToastUtils.showNegativeMessage(message: "此合约您还没有持仓～")
-                }
-            default:
-                closePosition()
-            }
-        }
     }
 
 }

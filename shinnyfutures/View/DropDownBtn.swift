@@ -104,8 +104,8 @@ class DropDownBtn: UIButton, DropDownProtocol {
 
 class DropDownView: UIView, UITableViewDelegate, UITableViewDataSource {
 
-    //期货公司序号
-    var selected_index = -1
+    //期货公司
+    var selected_index = ""
 
     var dropDownOptions = [String]()
 
@@ -124,6 +124,10 @@ class DropDownView: UIView, UITableViewDelegate, UITableViewDataSource {
         tableView.dataSource = self
 
         tableView.translatesAutoresizingMaskIntoConstraints = false
+
+        // make tableview look better in ipad
+        tableView.cellLayoutMarginsFollowReadableWidth = true
+        tableView.tableFooterView = UIView()
 
         self.addSubview(tableView)
         self.tableView = tableView
@@ -154,15 +158,20 @@ class DropDownView: UIView, UITableViewDelegate, UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell()
+        //全屏分割线
+        cell.preservesSuperviewLayoutMargins = false
+        cell.separatorInset = UIEdgeInsets.zero
+        cell.layoutMargins = UIEdgeInsets.zero
+        
         cell.textLabel?.text = dropDownOptions[indexPath.row]
         cell.backgroundColor = UIColor.darkGray
         return cell
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selected_index = indexPath.row
         self.delegate?.dropDownPressed(string: dropDownOptions[indexPath.row])
         self.tableView?.deselectRow(at: indexPath, animated: true)
+        self.selected_index = dropDownOptions[indexPath.row]
     }
 
 }

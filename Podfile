@@ -15,6 +15,12 @@ target 'shinnyfutures' do
 
   pod 'Bugly'
 
+  pod 'UMCCommon'
+
+  pod 'UMCAnalytics'
+
+  pod 'UMCSecurityPlugins'
+
   # Pods for shinnyfutures
 
   target 'shinnyfuturesTests' do

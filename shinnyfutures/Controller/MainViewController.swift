@@ -37,20 +37,18 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
     var quoteNavigationCollectionViewController: QuoteNavigationCollectionViewController!
     let mdWebSocketUtils = MDWebSocketUtils.getInstance()
     let tdWebSocketUtils = TDWebSocketUtils.getInstance()
-    var isMDOnline = false
     var lastMDTime = CACurrentMediaTime()
-    var isTDOnline = false
     var lastTDTime = CACurrentMediaTime()
     var mdURLs = [String]()
     var index = 0
 
     func websocketDidReceiveMessage(socket: TDWebSocketUtils, text: String) {
-        NSLog(text)
         DispatchQueue.global().async {
             let json = JSON(parseJSON: text)
             let aid = json["aid"].stringValue
             switch aid {
             case "rtn_brokers":
+                self.tdWebSocketUtils.ping()
                 DataManager.getInstance().parseBrokers(brokers: json)
             case "rtn_data":
                 DataManager.getInstance().parseRtnTD(transactionData: json)
@@ -79,11 +77,11 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
             let aid = json["aid"].stringValue
             switch aid {
             case "rsp_login":
+                self.mdWebSocketUtils.ping()
                 if DataManager.getInstance().sQuotes.count != 0{
                     socket.sendSubscribeQuote(insList: DataManager.getInstance().sQuotes[1].map {$0.key}[0..<CommonConstants.MAX_SUBSCRIBE_QUOTES].joined(separator: ","))
                 }
             case "rtn_data":
-                self.isMDOnline = true
                 self.index = 0
                 DataManager.getInstance().parseRtnMD(rtnData: json)
             default:
@@ -146,58 +144,6 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
         downloadTask.resume()
     }
 
-    //初始化服务器地址
-    func initTMDURLs(){
-        let mdURLGroup = shuffle(group: [CommonConstants.MARKET_URL_2, CommonConstants.MARKET_URL_3, CommonConstants.MARKET_URL_4, CommonConstants.MARKET_URL_5, CommonConstants.MARKET_URL_6, CommonConstants.MARKET_URL_7])
-
-         if let myClass = objc_getClass("shinnyfutures.LocalCommonConstants"){
-            let myClassType = myClass as! NSObject.Type
-            let cl = myClassType.init()
-            let url = cl.value(forKey: "MARKET_URL_8") as! String
-            let transaction_url = cl.value(forKey: "TRANSACTION_URL") as! String
-            CommonConstants.TRANSACTION_URL = transaction_url
-            mdURLs.append(url)
-        }else{
-            mdURLs.append(CommonConstants.MARKET_URL_1)
-        }
-        mdURLs += mdURLGroup
-    }
-
-    func shuffle(group: [String]) -> [String] {
-        var items = group
-        var last = items.count - 1
-        while(last > 0)
-        {
-            let rand = Int(arc4random_uniform(UInt32(last)))
-            items.swapAt(last, rand)
-            last -= 1
-        }
-        return items
-    }
-
-    //获取软件版本
-    func getAppVersion() {
-        if let appVersion = Bundle.main.infoDictionary!["CFBundleShortVersionString"] as? String, let appBuild = Bundle.main.infoDictionary!["CFBundleVersion"] as? String{
-            DataManager.getInstance().sAppVersion = appVersion
-            DataManager.getInstance().sAppBuild = appBuild
-        }
-    }
-
-    /// GCD定时器循环操作
-    ///   - timeInterval: 循环间隔时间
-    ///   - handler: 循环事件
-    func DispatchTimer(delay: Double, timeInterval: Double, handler:@escaping (DispatchSourceTimer?)->())
-    {
-        let timer = DispatchSource.makeTimerSource(flags: [], queue: DispatchQueue.main)
-        timer.schedule(deadline: .now() + delay, repeating: timeInterval)
-        timer.setEventHandler {
-            DispatchQueue.main.async {
-                handler(timer)
-            }
-        }
-        timer.resume()
-    }
-
     ////////////////////////////////////////////////////////////////////////////////
 
 
@@ -209,27 +155,40 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
         self.navigationController?.navigationBar.barTintColor = UIColor.black
         self.navigationController?.navigationBar.tintColor = UIColor.white
         initTMDURLs()
+        getAppVersion()
         self.mdWebSocketUtils.mdWebSocketUtilsDelegate = self
         self.tdWebSocketUtils.tdWebSocketUtilsDelegate = self
         sessionSimpleDownload(urlString: CommonConstants.LATEST_FILE_URL, fileName: "latest.json")
         self.DispatchTimer(delay: 15, timeInterval: 15){ timer in
-            self.tdWebSocketUtils.ping()
+
             if (CACurrentMediaTime() - self.lastTDTime) > 20 {
-                self.isTDOnline = false
+                DataManager.getInstance().sIsLogin = false
                 self.tdWebSocketUtils.reconnectTD(url: CommonConstants.TRANSACTION_URL)
                 NSLog("TD断线重连")
+            } else {
+                self.tdWebSocketUtils.ping()
             }
 
-            self.mdWebSocketUtils.ping()
             if (CACurrentMediaTime() - self.lastMDTime) > 20 {
-                self.isMDOnline = false
                 self.index = self.mdWebSocketUtils.reconnectMD(url: self.mdURLs[self.index], index: self.index)
                 NSLog("MD断线重连")
+            } else {
+                self.mdWebSocketUtils.ping()
             }
+
         }
         initSlideMenuWidth()
-        checkResponsibility()
         NotificationCenter.default.addObserver(self, selector: #selector(refreshMenu), name: Notification.Name(CommonConstants.BrokerInfoEmptyNotification), object: nil)
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        MobClick.beginLogPageView("HomePage")
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        MobClick.endLogPageView("HomePage")
     }
 
     deinit {
@@ -483,15 +442,75 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
         quoteNavigationCollectionViewController.loadDatas(index: index)
     }
 
-    private func checkResponsibility(){
-        let versionCode = UserDefaults.standard.integer(forKey: "versionCode")
-        if let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String, let versionCodeNow = Int(build) {
-            if versionCode < versionCodeNow {
-                ResponsibilityView.getInstance().showResponsibility()
-                UserDefaults.standard.set(versionCodeNow, forKey: "versionCode")
+    //初始化服务器地址
+    func initTMDURLs(){
+        let mdURLGroup = shuffle(group: [CommonConstants.MARKET_URL_2, CommonConstants.MARKET_URL_3, CommonConstants.MARKET_URL_4, CommonConstants.MARKET_URL_5, CommonConstants.MARKET_URL_6, CommonConstants.MARKET_URL_7])
+
+        if let myClass = objc_getClass("shinnyfutures.LocalCommonConstants"){
+            let myClassType = myClass as! NSObject.Type
+            let cl = myClassType.init()
+            let url = cl.value(forKey: "MARKET_URL_8") as! String
+            let transaction_url = cl.value(forKey: "TRANSACTION_URL") as! String
+            let json_url = cl.value(forKey: "LATEST_FILE_URL") as! String
+            CommonConstants.LATEST_FILE_URL = json_url
+            CommonConstants.TRANSACTION_URL = transaction_url
+            mdURLs.append(url)
+            let bugly_key = cl.value(forKey: "BUGLY_KEY") as! String
+            let umeng_key = cl.value(forKey: "UMENG_KEY") as! String
+            let baidu_key = cl.value(forKey: "BAIDU_KEY") as! String
+            #if DEBUG // 判断是否在测试环境下
+            // TODO
+            #else
+            Bugly.start(withAppId: bugly_key)
+            UMConfigure.initWithAppkey(umeng_key, channel: "AppStore")
+            let baidu = BaiduMobStat()
+            baidu.start(withAppId: baidu_key)
+            #endif
+        }else{
+            mdURLs.append(CommonConstants.MARKET_URL_1)
+        }
+        mdURLs += mdURLGroup
+    }
+
+    func shuffle(group: [String]) -> [String] {
+        var items = group
+        var last = items.count - 1
+        while(last > 0)
+        {
+            let rand = Int(arc4random_uniform(UInt32(last)))
+            items.swapAt(last, rand)
+            last -= 1
+        }
+        return items
+    }
+
+    //获取软件版本
+    func getAppVersion() {
+        if let appVersion = Bundle.main.infoDictionary!["CFBundleShortVersionString"] as? String, let appBuild = Bundle.main.infoDictionary!["CFBundleVersion"] as? String{
+            DataManager.getInstance().sAppVersion = appVersion
+            DataManager.getInstance().sAppBuild = appBuild
+            let versionCode = UserDefaults.standard.integer(forKey: "versionCode")
+            if let versionCodeNow = Int(appBuild){
+                if versionCode < versionCodeNow {
+                    //免责条款
+                    ResponsibilityView.getInstance().showResponsibility()
+                    UserDefaults.standard.set(versionCodeNow, forKey: "versionCode")
+                }
             }
         }
+    }
 
+    /// GCD定时器循环操作
+    func DispatchTimer(delay: Double, timeInterval: Double, handler:@escaping (DispatchSourceTimer?)->())
+    {
+        let timer = DispatchSource.makeTimerSource(flags: [], queue: DispatchQueue.main)
+        timer.schedule(deadline: .now() + delay, repeating: timeInterval)
+        timer.setEventHandler {
+            DispatchQueue.main.async {
+                handler(timer)
+            }
+        }
+        timer.resume()
     }
 
     @objc func refreshMenu(){

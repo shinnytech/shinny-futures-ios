@@ -77,11 +77,11 @@ class LoginViewController: UIViewController {
             ToastUtils.showNegativeMessage(message: "期货公司列表为空～")
             return
         }
-        if button.dropView.selected_index == -1 {
+        if button.dropView.selected_index.isEmpty {
             ToastUtils.showNegativeMessage(message: "请先选择期货公司～")
             return
         }
-        let broker_info = button.dropView.dropDownOptions[button.dropView.selected_index]
+        let broker_info = button.dropView.selected_index
         let user_name = userName.text
         let password = userPassword.text
         if user_name?.count == 0 {
@@ -113,12 +113,12 @@ class LoginViewController: UIViewController {
         }
         if jsonArray.count != 0 {
             if let brokerInfo = UserDefaults.standard.string(forKey: "brokerInfo") {
-                var index = Int(brokerInfo)!
-                if index > button.dropView.dropDownOptions.count {
-                    index = 0
+                if button.dropView.dropDownOptions.contains(brokerInfo){
+                    button.setTitle(brokerInfo, for: .normal)
+                    button.dropView.selected_index = brokerInfo
+                }else{
+                    button.setTitle("请选择期货公司", for: .normal)
                 }
-                button.dropView.selected_index = index
-                button.setTitle(button.dropView.dropDownOptions[index], for: .normal)
             } else {
                 button.setTitle("请选择期货公司", for: .normal)
             }
@@ -135,7 +135,7 @@ class LoginViewController: UIViewController {
             self.sDataManager.sIsLogin = true
             UserDefaults.standard.set(self.userName.text!, forKey: "userName")
             UserDefaults.standard.set(self.userPassword.text!, forKey: "userPassword")
-            UserDefaults.standard.set(String(button.dropView.selected_index), forKey: "brokerInfo")
+            UserDefaults.standard.set(button.dropView.selected_index, forKey: "brokerInfo")
             //手动式segue，代码触发；自动式指通过点击某个按钮出发
             switch self.sDataManager.sToLoginTarget {
             case "Account":

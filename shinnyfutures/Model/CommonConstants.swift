@@ -9,7 +9,8 @@
 import Foundation
 
 class CommonConstants {
-    public static let LATEST_FILE_URL = "http://openmd.shinnytech.com/t/md/symbols/latest.json"
+    //MARK: Server URL
+    public static var LATEST_FILE_URL = "http://openmd.shinnytech.com/t/md/symbols/latest.json"
     public static let MARKET_URL_1 = "ws://openmd.shinnytech.com/t/md/front/mobile"
     public static let MARKET_URL_2 = "ws://139.198.126.116/t/md/front/mobile"
     public static let MARKET_URL_3 = "ws://139.198.122.80/t/md/front/mobile"
@@ -19,13 +20,18 @@ class CommonConstants {
     public static let MARKET_URL_7 = "ws://106.15.219.160/t/md/front/mobile"
     public static var TRANSACTION_URL = "ws://opentd.shinnytech.com/trade/user0"
     public static let REDMINE_URL = "http://ask.shinnytech.com/src/indexm.html"
+
+    //MARK: Kline type
     public static let KLINE_MINUTE = "300000000000"
     public static let KLINE_HOUR = "3600000000000"
     public static let KLINE_DAY = "86400000000000"
     public static let CURRENT_DAY = "60000000000"
     public static let MAX_SUBSCRIBE_QUOTES = 24
     public static let VIEW_WIDTH = 200
+
+    //MARK: Quote page title
     public static let titleArray = ["自选合约", "主力合约", "上海期货交易所", "上期能源", "大连商品交易所", "郑州商品交易所", "中国金融期货交易所", "大连组合", "郑州组合"]
+
     // MARK: Notification
     public static let RefreshOptionalInsListNotification = "RefreshOptionalInsListNotification"
     public static let RtnMDNotification = "RtnMDNotification"
@@ -44,6 +50,7 @@ class CommonConstants {
     public static let ControlOrderLineNotification = "ControlOrderLineNotification"
     public static let ControlAverageLineNotification = "ControlAverageLineNotification"
     public static let LatestFileParsedNotification = "LatestFileParsedNotification"
+
     // MARK: Identifier
     public static let QuoteNavigationCollectionViewController = "QuoteNavigationCollectionViewController"
     public static let QuotePageViewController = "QuotePageViewController"
@@ -76,4 +83,11 @@ class CommonConstants {
     public static let LoginViewControllerUnwindSegue = "LoginViewControllerUnwindSegue"
     public static let AccountViewControllerUnwindSegue = "AccountViewControllerUnwindSegue"
     public static let TradeTableViewControllerUnwindSegue = "TradeTableViewControllerUnwindSegue"
+
+    //MARK: 下单板价格类型
+    public static let LATEST_PRICE = "最新价"
+    public static let COUNTERPARTY_PRICE = "对手价"
+    public static let MARKET_PRICE = "市价"
+    public static let QUEUED_PRICE = "排队价"
+    public static let USER_PRICE = "用户设置价"
 }

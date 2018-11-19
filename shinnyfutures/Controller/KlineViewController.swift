@@ -301,9 +301,9 @@ class KlineViewController: BaseChartViewController {
         let set = CandleChartDataSet(values: candles, label: "kline")
         set.axisDependency = .left
         set.shadowWidth = 0.7
-        set.decreasingColor = UIColor.green
+        set.decreasingColor = UIColor(red: 0.0, green: 252.0/255.0, blue: 252.0/255.0, alpha: 1)
         set.decreasingFilled = true
-        set.increasingColor = UIColor.red
+        set.increasingColor = UIColor(red: 218.0/255.0, green: 0.0, blue: 0.0, alpha: 1)
         set.increasingFilled = false
         set.neutralColor = UIColor.white
         set.shadowColorSameAsCandle = true

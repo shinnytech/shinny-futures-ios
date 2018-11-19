@@ -29,9 +29,7 @@ class DataManager {
     //////////////////////////////////////////////////////////////
     var sRtnMD = JSON()
     var sRtnBrokers = JSON()
-    var sRtnLogin = JSON()
     var sRtnTD = JSON()
-    var sMobileConfirmSettlement = JSON()
     var sPreInsList = ""
     var sInstrumentId = ""
     var isBackground = false
@@ -40,6 +38,7 @@ class DataManager {
     var sUser_id = ""
     var sAppVersion = ""
     var sAppBuild = ""
+    var sPriceType = CommonConstants.COUNTERPARTY_PRICE
     //进入登陆页的来源
     var sToLoginTarget = ""
 
@@ -257,6 +256,19 @@ class DataManager {
         return 0
     }
 
+    //获取合约详情页的标题
+    func getButtonTitle() -> String?{
+        if sInstrumentId.contains("KQ") {
+            if let underlying_symbol = sSearchEntities[sInstrumentId]?.underlying_symbol{
+                return sSearchEntities[underlying_symbol]?.instrument_name
+            }else {
+                return sInstrumentId
+            }
+        }else {
+            return sSearchEntities[sInstrumentId]?.instrument_name
+        }
+    }
+
     func parseRtnMD(rtnData: JSON) {
         do {
             let dataArray = rtnData[RtnMDConstants.data].arrayValue
@@ -271,22 +283,31 @@ class DataManager {
         }
     }
 
+    //清空账户
+    func clearAccount() {
+        sRtnBrokers = JSON.null
+        sRtnTD = JSON.null
+        sIsLogin = false
+        sIsEmpty = false
+        sUser_id = ""
+        sRtnBrokers = JSON()
+        sRtnTD = JSON()
+    }
+
     func parseBrokers(brokers: JSON) {
-        do {
-            if !brokers.dictionaryValue.keys.contains(RtnTDConstants.brokers) {
-                sIsLogin = true
-                sIsEmpty = true
-                DispatchQueue.main.async {
-                    NotificationCenter.default.post(name: Notification.Name(CommonConstants.BrokerInfoEmptyNotification), object: nil)
-                }
-            }
-            try sRtnBrokers.merge(with: brokers)
+        if !brokers.dictionaryValue.keys.contains(RtnTDConstants.brokers) {
+            sIsLogin = false
+            sIsEmpty = true
             DispatchQueue.main.async {
-                NotificationCenter.default.post(name: Notification.Name(CommonConstants.BrokerInfoNotification), object: nil)
+                NotificationCenter.default.post(name: Notification.Name(CommonConstants.BrokerInfoEmptyNotification), object: nil)
             }
-        } catch {
-            print(error.localizedDescription)
+            return
         }
+        sRtnBrokers = brokers
+        DispatchQueue.main.async {
+            NotificationCenter.default.post(name: Notification.Name(CommonConstants.BrokerInfoNotification), object: nil)
+        }
+
     }
 
     func parseRtnTD(transactionData: JSON) {

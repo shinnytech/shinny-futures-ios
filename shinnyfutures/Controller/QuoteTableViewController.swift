@@ -27,6 +27,7 @@ class QuoteTableViewController: UITableViewController, UIPopoverPresentationCont
         super.viewDidLoad()
         // make tableview look better in ipad
         tableView.cellLayoutMarginsFollowReadableWidth = true
+        tableView.tableFooterView = UIView()
         let longPressGusture = UILongPressGestureRecognizer(target: self, action: #selector(QuoteTableViewController.longPress(longPressGestureRecognizer:)))
         tableView.addGestureRecognizer(longPressGusture)
         NotificationCenter.default.addObserver(self, selector: #selector(initInsList), name: Notification.Name(CommonConstants.RefreshOptionalInsListNotification), object: nil)
@@ -70,6 +71,11 @@ class QuoteTableViewController: UITableViewController, UIPopoverPresentationCont
         guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? QuoteTableViewCell  else {
             fatalError("The dequeued cell is not an instance of QuoteTableViewCell.")
         }
+
+        //全屏分割线
+        cell.preservesSuperviewLayoutMargins = false
+        cell.separatorInset = UIEdgeInsets.zero
+        cell.layoutMargins = UIEdgeInsets.zero
 
         // Fetches the appropriate quote for the data source layout.
         let quote = quotes[indexPath.row]
@@ -148,9 +154,9 @@ class QuoteTableViewController: UITableViewController, UIPopoverPresentationCont
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 44.0))
+        let headerView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 35.0))
         headerView.backgroundColor = UIColor(red: 31/255, green:31/255, blue: 31/255, alpha: 1.0)
-        let stackView = UIStackView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width - 10, height: 44.0))
+        let stackView = UIStackView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width - 10, height: 35.0))
         stackView.distribution = .fillEqually
         let name = UILabel()
         name.textColor = UIColor.white
@@ -221,7 +227,7 @@ class QuoteTableViewController: UITableViewController, UIPopoverPresentationCont
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 44.0
+        return 35.0
     }
 
     //UICollectionView有3种停止滚动类型，分别是：1、快速滚动，自然停止；2、快速滚动，手指按压突然停止；3、慢速上下滑动停止。

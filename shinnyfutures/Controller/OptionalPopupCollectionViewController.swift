@@ -63,12 +63,9 @@ class OptionalPopupCollectionViewController: UICollectionViewController {
         let index = indexPath.row
         let instrumentId = insList[index]
         if let button = self.popoverPresentationController?.sourceView as? UIButton {
-            if let name = dataManager.sSearchEntities[instrumentId]?.instrument_name {
-                button.setTitle(name, for: .normal)
-            } else {
-                button.setTitle(instrumentId, for: .normal)
-            }
             dataManager.sInstrumentId = instrumentId
+            let title = dataManager.getButtonTitle()
+            button.setTitle(title, for: .normal)
         }
         NotificationCenter.default.post(name: Notification.Name(CommonConstants.SwitchQuoteNotification), object: nil)
         NotificationCenter.default.post(name: Notification.Name(CommonConstants.ClearChartViewNotification), object: nil)

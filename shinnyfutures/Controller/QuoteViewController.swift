@@ -30,7 +30,7 @@ class QuoteViewController: UIViewController, UIPopoverPresentationControllerDele
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        let title = dataManager.sSearchEntities[dataManager.sInstrumentId]?.instrument_name
+        let title = dataManager.getButtonTitle()
         button.frame = CGRect(x: 0, y: 0, width: 100, height: 40)
         button.setTitle(title, for: .normal)
         button.setImage(UIImage(named: "down", in: Bundle(identifier: "com.shinnytech.futures"), compatibleWith: nil), for: .normal)
@@ -284,7 +284,7 @@ class QuoteViewController: UIViewController, UIPopoverPresentationControllerDele
 
     @objc func switchToTransaction() {
         switchTransactionPage(index: 3)
-        let title = dataManager.sSearchEntities[dataManager.sInstrumentId]?.instrument_name
+        let title = dataManager.getButtonTitle()
         button.setTitle(title, for: .normal)
     }
 

@@ -17,7 +17,7 @@ class BankTransferViewController:  UIViewController, UITableViewDataSource, UITa
     let dataManager = DataManager.getInstance()
     let dateFormat = DateFormatter()
     var isRefresh = true
-    var bankIds = [String]()
+    var bankIds = [String: String]()
     @IBOutlet weak var tableview: UITableView!
     @IBOutlet weak var future_password: UITextField!
     @IBOutlet weak var bank_password: UITextField!
@@ -29,6 +29,8 @@ class BankTransferViewController:  UIViewController, UITableViewDataSource, UITa
     override func viewDidLoad() {
         super.viewDidLoad()
         dateFormat.dateFormat = "HH:mm:ss"
+
+        self.tableview.tableFooterView = UIView()
 
         //Configure the bank
         let bank = DropDownBtn.init(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
@@ -109,6 +111,10 @@ class BankTransferViewController:  UIViewController, UITableViewDataSource, UITa
             fatalError("The dequeued cell is not an instance of BankTransferTableViewCell.")
         }
 
+        //全屏分割线
+        cell.preservesSuperviewLayoutMargins = false
+        cell.separatorInset = UIEdgeInsets.zero
+        cell.layoutMargins = UIEdgeInsets.zero
 
         if transfers.count != 0 {
             let transfer = transfers[indexPath.row]
@@ -138,7 +144,7 @@ class BankTransferViewController:  UIViewController, UITableViewDataSource, UITa
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 35.0))
-        headerView.backgroundColor = UIColor.darkGray
+         headerView.backgroundColor = UIColor(red: 51/255, green:51/255, blue: 51/255, alpha: 1.0)
         let stackView = UIStackView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 35.0))
         stackView.distribution = .fillEqually
         let datetime = UILabel()
@@ -186,16 +192,19 @@ class BankTransferViewController:  UIViewController, UITableViewDataSource, UITa
         let user = dataManager.sRtnTD[dataManager.sUser_id]
         let bank = self.view.viewWithTag(101) as! DropDownBtn
         let currency = self.view.viewWithTag(102) as! DropDownBtn
+
         if bank.dropView.dropDownOptions.isEmpty {
             let banks = user[RtnTDConstants.banks].dictionaryValue.map{$0.value}
             for bankData in banks {
-                bankIds.append(bankData[BankConstants.id].stringValue)
-                bank.dropView.dropDownOptions.append(bankData[BankConstants.name].stringValue)
+                let bankName = bankData[BankConstants.name].stringValue
+                let bankId = bankData[BankConstants.id].stringValue
+                bankIds[bankName] = bankId
+                bank.dropView.dropDownOptions.append(bankName)
                 bank.dropView.tableView?.reloadData()
             }
             if !banks.isEmpty{
-                bank.dropView.selected_index = 0
                 bank.setTitle(bank.dropView.dropDownOptions[0], for: .normal)
+                bank.dropView.selected_index = bank.dropView.dropDownOptions[0]
             }else{
                 bank.setTitle("无", for: .normal)
             }
@@ -208,8 +217,8 @@ class BankTransferViewController:  UIViewController, UITableViewDataSource, UITa
                 currency.dropView.tableView?.reloadData()
             }
             if !currencies.isEmpty{
-                currency.dropView.selected_index = 0
                 currency.setTitle(currency.dropView.dropDownOptions[0], for: .normal)
+                currency.dropView.selected_index = currency.dropView.dropDownOptions[0]
             }else{
                 currency.setTitle("无", for: .normal)
             }
@@ -291,18 +300,21 @@ class BankTransferViewController:  UIViewController, UITableViewDataSource, UITa
         }
 
         let bankBtn = self.view.viewWithTag(101) as! DropDownBtn
-        if bankBtn.dropView.selected_index == -1 || bankIds.isEmpty || bankBtn.dropView.selected_index >= bankIds.count{
+        if bankBtn.dropView.selected_index.isEmpty || bankBtn.dropView.dropDownOptions.isEmpty || bankIds.isEmpty{
             ToastUtils.showNegativeMessage(message: "没有绑定银行或银行列表没有正确加载～")
             return
         }
-        let bank_id = bankIds[bankBtn.dropView.selected_index]
+        guard let bank_id = bankIds[bankBtn.dropView.selected_index] else {
+            ToastUtils.showNegativeMessage(message: "此银行银行不在列表中～")
+            return
+        }
 
         let currencyBtn = self.view.viewWithTag(102) as! DropDownBtn
-        if currencyBtn.dropView.selected_index == -1 || currencyBtn.dropView.dropDownOptions.isEmpty || currencyBtn.dropView.selected_index >= currencyBtn.dropView.dropDownOptions.count{
+        if currencyBtn.dropView.selected_index.isEmpty || currencyBtn.dropView.dropDownOptions.isEmpty{
             ToastUtils.showNegativeMessage(message: "币种列表没有正确加载～")
             return
         }
-        let currency = currencyBtn.dropView.dropDownOptions[currencyBtn.dropView.selected_index]
+        let currency = currencyBtn.dropView.selected_index
 
         if direction {
             TDWebSocketUtils.getInstance().sendReqBankTransfer(future_account: future_account, future_password: future_password, bank_id: bank_id, bank_password: bank_password, currency: currency, amount: fabsf(amountF))
