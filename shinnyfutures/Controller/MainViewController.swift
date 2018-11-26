@@ -9,7 +9,7 @@
 import UIKit
 import SwiftyJSON
 
-class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocketUtilsDelegate {
+class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocketUtilsDelegate, UIPopoverPresentationControllerDelegate {
     // MARK: Properties
     @IBOutlet weak var slideMenuConstraint: NSLayoutConstraint!
     @IBOutlet weak var menu: UIStackView!
@@ -41,6 +41,7 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
     var lastTDTime = CACurrentMediaTime()
     var mdURLs = [String]()
     var index = 0
+    let button =  UIButton(type: .custom)
 
     func websocketDidReceiveMessage(socket: TDWebSocketUtils, text: String) {
         DispatchQueue.global().async {
@@ -145,8 +146,6 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
     }
 
     ////////////////////////////////////////////////////////////////////////////////
-
-
     override func viewDidLoad() {
         super.viewDidLoad()
         UIApplication.shared.statusBarStyle = .lightContent
@@ -154,6 +153,12 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
         self.navigationController?.navigationBar.titleTextAttributes = dict as? [NSAttributedStringKey: Any]
         self.navigationController?.navigationBar.barTintColor = UIColor.black
         self.navigationController?.navigationBar.tintColor = UIColor.white
+        button.frame = CGRect(x: 0, y: 0, width: 200, height: 40)
+        button.setTitle(CommonConstants.titleArray[1], for: .normal)
+        button.setTitleColor(UIColor.white, for: .normal)
+        self.navigationItem.titleView = button
+        definesPresentationContext = true
+        
         initTMDURLs()
         getAppVersion()
         self.mdWebSocketUtils.mdWebSocketUtilsDelegate = self
@@ -179,6 +184,7 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
         }
         initSlideMenuWidth()
         NotificationCenter.default.addObserver(self, selector: #selector(refreshMenu), name: Notification.Name(CommonConstants.BrokerInfoEmptyNotification), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(popupOptionalList), name: Notification.Name(CommonConstants.PopupOptionalInsListNotification), object: nil)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -194,6 +200,11 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
     deinit {
         print("主页销毁")
         NotificationCenter.default.removeObserver(self)
+    }
+
+    //iPhone下默认是.overFullScreen(全屏显示)，需要返回.none，否则没有弹出框效果，iPad则不需要
+    func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
+        return .none
     }
 
     // change the width of slide menu when the orientation changes
@@ -300,55 +311,55 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
 
     @IBAction func toOptional(_ sender: UIButton) {
         controlSlideMenuVisibility()
-        self.title = CommonConstants.titleArray[0]
+        button.setTitle(CommonConstants.titleArray[0], for: .normal)
         switchPage(index: 0)
     }
 
     @IBAction func toDomain(_ sender: UIButton) {
         controlSlideMenuVisibility()
-        self.title = CommonConstants.titleArray[1]
+        button.setTitle(CommonConstants.titleArray[1], for: .normal)
         switchPage(index: 1)
     }
 
     @IBAction func toShanghai(_ sender: UIButton) {
         controlSlideMenuVisibility()
-        self.title = CommonConstants.titleArray[2]
+        button.setTitle(CommonConstants.titleArray[2], for: .normal)
         switchPage(index: 2)
     }
 
     @IBAction func toNengyuan(_ sender: UIButton) {
         controlSlideMenuVisibility()
-        self.title = CommonConstants.titleArray[3]
+        button.setTitle(CommonConstants.titleArray[3], for: .normal)
         switchPage(index: 3)
     }
 
     @IBAction func toDalian(_ sender: UIButton) {
         controlSlideMenuVisibility()
-        self.title = CommonConstants.titleArray[4]
+        button.setTitle(CommonConstants.titleArray[4], for: .normal)
         switchPage(index: 4)
     }
 
     @IBAction func toZhengzhou(_ sender: UIButton) {
         controlSlideMenuVisibility()
-        self.title = CommonConstants.titleArray[5]
+        button.setTitle(CommonConstants.titleArray[5], for: .normal)
         switchPage(index: 5)
     }
 
     @IBAction func toZhongjin(_ sender: UIButton) {
         controlSlideMenuVisibility()
-        self.title = CommonConstants.titleArray[6]
+        button.setTitle(CommonConstants.titleArray[6], for: .normal)
         switchPage(index: 6)
     }
 
     @IBAction func toDaLianZuHe(_ sender: UIButton) {
         controlSlideMenuVisibility()
-        self.title = CommonConstants.titleArray[7]
+        button.setTitle(CommonConstants.titleArray[7], for: .normal)
         switchPage(index: 7)
     }
 
     @IBAction func toZhengZhouZuHe(_ sender: UIButton) {
         controlSlideMenuVisibility()
-        self.title = CommonConstants.titleArray[8]
+        button.setTitle(CommonConstants.titleArray[8], for: .normal)
         switchPage(index: 8)
     }
 
@@ -442,6 +453,26 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
         quoteNavigationCollectionViewController.loadDatas(index: index)
     }
 
+    //初始化默认配置
+    func initDefaultConfig() {
+        if UserDefaults.standard.object(forKey: "positionLine") == nil {
+            UserDefaults.standard.set(true, forKey: "positionLine")
+        }
+
+        if UserDefaults.standard.object(forKey: "orderLine") == nil {
+            UserDefaults.standard.set(true, forKey: "orderLine")
+        }
+
+        if UserDefaults.standard.object(forKey: "averageLine") == nil {
+            UserDefaults.standard.set(true, forKey: "averageLine")
+        }
+
+        if UserDefaults.standard.object(forKey: "isLocked") == nil {
+            UserDefaults.standard.set(false, forKey: "isLocked")
+        }
+
+    }
+
     //初始化服务器地址
     func initTMDURLs(){
         let mdURLGroup = shuffle(group: [CommonConstants.MARKET_URL_2, CommonConstants.MARKET_URL_3, CommonConstants.MARKET_URL_4, CommonConstants.MARKET_URL_5, CommonConstants.MARKET_URL_6, CommonConstants.MARKET_URL_7])
@@ -518,6 +549,27 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
         menu.removeArrangedSubview(position)
         menu.removeArrangedSubview(trade)
         menu.removeArrangedSubview(transfer)
+    }
+
+    @objc func popupOptionalList(){
+        if let optionalPopupView = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: CommonConstants.OptionalPopupTableViewController) as? OptionalPopupTableViewController {
+
+            optionalPopupView.modalPresentationStyle = .popover
+            //箭头所指向的区域
+            optionalPopupView.popoverPresentationController?.sourceView = self.navigationItem.titleView
+            optionalPopupView.popoverPresentationController?.sourceRect = (self.navigationItem.titleView?.bounds)!
+            //箭头方向
+            optionalPopupView.popoverPresentationController?.permittedArrowDirections = .up
+            //设置代理
+            optionalPopupView.popoverPresentationController?.delegate = self
+            //弹出框口大小
+            //optionalPopupView.preferredContentSize = CGSize(width: UIScreen.main.bounds.width, height: 44.0)
+            self.present(optionalPopupView, animated: true, completion: nil)
+        }
+    }
+
+    func popoverPresentationControllerDidDismissPopover(_ popoverPresentationController: UIPopoverPresentationController) {
+        MDWebSocketUtils.getInstance().sendSubscribeQuote(insList: FileUtils.getOptional().joined(separator: ","))
     }
 
 }

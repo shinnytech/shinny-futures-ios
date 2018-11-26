@@ -193,7 +193,7 @@ class OrderTableViewController: UIViewController, UITableViewDataSource, UITable
         volume.font = UIFont(name: "Helvetica Neue", size: 15.0)
         volume.adjustsFontSizeToFitWidth = true
         volume.text = "数量"
-        volume.textAlignment = .center
+        volume.textAlignment = .right
         let time = UILabel()
         time.font = UIFont(name: "Helvetica Neue", size: 15.0)
         time.adjustsFontSizeToFitWidth = true

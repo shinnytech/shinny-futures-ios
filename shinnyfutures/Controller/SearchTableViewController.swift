@@ -87,14 +87,14 @@ class SearchTableViewController: UITableViewController, UISearchResultsUpdating 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let indexPath = tableView.indexPathForSelectedRow {
             if searchController.isActive {
-                let instrumentId = searchResults[indexPath.row].instrument_id
+                let instrumentId = searchResults[indexPath.row].instrument_id!
                 dataManager.sInstrumentId = instrumentId
                 if !dataManager.sSearchHistoryEntities.contains(where: {$0.key.elementsEqual(instrumentId)}) {
                     dataManager.sSearchHistoryEntities[instrumentId] = dataManager.sSearchEntities[instrumentId]
                 }
                 searchController.isActive = false
             } else {
-                dataManager.sInstrumentId = searchHistory[indexPath.row].instrument_id
+                dataManager.sInstrumentId = searchHistory[indexPath.row].instrument_id!
             }
             DataManager.getInstance().sPreInsList = DataManager.getInstance().sRtnMD[RtnMDConstants.ins_list].stringValue
         }
@@ -110,32 +110,32 @@ class SearchTableViewController: UITableViewController, UISearchResultsUpdating 
     // MARK: Private Methods
     private func loadData() {
         searchHistory = dataManager.sSearchHistoryEntities.sorted(by: {
-            if let sortKey0 = (dataManager.sSearchEntities[$0.key]?.sort_key), let sortKey1 = (dataManager.sSearchEntities[$1.key]?.sort_key){
-                if sortKey0 != sortKey1{
-                    return sortKey0 < sortKey1
+            if let pre_volume0 = (dataManager.sSearchEntities[$0.key]?.pre_volume), let pre_volume1 = (dataManager.sSearchEntities[$1.key]?.pre_volume){
+                if pre_volume0 != pre_volume1{
+                    return pre_volume0 > pre_volume1
                 }else{
-                    return $0.key < $1.key
+                    return $0.key > $1.key
                 }
             }
-            return $0.key < $1.key
+            return $0.key > $1.key
 
         }).map {$0.value}
     }
 
     func filterContent(for searchText: String) {
         searchResults = dataManager.sSearchEntities.filter({ (_, search) -> Bool in
-            let isMatch = search.instrument_id.localizedCaseInsensitiveContains(searchText) || search.instrument_name.localizedCaseInsensitiveContains(searchText) ||
-                search.py.localizedCaseInsensitiveContains(searchText)
+            let isMatch = search.instrument_id!.localizedCaseInsensitiveContains(searchText) || search.instrument_name!.localizedCaseInsensitiveContains(searchText) ||
+                search.py!.localizedCaseInsensitiveContains(searchText)
             return isMatch
         }).sorted(by: {
-            if let sortKey0 = (dataManager.sSearchEntities[$0.key]?.sort_key), let sortKey1 = (dataManager.sSearchEntities[$1.key]?.sort_key){
-                if sortKey0 != sortKey1{
-                    return sortKey0 < sortKey1
+            if let pre_volume0 = (dataManager.sSearchEntities[$0.key]?.pre_volume), let pre_volume1 = (dataManager.sSearchEntities[$1.key]?.pre_volume){
+                if pre_volume0 != pre_volume1{
+                    return pre_volume0 > pre_volume1
                 }else{
-                    return $0.key < $1.key
+                    return $0.key > $1.key
                 }
             }
-            return $0.key < $1.key
+            return $0.key > $1.key
 
         }).map {$0.value}
     }

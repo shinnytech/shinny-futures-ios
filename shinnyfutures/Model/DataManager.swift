@@ -67,34 +67,34 @@ class DataManager {
                 guard let latestJson = try JSONSerialization.jsonObject(with: latestData, options: []) as? [String: Any] else { return }
                 for (instrument_id, value) in latestJson {
                     let subJson = value as! [String: Any]
-                    let classN = subJson["class"] as! String
+                    guard let classN = subJson["class"] as? String else {return}
                     if !"FUTURE_CONT".elementsEqual(classN) && !"FUTURE".elementsEqual(classN) && !"FUTURE_COMBINE".elementsEqual(classN){continue}
-                    let ins_name = subJson["ins_name"] as! String
-                    let expired = subJson["expired"] as! Bool
+                    guard let ins_name = subJson["ins_name"] as? String else {return}
+                    let expired = subJson["expired"] as? Bool
                     let exchange_id = subJson["exchange_id"] as! String
-                    let price_tick = (subJson["price_tick"] as! NSNumber).stringValue
-                    let price_decs = (subJson["price_decs"] as! NSNumber).intValue
-                    let volume_multiple = (subJson["volume_multiple"] as! NSNumber).stringValue
-                    let sort_key = (subJson["sort_key"] as! NSNumber).intValue
+                    let price_tick = (subJson["price_tick"] as? NSNumber)?.stringValue
+                    let price_decs = (subJson["price_decs"] as? NSNumber)?.intValue
+                    let volume_multiple = (subJson["volume_multiple"] as? NSNumber)?.stringValue
+                    let sort_key = (subJson["sort_key"] as? NSNumber)?.intValue
 
-                    let searchEntity = Search(instrument_id: instrument_id, instrument_name: ins_name, exchange_name: "", exchange_id: exchange_id, py: "", p_tick: price_tick, p_decs: price_decs, vm: volume_multiple, sort_key: sort_key, margin: 0, underlying_symbol: "")
+                    let searchEntity = Search(instrument_id: instrument_id, instrument_name: ins_name, exchange_name: "", exchange_id: exchange_id, py: "", p_tick: price_tick, p_decs: price_decs, vm: volume_multiple, sort_key: sort_key, margin: 0, underlying_symbol: "", pre_volume: 0)
 
                     if "FUTURE_CONT".elementsEqual(classN){
-                        let py = subJson["py"] as! String
-                        searchEntity.py = py
-                        let underlying_symbol = subJson["underlying_symbol"] as! String
-                        if "".elementsEqual(underlying_symbol){continue}
-                        searchEntity.underlying_symbol = underlying_symbol
                         sMainQuotes[instrument_id] = JSON(parseJSON: "{\"instrument_id\":\"\(instrument_id)\", \"instrument_name\":\"\(ins_name)\"}")
                         sMainInsListNameNav[ins_name.replacingOccurrences(of: "主连", with: "")] = instrument_id
+
+                        let py = subJson["py"] as? String
+                        searchEntity.py = py
+                        guard let underlying_symbol = subJson["underlying_symbol"] as? String else {return}
+                        searchEntity.underlying_symbol = underlying_symbol
+                        guard let subJsonFuture = latestJson[underlying_symbol] as? [String: Any] else {return}
+                        let pre_volume = (subJsonFuture["pre_volume"] as? NSNumber)?.intValue
+                        searchEntity.pre_volume = pre_volume
                     }
 
                     if "FUTURE".elementsEqual(classN){
-                        let product_short_name = subJson["product_short_name"] as! String
-                        let py = subJson["py"] as! String
-                        let margin = (subJson["margin"] as! NSNumber).intValue
-                        searchEntity.py = py
-                        searchEntity.margin = margin
+                        guard let product_short_name = subJson["product_short_name"] as? String else {return}
+                        guard let expired = expired else {return}
                         switch exchange_id {
                         case "SHFE":
                             if !expired{
@@ -129,14 +129,19 @@ class DataManager {
                         default:
                             return
                         }
+                        let py = subJson["py"] as? String
+                        let margin = (subJson["margin"] as? NSNumber)?.intValue
+                        let pre_volume = (subJson["pre_volume"] as? NSNumber)?.intValue
+                        searchEntity.pre_volume = pre_volume
+                        searchEntity.py = py
+                        searchEntity.margin = margin
                     }
 
                     if "FUTURE_COMBINE".elementsEqual(classN){
-                        let leg1_symbol = subJson["leg1_symbol"] as! String
-                        let subJsonFuture = latestJson[leg1_symbol] as! [String: Any]
-                        let product_short_name = subJsonFuture["product_short_name"] as! String
-                        let py = subJsonFuture["py"] as! String
-                        searchEntity.py = py
+                        guard let leg1_symbol = subJson["leg1_symbol"] as? String else {return}
+                        guard let subJsonFuture = latestJson[leg1_symbol] as? [String: Any] else {return}
+                        guard let product_short_name = subJsonFuture["product_short_name"] as? String else {return}
+                        guard let expired = expired else {return}
                         switch exchange_id {
                         case "CZCE":
                             if !expired{
@@ -153,6 +158,10 @@ class DataManager {
                         default:
                             return
                         }
+                        let py = subJsonFuture["py"] as? String
+                        let pre_volume = (subJson["pre_volume"] as? NSNumber)?.intValue
+                        searchEntity.pre_volume = pre_volume
+                        searchEntity.py = py
                     }
                     sSearchEntities[instrument_id] = searchEntity
                 }
@@ -166,7 +175,7 @@ class DataManager {
                     }
                 }
 
-                sQuotes.append(sortByKey(insList: sOptionalQuotes))
+                sQuotes.append(sortByUser(insList: sOptionalQuotes))
                 sQuotes.append(sortByKey(insList: sMainQuotes))
                 sQuotes.append(sortByKey(insList: sShangqiQuotes))
                 sQuotes.append(sortByKey(insList: sNengyuanQuotes))
@@ -194,6 +203,16 @@ class DataManager {
         NSLog("解析结束")
     }
 
+    func sortByUser(insList: [String: JSON]) -> [(key: String, value: JSON)] {
+        return insList.sorted(by: {
+            let optional = FileUtils.getOptional()
+            if let index0 = optional.index(of: $0.key), let index1 = optional.index(of: $1.key){
+                return index0 < index1
+            }
+            return $0.key < $1.key
+        })
+    }
+
     func sortByKey(insList: [String: JSON]) -> [(key: String, value: JSON)] {
         return insList.sorted(by: {
             if let sortKey0 = (sSearchEntities[$0.key]?.sort_key), let sortKey1 = (sSearchEntities[$1.key]?.sort_key){
@@ -218,6 +237,16 @@ class DataManager {
             }
             return $0.value < $1.value
         })
+    }
+
+    func resortOptional(fromIndex: Int, toIndex: Int) {
+        var optional = FileUtils.getOptional()
+        let ins = optional.remove(at: fromIndex)
+        optional.insert(ins, at: toIndex)
+        FileUtils.saveOptional(ins: optional)
+        let quote = sQuotes[0].remove(at: fromIndex)
+        sQuotes[0].insert(quote, at: toIndex)
+        NotificationCenter.default.post(name: Notification.Name(CommonConstants.RefreshOptionalInsListNotification), object: nil)
     }
 
     func saveOrRemoveIns(ins: String) {
@@ -250,7 +279,7 @@ class DataManager {
 
     func getDecimalByPtick(instrumentId: String) -> Int {
         if let search = sSearchEntities[instrumentId] {
-            let p_decs = search.p_decs
+            guard let p_decs = search.p_decs else {return 0}
             return p_decs
         }
         return 0

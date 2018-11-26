@@ -89,6 +89,24 @@ class TransactionViewController: UIViewController, PriceKeyboardViewDelegate, Vo
         initPosition()
         refreshPrice()
         refreshAccount()
+        refreshPriceKeyboardQuote()
+    }
+
+    //刷新价格软键盘合约代码
+    func refreshPriceKeyboardQuote() {
+        (price.inputView as! PriceKeyboardView).switchQuote()
+    }
+
+    //刷新软键盘涨跌停价格
+    func refreshKeyboardPrice() {
+        (volume.inputView as! VolumeKeyboardView).refreshPrice()
+        (price.inputView as! PriceKeyboardView).refreshPrice()
+    }
+
+    //刷新软键盘最大可开仓手数
+    func refreshKeyboardVolume() {
+        (volume.inputView as! VolumeKeyboardView).refreshAccount()
+        (price.inputView as! PriceKeyboardView).refreshAccount()
     }
 
     func initPosition() {
@@ -249,11 +267,8 @@ class TransactionViewController: UIViewController, PriceKeyboardViewDelegate, Vo
                 self.usingRate.text = "0%"
             }
         }
-
-        (volume.inputView as! VolumeKeyboardView).refreshAccount()
-        (price.inputView as! PriceKeyboardView).refreshAccount()
-
         refreshPosition()
+        refreshKeyboardVolume()
     }
 
     @objc func refreshPrice() {
@@ -318,10 +333,7 @@ class TransactionViewController: UIViewController, PriceKeyboardViewDelegate, Vo
                 break
             }
         }
-
-        (volume.inputView as! VolumeKeyboardView).refreshPrice()
-        (price.inputView as! PriceKeyboardView).refreshPrice()
-
+        refreshKeyboardPrice()
     }
 
     @objc func refreshPosition() {

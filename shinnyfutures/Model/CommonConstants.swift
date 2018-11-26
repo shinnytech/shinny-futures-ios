@@ -34,6 +34,7 @@ class CommonConstants {
 
     // MARK: Notification
     public static let RefreshOptionalInsListNotification = "RefreshOptionalInsListNotification"
+    public static let PopupOptionalInsListNotification = "PopupOptionalInsListNotification"
     public static let RtnMDNotification = "RtnMDNotification"
     public static let BrokerInfoNotification = "BrokerInfoNotification"
     public static let BrokerInfoEmptyNotification = "BrokerInfoEmptyNotification"
@@ -77,6 +78,7 @@ class CommonConstants {
     public static let TransactionViewController = "TransactionViewController"
     public static let KlinePopupView = "KlinePopupView"
     public static let OptionalPopupViewController = "OptionalPopupViewController"
+    public static let OptionalPopupTableViewController = "OptionalPopupTableViewController"
     public static let OptionalPopupCollectionViewController = "OptionalPopupCollectionViewController"
     public static let QuoteTableViewController = "QuoteTableViewController"
     public static let QuoteViewControllerUnwindSegue = "QuoteViewControllerUnwindSegue"

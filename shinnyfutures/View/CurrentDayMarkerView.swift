@@ -26,6 +26,13 @@ open class CurrentDayMarkerView: MarkerView {
     let dataManager = DataManager.getInstance()
     let klineType = CommonConstants.CURRENT_DAY
 
+    func resizeXib(heiht: CGFloat){
+        var Rect: CGRect = self.frame
+        Rect.size.height = heiht
+        self.frame = Rect
+        self.layoutIfNeeded()
+    }
+
     open override func awakeFromNib() {
         super.awakeFromNib()
         self.layer.borderWidth = 2.0;

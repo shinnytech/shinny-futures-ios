@@ -28,11 +28,14 @@ class QuoteTableViewController: UITableViewController, UIPopoverPresentationCont
         // make tableview look better in ipad
         tableView.cellLayoutMarginsFollowReadableWidth = true
         tableView.tableFooterView = UIView()
+
         let longPressGusture = UILongPressGestureRecognizer(target: self, action: #selector(QuoteTableViewController.longPress(longPressGestureRecognizer:)))
         tableView.addGestureRecognizer(longPressGusture)
-        NotificationCenter.default.addObserver(self, selector: #selector(initInsList), name: Notification.Name(CommonConstants.RefreshOptionalInsListNotification), object: nil)
-        quotes = dataManager.sQuotes[self.index].map {$0.value}
 
+        NotificationCenter.default.addObserver(self, selector: #selector(initInsList), name: Notification.Name(CommonConstants.RefreshOptionalInsListNotification), object: nil)
+        
+
+        quotes = dataManager.sQuotes[self.index].map {$0.value}
         insList = dataManager.sQuotes[self.index].map {$0.key}
     }
     
@@ -328,6 +331,8 @@ class QuoteTableViewController: UITableViewController, UIPopoverPresentationCont
                         }
                     }
                 }
+
+
             }
         }
     }
@@ -384,6 +389,7 @@ class QuoteTableViewController: UITableViewController, UIPopoverPresentationCont
             insList = dataManager.sQuotes[self.index].map {$0.key}
         }
     }
+
 }
 
 

@@ -35,8 +35,12 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
     var isShowAverageLine = true
     //持仓线数据
     var positionLimitLines = [String: ChartLimitLine]()
+    //持仓手数
+    var positionVolumes = [String: Int]()
     //挂单数据
     var orderLimitLines = [String: ChartLimitLine]()
+    //挂单手数
+    var orderVolumes = [String: Int]()
 
     let dataManager = DataManager.getInstance()
     let calendar = Calendar.autoupdatingCurrent
@@ -161,7 +165,7 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
         addShortPositionLimitLine()
     }
 
-    func generatePositionLimitLine(limit: String, label: String, color: UIColor, limitKey: String) {
+    func generatePositionLimitLine(limit: String, label: String, color: UIColor, limitKey: String, volume: Int) {
         if let limit = Double(limit) {
             let chartLimitLine = ChartLimitLine(limit: limit, label: label)
             chartLimitLine.lineWidth = 1.0
@@ -172,6 +176,7 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
             chartLimitLine.valueFont = UIFont.systemFont(ofSize: 10.0)
             chartLimitLine.valueTextColor = colorText!
             positionLimitLines[limitKey] = chartLimitLine
+            positionVolumes[limitKey] = volume
             chartView.leftAxis.addLimitLine(chartLimitLine)
         }
     }
@@ -190,7 +195,7 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
             let p_decs = dataManager.getDecimalByPtick(instrumentId: key)
             let limit_long_p = dataManager.saveDecimalByPtick(decimal: p_decs, data: limit_long)
             let label_long = "\(position[PositionConstants.instrument_id].stringValue)@\(limit_long_p)/\(volume_long)手"
-            generatePositionLimitLine(limit: limit_long_p, label: label_long, color: colorBuy!, limitKey: key + "0")
+            generatePositionLimitLine(limit: limit_long_p, label: label_long, color: colorBuy!, limitKey: key + "0", volume: volume_long)
         }
     }
 
@@ -208,7 +213,7 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
             let p_decs = dataManager.getDecimalByPtick(instrumentId: key)
             let limit_short_p = dataManager.saveDecimalByPtick(decimal: p_decs, data: limit_short)
             let label_short = "\(position[PositionConstants.instrument_id].stringValue)@\(limit_short_p)/\(volume_short)手"
-            generatePositionLimitLine(limit: limit_short_p, label: label_short, color: colorSell!, limitKey: key + "1")
+            generatePositionLimitLine(limit: limit_short_p, label: label_short, color: colorSell!, limitKey: key + "1", volume: volume_short)
         }
     }
 
@@ -222,20 +227,23 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
         let user = dataManager.sRtnTD[dataManager.sUser_id]
         guard let position = user[RtnTDConstants.positions].dictionaryValue[key] else {return}
         let volume_long = position[PositionConstants.volume_long].intValue
+        guard let limitLine = positionLimitLines[limitKey] else {return}
         if volume_long != 0 {
             let limit_long = position[PositionConstants.open_price_long].stringValue
             let p_decs = dataManager.getDecimalByPtick(instrumentId: key)
             let limit_long_p = dataManager.saveDecimalByPtick(decimal: p_decs, data: limit_long)
             guard let limit_long_p_d = Double(limit_long_p) else{return}
-            let limitLine = positionLimitLines[limitKey]
-            if limitLine?.limit != limit_long_p_d {
+
+            guard let volume_long_l = positionVolumes[limitKey] else {return}
+            if limitLine.limit != limit_long_p_d || volume_long != volume_long_l {
                 let label_long = "\(position[PositionConstants.instrument_id].stringValue)@\(limit_long_p)/\(volume_long)手"
-                chartView.leftAxis.removeLimitLine(positionLimitLines[limitKey]!)
-                generatePositionLimitLine(limit: limit_long_p, label: label_long, color: colorBuy!, limitKey: limitKey)
+                chartView.leftAxis.removeLimitLine(limitLine)
+                generatePositionLimitLine(limit: limit_long_p, label: label_long, color: colorBuy!, limitKey: limitKey, volume: volume_long)
             }
         } else {
-            chartView.leftAxis.removeLimitLine(positionLimitLines[limitKey]!)
+            chartView.leftAxis.removeLimitLine(limitLine)
             positionLimitLines.removeValue(forKey: limitKey)
+            positionVolumes.removeValue(forKey: limitKey)
         }
 
     }
@@ -250,20 +258,22 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
         let user = dataManager.sRtnTD[dataManager.sUser_id]
         guard let position = user[RtnTDConstants.positions].dictionaryValue[key] else {return}
         let volume_short = position[PositionConstants.volume_short].intValue
+        guard let limitLine = positionLimitLines[limitKey] else {return}
         if volume_short != 0 {
             let limit_short = position[PositionConstants.open_price_short].stringValue
             let p_decs = dataManager.getDecimalByPtick(instrumentId: key)
             let limit_short_p = dataManager.saveDecimalByPtick(decimal: p_decs, data: limit_short)
             guard let limit_short_p_d = Double(limit_short_p) else{return}
-            let limitLine = positionLimitLines[limitKey]
-            if limitLine?.limit != limit_short_p_d {
+            guard let volume_short_l = positionVolumes[limitKey] else {return}
+            if limitLine.limit != limit_short_p_d || volume_short != volume_short_l{
                 let label_short = "\(position[PositionConstants.instrument_id].stringValue)@\(limit_short_p)/\(volume_short)手"
-                chartView.leftAxis.removeLimitLine(positionLimitLines[limitKey]!)
-                generatePositionLimitLine(limit: limit_short_p, label: label_short, color: colorSell!, limitKey: limitKey)
+                chartView.leftAxis.removeLimitLine(limitLine)
+                generatePositionLimitLine(limit: limit_short_p, label: label_short, color: colorSell!, limitKey: limitKey, volume: volume_short)
             }
         } else {
-            chartView.leftAxis.removeLimitLine(positionLimitLines[limitKey]!)
+            chartView.leftAxis.removeLimitLine(limitLine)
             positionLimitLines.removeValue(forKey: limitKey)
+            positionVolumes.removeValue(forKey: limitKey)
         }
     }
 
@@ -273,6 +283,7 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
             chartView.leftAxis.removeLimitLine(value)
         }
         positionLimitLines.removeAll()
+        positionVolumes.removeAll()
     }
 
     //挂单线增删操作
@@ -306,11 +317,12 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
         let price = dataManager.saveDecimalByPtick(decimal: p_decs, data: orderEntity[OrderConstants.limit_price].stringValue)
         let order_id = orderEntity[OrderConstants.order_id].stringValue
         let instrument_id = orderEntity[OrderConstants.instrument_id].stringValue
-        let volume = orderEntity[OrderConstants.volume_orign].stringValue
+        let volume = orderEntity[OrderConstants.volume_orign].intValue
         let limit = Double(price)!
         let label = "\(instrument_id)@\(price)/\(volume)手"
         let chartLimitLine = ChartLimitLine(limit: limit, label: label)
         orderLimitLines[order_id] = chartLimitLine
+        orderVolumes[order_id] = volume
         chartLimitLine.lineWidth = 1.0
         if "BUY".elementsEqual(direction) {
             chartLimitLine.lineColor = colorBuy!
@@ -327,6 +339,7 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
         let limitLine = orderLimitLines[key]!
         chartView.leftAxis.removeLimitLine(limitLine)
         orderLimitLines.removeValue(forKey: key)
+        orderVolumes.removeValue(forKey: key)
     }
 
     // MARK: objc methods

@@ -71,6 +71,10 @@ open class PriceKeyboardView: UIView {
         refreshAccount()
     }
 
+    func switchQuote() {
+        processor.refreshCurrentOperand()
+    }
+
     func refreshPrice() {
         let dataManager = DataManager.getInstance()
         let instrument_id = dataManager.sInstrumentId
@@ -83,8 +87,6 @@ open class PriceKeyboardView: UIView {
         let lower = quote[QuoteConstants.lower_limit].stringValue
         upperLimit.text = dataManager.saveDecimalByPtick(decimal: decimal, data: upper)
         lowerLimit.text = dataManager.saveDecimalByPtick(decimal: decimal, data: lower)
-
-        processor.refreshCurrentOperand()
     }
 
     func refreshAccount() {
@@ -172,7 +174,6 @@ class PriceKeyboardViewProcessor {
         default:
             currentOperand += operand
         }
-
         return currentOperand
     }
 

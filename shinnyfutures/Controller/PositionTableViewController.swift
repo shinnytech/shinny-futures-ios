@@ -153,7 +153,7 @@ class PositionTableViewController: UITableViewController {
         name.font = UIFont(name: "Helvetica Neue", size: 15.0)
         name.adjustsFontSizeToFitWidth = true
         name.text = "合约"
-        name.textAlignment = .center
+        name.textAlignment = .left
         let direction = UILabel()
         direction.font = UIFont(name: "Helvetica Neue", size: 15.0)
         direction.adjustsFontSizeToFitWidth = true
@@ -163,12 +163,12 @@ class PositionTableViewController: UITableViewController {
         volume.font = UIFont(name: "Helvetica Neue", size: 15.0)
         volume.adjustsFontSizeToFitWidth = true
         volume.text = "手数"
-        volume.textAlignment = .right
+        volume.textAlignment = .center
         let available = UILabel()
         available.font = UIFont(name: "Helvetica Neue", size: 15.0)
         available.adjustsFontSizeToFitWidth = true
         available.text = "可用"
-        available.textAlignment = .right
+        available.textAlignment = .center
         let openInterest = UILabel()
         openInterest.font = UIFont(name: "Helvetica Neue", size: 15.0)
         openInterest.adjustsFontSizeToFitWidth = true
@@ -187,12 +187,12 @@ class PositionTableViewController: UITableViewController {
         stackView.addArrangedSubview(profit)
         headerView.addSubview(stackView)
         NSLayoutConstraint.activate([
-            name.widthAnchor.constraint(equalTo: stackView.widthAnchor, multiplier: 0.25),
-            direction.widthAnchor.constraint(equalTo: stackView.widthAnchor, multiplier: 1/12),
-            volume.widthAnchor.constraint(equalTo: stackView.widthAnchor, multiplier: 1/12),
-            available.widthAnchor.constraint(equalTo: stackView.widthAnchor, multiplier: 1/12),
-            openInterest.widthAnchor.constraint(equalTo: stackView.widthAnchor, multiplier: 0.25),
-            profit.widthAnchor.constraint(equalTo: stackView.widthAnchor, multiplier: 0.25)
+            name.widthAnchor.constraint(equalTo: stackView.widthAnchor, multiplier: 0.2),
+            direction.widthAnchor.constraint(equalTo: stackView.widthAnchor, multiplier: 0.08),
+            volume.widthAnchor.constraint(equalTo: stackView.widthAnchor, multiplier: 0.08),
+            available.widthAnchor.constraint(equalTo: stackView.widthAnchor, multiplier: 0.08),
+            openInterest.widthAnchor.constraint(equalTo: stackView.widthAnchor, multiplier: 0.28),
+            profit.widthAnchor.constraint(equalTo: stackView.widthAnchor, multiplier: 0.28)
             ])
         return headerView
     }

@@ -260,7 +260,7 @@ class QuoteViewController: UIViewController, UIPopoverPresentationControllerDele
             //设置代理
             optionalPopupView.popoverPresentationController?.delegate = self
             //弹出框口大小
-            //            optionalPopupView.preferredContentSize = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width)
+            //optionalPopupView.preferredContentSize = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width)
             self.present(optionalPopupView, animated: true, completion: nil)
         }
 

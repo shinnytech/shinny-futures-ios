@@ -157,6 +157,7 @@ class CurrentDayViewController: BaseChartViewController {
                     chartView.data = combineData
                     (chartView.xAxis as! MyXAxis).labels = labels
                     chartView.setVisibleXRangeMinimum(Double(trading_day_end_id - trading_day_start_id))
+                    (chartView.marker as! CurrentDayMarkerView).resizeXib(heiht: chartView.viewPortHandler.contentHeight)
                 }
             }
         }

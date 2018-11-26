@@ -27,6 +27,13 @@ open class KlineMarkerView: MarkerView {
     let dataManager = DataManager.getInstance()
     var klineType = ""
 
+    func resizeXib(heiht: CGFloat){
+        var Rect: CGRect = self.frame
+        Rect.size.height = heiht
+        self.frame = Rect
+        self.layoutIfNeeded()
+    }
+
     open override func awakeFromNib() {
         self.layer.borderWidth = 2.0;
         self.layer.masksToBounds = true;

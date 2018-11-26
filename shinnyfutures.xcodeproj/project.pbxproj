@@ -29,6 +29,8 @@
 		D42EE5282071D3C600EF8066 /* Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = D42EE5272071D3C600EF8066 /* Search.swift */; };
 		D42EE52A2071D55700EF8066 /* SearchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D42EE5292071D55700EF8066 /* SearchTableViewCell.swift */; };
 		D42EE52C20721ED000EF8066 /* SearchTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D42EE52B20721ED000EF8066 /* SearchTableViewController.swift */; };
+		D447697F21A7BDEF00620CA0 /* OptionalPopupTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D447697E21A7BDEF00620CA0 /* OptionalPopupTableViewController.swift */; };
+		D447698121A7BF8000620CA0 /* OptionalTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D447698021A7BF8000620CA0 /* OptionalTableViewCell.swift */; };
 		D466D4CF2137D47500FD6FBA /* BankTransferViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D466D4CE2137D47500FD6FBA /* BankTransferViewController.swift */; };
 		D466D4D32138225200FD6FBA /* BankTransferTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D466D4D22138225200FD6FBA /* BankTransferTableViewCell.swift */; };
 		D466D4D62138D4B300FD6FBA /* BankConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D466D4D52138D4B300FD6FBA /* BankConstants.swift */; };
@@ -194,6 +196,8 @@
 		D42EE5272071D3C600EF8066 /* Search.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Search.swift; sourceTree = "<group>"; };
 		D42EE5292071D55700EF8066 /* SearchTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTableViewCell.swift; sourceTree = "<group>"; };
 		D42EE52B20721ED000EF8066 /* SearchTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTableViewController.swift; sourceTree = "<group>"; };
+		D447697E21A7BDEF00620CA0 /* OptionalPopupTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionalPopupTableViewController.swift; sourceTree = "<group>"; };
+		D447698021A7BF8000620CA0 /* OptionalTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionalTableViewCell.swift; sourceTree = "<group>"; };
 		D466D4CE2137D47500FD6FBA /* BankTransferViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankTransferViewController.swift; sourceTree = "<group>"; };
 		D466D4D22138225200FD6FBA /* BankTransferTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankTransferTableViewCell.swift; sourceTree = "<group>"; };
 		D466D4D52138D4B300FD6FBA /* BankConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankConstants.swift; sourceTree = "<group>"; };
@@ -455,6 +459,7 @@
 			children = (
 				D48022892068C0240033E202 /* QuoteTableViewCell.swift */,
 				D47A4E762085D0FF00255276 /* QuoteNavigationCollectionViewCell.swift */,
+				D447698021A7BF8000620CA0 /* OptionalTableViewCell.swift */,
 				D48606A120A3EA8100C4FEB5 /* OptionalCollectionViewCell.swift */,
 				D42EE5292071D55700EF8066 /* SearchTableViewCell.swift */,
 				D49A7186207399C000AA947A /* TradeTableViewCell.swift */,
@@ -489,6 +494,7 @@
 				D4802295206B375E0033E202 /* MainViewController.swift */,
 				D480228B2068D52C0033E202 /* QuoteTableViewController.swift */,
 				D486069D20A030B900C4FEB5 /* OptionalPopupViewController.swift */,
+				D447697E21A7BDEF00620CA0 /* OptionalPopupTableViewController.swift */,
 				D47A4E782085D1A700255276 /* QuoteNavigationCollectionViewController.swift */,
 				D480228F2069116F0033E202 /* QuotePageViewController.swift */,
 				D42EE52B20721ED000EF8066 /* SearchTableViewController.swift */,
@@ -610,7 +616,7 @@
 				TargetAttributes = {
 					D480225520688A180033E202 = {
 						CreatedOnToolsVersion = 9.2;
-						ProvisioningStyle = Manual;
+						ProvisioningStyle = Automatic;
 					};
 					D480226920688A180033E202 = {
 						CreatedOnToolsVersion = 9.2;
@@ -807,6 +813,7 @@
 				D49A718120738A9B00AA947A /* TradeTableViewController.swift in Sources */,
 				D48606B220A5283800C4FEB5 /* AccountConstants.swift in Sources */,
 				D48606A820A4429200C4FEB5 /* QuoteConstants.swift in Sources */,
+				D447698121A7BF8000620CA0 /* OptionalTableViewCell.swift in Sources */,
 				D4B3DBCF207B65BE00545376 /* TransactionViewController.swift in Sources */,
 				D47A4E852089958A00255276 /* FileUtils.swift in Sources */,
 				D480229E206B67FE0033E202 /* LoginViewController.swift in Sources */,
@@ -829,6 +836,7 @@
 				D48606B620A5286E00C4FEB5 /* OrderConstants.swift in Sources */,
 				D4A2B2D021893E3A008536F7 /* AboutViewController.swift in Sources */,
 				D4B3DBC72074C55A00545376 /* OrderTableViewCell.swift in Sources */,
+				D447697F21A7BDEF00620CA0 /* OptionalPopupTableViewController.swift in Sources */,
 				D420B2F020E2207F0045B6AF /* KlineYAxisRenderer.swift in Sources */,
 				D466D4D62138D4B300FD6FBA /* BankConstants.swift in Sources */,
 				D480225C20688A180033E202 /* QuoteViewController.swift in Sources */,
@@ -1049,8 +1057,8 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = ETY2JG84H2;
 				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1066,8 +1074,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.shinnytech.zhongqihuo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "953163f4-e6ea-4d7b-aed0-7e4edcad19c6";
-				PROVISIONING_PROFILE_SPECIFIER = zhongqihuo;
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/shinnyfutures/shinnyfutures-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1082,8 +1090,8 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = ETY2JG84H2;
 				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1101,8 +1109,8 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.shinnytech.zhongqihuo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "953163f4-e6ea-4d7b-aed0-7e4edcad19c6";
-				PROVISIONING_PROFILE_SPECIFIER = zhongqihuo;
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/shinnyfutures/shinnyfutures-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

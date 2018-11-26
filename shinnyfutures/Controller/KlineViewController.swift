@@ -30,6 +30,8 @@ class KlineViewController: BaseChartViewController {
     var moveGesture: UIPanGestureRecognizer!
     var isMoveHighlight = false
     var startX = CGFloat(0.0)
+    //最新价数据
+    var latestLimitLines = [String: ChartLimitLine]()
 
     override func viewDidLoad() {
         //为了marker view中的分类
@@ -183,19 +185,20 @@ class KlineViewController: BaseChartViewController {
                 let itemCount = datas.count
                 let entryCount = candleData?.getDataSetByIndex(0).entryCount
                 if itemCount == entryCount {
-                    //                    print("k线图刷新")
+                    //print("k线图刷新")
                     let xValue = Double(last_id)
                     candleData?.removeEntry(xValue: xValue, dataSetIndex: 0)
                     lineData.removeEntry(xValue: xValue, dataSetIndex: 0)
                     lineData.removeEntry(xValue: xValue, dataSetIndex: 1)
                     lineData.removeEntry(xValue: xValue, dataSetIndex: 2)
                     generateLineCandleDataEntry(candleData: candleData!, left_id: left_id, index: last_id, datas: datas)
+                    refreshLatestLine(data: datas["\(last_id)"])
                 } else {
                     var left_index = chart[ChartConstants.left_id].intValue
                     let right_index = chart[ChartConstants.right_id].intValue
                     if left_index < 0 {left_index = 0}
                     if left_index < left_id {
-                        //                        NSLog("向前添加柱子")
+                        //NSLog("向前添加柱子")
                         var index = left_id - 1
                         while index >= left_index {
                             generateLineCandleDataEntry(candleData: candleData!, left_id: left_index, index: index, datas: datas)
@@ -203,11 +206,12 @@ class KlineViewController: BaseChartViewController {
                         }
                         left_id = left_index
                     } else if right_index > right_id {
-                        //                        NSLog("向后添加柱子")
+                        //NSLog("向后添加柱子")
                         for index in (right_id + 1)...right_index {
                             generateLineCandleDataEntry(candleData: candleData!, left_id: left_id, index: index, datas: datas)
                         }
                         right_id = right_index
+                        refreshLatestLine(data: datas["\(last_id)"])
                     }
                 }
                 combineData?.notifyDataChanged()
@@ -248,7 +252,41 @@ class KlineViewController: BaseChartViewController {
                 chartView.setVisibleXRangeMaximum(200)
                 chartView.setVisibleXRangeMinimum(7)
                 chartView.zoom(scaleX: scaleX, scaleY: 1.0, xValue: Double(last_id), yValue: 0.0, axis: YAxis.AxisDependency.left)
+                generateLatestLine(data: datas["\(right_id)"])
+                (chartView.marker as! KlineMarkerView).resizeXib(heiht: chartView.viewPortHandler.contentHeight)
             }
+        }
+    }
+
+    //生成最新价线
+    private func generateLatestLine(data: JSON){
+        let limit = data[KlineConstants.close].stringValue
+        let decimal = dataManager.getDecimalByPtick(instrumentId: dataManager.sInstrumentId)
+        let label = dataManager.saveDecimalByPtick(decimal: decimal, data: limit)
+        if let limit = Double(limit) {
+            let chartLimitLine = ChartLimitLine(limit: limit, label: label)
+            chartLimitLine.lineWidth = 1.0
+            chartLimitLine.lineDashLengths = [2.0, 2.0]
+            chartLimitLine.lineDashPhase = 0.0
+            chartLimitLine.lineColor = UIColor(red: 63/255.0, green: 63/255.0, blue: 63/255.0, alpha: 1)
+            chartLimitLine.labelPosition = .rightTop
+            chartLimitLine.valueFont = UIFont.systemFont(ofSize: 10.0)
+            chartLimitLine.valueTextColor = UIColor(red: 63/255.0, green: 63/255.0, blue: 63/255.0, alpha: 1)
+            latestLimitLines["latest"] = chartLimitLine
+            chartView.leftAxis.addLimitLine(chartLimitLine)
+        }
+
+    }
+
+
+    //刷新最新价线
+    private func refreshLatestLine(data: JSON){
+        let limit = data[KlineConstants.close].doubleValue
+        guard let limitLine = latestLimitLines["latest"] else {return}
+        if limitLine.limit != limit{
+            chartView.leftAxis.removeLimitLine(limitLine)
+            latestLimitLines.removeValue(forKey: "latest")
+            generateLatestLine(data: data)
         }
     }
 

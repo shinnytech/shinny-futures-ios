@@ -15,12 +15,21 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var login: UIButton!
     @IBOutlet weak var userName: UITextField!
     @IBOutlet weak var userPassword: UITextField!
+    @IBOutlet weak var passwordLock: UIButton!
     let sDataManager = DataManager.getInstance()
+    var isLocked = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
         if let userName = UserDefaults.standard.string(forKey: "userName") {
             self.userName.text = userName
+        }
+
+        self.isLocked = UserDefaults.standard.bool(forKey: "isLocked")
+        if self.isLocked{
+            passwordLock.setImage(UIImage(named: "lock", in: Bundle(identifier: "com.shinnytech.futures"), compatibleWith: nil), for: .normal)
+        }else{
+            passwordLock.setImage(UIImage(named: "unlock", in: Bundle(identifier: "com.shinnytech.futures"), compatibleWith: nil), for: .normal)
         }
         
         if let userPassword = UserDefaults.standard.string(forKey: "userPassword") {
@@ -134,7 +143,12 @@ class LoginViewController: UIViewController {
             //登陆成功的提示在DataManager中的showMessage解析中弹出
             self.sDataManager.sIsLogin = true
             UserDefaults.standard.set(self.userName.text!, forKey: "userName")
-            UserDefaults.standard.set(self.userPassword.text!, forKey: "userPassword")
+            if self.isLocked {
+                UserDefaults.standard.set(self.userPassword.text!, forKey: "userPassword")
+            }else{
+                UserDefaults.standard.set("", forKey: "userPassword")
+            }
+
             UserDefaults.standard.set(button.dropView.selected_index, forKey: "brokerInfo")
             //手动式segue，代码触发；自动式指通过点击某个按钮出发
             switch self.sDataManager.sToLoginTarget {
@@ -185,6 +199,21 @@ class LoginViewController: UIViewController {
     @IBAction func passwordDone(_ sender: UITextField) {
         userPassword.resignFirstResponder()
     }
+
+    @IBAction func lockOrUnlock(_ sender: UIButton) {
+        if self.isLocked{
+            passwordLock.setImage(UIImage(named: "unlock", in: Bundle(identifier: "com.shinnytech.futures"), compatibleWith: nil), for: .normal)
+            self.isLocked = false
+            UserDefaults.standard.set(false, forKey: "isLocked")
+            ToastUtils.showPositiveMessage(message: "不保存密码")
+        }else{
+            passwordLock.setImage(UIImage(named: "lock", in: Bundle(identifier: "com.shinnytech.futures"), compatibleWith: nil), for: .normal)
+            self.isLocked = true
+            UserDefaults.standard.set(true, forKey: "isLocked")
+             ToastUtils.showNegativeMessage(message: "保存密码")
+        }
+    }
+
 }
 
 
