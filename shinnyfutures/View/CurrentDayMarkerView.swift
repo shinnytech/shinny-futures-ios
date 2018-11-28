@@ -75,17 +75,17 @@ open class CurrentDayMarkerView: MarkerView {
                 let volumeDelta = volume - dataPre[KlineConstants.volume].intValue
                 self.volumeDalta.text = "\(volumeDelta)"
                 if volumeDelta < 0 {
-                    self.volumeDalta.textColor = UIColor.green
+                    self.volumeDalta.textColor = CommonConstants.GREEN_TEXT
                 }else{
-                    self.volumeDalta.textColor = UIColor.red
+                    self.volumeDalta.textColor = CommonConstants.RED_TEXT
                 }
 
                 let closeOiDelta = closeOi - dataPre[KlineConstants.close_oi].intValue
                 self.closeOiDelta.text = "\(closeOiDelta)"
                 if closeOiDelta < 0 {
-                    self.closeOiDelta.textColor = UIColor.green
+                    self.closeOiDelta.textColor = CommonConstants.GREEN_TEXT
                 }else{
-                    self.closeOiDelta.textColor = UIColor.red
+                    self.closeOiDelta.textColor = CommonConstants.RED_TEXT
                 }
             }else{
                 self.volumeDalta.text = "-"

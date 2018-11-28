@@ -59,11 +59,6 @@ class SearchTableViewController: UITableViewController, UISearchResultsUpdating 
             fatalError("The dequeued cell is not an instance of TradeTableViewCell.")
         }
 
-        //全屏分割线
-        cell.preservesSuperviewLayoutMargins = false
-        cell.separatorInset = UIEdgeInsets.zero
-        cell.layoutMargins = UIEdgeInsets.zero
-
         // Fetches the appropriate quote for the data source layout.
         let quote = (searchController.isActive) ? searchResults[indexPath.row] : searchHistory[indexPath.row]
 
@@ -96,6 +91,7 @@ class SearchTableViewController: UITableViewController, UISearchResultsUpdating 
             } else {
                 dataManager.sInstrumentId = searchHistory[indexPath.row].instrument_id!
             }
+            DataManager.getInstance().sToQuoteTarget = ""
             DataManager.getInstance().sPreInsList = DataManager.getInstance().sRtnMD[RtnMDConstants.ins_list].stringValue
         }
     }

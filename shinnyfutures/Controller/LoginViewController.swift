@@ -115,7 +115,9 @@ class LoginViewController: UIViewController {
     //Set the drop down menu's options
     @objc func loadBrokerInfo() {
         let jsonArray = sDataManager.sRtnBrokers[RtnTDConstants.brokers].arrayValue
+        if jsonArray.isEmpty {return}
         let button = self.view.viewWithTag(100) as! DropDownBtn
+        button.dropView.dropDownOptions.removeAll()
         for json in jsonArray {
             button.dropView.dropDownOptions.append(json.stringValue)
             button.dropView.tableView?.reloadData()

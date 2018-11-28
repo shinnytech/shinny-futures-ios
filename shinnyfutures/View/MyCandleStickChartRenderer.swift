@@ -276,7 +276,7 @@ open class MyCandleStickChartRenderer: CandleStickChartRenderer {
                         x: maxPt.x,
                         y: maxPt.y - yoffset / 2),
                     align: .left,
-                    attributes: [NSAttributedStringKey.font: valueFont, NSAttributedStringKey.foregroundColor: UIColor.red])
+                    attributes: [NSAttributedStringKey.font: valueFont, NSAttributedStringKey.foregroundColor: CommonConstants.RED_TEXT])
 
                 drawText(
                     context: context,
@@ -289,7 +289,7 @@ open class MyCandleStickChartRenderer: CandleStickChartRenderer {
                         x: minPt.x,
                         y: minPt.y - yoffset / 2),
                     align: .left,
-                    attributes: [NSAttributedStringKey.font: valueFont, NSAttributedStringKey.foregroundColor: UIColor.green])
+                    attributes: [NSAttributedStringKey.font: valueFont, NSAttributedStringKey.foregroundColor: CommonConstants.GREEN_TEXT])
             }
         }
     }

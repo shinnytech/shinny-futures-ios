@@ -75,11 +75,6 @@ class QuoteTableViewController: UITableViewController, UIPopoverPresentationCont
             fatalError("The dequeued cell is not an instance of QuoteTableViewCell.")
         }
 
-        //全屏分割线
-        cell.preservesSuperviewLayoutMargins = false
-        cell.separatorInset = UIEdgeInsets.zero
-        cell.layoutMargins = UIEdgeInsets.zero
-
         // Fetches the appropriate quote for the data source layout.
         let quote = quotes[indexPath.row]
         let instrumentId = quote[QuoteConstants.instrument_id].stringValue
@@ -91,13 +86,13 @@ class QuoteTableViewController: UITableViewController, UIPopoverPresentationCont
             if isUpperLimit {
                 let upper_limit = quote[QuoteConstants.upper_limit].stringValue
                 if let upper_limit = Float(upper_limit){
-                    if upper_limit < 0 {cell.last.textColor = UIColor.green} else {cell.last.textColor = UIColor.red}
+                    if upper_limit < 0 {cell.last.textColor = CommonConstants.GREEN_TEXT} else {cell.last.textColor = CommonConstants.RED_TEXT}
                 }
                 cell.last.text = dataManager.saveDecimalByPtick(decimal: decimal, data: upper_limit)
             }else{
                 let lower_limit = quote[QuoteConstants.lower_limit].stringValue
                 if let lower_limit = Float(lower_limit){
-                    if lower_limit < 0 {cell.last.textColor = UIColor.green} else {cell.last.textColor = UIColor.red}
+                    if lower_limit < 0 {cell.last.textColor = CommonConstants.GREEN_TEXT} else {cell.last.textColor = CommonConstants.RED_TEXT}
                 }
                 cell.last.text = dataManager.saveDecimalByPtick(decimal: decimal, data: lower_limit)
             }
@@ -105,13 +100,13 @@ class QuoteTableViewController: UITableViewController, UIPopoverPresentationCont
             if isChangePercent {
                 let bid_price1 = quote[QuoteConstants.bid_price1].stringValue
                 if let bid_price1 = Float(bid_price1){
-                    if bid_price1 < 0 {cell.changePercent.textColor = UIColor.green} else {cell.changePercent.textColor = UIColor.red}
+                    if bid_price1 < 0 {cell.changePercent.textColor = CommonConstants.GREEN_TEXT} else {cell.changePercent.textColor = CommonConstants.RED_TEXT}
                 }
                 cell.changePercent.text = dataManager.saveDecimalByPtick(decimal: decimal, data: bid_price1)
             } else {
                 let ask_price1 = quote[QuoteConstants.ask_price1].stringValue
                 if let ask_price1 = Float(ask_price1){
-                    if ask_price1 < 0 {cell.changePercent.textColor = UIColor.green} else {cell.changePercent.textColor = UIColor.red}
+                    if ask_price1 < 0 {cell.changePercent.textColor = CommonConstants.GREEN_TEXT} else {cell.changePercent.textColor = CommonConstants.RED_TEXT}
                 }
                 cell.changePercent.text = dataManager.saveDecimalByPtick(decimal: decimal, data: ask_price1)
             }
@@ -125,9 +120,9 @@ class QuoteTableViewController: UITableViewController, UIPopoverPresentationCont
             let pre_settlement = quote[QuoteConstants.pre_settlement].stringValue
             cell.last.text = dataManager.saveDecimalByPtick(decimal: decimal, data: last)
             if let last = Float(last), let pre_settlement = Float(pre_settlement) {
-                if last < 0 {cell.last.textColor = UIColor.green} else {cell.last.textColor = UIColor.red}
+                if last < 0 {cell.last.textColor = CommonConstants.GREEN_TEXT} else {cell.last.textColor = CommonConstants.RED_TEXT}
                 let change = last - pre_settlement
-                if change < 0 {cell.changePercent.textColor = UIColor.green} else {cell.changePercent.textColor = UIColor.red}
+                if change < 0 {cell.changePercent.textColor = CommonConstants.GREEN_TEXT} else {cell.changePercent.textColor = CommonConstants.RED_TEXT}
                 if isChangePercent {
                     let change_percent = change / pre_settlement * 100
                     cell.changePercent.text = dataManager.saveDecimalByPtick(decimal: 2, data: "\(change_percent)")
@@ -158,30 +153,32 @@ class QuoteTableViewController: UITableViewController, UIPopoverPresentationCont
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 35.0))
-        headerView.backgroundColor = UIColor(red: 31/255, green:31/255, blue: 31/255, alpha: 1.0)
+        headerView.backgroundColor = CommonConstants.QUOTE_TABLE_HEADER_2
         let stackView = UIStackView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width - 10, height: 35.0))
         stackView.distribution = .fillEqually
         let name = UILabel()
         name.textColor = UIColor.white
         name.text = "合约名称"
         name.textAlignment = .center
+        name.backgroundColor = CommonConstants.QUOTE_TABLE_HEADER_1
         let last = UILabel()
         last.textColor = UIColor.white
         last.textAlignment = .right
         let tapUpperLimit = UITapGestureRecognizer(target: self, action: #selector(QuoteTableViewController.tapUpperLimit))
         last.isUserInteractionEnabled = true
         last.addGestureRecognizer(tapUpperLimit)
+        last.backgroundColor = CommonConstants.QUOTE_TABLE_HEADER_1
 
         let changePercent = UILabel()
         changePercent.textColor = UIColor.white
-        changePercent.backgroundColor = UIColor(red: 51/255, green: 51/255, blue: 51/255, alpha: 1.0)
+        changePercent.backgroundColor = CommonConstants.QUOTE_TABLE_HEADER_2
         changePercent.textAlignment = .right
         let tapChangePercent = UITapGestureRecognizer(target: self, action: #selector(QuoteTableViewController.tapChangePercent))
         changePercent.isUserInteractionEnabled = true
         changePercent.addGestureRecognizer(tapChangePercent)
 
         let openInterest = UILabel()
-        openInterest.backgroundColor = UIColor(red: 31/255, green:31/255, blue: 31/255, alpha: 1.0)
+        openInterest.backgroundColor = CommonConstants.QUOTE_TABLE_HEADER_2
         openInterest.textColor = UIColor.white
         openInterest.textAlignment = .right
         let tapOpenInterest = UITapGestureRecognizer(target: self, action: #selector(QuoteTableViewController.tapOpenInterest))
@@ -268,6 +265,7 @@ class QuoteTableViewController: UITableViewController, UIPopoverPresentationCont
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let indexPath = tableView.indexPathForSelectedRow {
+            DataManager.getInstance().sToQuoteTarget = ""
             let instrumentId = insList[indexPath.row]
             DataManager.getInstance().sPreInsList = DataManager.getInstance().sRtnMD[RtnMDConstants.ins_list].stringValue
             dataManager.sInstrumentId = instrumentId

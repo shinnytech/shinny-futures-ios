@@ -41,6 +41,8 @@ class DataManager {
     var sPriceType = CommonConstants.COUNTERPARTY_PRICE
     //进入登陆页的来源
     var sToLoginTarget = ""
+    //进入合约详情页的来源
+    var sToQuoteTarget = ""
 
     func parseLatestFile() {
         NSLog("解析开始")
@@ -67,9 +69,9 @@ class DataManager {
                 guard let latestJson = try JSONSerialization.jsonObject(with: latestData, options: []) as? [String: Any] else { return }
                 for (instrument_id, value) in latestJson {
                     let subJson = value as! [String: Any]
-                    guard let classN = subJson["class"] as? String else {return}
+                    guard let classN = subJson["class"] as? String else {continue}
                     if !"FUTURE_CONT".elementsEqual(classN) && !"FUTURE".elementsEqual(classN) && !"FUTURE_COMBINE".elementsEqual(classN){continue}
-                    guard let ins_name = subJson["ins_name"] as? String else {return}
+                    guard let ins_name = subJson["ins_name"] as? String else {continue}
                     let expired = subJson["expired"] as? Bool
                     let exchange_id = subJson["exchange_id"] as! String
                     let price_tick = (subJson["price_tick"] as? NSNumber)?.stringValue
@@ -85,16 +87,16 @@ class DataManager {
 
                         let py = subJson["py"] as? String
                         searchEntity.py = py
-                        guard let underlying_symbol = subJson["underlying_symbol"] as? String else {return}
+                        guard let underlying_symbol = subJson["underlying_symbol"] as? String else {continue}
                         searchEntity.underlying_symbol = underlying_symbol
-                        guard let subJsonFuture = latestJson[underlying_symbol] as? [String: Any] else {return}
+                        guard let subJsonFuture = latestJson[underlying_symbol] as? [String: Any] else {continue}
                         let pre_volume = (subJsonFuture["pre_volume"] as? NSNumber)?.intValue
                         searchEntity.pre_volume = pre_volume
                     }
 
                     if "FUTURE".elementsEqual(classN){
-                        guard let product_short_name = subJson["product_short_name"] as? String else {return}
-                        guard let expired = expired else {return}
+                        guard let product_short_name = subJson["product_short_name"] as? String else {continue}
+                        guard let expired = expired else {continue}
                         switch exchange_id {
                         case "SHFE":
                             if !expired{
@@ -138,10 +140,10 @@ class DataManager {
                     }
 
                     if "FUTURE_COMBINE".elementsEqual(classN){
-                        guard let leg1_symbol = subJson["leg1_symbol"] as? String else {return}
-                        guard let subJsonFuture = latestJson[leg1_symbol] as? [String: Any] else {return}
-                        guard let product_short_name = subJsonFuture["product_short_name"] as? String else {return}
-                        guard let expired = expired else {return}
+                        guard let leg1_symbol = subJson["leg1_symbol"] as? String else {continue}
+                        guard let subJsonFuture = latestJson[leg1_symbol] as? [String: Any] else {continue}
+                        guard let product_short_name = subJsonFuture["product_short_name"] as? String else {continue}
+                        guard let expired = expired else {continue}
                         switch exchange_id {
                         case "CZCE":
                             if !expired{
@@ -314,12 +316,10 @@ class DataManager {
 
     //清空账户
     func clearAccount() {
-        sRtnBrokers = JSON.null
         sRtnTD = JSON.null
         sIsLogin = false
         sIsEmpty = false
         sUser_id = ""
-        sRtnBrokers = JSON()
         sRtnTD = JSON()
     }
 

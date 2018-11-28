@@ -45,15 +45,32 @@ class QuoteViewController: UIViewController, UIPopoverPresentationControllerDele
         if optional.contains(dataManager.sInstrumentId){
             save.image = UIImage(named: "heart", in: Bundle(identifier: "com.shinnytech.futures"), compatibleWith: nil)
         }
-        // Do any additional setup after loading the view, typically from a nib.
+
+        initUpNavBottomLine(view: currentDay)
+        initUpNavBottomLine(view: klineDay)
+        initUpNavBottomLine(view: klineHour)
+        initUpNavBottomLine(view: klineMinute)
         currentDay.setTitleColor(UIColor.yellow, for: .normal)
+        highlightUpNavBottomLine(view: currentDay)
+
         handicap.setTitleColor(UIColor.yellow, for: .normal)
 
         if dataManager.sIsEmpty {
-            downStackView.removeArrangedSubview(position)
-            downStackView.removeArrangedSubview(order)
-            downStackView.removeArrangedSubview(transaction)
+            position.isHidden = true
+            order.isHidden = true
+            transaction.isHidden = true
+        }else {
+            highlightBottomNavBorderLine(view: handicap)
+            unhighlightBottomNavBorderLine(view: position)
+            unhighlightBottomNavBorderLine(view: order)
+            unhighlightBottomNavBorderLine(view: transaction)
+
+            //从主页导航栏而来
+            if dataManager.sToQuoteTarget.elementsEqual("Position") {
+                switchToPosition()
+            }
         }
+
 
         NotificationCenter.default.addObserver(self, selector: #selector(showUpView), name: Notification.Name(CommonConstants.ShowUpViewNotification), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(hideUpView), name: Notification.Name(CommonConstants.HideUpViewNotification), object: nil)
@@ -192,56 +209,171 @@ class QuoteViewController: UIViewController, UIPopoverPresentationControllerDele
         }
     }
 
+    //初始化顶部导航按钮添加横线
+    func initUpNavBottomLine(view: UIButton) {
+        let lineView = UIView(frame: CGRect(x: 0, y: view.frame.size.height - 2, width: view.frame.size.width, height: 2))
+        lineView.backgroundColor = CommonConstants.NAV_TEXT_UNHIGHLIGHTED
+        lineView.tag = 100
+        view.addSubview(lineView)
+    }
+
+    func highlightUpNavBottomLine(view: UIButton) {
+        if let viewWithTag = view.viewWithTag(100) {
+            viewWithTag.backgroundColor = CommonConstants.NAV_TEXT_HIGHLIGHTED
+        }
+    }
+
+    func unhighlightUpNavBottomLine(view: UIButton) {
+        if let viewWithTag = view.viewWithTag(100) {
+            viewWithTag.backgroundColor = CommonConstants.NAV_TEXT_UNHIGHLIGHTED
+        }
+    }
+
+
     func controlKlineVisibility(index: Int) {
         switch index {
         case 0:
-            currentDay.setTitleColor(UIColor.yellow, for: .normal)
-            klineDay.setTitleColor(UIColor.white, for: .normal)
-            klineHour.setTitleColor(UIColor.white, for: .normal)
-            klineMinute.setTitleColor(UIColor.white, for: .normal)
+            currentDay.setTitleColor(CommonConstants.NAV_TEXT_HIGHLIGHTED, for: .normal)
+            highlightUpNavBottomLine(view: currentDay)
+            klineDay.setTitleColor(CommonConstants.NAV_TEXT, for: .normal)
+            unhighlightUpNavBottomLine(view: klineDay)
+            klineHour.setTitleColor(CommonConstants.NAV_TEXT, for: .normal)
+            unhighlightUpNavBottomLine(view: klineHour)
+            klineMinute.setTitleColor(CommonConstants.NAV_TEXT, for: .normal)
+            unhighlightUpNavBottomLine(view: klineMinute)
         case 1:
-            currentDay.setTitleColor(UIColor.white, for: .normal)
-            klineDay.setTitleColor(UIColor.yellow, for: .normal)
-            klineHour.setTitleColor(UIColor.white, for: .normal)
-            klineMinute.setTitleColor(UIColor.white, for: .normal)
+            currentDay.setTitleColor(CommonConstants.NAV_TEXT, for: .normal)
+            unhighlightUpNavBottomLine(view: currentDay)
+            klineDay.setTitleColor(CommonConstants.NAV_TEXT_HIGHLIGHTED, for: .normal)
+            highlightUpNavBottomLine(view: klineDay)
+            klineHour.setTitleColor(CommonConstants.NAV_TEXT, for: .normal)
+            unhighlightUpNavBottomLine(view: klineHour)
+            klineMinute.setTitleColor(CommonConstants.NAV_TEXT, for: .normal)
+            unhighlightUpNavBottomLine(view: klineMinute)
         case 2:
-            currentDay.setTitleColor(UIColor.white, for: .normal)
-            klineDay.setTitleColor(UIColor.white, for: .normal)
-            klineHour.setTitleColor(UIColor.yellow, for: .normal)
-            klineMinute.setTitleColor(UIColor.white, for: .normal)
+            currentDay.setTitleColor(CommonConstants.NAV_TEXT, for: .normal)
+            unhighlightUpNavBottomLine(view: currentDay)
+            klineDay.setTitleColor(CommonConstants.NAV_TEXT, for: .normal)
+            unhighlightUpNavBottomLine(view: klineDay)
+            klineHour.setTitleColor(CommonConstants.NAV_TEXT_HIGHLIGHTED, for: .normal)
+            highlightUpNavBottomLine(view: klineHour)
+            klineMinute.setTitleColor(CommonConstants.NAV_TEXT, for: .normal)
+            unhighlightUpNavBottomLine(view: klineMinute)
         case 3:
-            currentDay.setTitleColor(UIColor.white, for: .normal)
-            klineDay.setTitleColor(UIColor.white, for: .normal)
-            klineHour.setTitleColor(UIColor.white, for: .normal)
-            klineMinute.setTitleColor(UIColor.yellow, for: .normal)
+            currentDay.setTitleColor(CommonConstants.NAV_TEXT, for: .normal)
+            unhighlightUpNavBottomLine(view: currentDay)
+            klineDay.setTitleColor(CommonConstants.NAV_TEXT, for: .normal)
+            unhighlightUpNavBottomLine(view: klineDay)
+            klineHour.setTitleColor(CommonConstants.NAV_TEXT, for: .normal)
+            unhighlightUpNavBottomLine(view: klineHour)
+            klineMinute.setTitleColor(CommonConstants.NAV_TEXT_HIGHLIGHTED, for: .normal)
+            highlightUpNavBottomLine(view: klineMinute)
         default:
             break
 
         }
     }
 
+    //初始化底部导航按钮添加横线
+    func highlightBottomNavBorderLine(view: UIButton) {
+        if let viewWithTag = view.viewWithTag(100) {
+            viewWithTag.removeFromSuperview()
+        }
+        if let viewWithTag = view.viewWithTag(101) {
+            viewWithTag.removeFromSuperview()
+        }
+        if let viewWithTag = view.viewWithTag(102) {
+            viewWithTag.removeFromSuperview()
+        }
+        if let viewWithTag = view.viewWithTag(103) {
+            viewWithTag.removeFromSuperview()
+        }
+
+        let lineView0 = UIView(frame: CGRect(x: 0, y: 0, width: 2, height: view.frame.size.height))
+        lineView0.backgroundColor = CommonConstants.NAV_TEXT_HIGHLIGHTED
+        lineView0.tag = 100
+
+        let lineView1 = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 2))
+        lineView1.backgroundColor = CommonConstants.NAV_TEXT_HIGHLIGHTED
+        lineView1.tag = 101
+
+        //打补丁，真机时宽度计算错误
+        var x = view.frame.size.width
+        let width = UIScreen.main.bounds.width / 4
+        if x > width {
+            x = width - 1.5
+        }else {
+            x -= 2
+        }
+        let lineView2 = UIView(frame: CGRect(x: x, y: 0, width: 2, height: view.frame.size.height))
+        lineView2.backgroundColor = CommonConstants.NAV_TEXT_HIGHLIGHTED
+        lineView2.tag = 102
+
+        view.addSubview(lineView0)
+        view.addSubview(lineView1)
+        view.addSubview(lineView2)
+    }
+
+    func unhighlightBottomNavBorderLine(view: UIButton) {
+        if let viewWithTag = view.viewWithTag(100) {
+            viewWithTag.removeFromSuperview()
+        }
+        if let viewWithTag = view.viewWithTag(101) {
+            viewWithTag.removeFromSuperview()
+        }
+        if let viewWithTag = view.viewWithTag(102) {
+            viewWithTag.removeFromSuperview()
+        }
+        if let viewWithTag = view.viewWithTag(103) {
+            viewWithTag.removeFromSuperview()
+        }
+
+        let lineView3 = UIView(frame: CGRect(x: 0, y: view.frame.size.height - 2, width: view.frame.size.width, height: 2))
+        lineView3.backgroundColor = CommonConstants.NAV_TEXT_HIGHLIGHTED
+        lineView3.tag = 103
+
+        view.addSubview(lineView3)
+
+    }
+
     func controlTransactionVisibility(index: Int) {
         switch index {
         case 0:
-            handicap.setTitleColor(UIColor.yellow, for: .normal)
-            position.setTitleColor(UIColor.white, for: .normal)
-            order.setTitleColor(UIColor.white, for: .normal)
-            transaction.setTitleColor(UIColor.white, for: .normal)
+            handicap.setTitleColor(CommonConstants.NAV_TEXT_HIGHLIGHTED, for: .normal)
+            highlightBottomNavBorderLine(view: handicap)
+            position.setTitleColor(CommonConstants.NAV_TEXT, for: .normal)
+            unhighlightBottomNavBorderLine(view: position)
+            order.setTitleColor(CommonConstants.NAV_TEXT, for: .normal)
+            unhighlightBottomNavBorderLine(view: order)
+            transaction.setTitleColor(CommonConstants.WHITE_TEXT, for: .normal)
+            unhighlightBottomNavBorderLine(view: transaction)
         case 1:
-            handicap.setTitleColor(UIColor.white, for: .normal)
-            position.setTitleColor(UIColor.yellow, for: .normal)
-            order.setTitleColor(UIColor.white, for: .normal)
-            transaction.setTitleColor(UIColor.white, for: .normal)
+            handicap.setTitleColor(CommonConstants.NAV_TEXT, for: .normal)
+            unhighlightBottomNavBorderLine(view: handicap)
+            position.setTitleColor(CommonConstants.NAV_TEXT_HIGHLIGHTED, for: .normal)
+            highlightBottomNavBorderLine(view: position)
+            order.setTitleColor(CommonConstants.NAV_TEXT, for: .normal)
+            unhighlightBottomNavBorderLine(view: order)
+            transaction.setTitleColor(CommonConstants.WHITE_TEXT, for: .normal)
+            unhighlightBottomNavBorderLine(view: transaction)
         case 2:
-            handicap.setTitleColor(UIColor.white, for: .normal)
-            position.setTitleColor(UIColor.white, for: .normal)
-            order.setTitleColor(UIColor.yellow, for: .normal)
-            transaction.setTitleColor(UIColor.white, for: .normal)
+            handicap.setTitleColor(CommonConstants.NAV_TEXT, for: .normal)
+            unhighlightBottomNavBorderLine(view: handicap)
+            position.setTitleColor(CommonConstants.NAV_TEXT, for: .normal)
+            unhighlightBottomNavBorderLine(view: position)
+            order.setTitleColor(CommonConstants.NAV_TEXT_HIGHLIGHTED, for: .normal)
+            highlightBottomNavBorderLine(view: order)
+            transaction.setTitleColor(CommonConstants.WHITE_TEXT, for: .normal)
+            unhighlightBottomNavBorderLine(view: transaction)
         case 3:
-            handicap.setTitleColor(UIColor.white, for: .normal)
-            position.setTitleColor(UIColor.white, for: .normal)
-            order.setTitleColor(UIColor.white, for: .normal)
-            transaction.setTitleColor(UIColor.yellow, for: .normal)
+            handicap.setTitleColor(CommonConstants.NAV_TEXT, for: .normal)
+            unhighlightBottomNavBorderLine(view: handicap)
+            position.setTitleColor(CommonConstants.NAV_TEXT, for: .normal)
+            unhighlightBottomNavBorderLine(view: position)
+            order.setTitleColor(CommonConstants.NAV_TEXT, for: .normal)
+            unhighlightBottomNavBorderLine(view: order)
+            transaction.setTitleColor(CommonConstants.NAV_TEXT_HIGHLIGHTED, for: .normal)
+            highlightBottomNavBorderLine(view: transaction)
         default:
             break
 

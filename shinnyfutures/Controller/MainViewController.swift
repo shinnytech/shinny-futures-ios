@@ -148,17 +148,17 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
     ////////////////////////////////////////////////////////////////////////////////
     override func viewDidLoad() {
         super.viewDidLoad()
-        UIApplication.shared.statusBarStyle = .lightContent
         let dict: NSDictionary = [NSAttributedStringKey.foregroundColor: UIColor.white, NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 18)]
         self.navigationController?.navigationBar.titleTextAttributes = dict as? [NSAttributedStringKey: Any]
-        self.navigationController?.navigationBar.barTintColor = UIColor.black
+        self.navigationController?.navigationBar.barTintColor = CommonConstants.QUOTE_PAGE_HEADER
         self.navigationController?.navigationBar.tintColor = UIColor.white
         button.frame = CGRect(x: 0, y: 0, width: 200, height: 40)
         button.setTitle(CommonConstants.titleArray[1], for: .normal)
         button.setTitleColor(UIColor.white, for: .normal)
         self.navigationItem.titleView = button
         definesPresentationContext = true
-        
+
+        initDefaultConfig()
         initTMDURLs()
         getAppVersion()
         self.mdWebSocketUtils.mdWebSocketUtilsDelegate = self
@@ -219,9 +219,9 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
         case CommonConstants.MainToAbout:
             controlSlideMenuVisibility()
         case CommonConstants.QuotePageViewController:
-            quotePageViewController = segue.destination as! QuotePageViewController
+            quotePageViewController = segue.destination as? QuotePageViewController
         case CommonConstants.QuoteNavigationCollectionViewController:
-            quoteNavigationCollectionViewController = segue.destination as! QuoteNavigationCollectionViewController
+            quoteNavigationCollectionViewController = segue.destination as? QuoteNavigationCollectionViewController
         default:
             return
         }
@@ -259,6 +259,7 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
     }
 
     @IBAction func toPosition(_ sender: UIButton) {
+        DataManager.getInstance().sToQuoteTarget = "Position"
         controlSlideMenuVisibility()
         if !DataManager.getInstance().sIsLogin {
             DataManager.getInstance().sToLoginTarget = "Position"
@@ -269,11 +270,6 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
             //进入合约详情页的入口有：合约列表页，登陆页，搜索页，主页
             DataManager.getInstance().sPreInsList = DataManager.getInstance().sRtnMD[RtnMDConstants.ins_list].stringValue
             DataManager.getInstance().sInstrumentId = instrumentId
-            MDWebSocketUtils.getInstance().sendSubscribeQuote(insList: instrumentId)
-            MDWebSocketUtils.getInstance().sendSetChart(insList: instrumentId)
-            MDWebSocketUtils.getInstance().sendSetChartDay(insList: instrumentId, viewWidth: CommonConstants.VIEW_WIDTH)
-            MDWebSocketUtils.getInstance().sendSetChartHour(insList: instrumentId, viewWidth: CommonConstants.VIEW_WIDTH)
-            MDWebSocketUtils.getInstance().sendSetChartMinute(insList: instrumentId, viewWidth: CommonConstants.VIEW_WIDTH)
         }
     }
 
@@ -545,10 +541,10 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
     }
 
     @objc func refreshMenu(){
-        menu.removeArrangedSubview(account)
-        menu.removeArrangedSubview(position)
-        menu.removeArrangedSubview(trade)
-        menu.removeArrangedSubview(transfer)
+        account.isHidden = true
+        position.isHidden = true
+        trade.isHidden = true
+        transfer.isHidden = true
     }
 
     @objc func popupOptionalList(){

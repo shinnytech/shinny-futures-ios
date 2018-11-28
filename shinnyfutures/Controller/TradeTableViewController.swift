@@ -60,11 +60,6 @@ class TradeTableViewController: UITableViewController {
             fatalError("The dequeued cell is not an instance of TradeTableViewCell.")
         }
 
-        //全屏分割线
-        cell.preservesSuperviewLayoutMargins = false
-        cell.separatorInset = UIEdgeInsets.zero
-        cell.layoutMargins = UIEdgeInsets.zero
-
         // Fetches the appropriate quote for the data source layout.
         let trade = trades[indexPath.row]
         let instrumentId = trade[TradeConstants.exchange_id].stringValue + "." +  trade[TradeConstants.instrument_id].stringValue
@@ -89,11 +84,11 @@ class TradeTableViewController: UITableViewController {
         }
         switch trade[TradeConstants.direction].stringValue {
         case "BUY":
-            cell.offset.textColor = UIColor.red
+            cell.offset.textColor = CommonConstants.RED_TEXT
         case "SELL":
-            cell.offset.textColor = UIColor.green
+            cell.offset.textColor = CommonConstants.GREEN_TEXT
         default:
-            cell.offset.textColor = UIColor.red
+            cell.offset.textColor = CommonConstants.RED_TEXT
         }
         let decimal = dataManager.getDecimalByPtick(instrumentId: instrumentId)
         let price = trade[TradeConstants.price].stringValue
@@ -115,29 +110,34 @@ class TradeTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 35.0))
-        headerView.backgroundColor = UIColor(red: 51/255, green:51/255, blue: 51/255, alpha: 1.0)
+        headerView.backgroundColor = CommonConstants.QUOTE_TABLE_HEADER_1
         let stackView = UIStackView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 35.0))
         stackView.distribution = .fillEqually
         let name = UILabel()
         name.adjustsFontSizeToFitWidth = true
         name.text = "合约名称"
         name.textAlignment = .center
+        name.textColor = UIColor.white
         let direction = UILabel()
         direction.adjustsFontSizeToFitWidth = true
         direction.text = "开平"
         direction.textAlignment = .center
+        direction.textColor = UIColor.white
         let price = UILabel()
         price.adjustsFontSizeToFitWidth = true
         price.text = "成交价"
         price.textAlignment = .right
+        price.textColor = UIColor.white
         let volume = UILabel()
         volume.adjustsFontSizeToFitWidth = true
         volume.text = "成交量"
-        volume.textAlignment = .right
+        volume.textAlignment = .center
+        volume.textColor = UIColor.white
         let datetime = UILabel()
         datetime.adjustsFontSizeToFitWidth = true
         datetime.text = "成交时间"
         datetime.textAlignment = .center
+        datetime.textColor = UIColor.white
         stackView.addArrangedSubview(name)
         stackView.addArrangedSubview(datetime)
         stackView.addArrangedSubview(price)

@@ -92,4 +92,25 @@ class CommonConstants {
     public static let MARKET_PRICE = "市价"
     public static let QUEUED_PRICE = "排队价"
     public static let USER_PRICE = "用户设置价"
+
+    //MARK: 合约页配色
+    public static let QUOTE_PAGE_HEADER = UIColor(red: 29/255.0, green: 29/255.0, blue: 29/255.0, alpha: 1)
+    public static let QUOTE_TABLE_HEADER_1 = UIColor(red: 68/255.0, green: 68/255.0, blue: 68/255.0, alpha: 1)
+    public static let QUOTE_TABLE_HEADER_2 = UIColor(red: 99/255.0, green: 99/255.0, blue: 99/255.0, alpha: 1)
+    public static let RED_TEXT = UIColor(red: 160/255.0, green: 20/255.0, blue: 20/255.0, alpha: 1)
+    public static let GREEN_TEXT = UIColor(red: 26/255.0, green: 197/255.0, blue: 26/255.0, alpha: 1)
+    public static let WHITE_TEXT = UIColor(red: 225/255.0, green: 225/255.0, blue: 225/255.0, alpha:1)
+
+    //MARK: 合约详情页
+    public static let NAV_TEXT = UIColor(red: 153/255.0, green: 153/255.0, blue: 153/255.0, alpha: 1)
+    public static let NAV_TEXT_HIGHLIGHTED = UIColor(red: 255/255.0, green: 255/255.0, blue: 0/255.0, alpha: 1)
+    public static let NAV_TEXT_UNHIGHLIGHTED = UIColor(red: 68/255.0, green: 68/255.0, blue: 68/255.0, alpha: 1)
+    public static let KLINE_GRID = UIColor(red: 180/255.0, green: 0/255.0, blue: 0/255.0, alpha: 1)
+    public static let KLINE_MD5 = UIColor(red: 255/255.0, green: 255/255.0, blue: 255/255.0, alpha: 1)
+    public static let KLINE_MD10 = UIColor(red: 255/255.0, green: 255/255.0, blue: 0/255.0, alpha: 1)
+    public static let KLINE_MD20 = UIColor(red: 198/255.0, green: 0/255.0, blue: 223/255.0, alpha: 1)
+    public static let KLINE_PO_LINE_SELL = UIColor(red: 26/255.0, green: 197/255.0, blue: 26/255.0, alpha: 1)
+    public static let KLINE_PO_LINE_BUY = UIColor(red: 160/255.0, green: 20/255.0, blue: 20/255.0, alpha: 1)
+
+
 }

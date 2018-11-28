@@ -60,11 +60,6 @@ class PositionTableViewController: UITableViewController {
             fatalError("The dequeued cell is not an instance of PositionTableViewCell.")
         }
 
-        //全屏分割线
-        cell.preservesSuperviewLayoutMargins = false
-        cell.separatorInset = UIEdgeInsets.zero
-        cell.layoutMargins = UIEdgeInsets.zero
-
         // Fetches the appropriate quote for the data source layout.
         let position = positions[indexPath.row]
         let instrumentId = position[PositionConstants.exchange_id].stringValue + "." + position[PositionConstants.instrument_id].stringValue
@@ -86,7 +81,7 @@ class PositionTableViewController: UITableViewController {
 
         if volume_long != 0 && volume_short == 0 {
             cell.direction.text = "多"
-            cell.direction.textColor = UIColor.red
+            cell.direction.textColor = CommonConstants.RED_TEXT
             cell.available.text = "\(available_long)"
             cell.volume.text = "\(volume_long)"
             let open_price_long = position[PositionConstants.open_price_long].floatValue
@@ -95,7 +90,7 @@ class PositionTableViewController: UITableViewController {
             cell.profit.text = dataManager.saveDecimalByPtick(decimal: 2, data: "\(profit)")
         } else if volume_long == 0 && volume_short != 0 {
             cell.direction.text = "空"
-            cell.direction.textColor = UIColor.green
+            cell.direction.textColor = CommonConstants.GREEN_TEXT
             cell.available.text = "\(available_short)"
             cell.volume.text = "\(volume_short)"
             let open_price_short = position[PositionConstants.open_price_short].floatValue
@@ -119,9 +114,9 @@ class PositionTableViewController: UITableViewController {
         }
 
         if profit > 0 {
-            cell.profit.textColor = UIColor.red
+            cell.profit.textColor = CommonConstants.RED_TEXT
         } else if profit < 0 {
-            cell.profit.textColor = UIColor.green
+            cell.profit.textColor = CommonConstants.GREEN_TEXT
         } else {
             cell.profit.textColor = UIColor.white
         }
@@ -146,39 +141,45 @@ class PositionTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 35.0))
-         headerView.backgroundColor = UIColor(red: 51/255, green:51/255, blue: 51/255, alpha: 1.0)
+         headerView.backgroundColor = CommonConstants.QUOTE_TABLE_HEADER_1
         let stackView = UIStackView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 35.0))
         stackView.distribution = .fillProportionally
         let name = UILabel()
         name.font = UIFont(name: "Helvetica Neue", size: 15.0)
         name.adjustsFontSizeToFitWidth = true
         name.text = "合约"
-        name.textAlignment = .left
+        name.textAlignment = .center
+        name.textColor = UIColor.white
         let direction = UILabel()
         direction.font = UIFont(name: "Helvetica Neue", size: 15.0)
         direction.adjustsFontSizeToFitWidth = true
         direction.text = "多空"
         direction.textAlignment = .center
+        direction.textColor = UIColor.white
         let volume = UILabel()
         volume.font = UIFont(name: "Helvetica Neue", size: 15.0)
         volume.adjustsFontSizeToFitWidth = true
         volume.text = "手数"
         volume.textAlignment = .center
+        volume.textColor = UIColor.white
         let available = UILabel()
         available.font = UIFont(name: "Helvetica Neue", size: 15.0)
         available.adjustsFontSizeToFitWidth = true
         available.text = "可用"
         available.textAlignment = .center
+        available.textColor = UIColor.white
         let openInterest = UILabel()
         openInterest.font = UIFont(name: "Helvetica Neue", size: 15.0)
         openInterest.adjustsFontSizeToFitWidth = true
         openInterest.text = "开仓均价"
         openInterest.textAlignment = .right
+        openInterest.textColor = UIColor.white
         let profit = UILabel()
         profit.font = UIFont(name: "Helvetica Neue", size: 15.0)
         profit.adjustsFontSizeToFitWidth = true
         profit.text = "逐笔盈亏"
         profit.textAlignment = .right
+        profit.textColor = UIColor.white
         stackView.addArrangedSubview(name)
         stackView.addArrangedSubview(direction)
         stackView.addArrangedSubview(volume)

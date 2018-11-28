@@ -67,11 +67,6 @@ class OrderTableViewController: UIViewController, UITableViewDataSource, UITable
             fatalError("The dequeued cell is not an instance of OrderTableViewCell.")
         }
 
-        //全屏分割线
-        cell.preservesSuperviewLayoutMargins = false
-        cell.separatorInset = UIEdgeInsets.zero
-        cell.layoutMargins = UIEdgeInsets.zero
-
         // Fetches the appropriate quote for the data source layout.
         // 切换挂单种类手动reloadData时需要判空
         if orders.count != 0 {
@@ -103,11 +98,11 @@ class OrderTableViewController: UIViewController, UITableViewDataSource, UITable
             let direction = order[OrderConstants.direction].stringValue
             switch direction {
             case "BUY":
-                cell.offset.textColor = UIColor.red
+                cell.offset.textColor = CommonConstants.RED_TEXT
             case "SELL":
-                cell.offset.textColor = UIColor.green
+                cell.offset.textColor = CommonConstants.GREEN_TEXT
             default:
-                cell.offset.textColor = UIColor.red
+                cell.offset.textColor = CommonConstants.RED_TEXT
             }
             let decimal = dataManager.getDecimalByPtick(instrumentId: instrumentId)
 
@@ -166,7 +161,7 @@ class OrderTableViewController: UIViewController, UITableViewDataSource, UITable
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 35.0))
-         headerView.backgroundColor = UIColor(red: 51/255, green:51/255, blue: 51/255, alpha: 1.0)
+         headerView.backgroundColor = CommonConstants.QUOTE_TABLE_HEADER_1
         let stackView = UIStackView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 35.0))
         stackView.distribution = .fillProportionally
         let name = UILabel()
@@ -174,31 +169,37 @@ class OrderTableViewController: UIViewController, UITableViewDataSource, UITable
         name.adjustsFontSizeToFitWidth = true
         name.text = "合约"
         name.textAlignment = .center
+        name.textColor = UIColor.white
         let state = UILabel()
         state.font = UIFont(name: "Helvetica Neue", size: 15.0)
         state.adjustsFontSizeToFitWidth = true
         state.text = "状态"
         state.textAlignment = .center
+        state.textColor = UIColor.white
         let direction = UILabel()
         direction.font = UIFont(name: "Helvetica Neue", size: 15.0)
         direction.adjustsFontSizeToFitWidth = true
         direction.text = "开平"
         direction.textAlignment = .center
+        direction.textColor = UIColor.white
         let price = UILabel()
         price.font = UIFont(name: "Helvetica Neue", size: 15.0)
         price.adjustsFontSizeToFitWidth = true
         price.text = "委托价"
         price.textAlignment = .right
+        price.textColor = UIColor.white
         let volume = UILabel()
         volume.font = UIFont(name: "Helvetica Neue", size: 15.0)
         volume.adjustsFontSizeToFitWidth = true
         volume.text = "数量"
         volume.textAlignment = .right
+        volume.textColor = UIColor.white
         let time = UILabel()
         time.font = UIFont(name: "Helvetica Neue", size: 15.0)
         time.adjustsFontSizeToFitWidth = true
         time.text = "时间"
         time.textAlignment = .center
+        time.textColor = UIColor.white
         stackView.addArrangedSubview(name)
         stackView.addArrangedSubview(state)
         stackView.addArrangedSubview(direction)

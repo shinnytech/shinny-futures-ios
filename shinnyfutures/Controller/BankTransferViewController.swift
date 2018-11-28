@@ -110,20 +110,15 @@ class BankTransferViewController:  UIViewController, UITableViewDataSource, UITa
         guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? BankTransferTableViewCell  else {
             fatalError("The dequeued cell is not an instance of BankTransferTableViewCell.")
         }
-
-        //全屏分割线
-        cell.preservesSuperviewLayoutMargins = false
-        cell.separatorInset = UIEdgeInsets.zero
-        cell.layoutMargins = UIEdgeInsets.zero
-
+        
         if transfers.count != 0 {
             let transfer = transfers[indexPath.row]
             let datetime = transfer[TransferConstants.datetime].doubleValue
             let date = Date(timeIntervalSince1970: (datetime / 1000000000))
             cell.datetime.text = dateFormat.string(from: date)
             let amount = transfer[TransferConstants.amount].floatValue
-            if amount > 0 {cell.amount.textColor = UIColor.red}
-            else {cell.amount.textColor = UIColor.green}
+            if amount > 0 {cell.amount.textColor = CommonConstants.RED_TEXT}
+            else {cell.amount.textColor = CommonConstants.GREEN_TEXT}
             cell.amount.text = String(format: "%.2f", amount)
             let currency = transfer[TransferConstants.currency].stringValue
             cell.currency.text = currency
@@ -144,21 +139,25 @@ class BankTransferViewController:  UIViewController, UITableViewDataSource, UITa
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 35.0))
-         headerView.backgroundColor = UIColor(red: 51/255, green:51/255, blue: 51/255, alpha: 1.0)
+         headerView.backgroundColor = CommonConstants.QUOTE_TABLE_HEADER_1
         let stackView = UIStackView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 35.0))
         stackView.distribution = .fillEqually
         let datetime = UILabel()
         datetime.text = "转账时间"
         datetime.textAlignment = .center
+        datetime.textColor = UIColor.white
         let amount = UILabel()
         amount.text = "转账金额"
         amount.textAlignment = .right
+        amount.textColor = UIColor.white
         let currency = UILabel()
         currency.text = "币种"
         currency.textAlignment = .center
+        currency.textColor = UIColor.white
         let result = UILabel()
         result.text = "转账结果"
         result.textAlignment = .center
+        result.textColor = UIColor.white
         stackView.addArrangedSubview(datetime)
         stackView.addArrangedSubview(amount)
         stackView.addArrangedSubview(currency)

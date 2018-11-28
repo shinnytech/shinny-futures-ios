@@ -17,8 +17,6 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
     weak var chartView: CombinedChartView!
     //图表背景色
     var colorChartBackground: UIColor?
-    //轴线颜色
-    var colorAxis: UIColor?
     //文字颜色
     var colorText: UIColor?
     //栅格线颜色
@@ -123,11 +121,10 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
     // MARK: functions
     func initChart() {
         colorChartBackground = UIColor.black
-        colorAxis = UIColor.black
         colorText = UIColor.white
-        colorGrid = UIColor.red
-        colorSell = UIColor.green
-        colorBuy = UIColor.red
+        colorGrid = CommonConstants.KLINE_GRID
+        colorSell = CommonConstants.KLINE_PO_LINE_SELL
+        colorBuy = CommonConstants.KLINE_PO_LINE_BUY
         chartView.delegate = self
         chartView.chartDescription?.enabled = false
         chartView.drawValueAboveBarEnabled = false

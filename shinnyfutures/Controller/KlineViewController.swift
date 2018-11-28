@@ -61,9 +61,9 @@ class KlineViewController: BaseChartViewController {
         simpleDateFormat = DateFormatter()
         simpleDateFormat.dateFormat = xValsFormat
         simpleDateFormat.locale = Locale.autoupdatingCurrent
-        colorMa5 = UIColor.white
-        colorMa10 = UIColor.yellow
-        colorMa20 = UIColor.purple
+        colorMa5 = CommonConstants.KLINE_MD5
+        colorMa10 = CommonConstants.KLINE_MD10
+        colorMa20 = CommonConstants.KLINE_MD20
         viewWidth = CommonConstants.VIEW_WIDTH
 
         chartView.scaleYEnabled = false

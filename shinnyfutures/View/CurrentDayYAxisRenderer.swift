@@ -116,18 +116,18 @@ open class CurrentDayYAxisrenderer: YAxisRenderer {
             //颜色设置
             if label.contains("%"){
                 if label.contains("-"){
-                    labelTextColor = UIColor.green
+                    labelTextColor = CommonConstants.GREEN_TEXT
                 }else if label.contains("0.00"){
                     labelTextColor = yAxis.labelTextColor
                 }else{
                     label = "+" + label
-                    labelTextColor = UIColor.red
+                    labelTextColor = CommonConstants.RED_TEXT
                 }
             }else{
                 if Double(label)! > yAxis.baseValue {
-                    labelTextColor = UIColor.red
+                    labelTextColor = CommonConstants.RED_TEXT
                 }else if Double(label)! < yAxis.baseValue{
-                    labelTextColor = UIColor.green
+                    labelTextColor = CommonConstants.GREEN_TEXT
                 }else {
                     labelTextColor = yAxis.labelTextColor
                 }

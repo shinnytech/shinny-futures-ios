@@ -77,9 +77,9 @@ open class KlineMarkerView: MarkerView {
                 let closeOiDelta = closeOi - dataPre[KlineConstants.close_oi].intValue
                 self.closeOiDelta.text = "\(closeOiDelta)"
                 if closeOiDelta < 0 {
-                    self.closeOiDelta.textColor = UIColor.green
+                    self.closeOiDelta.textColor = CommonConstants.GREEN_TEXT
                 }else{
-                    self.closeOiDelta.textColor = UIColor.red
+                    self.closeOiDelta.textColor = CommonConstants.RED_TEXT
                 }
             }else{
                 self.closeOiDelta.text = "-"
