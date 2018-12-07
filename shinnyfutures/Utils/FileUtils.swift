@@ -11,15 +11,15 @@ import Foundation
 class FileUtils {
 
     //读取latest文件
-    class func readLatestFile() -> String? {
-        let manager = FileManager.default
-        let urlsForDocDirectory = manager.urls(for: .documentDirectory, in: .userDomainMask)
-        let docPath = urlsForDocDirectory[0]
-        let file = docPath.appendingPathComponent("latest.json")
-        let readHandler = try! FileHandle(forReadingFrom: file)
-        let data = readHandler.readDataToEndOfFile()
-        return String(data: data, encoding: .utf8)
-    }
+//    class func readLatestFile() -> String? {
+//        let manager = FileManager.default
+//        let urlsForDocDirectory = manager.urls(for: .documentDirectory, in: .userDomainMask)
+//        let docPath = urlsForDocDirectory[0]
+//        let file = docPath.appendingPathComponent("latest.json")
+//        let readHandler = try! FileHandle(forReadingFrom: file)
+//        let data = readHandler.readDataToEndOfFile()
+//        return String(data: data, encoding: .utf8)
+//    }
 
     //保存自选合约
     class func saveOptional(ins: [String]) {

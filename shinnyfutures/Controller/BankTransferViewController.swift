@@ -7,13 +7,12 @@
 //
 
 import UIKit
-import SwiftyJSON
 import DeepDiff
 
 class BankTransferViewController:  UIViewController, UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate {
 
     // MARK: Properties
-    var transfers = [JSON]()
+    var transfers = [Transfer]()
     let dataManager = DataManager.getInstance()
     let dateFormat = DateFormatter()
     var isRefresh = true
@@ -113,16 +112,16 @@ class BankTransferViewController:  UIViewController, UITableViewDataSource, UITa
         
         if transfers.count != 0 {
             let transfer = transfers[indexPath.row]
-            let datetime = transfer[TransferConstants.datetime].doubleValue
+            let datetime = Double("\(transfer.datetime ?? 0)") ?? 0.0
             let date = Date(timeIntervalSince1970: (datetime / 1000000000))
             cell.datetime.text = dateFormat.string(from: date)
-            let amount = transfer[TransferConstants.amount].floatValue
+            let amount = Float("\(transfer.amount ?? 0.0)") ?? 0.0
             if amount > 0 {cell.amount.textColor = CommonConstants.RED_TEXT}
             else {cell.amount.textColor = CommonConstants.GREEN_TEXT}
             cell.amount.text = String(format: "%.2f", amount)
-            let currency = transfer[TransferConstants.currency].stringValue
+            let currency = "\(transfer.currency ?? "")"
             cell.currency.text = currency
-            let result = transfer[TransferConstants.error_msg].stringValue
+            let result = "\(transfer.error_msg ?? "")"
             cell.result.text = result
         }
 
@@ -188,15 +187,15 @@ class BankTransferViewController:  UIViewController, UITableViewDataSource, UITa
 
     // MARK: objc Methods
     @objc private func loadData() {
-        let user = dataManager.sRtnTD[dataManager.sUser_id]
+        guard let user = dataManager.sRtnTD.users[dataManager.sUser_id] else {return}
         let bank = self.view.viewWithTag(101) as! DropDownBtn
         let currency = self.view.viewWithTag(102) as! DropDownBtn
 
         if bank.dropView.dropDownOptions.isEmpty {
-            let banks = user[RtnTDConstants.banks].dictionaryValue.map{$0.value}
+            let banks = user.banks.map{$0.value}
             for bankData in banks {
-                let bankName = bankData[BankConstants.name].stringValue
-                let bankId = bankData[BankConstants.id].stringValue
+                let bankName = "\(bankData.name ?? "")"
+                let bankId = "\(bankData.id ?? "")"
                 bankIds[bankName] = bankId
                 bank.dropView.dropDownOptions.append(bankName)
                 bank.dropView.tableView?.reloadData()
@@ -210,7 +209,7 @@ class BankTransferViewController:  UIViewController, UITableViewDataSource, UITa
         }
 
         if currency.dropView.dropDownOptions.isEmpty {
-            let currencies = user[RtnTDConstants.accounts].dictionaryValue.map{$0.key}
+            let currencies = user.accounts.map{$0.key}
             for currencyData in currencies {
                 currency.dropView.dropDownOptions.append(currencyData)
                 currency.dropView.tableView?.reloadData()
@@ -224,7 +223,8 @@ class BankTransferViewController:  UIViewController, UITableViewDataSource, UITa
         }
 
         if !isRefresh{return}
-        let transfers_tmp = user[RtnTDConstants.transfers].dictionaryValue.sorted{ $0.value[TransferConstants.datetime].stringValue > $1.value[TransferConstants.datetime].stringValue }.map {$0.value}
+        let transfers_tmp = user.transfers.sorted{
+            "\($0.value.datetime ?? "")" > "\($1.value.datetime ?? "")"}.map {$0.value}
 
         if transfers.count == 0 {
             transfers = transfers_tmp

@@ -114,15 +114,15 @@ class LoginViewController: UIViewController {
 
     //Set the drop down menu's options
     @objc func loadBrokerInfo() {
-        let jsonArray = sDataManager.sRtnBrokers[RtnTDConstants.brokers].arrayValue
-        if jsonArray.isEmpty {return}
+        let brokerArray = sDataManager.sBrokers
+        if brokerArray.isEmpty {return}
         let button = self.view.viewWithTag(100) as! DropDownBtn
         button.dropView.dropDownOptions.removeAll()
-        for json in jsonArray {
-            button.dropView.dropDownOptions.append(json.stringValue)
+        for broker in brokerArray {
+            button.dropView.dropDownOptions.append(broker)
             button.dropView.tableView?.reloadData()
         }
-        if jsonArray.count != 0 {
+        if brokerArray.count != 0 {
             if let brokerInfo = UserDefaults.standard.string(forKey: "brokerInfo") {
                 if button.dropView.dropDownOptions.contains(brokerInfo){
                     button.setTitle(brokerInfo, for: .normal)
@@ -160,7 +160,7 @@ class LoginViewController: UIViewController {
                 self.performSegue(withIdentifier: CommonConstants.LoginToQuote, sender: self.login)
                 let instrumentId = self.sDataManager.sQuotes[1].map {$0.key}[0]
                 self.sDataManager.sInstrumentId = instrumentId
-                self.sDataManager.sPreInsList = self.sDataManager.sRtnMD[RtnMDConstants.ins_list].stringValue
+                self.sDataManager.sPreInsList = self.sDataManager.sRtnMD.ins_list
                 MDWebSocketUtils.getInstance().sendSubscribeQuote(insList: instrumentId)
                 MDWebSocketUtils.getInstance().sendSetChart(insList: instrumentId)
                 MDWebSocketUtils.getInstance().sendSetChartDay(insList: instrumentId, viewWidth: CommonConstants.VIEW_WIDTH)

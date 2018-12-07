@@ -7,14 +7,13 @@
 //
 
 import UIKit
-import SwiftyJSON
 import DeepDiff
 
 class OptionalPopupTableViewController: UITableViewController, UIPopoverPresentationControllerDelegate, OptionalTableViewCellDelegate {
 
     // MARK: Properties
     let dataManager = DataManager.getInstance()
-    var quotes = [JSON]()
+    var quotes = [Quote]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,7 +53,10 @@ class OptionalPopupTableViewController: UITableViewController, UIPopoverPresenta
 
         // Fetches the appropriate quote for the data source layout.
         let quote = quotes[indexPath.row]
-        let insturmentName = quote[QuoteConstants.instrument_name].stringValue
+        var insturmentName = quote.instrument_id as? String
+        if let instrumentId = insturmentName {
+            insturmentName = dataManager.sSearchEntities[instrumentId]?.instrument_name
+        }
         cell.instrumentId.text = insturmentName
 
         return cell
@@ -92,7 +94,7 @@ class OptionalPopupTableViewController: UITableViewController, UIPopoverPresenta
 
     func didCutButton(_ tag: Int) {
         let quote = quotes[tag]
-        let instrument_id = quote[QuoteConstants.instrument_id].stringValue
+        let instrument_id = "\(quote.instrument_id ?? "")"
         self.quotes.remove(at: tag)
         dataManager.saveOrRemoveIns(ins: instrument_id)
         let indexPath = IndexPath(row: tag, section: 0)

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class QuoteNavigationCollectionViewController: UICollectionViewController {
+class QuoteNavigationCollectionViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
     // MARK: Properties
     var insList = [String]()
     var nameList = [String]()
@@ -25,7 +25,7 @@ class QuoteNavigationCollectionViewController: UICollectionViewController {
     }
 
     override func viewDidAppear(_ animated: Bool) {
-        mainViewController = self.parent as! MainViewController
+        mainViewController = self.parent as? MainViewController
     }
 
     deinit {
@@ -70,6 +70,17 @@ class QuoteNavigationCollectionViewController: UICollectionViewController {
             }
         }
 
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let label = nameList[indexPath.row]
+        let width = textWidth(text: label, font: UIFont(name: "Helvetica Neue", size: 17)) + 10
+        return CGSize(width: width, height: 44)
+    }
+
+    func textWidth(text: String, font: UIFont?) -> CGFloat {
+        let attributes = font != nil ? [NSAttributedStringKey.font: font] : [:]
+        return text.size(withAttributes: attributes as [NSAttributedStringKey : Any]).width
     }
 
     // MARK: Public Methods

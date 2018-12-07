@@ -82,9 +82,9 @@ open class PriceKeyboardView: UIView {
         priceTick.text = dataManager.sSearchEntities[instrument_id]?.p_tick
 
         let decimal = dataManager.getDecimalByPtick(instrumentId: instrument_id)
-        let quote = dataManager.sRtnMD[RtnMDConstants.quotes][instrument_id]
-        let upper = quote[QuoteConstants.upper_limit].stringValue
-        let lower = quote[QuoteConstants.lower_limit].stringValue
+        guard let quote = dataManager.sRtnMD.quotes[instrument_id] else {return}
+        let upper = "\(quote.upper_limit ?? 0.0)"
+        let lower = "\(quote.lower_limit ?? 0.0)"
         upperLimit.text = dataManager.saveDecimalByPtick(decimal: decimal, data: upper)
         lowerLimit.text = dataManager.saveDecimalByPtick(decimal: decimal, data: lower)
     }
@@ -100,9 +100,9 @@ open class PriceKeyboardView: UIView {
         if margin == 0{
             openVolume.text = "0"
         }else {
-            let user = dataManager.sRtnTD[dataManager.sUser_id]
-            for (_, account) in user[RtnTDConstants.accounts].dictionaryValue {
-                let available = account[AccountConstants.available].intValue
+            guard let user = dataManager.sRtnTD.users[dataManager.sUser_id] else {return}
+            for (_, account) in user.accounts {
+                let available = Int("\(account.available ?? 0)") ?? 0
                 openVolume.text = "\(available / margin)"
             }
         }
@@ -209,27 +209,27 @@ class PriceKeyboardViewProcessor {
 
         switch currentOperand {
         case PriceType.lineup.rawValue:
-            let quote = dataManager.sRtnMD[RtnMDConstants.quotes][dataManager.sInstrumentId]
-            let bid_price1 = (quote[QuoteConstants.bid_price1].stringValue as NSString).doubleValue
-            let ask_price1 = (quote[QuoteConstants.ask_price1].stringValue as NSString).doubleValue
+            guard let quote = dataManager.sRtnMD.quotes[dataManager.sInstrumentId] else {break}
+            let bid_price1 = Double("\(quote.bid_price1 ?? 0.0)") ?? 0.0
+            let ask_price1 = Double("\(quote.ask_price1 ?? 0.0)") ?? 0.0
             value = ask_price1 < bid_price1 ? ask_price1 : bid_price1
             currentOperand = dataManager.saveDecimalByPtick(decimal: decimal, data: "\(value)")
             return currentOperand
         case PriceType.opponent.rawValue:
-            let quote = dataManager.sRtnMD[RtnMDConstants.quotes][dataManager.sInstrumentId]
-            let bid_price1 = (quote[QuoteConstants.bid_price1].stringValue as NSString).doubleValue
-            let ask_price1 = (quote[QuoteConstants.ask_price1].stringValue as NSString).doubleValue
+            guard let quote = dataManager.sRtnMD.quotes[dataManager.sInstrumentId] else {break}
+            let bid_price1 = Double("\(quote.bid_price1 ?? 0.0)") ?? 0.0
+            let ask_price1 = Double("\(quote.ask_price1 ?? 0.0)") ?? 0.0
             value = ask_price1 < bid_price1 ? bid_price1 : ask_price1
             currentOperand = dataManager.saveDecimalByPtick(decimal: decimal, data: "\(value)")
             return currentOperand
         case PriceType.market.rawValue:
-            let quote = dataManager.sRtnMD[RtnMDConstants.quotes][dataManager.sInstrumentId]
-            value = (quote[QuoteConstants.last_price].stringValue as NSString).doubleValue
+            guard let quote = dataManager.sRtnMD.quotes[dataManager.sInstrumentId] else {break}
+            value = Double("\(quote.last_price ?? 0.0)") ?? 0.0
             currentOperand = dataManager.saveDecimalByPtick(decimal: decimal, data: "\(value)")
             return currentOperand
         case PriceType.last.rawValue:
-            let quote = dataManager.sRtnMD[RtnMDConstants.quotes][dataManager.sInstrumentId]
-            value = (quote[QuoteConstants.last_price].stringValue as NSString).doubleValue
+            guard let quote = dataManager.sRtnMD.quotes[dataManager.sInstrumentId] else {break}
+            value = Double("\(quote.last_price ?? 0.0)") ?? 0.0
             currentOperand = dataManager.saveDecimalByPtick(decimal: decimal, data: "\(value)")
             return currentOperand
         default:

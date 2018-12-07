@@ -92,7 +92,7 @@ class SearchTableViewController: UITableViewController, UISearchResultsUpdating 
                 dataManager.sInstrumentId = searchHistory[indexPath.row].instrument_id!
             }
             DataManager.getInstance().sToQuoteTarget = ""
-            DataManager.getInstance().sPreInsList = DataManager.getInstance().sRtnMD[RtnMDConstants.ins_list].stringValue
+            DataManager.getInstance().sPreInsList = DataManager.getInstance().sRtnMD.ins_list
         }
     }
 

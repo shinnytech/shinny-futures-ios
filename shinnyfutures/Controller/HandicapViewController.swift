@@ -56,43 +56,51 @@ class HandicapViewController: UIViewController {
     @objc private func refreshDatas() {
         let instrumentId = dataManager.sInstrumentId
         let decimal = dataManager.getDecimalByPtick(instrumentId: instrumentId)
-        let quoteJson = dataManager.sRtnMD[RtnMDConstants.quotes][instrumentId]
-        let ask_price1 = quoteJson[QuoteConstants.ask_price1].floatValue
-        let ask_volume1 = quoteJson[QuoteConstants.ask_volume1].intValue
-        let bid_price1 = quoteJson[QuoteConstants.bid_price1].floatValue
-        let bid_volume1 = quoteJson[QuoteConstants.bid_volume1].intValue
-        let last_price = quoteJson[QuoteConstants.last_price].floatValue
-        let open = quoteJson[QuoteConstants.open].floatValue
-        let volume = quoteJson[QuoteConstants.volume].intValue
-        let highest = quoteJson[QuoteConstants.highest].floatValue
-        let open_interest = quoteJson[QuoteConstants.open_interest].intValue
-        let pre_open_interest = quoteJson[QuoteConstants.pre_open_interest].intValue
-        let lowest = quoteJson[QuoteConstants.lowest].floatValue
-        let average = quoteJson[QuoteConstants.average].floatValue
-        let pre_close = quoteJson[QuoteConstants.pre_close].floatValue
-        let upper_limit = quoteJson[QuoteConstants.upper_limit].floatValue
-        let pre_settlement = quoteJson[QuoteConstants.pre_settlement].floatValue
-        let lower_limit = quoteJson[QuoteConstants.lower_limit].floatValue
-        let settlement = quoteJson[QuoteConstants.settlement].floatValue
+        guard let quote = dataManager.sRtnMD.quotes[instrumentId] else {return}
+        let ask_price1 = "\(quote.ask_price1 ?? 0)"
+        let ask_volume1 = "\(quote.ask_volume1 ?? 0)"
+        let bid_price1 = "\(quote.bid_price1 ?? 0)"
+        let bid_volume1 = "\(quote.bid_volume1 ?? 0)"
+        let last_price = "\(quote.last_price ?? 0)"
+        let open = "\(quote.open ?? 0)"
+        let volume = "\(quote.volume ?? 0)"
+        let highest = "\(quote.highest ?? 0)"
+        let open_interest = "\(quote.open_interest ?? 0)"
+        let pre_open_interest = "\(quote.pre_open_interest ?? 0)"
+        let lowest = "\(quote.lowest ?? 0)"
+        let average = "\(quote.average ?? 0)"
+        let pre_close = "\(quote.pre_close ?? 0)"
+        let upper_limit = "\(quote.upper_limit ?? 0)"
+        let pre_settlement = "\(quote.pre_settlement ?? 0)"
+        let lower_limit = "\(quote.lower_limit ?? 0)"
+        let settlement = "\(quote.settlement ?? 0)"
+        var change = Float()
+        if let last = Float(last_price), let pre_settlement = Float(pre_settlement){
+            change = last - pre_settlement
+        }
+        var sub_open_interest = Int()
+        if let open_interest = Int(open_interest), let pre_open_interest = Int(pre_open_interest){
+            sub_open_interest = open_interest - pre_open_interest
+        }
         
-        self.ask_price1.text = String(format: "%.\(decimal)f", ask_price1)
-        self.ask_volume1.text = "\(ask_volume1)"
-        self.bid_price1.text = String(format: "%.\(decimal)f", bid_price1)
-        self.bid_volume1.text = "\(bid_volume1)"
-        self.latest.text = String(format: "%.\(decimal)f", last_price)
-        self.change.text = String(format: "%.\(decimal)f", last_price - pre_settlement)
-        self.open.text = String(format: "%.\(decimal)f", open)
-        self.volume.text = "\(volume)"
-        self.highest.text = String(format: "%.\(decimal)f", highest)
-        self.lowest.text = String(format: "%.\(decimal)f", lowest)
-        self.open_interest.text = "\(open_interest)"
-        self.sub_open_interest.text = "\(open_interest - pre_open_interest)"
-        self.average.text = String(format: "%.\(decimal)f", average)
-        self.settlement.text = String(format: "%.\(decimal)f", settlement)
-        self.pre_close.text = String(format: "%.\(decimal)f", pre_close)
-        self.upper_limit.text = String(format: "%.\(decimal)f", upper_limit)
-        self.pre_settlement.text = String(format: "%.\(decimal)f", pre_settlement)
-        self.lower_limit.text = String(format: "%.\(decimal)f", lower_limit)
+        self.ask_price1.text = dataManager.saveDecimalByPtick(decimal: decimal, data: ask_price1)
+        self.ask_volume1.text = ask_volume1
+        self.bid_price1.text = dataManager.saveDecimalByPtick(decimal: decimal, data: bid_price1)
+        self.bid_volume1.text = bid_volume1
+        self.latest.text = dataManager.saveDecimalByPtick(decimal: decimal, data: last_price)
+        self.change.text = String(format: "%.\(decimal)f", change)
+        self.open.text = dataManager.saveDecimalByPtick(decimal: decimal, data: open)
+        self.volume.text = volume
+        self.highest.text = dataManager.saveDecimalByPtick(decimal: decimal, data: highest)
+        self.lowest.text = dataManager.saveDecimalByPtick(decimal: decimal, data: lowest)
+        self.open_interest.text = open_interest
+        self.sub_open_interest.text = "\(sub_open_interest)"
+        self.average.text = dataManager.saveDecimalByPtick(decimal: decimal, data: average)
+        self.settlement.text = dataManager.saveDecimalByPtick(decimal: decimal, data: settlement)
+        self.pre_close.text = dataManager.saveDecimalByPtick(decimal: decimal, data: pre_close)
+        self.upper_limit.text = dataManager.saveDecimalByPtick(decimal: decimal, data: upper_limit)
+        self.pre_settlement.text = dataManager.saveDecimalByPtick(decimal: decimal, data: pre_settlement)
+        self.lower_limit.text = dataManager.saveDecimalByPtick(decimal: decimal, data: lower_limit)
         
         
     }

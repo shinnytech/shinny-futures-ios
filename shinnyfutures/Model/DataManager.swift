@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import SwiftyJSON
 
 class DataManager {
     private static let instance: DataManager = {
@@ -23,13 +22,13 @@ class DataManager {
 
     var sSearchHistoryEntities = [String: Search]()
     var sSearchEntities = [String: Search]()
-    var sQuotes = [[(key: String, value: JSON)]]()
+    var sQuotes = [[(key: String, value: Quote)]]()
     var sInsListNames = [[(key: String, value: String)]]()
 
     //////////////////////////////////////////////////////////////
-    var sRtnMD = JSON()
-    var sRtnBrokers = JSON()
-    var sRtnTD = JSON()
+    var sRtnMD = RtnMD()
+    var sRtnTD = RtnTD()
+    var sBrokers = [String]()
     var sPreInsList = ""
     var sInstrumentId = ""
     var isBackground = false
@@ -44,168 +43,180 @@ class DataManager {
     //进入合约详情页的来源
     var sToQuoteTarget = ""
 
-    func parseLatestFile() {
+    func parseLatestFile(latestData: Data) {
         NSLog("解析开始")
-        var sOptionalQuotes = [String: JSON]()
-        var sMainQuotes = [String: JSON]()
+        var sOptionalQuotes = [String: Quote]()
+        var sMainQuotes = [String: Quote]()
         var sMainInsListNameNav = [String: String]()
-        var sShangqiQuotes = [String: JSON]()
+        var sShangqiQuotes = [String: Quote]()
         var sShangqiInsListNameNav = [String: String]()
-        var sDalianQuotes = [String: JSON]()
+        var sDalianQuotes = [String: Quote]()
         var sDalianInsListNameNav = [String: String]()
-        var sZhengzhouQuotes = [String: JSON]()
+        var sZhengzhouQuotes = [String: Quote]()
         var sZhengzhouInsListNameNav = [String: String]()
-        var sZhongjinQuotes = [String: JSON]()
+        var sZhongjinQuotes = [String: Quote]()
         var sZhongjinInsListNameNav = [String: String]()
-        var sNengyuanQuotes = [String: JSON]()
+        var sNengyuanQuotes = [String: Quote]()
         var sNengyuanInsListNameNav = [String: String]()
-        var sDalianzuheQuotes = [String: JSON]()
+        var sDazongQuotes = [String: Quote]()
+        var sDazongInsListNameNav = [String: String]()
+        var sDalianzuheQuotes = [String: Quote]()
         var sDalianzuheInsListNameNav = [String: String]()
-        var sZhengzhouzeheQuotes = [String: JSON]()
+        var sZhengzhouzeheQuotes = [String: Quote]()
         var sZhengzhouzeheInsListNameNav = [String: String]()
-        let latestString = FileUtils.readLatestFile()
-        if let latestData = latestString?.data(using: .utf8) {
-            do {
-                guard let latestJson = try JSONSerialization.jsonObject(with: latestData, options: []) as? [String: Any] else { return }
-                for (instrument_id, value) in latestJson {
-                    let subJson = value as! [String: Any]
-                    guard let classN = subJson["class"] as? String else {continue}
-                    if !"FUTURE_CONT".elementsEqual(classN) && !"FUTURE".elementsEqual(classN) && !"FUTURE_COMBINE".elementsEqual(classN){continue}
-                    guard let ins_name = subJson["ins_name"] as? String else {continue}
-                    let expired = subJson["expired"] as? Bool
-                    let exchange_id = subJson["exchange_id"] as! String
-                    let price_tick = (subJson["price_tick"] as? NSNumber)?.stringValue
-                    let price_decs = (subJson["price_decs"] as? NSNumber)?.intValue
-                    let volume_multiple = (subJson["volume_multiple"] as? NSNumber)?.stringValue
-                    let sort_key = (subJson["sort_key"] as? NSNumber)?.intValue
+        do {
+            guard let latestJson = try JSONSerialization.jsonObject(with: latestData, options: []) as? [String: Any] else { return }
+            for (instrument_id, value) in latestJson {
+                let subJson = value as! [String: Any]
+                guard let classN = subJson["class"] as? String else {continue}
+                if !"FUTURE_CONT".elementsEqual(classN) && !"FUTURE".elementsEqual(classN) && !"FUTURE_COMBINE".elementsEqual(classN) && !"SPOT".elementsEqual(classN){continue}
+                guard let ins_name = subJson["ins_name"] as? String else {continue}
+                let expired = subJson["expired"] as? Bool
+                let exchange_id = subJson["exchange_id"] as? String
+                let price_tick = (subJson["price_tick"] as? NSNumber)?.stringValue
+                let price_decs = subJson["price_decs"] as? Int
+                let volume_multiple = (subJson["volume_multiple"] as? NSNumber)?.stringValue
+                let sort_key = subJson["sort_key"] as? Int
 
-                    let searchEntity = Search(instrument_id: instrument_id, instrument_name: ins_name, exchange_name: "", exchange_id: exchange_id, py: "", p_tick: price_tick, p_decs: price_decs, vm: volume_multiple, sort_key: sort_key, margin: 0, underlying_symbol: "", pre_volume: 0)
+                let searchEntity = Search(instrument_id: instrument_id, instrument_name: ins_name, exchange_name: "", exchange_id: exchange_id, py: "", p_tick: price_tick, p_decs: price_decs, vm: volume_multiple, sort_key: sort_key, margin: 0, underlying_symbol: "", pre_volume: 0)
 
-                    if "FUTURE_CONT".elementsEqual(classN){
-                        sMainQuotes[instrument_id] = JSON(parseJSON: "{\"instrument_id\":\"\(instrument_id)\", \"instrument_name\":\"\(ins_name)\"}")
-                        sMainInsListNameNav[ins_name.replacingOccurrences(of: "主连", with: "")] = instrument_id
-
-                        let py = subJson["py"] as? String
-                        searchEntity.py = py
-                        guard let underlying_symbol = subJson["underlying_symbol"] as? String else {continue}
-                        searchEntity.underlying_symbol = underlying_symbol
-                        guard let subJsonFuture = latestJson[underlying_symbol] as? [String: Any] else {continue}
-                        let pre_volume = (subJsonFuture["pre_volume"] as? NSNumber)?.intValue
-                        searchEntity.pre_volume = pre_volume
-                    }
-
-                    if "FUTURE".elementsEqual(classN){
-                        guard let product_short_name = subJson["product_short_name"] as? String else {continue}
-                        guard let expired = expired else {continue}
-                        switch exchange_id {
-                        case "SHFE":
-                            if !expired{
-                                sShangqiQuotes[instrument_id] = JSON(parseJSON: "{\"instrument_id\":\"\(instrument_id)\", \"instrument_name\":\"\(ins_name)\"}")
-                                sShangqiInsListNameNav[product_short_name] = instrument_id
-                            }
-                            searchEntity.exchange_name = "上海期货交易所"
-                        case "CZCE":
-                            if !expired{
-                                sZhengzhouQuotes[instrument_id] = JSON(parseJSON: "{\"instrument_id\":\"\(instrument_id)\", \"instrument_name\":\"\(ins_name)\"}")
-                                sZhengzhouInsListNameNav[product_short_name] = instrument_id
-                            }
-                            searchEntity.exchange_name = "郑州商品交易所"
-                        case "DCE":
-                            if !expired {
-                                sDalianQuotes[instrument_id] = JSON(parseJSON: "{\"instrument_id\":\"\(instrument_id)\", \"instrument_name\":\"\(ins_name)\"}")
-                                sDalianInsListNameNav[product_short_name] = instrument_id
-                            }
-                            searchEntity.exchange_name = "大连商品交易所"
-                        case "CFFEX":
-                            if !expired {
-                                sZhongjinQuotes[instrument_id] = JSON(parseJSON: "{\"instrument_id\":\"\(instrument_id)\", \"instrument_name\":\"\(ins_name)\"}")
-                                sZhongjinInsListNameNav[product_short_name] = instrument_id
-                            }
-                            searchEntity.exchange_name = "中国金融期货交易所"
-                        case "INE":
-                            if !expired{
-                                sNengyuanQuotes[instrument_id] = JSON(parseJSON: "{\"instrument_id\":\"\(instrument_id)\", \"instrument_name\":\"\(ins_name)\"}")
-                                sNengyuanInsListNameNav[product_short_name] = instrument_id
-                            }
-                            searchEntity.exchange_name = "上海国际能源交易中心"
-                        default:
-                            return
-                        }
-                        let py = subJson["py"] as? String
-                        let margin = (subJson["margin"] as? NSNumber)?.intValue
-                        let pre_volume = (subJson["pre_volume"] as? NSNumber)?.intValue
-                        searchEntity.pre_volume = pre_volume
-                        searchEntity.py = py
-                        searchEntity.margin = margin
-                    }
-
-                    if "FUTURE_COMBINE".elementsEqual(classN){
-                        guard let leg1_symbol = subJson["leg1_symbol"] as? String else {continue}
-                        guard let subJsonFuture = latestJson[leg1_symbol] as? [String: Any] else {continue}
-                        guard let product_short_name = subJsonFuture["product_short_name"] as? String else {continue}
-                        guard let expired = expired else {continue}
-                        switch exchange_id {
-                        case "CZCE":
-                            if !expired{
-                                sZhengzhouzeheQuotes[instrument_id] = JSON(parseJSON: "{\"instrument_id\":\"\(instrument_id)\", \"instrument_name\":\"\(ins_name)\"}")
-                                sZhengzhouzeheInsListNameNav[product_short_name] = instrument_id
-                            }
-                            searchEntity.exchange_name = "郑州商品交易所"
-                        case "DCE":
-                            if !expired{
-                                sDalianzuheQuotes[instrument_id] = JSON(parseJSON: "{\"instrument_id\":\"\(instrument_id)\", \"instrument_name\":\"\(ins_name)\"}")
-                                sDalianzuheInsListNameNav[product_short_name] = instrument_id
-                            }
-                            searchEntity.exchange_name = "大连商品交易所"
-                        default:
-                            return
-                        }
-                        let py = subJsonFuture["py"] as? String
-                        let pre_volume = (subJson["pre_volume"] as? NSNumber)?.intValue
-                        searchEntity.pre_volume = pre_volume
-                        searchEntity.py = py
-                    }
-                    sSearchEntities[instrument_id] = searchEntity
+                if "FUTURE_CONT".elementsEqual(classN){
+                    let py = subJson["py"] as? String
+                    searchEntity.py = py
+                    guard let underlying_symbol = subJson["underlying_symbol"] as? String else {continue}
+                    if "".elementsEqual(underlying_symbol){continue}
+                    searchEntity.underlying_symbol = underlying_symbol
+                    guard let subJsonFuture = latestJson[underlying_symbol] as? [String: Any] else {continue}
+                    let pre_volume = subJsonFuture["pre_volume"] as? Int
+                    searchEntity.pre_volume = pre_volume
+                    let quote = Quote()
+                    quote.instrument_id = instrument_id
+                    sMainQuotes[instrument_id] = quote
+                    sMainInsListNameNav[ins_name.replacingOccurrences(of: "主连", with: "")] = instrument_id
                 }
 
-                //考虑到合约下架或合约列表中不存在，自选合约自建loop，反映到自选列表上让用户删除
-                for ins in FileUtils.getOptional() {
-                    if let ins_name = sSearchEntities[ins]?.instrument_name {
-                        sOptionalQuotes[ins] = JSON(parseJSON: "{\"instrument_id\":\"\(ins)\", \"instrument_name\":\"\(ins_name)\"}")
-                    }else{
-                        sOptionalQuotes[ins] = JSON(parseJSON: "{\"instrument_id\":\"\(ins)\", \"instrument_name\":\"\(ins)\"}")
+                if "FUTURE".elementsEqual(classN) || "SPOT".elementsEqual(classN){
+                    guard let product_short_name = subJson["product_short_name"] as? String else {continue}
+                    guard let expired = expired else {continue}
+                    let py = subJson["py"] as? String
+                    let margin = subJson["margin"] as? Int
+                    let pre_volume = subJson["pre_volume"] as? Int
+                    searchEntity.pre_volume = pre_volume
+                    searchEntity.py = py
+                    searchEntity.margin = margin
+                    let quote = Quote()
+                    quote.instrument_id = instrument_id
+                    switch exchange_id {
+                    case "SHFE":
+                        if !expired{
+                            sShangqiQuotes[instrument_id] = quote
+                            sShangqiInsListNameNav[product_short_name] = instrument_id
+                        }
+                        searchEntity.exchange_name = "上海期货交易所"
+                    case "CZCE":
+                        if !expired{
+                            sZhengzhouQuotes[instrument_id] = quote
+                            sZhengzhouInsListNameNav[product_short_name] = instrument_id
+                        }
+                        searchEntity.exchange_name = "郑州商品交易所"
+                    case "DCE":
+                        if !expired {
+                            sDalianQuotes[instrument_id] = quote
+                            sDalianInsListNameNav[product_short_name] = instrument_id
+                        }
+                        searchEntity.exchange_name = "大连商品交易所"
+                    case "CFFEX":
+                        if !expired {
+                            sZhongjinQuotes[instrument_id] = quote
+                            sZhongjinInsListNameNav[product_short_name] = instrument_id
+                        }
+                        searchEntity.exchange_name = "中国金融期货交易所"
+                    case "INE":
+                        if !expired{
+                            sNengyuanQuotes[instrument_id] = quote
+                            sNengyuanInsListNameNav[product_short_name] = instrument_id
+                        }
+                        searchEntity.exchange_name = "上海国际能源交易中心"
+                    case "SSWE":
+                        if !expired{
+                            sDazongQuotes[instrument_id] = quote
+                            sDazongInsListNameNav[product_short_name] = instrument_id
+                        }
+                        searchEntity.exchange_name = "上海大宗商品交易所"
+                    default:
+                        continue
                     }
+
                 }
 
-                sQuotes.append(sortByUser(insList: sOptionalQuotes))
-                sQuotes.append(sortByKey(insList: sMainQuotes))
-                sQuotes.append(sortByKey(insList: sShangqiQuotes))
-                sQuotes.append(sortByKey(insList: sNengyuanQuotes))
-                sQuotes.append(sortByKey(insList: sDalianQuotes))
-                sQuotes.append(sortByKey(insList: sZhengzhouQuotes))
-                sQuotes.append(sortByKey(insList: sZhongjinQuotes))
-                sQuotes.append(sortByKey(insList: sDalianzuheQuotes))
-                sQuotes.append(sortByKey(insList: sZhengzhouzeheQuotes))
-
-                sInsListNames.append([(key: String, value: String)]())
-                sInsListNames.append(sortByValue(insList: sMainInsListNameNav))
-                sInsListNames.append(sortByValue(insList: sShangqiInsListNameNav))
-                sInsListNames.append(sortByValue(insList: sNengyuanInsListNameNav))
-                sInsListNames.append(sortByValue(insList: sDalianInsListNameNav))
-                sInsListNames.append(sortByValue(insList: sZhengzhouInsListNameNav))
-                sInsListNames.append(sortByValue(insList: sZhongjinInsListNameNav))
-                sInsListNames.append(sortByValue(insList: sDalianzuheInsListNameNav))
-                sInsListNames.append(sortByValue(insList: sZhengzhouzeheInsListNameNav))
-
-                
-            } catch {
-                print(error.localizedDescription)
+                if "FUTURE_COMBINE".elementsEqual(classN){
+                    guard let leg1_symbol = subJson["leg1_symbol"] as? String else {continue}
+                    guard let subJsonFuture = latestJson[leg1_symbol] as? [String: Any] else {continue}
+                    guard let product_short_name = subJsonFuture["product_short_name"] as? String else {continue}
+                    guard let expired = expired else {continue}
+                    let py = subJsonFuture["py"] as? String
+                    let pre_volume = subJson["pre_volume"] as? Int
+                    searchEntity.pre_volume = pre_volume
+                    searchEntity.py = py
+                    let quote = Quote()
+                    quote.instrument_id = instrument_id
+                    switch exchange_id {
+                    case "CZCE":
+                        if !expired{
+                            sZhengzhouzeheQuotes[instrument_id] = quote
+                            sZhengzhouzeheInsListNameNav[product_short_name] = instrument_id
+                        }
+                        searchEntity.exchange_name = "郑州商品交易所"
+                    case "DCE":
+                        if !expired{
+                            sDalianzuheQuotes[instrument_id] = quote
+                            sDalianzuheInsListNameNav[product_short_name] = instrument_id
+                        }
+                        searchEntity.exchange_name = "大连商品交易所"
+                    default:
+                        continue
+                    }
+                }
+                sSearchEntities[instrument_id] = searchEntity
             }
+
+            //考虑到合约下架或合约列表中不存在，自选合约自建loop，反映到自选列表上让用户删除
+            for ins in FileUtils.getOptional() {
+                let quote = Quote()
+                quote.instrument_id = ins
+                sOptionalQuotes[ins] = quote
+            }
+
+            sQuotes.append(sortByUser(insList: sOptionalQuotes))
+            sQuotes.append(sortByKey(insList: sMainQuotes))
+            sQuotes.append(sortByKey(insList: sShangqiQuotes))
+            sQuotes.append(sortByKey(insList: sNengyuanQuotes))
+            sQuotes.append(sortByKey(insList: sDazongQuotes))
+            sQuotes.append(sortByKey(insList: sDalianQuotes))
+            sQuotes.append(sortByKey(insList: sZhengzhouQuotes))
+            sQuotes.append(sortByKey(insList: sZhongjinQuotes))
+            sQuotes.append(sortByKey(insList: sDalianzuheQuotes))
+            sQuotes.append(sortByKey(insList: sZhengzhouzeheQuotes))
+
+            sInsListNames.append([(key: String, value: String)]())
+            sInsListNames.append(sortByValue(insList: sMainInsListNameNav))
+            sInsListNames.append(sortByValue(insList: sShangqiInsListNameNav))
+            sInsListNames.append(sortByValue(insList: sNengyuanInsListNameNav))
+            sInsListNames.append(sortByValue(insList: sDazongInsListNameNav))
+            sInsListNames.append(sortByValue(insList: sDalianInsListNameNav))
+            sInsListNames.append(sortByValue(insList: sZhengzhouInsListNameNav))
+            sInsListNames.append(sortByValue(insList: sZhongjinInsListNameNav))
+            sInsListNames.append(sortByValue(insList: sDalianzuheInsListNameNav))
+            sInsListNames.append(sortByValue(insList: sZhengzhouzeheInsListNameNav))
+
+
+        } catch {
+            print(error.localizedDescription)
         }
         NSLog("解析结束")
     }
 
-    func sortByUser(insList: [String: JSON]) -> [(key: String, value: JSON)] {
+    func sortByUser(insList: [String: Quote]) -> [(key: String, value: Quote)] {
         return insList.sorted(by: {
             let optional = FileUtils.getOptional()
             if let index0 = optional.index(of: $0.key), let index1 = optional.index(of: $1.key){
@@ -215,7 +226,7 @@ class DataManager {
         })
     }
 
-    func sortByKey(insList: [String: JSON]) -> [(key: String, value: JSON)] {
+    func sortByKey(insList: [String: Quote]) -> [(key: String, value: Quote)] {
         return insList.sorted(by: {
             if let sortKey0 = (sSearchEntities[$0.key]?.sort_key), let sortKey1 = (sSearchEntities[$1.key]?.sort_key){
                 if sortKey0 != sortKey1{
@@ -243,6 +254,7 @@ class DataManager {
 
     func resortOptional(fromIndex: Int, toIndex: Int) {
         var optional = FileUtils.getOptional()
+        if fromIndex >= optional.count || toIndex >= optional.count{return}
         let ins = optional.remove(at: fromIndex)
         optional.insert(ins, at: toIndex)
         FileUtils.saveOptional(ins: optional)
@@ -256,12 +268,8 @@ class DataManager {
         if !optional.contains(ins) {
             optional.append(ins)
             FileUtils.saveOptional(ins: optional)
-            var quote: JSON!
-            if let ins_name = sSearchEntities[ins]?.instrument_name {
-                quote = JSON(parseJSON: "{\"instrument_id\":\"\(ins)\", \"instrument_name\":\"\(ins_name)\"}")
-            }else{
-                quote = JSON(parseJSON: "{\"instrument_id\":\"\(ins)\", \"instrument_name\":\"\(ins)\"}")
-            }
+            let quote = Quote()
+            quote.instrument_id = ins
             sQuotes[0].append((key: ins, value: quote))
             ToastUtils.showPositiveMessage(message: "合约\(ins)已添加到自选～")
         } else if let index = optional.index(of: ins), let index1 = sQuotes[0].index(where: {$0.key.elementsEqual(ins)}){
@@ -300,31 +308,144 @@ class DataManager {
         }
     }
 
-    func parseRtnMD(rtnData: JSON) {
-        do {
-            let dataArray = rtnData[RtnMDConstants.data].arrayValue
-            for dataJson in dataArray {
-                try sRtnMD.merge(with: dataJson)
+    func parseRtnMD(rtnData: [String: Any]) {
+        guard let dataArray = rtnData[RtnMDConstants.data] as? [Any] else {return}
+        for dataJson in dataArray {
+            guard let data = dataJson as? [String: Any] else {continue}
+            for (key, value) in data{
+                switch key{
+                case RtnMDConstants.quotes:
+                    let quotes = value as? [String: Any]
+                    parseQuotes(quotes: quotes)
+                case RtnMDConstants.charts:
+                    let charts = value as? [String: Any]
+                    parseCharts(charts: charts)
+                case RtnMDConstants.klines:
+                    let klines = value as? [String: Any]
+                    parseKlines(klines: klines)
+                case RtnMDConstants.ins_list:
+                    let ins_list = value as? String
+                    sRtnMD.ins_list = ins_list ?? ""
+                default:
+                    break
+                }
             }
-            DispatchQueue.main.async {
-                NotificationCenter.default.post(name: Notification.Name(CommonConstants.RtnMDNotification), object: nil)
+
+
+        }
+        DispatchQueue.main.async {
+            NotificationCenter.default.post(name: Notification.Name(CommonConstants.RtnMDNotification), object: nil)
+        }
+
+    }
+
+    fileprivate func parseKlines(klines: [String: Any]?){
+        guard let klines = klines else {return}
+        for (instrument_id, kline) in klines {
+            var kline_local = sRtnMD.klines[instrument_id]
+            if kline_local == nil{
+                kline_local = [String: Kline]()
             }
-        } catch {
-            print(error.localizedDescription)
+            guard let kline = kline as? [String: Any] else {continue}
+            for (duration, kline_data) in kline{
+                var kline_data_local = kline_local?[duration]
+                if kline_data_local == nil{
+                    kline_data_local = Kline()
+                }
+                guard let kline_data = kline_data as? [String: Any] else {continue}
+                for (key, value) in kline_data{
+                    SwiftTryCatch.try({
+                        switch key {
+                        case KlineConstants.data:
+                            if let datas = value as? [String: Any] {
+                                for (key, data) in datas {
+                                    guard let data = data as? [String: Any] else {continue}
+                                    var data_local = kline_data_local?.datas[key]
+                                    if data_local == nil{
+                                        data_local = Kline.Data()
+                                    }
+                                    for (key, value) in data {
+                                        data_local?.setValue(value, forKey: key)
+                                    }
+                                    kline_data_local?.datas[key] = data_local
+
+                                }
+                            }
+                        case KlineConstants.binding:
+                            print(value)
+                        default:
+                            kline_data_local?.setValue(value, forKey: key)
+                        }
+                    }, catch: { (error) in
+                    }, finally: {
+                    })
+                }
+                kline_local?[duration] = kline_data_local
+            }
+            sRtnMD.klines[instrument_id] = kline_local
+        }
+    }
+
+    fileprivate func parseCharts(charts: [String: Any]?){
+        guard let charts = charts else {return}
+        for (instrument_id, chart) in charts {
+            var chart_local = sRtnMD.charts[instrument_id]
+            if chart_local == nil{
+                chart_local = Chart()
+            }
+            guard let chart = chart as? [String: Any] else {continue}
+            for (key, value) in chart{
+                SwiftTryCatch.try({
+                    if ChartConstants.state.elementsEqual(key){
+                        if chart_local?.state == nil{
+                            chart_local?.state = Chart.State()
+                        }
+                        if let state = value as? [String: Any] {
+                            for (key, value) in state{
+                                chart_local?.state?.setValue(value, forKey: key)
+                            }
+                        }
+                    }else{
+                        chart_local?.setValue(value, forKey: key)
+                    }
+                }, catch: { (error) in
+                }, finally: {
+                })
+
+            }
+            sRtnMD.charts[instrument_id] = chart_local
+        }
+    }
+
+    fileprivate func parseQuotes(quotes: [String: Any]?){
+        guard let quotes = quotes else {return}
+        for (instrument_id, quote) in quotes {
+            var quote_local = sRtnMD.quotes[instrument_id]
+            if quote_local == nil{
+                quote_local = Quote()
+            }
+            guard let quote = quote as? [String: Any] else {continue}
+            for (key, value) in quote{
+                SwiftTryCatch.try({
+                    quote_local?.setValue(value, forKey: key)
+                }, catch: { (error) in
+                }, finally: {
+                })
+            }
+            sRtnMD.quotes[instrument_id] = quote_local
         }
     }
 
     //清空账户
     func clearAccount() {
-        sRtnTD = JSON.null
         sIsLogin = false
         sIsEmpty = false
         sUser_id = ""
-        sRtnTD = JSON()
+        sRtnTD = RtnTD()
     }
 
-    func parseBrokers(brokers: JSON) {
-        if !brokers.dictionaryValue.keys.contains(RtnTDConstants.brokers) {
+    func parseBrokers(rtnData: [String: Any]) {
+        if !rtnData.keys.contains(RtnTDConstants.brokers) {
             sIsLogin = false
             sIsEmpty = true
             DispatchQueue.main.async {
@@ -332,57 +453,247 @@ class DataManager {
             }
             return
         }
-        sRtnBrokers = brokers
+        sBrokers = rtnData[RtnTDConstants.brokers] as? [String] ?? [""]
         DispatchQueue.main.async {
             NotificationCenter.default.post(name: Notification.Name(CommonConstants.BrokerInfoNotification), object: nil)
         }
 
     }
 
-    func parseRtnTD(transactionData: JSON) {
-        do {
-            let dataArray = transactionData[RtnTDConstants.data].arrayValue
-            for dataJson in dataArray {
-                let tradeJson = dataJson[RtnTDConstants.trade]
-                if !tradeJson.isEmpty {
-                    try sRtnTD.merge(with: tradeJson)
-                    DispatchQueue.main.async {
-                        NotificationCenter.default.post(name: Notification.Name(CommonConstants.RtnTDNotification), object: nil)
-                    }
-                }
-
-                if !sIsLogin{
-                    let session = tradeJson[sUser_id][RtnTDConstants.session]
-                    if !session.isEmpty {
-                        DispatchQueue.main.async {
-                            NotificationCenter.default.post(name: Notification.Name(CommonConstants.LoginNotification), object: nil)
-                        }
-                    }
-                }
-
-                let notifyArray = dataJson[RtnTDConstants.notify]
-                if !notifyArray.isEmpty {
-                    for (_, notifyJson) in notifyArray.dictionaryValue {
-                        let content = notifyJson[NotifyConstants.content].stringValue
-                        let type = notifyJson[NotifyConstants.type].stringValue
-                        if "SETTLEMENT".elementsEqual(type){
-                            DispatchQueue.main.async {
-                                ConfirmSettlementView.getInstance().showConfirmSettlement(message: content)
-                            }
-                        }else{
-                            DispatchQueue.main.async {
-                                ToastUtils.showPositiveMessage(message: content)
-                            }
-                        }
-
-                    }
-                    
+    func parseRtnTD(rtnData: [String: Any]) {
+        guard let dataArray = rtnData[RtnTDConstants.data] as? [Any] else {return}
+        for data in dataArray {
+            guard let data = data as? [String: Any] else {continue}
+            for (key, value) in data {
+                guard let data = value as? [String: Any] else {continue}
+                switch key {
+                case RtnTDConstants.trade:
+                    parseTrade(trade: data)
+                    break
+                case RtnTDConstants.notify:
+                    parseNotify(notify: data)
+                    break
+                default:
+                    break
                 }
             }
-
-        } catch {
-            print(error.localizedDescription)
         }
     }
 
+    fileprivate func parseNotify(notify: [String: Any]?){
+        guard let notify = notify else {return}
+        for (_, value) in notify{
+            guard let value = value as? [String: Any] else {continue}
+            let content = "\(value[NotifyConstants.content] ?? "")"
+            let type = "\(value[NotifyConstants.type] ?? "")"
+            if "SETTLEMENT".elementsEqual(type){
+                DispatchQueue.main.async {
+                    ConfirmSettlementView.getInstance().showConfirmSettlement(message: content)
+                }
+            }else{
+                DispatchQueue.main.async {
+                    ToastUtils.showPositiveMessage(message: content)
+                }
+            }
+
+        }
+    }
+
+    fileprivate func parseTrade(trade: [String: Any]?){
+        guard let trade = trade else {return}
+        for (key_user, user) in trade{
+            guard let user = user as? [String: Any] else {continue}
+            for (key_value, value) in user {
+                switch key_value {
+                case RtnTDConstants.accounts:
+                    let accounts = value as? [String: Any]
+                    parseAccounts(accounts: accounts, key_user: key_user)
+                    break
+                case RtnTDConstants.positions:
+                    let positions = value as? [String: Any]
+                    parsePositions(positions: positions, key_user: key_user)
+                    break
+                case RtnTDConstants.orders:
+                    let orders = value as? [String: Any]
+                    parseOrders(orders: orders, key_user: key_user)
+                    break
+                case RtnTDConstants.trades:
+                    let trades = value as? [String: Any]
+                    parseTrades(trades: trades, key_user: key_user)
+                    break
+                case RtnTDConstants.transfers:
+                    let transfers = value as? [String: Any]
+                    parseTransfers(transfers: transfers, key_user: key_user)
+                    break
+                case RtnTDConstants.banks:
+                    let banks = value as? [String: Any]
+                    parseBanks(banks: banks, key_user: key_user)
+                    break
+                case RtnTDConstants.session:
+                    DispatchQueue.main.async {
+                        NotificationCenter.default.post(name: Notification.Name(CommonConstants.LoginNotification), object: nil)
+                    }
+                    return
+                default:
+                    break
+                }
+            }
+        }
+        DispatchQueue.main.async {
+            NotificationCenter.default.post(name: Notification.Name(CommonConstants.RtnTDNotification), object: nil)
+        }
+
+    }
+
+    fileprivate func parseAccounts(accounts: [String: Any]?, key_user: String){
+        guard let accounts = accounts else {return}
+        var user_local = sRtnTD.users[key_user]
+        if user_local == nil{
+            user_local = User()
+        }
+        for (key, value) in accounts {
+            guard let account = value as? [String: Any] else {continue}
+            var account_local = user_local?.accounts[key]
+            if account_local == nil{
+                account_local = Account()
+            }
+            for (key, value) in account{
+                SwiftTryCatch.try({
+                    account_local?.setValue(value, forKey: key)
+                }, catch: { (error) in
+                }, finally: {
+                })
+            }
+            user_local?.accounts[key] = account_local
+        }
+        sRtnTD.users[key_user] = user_local
+    }
+
+    fileprivate func parsePositions(positions: [String: Any]?, key_user: String){
+        guard let positions = positions else {return}
+        var user_local = sRtnTD.users[key_user]
+        if user_local == nil{
+            user_local = User()
+        }
+        for (key, value) in positions {
+            guard let position = value as? [String: Any] else {continue}
+            var position_local = user_local?.positions[key]
+            if position_local == nil{
+                position_local = Position()
+            }
+            for (key, value) in position{
+                SwiftTryCatch.try({
+                    position_local?.setValue(value, forKey: key)
+                }, catch: { (error) in
+                }, finally: {
+                })
+            }
+            user_local?.positions[key] = position_local
+        }
+        sRtnTD.users[key_user] = user_local
+
+    }
+
+    fileprivate func parseOrders(orders: [String: Any]?, key_user: String){
+        guard let orders = orders else {return}
+        var user_local = sRtnTD.users[key_user]
+        if user_local == nil{
+            user_local = User()
+        }
+        for (key, value) in orders {
+            guard let order = value as? [String: Any] else {continue}
+            var order_local = user_local?.orders[key]
+            if order_local == nil{
+                order_local = Order()
+            }
+            for (key, value) in order{
+                SwiftTryCatch.try({
+                    order_local?.setValue(value, forKey: key)
+                }, catch: { (error) in
+                }, finally: {
+                })
+            }
+            user_local?.orders[key] = order_local
+        }
+
+        sRtnTD.users[key_user] = user_local
+
+    }
+
+    fileprivate func parseTransfers(transfers: [String: Any]?, key_user: String){
+        guard let transfers = transfers else {return}
+        var user_local = sRtnTD.users[key_user]
+        if user_local == nil{
+            user_local = User()
+        }
+        for (key, value) in transfers {
+            guard let transfer = value as? [String: Any] else {continue}
+            var transfer_local = user_local?.transfers[key]
+            if transfer_local == nil{
+                transfer_local = Transfer()
+            }
+            for (key, value) in transfer{
+                SwiftTryCatch.try({
+                    transfer_local?.setValue(value, forKey: key)
+                }, catch: { (error) in
+                }, finally: {
+                })
+            }
+            user_local?.transfers[key] = transfer_local
+        }
+
+        sRtnTD.users[key_user] = user_local
+
+    }
+
+    fileprivate func parseBanks(banks: [String: Any]?, key_user: String){
+        guard let banks = banks else {return}
+        var user_local = sRtnTD.users[key_user]
+        if user_local == nil{
+            user_local = User()
+        }
+        for (key, value) in banks {
+            guard let bank = value as? [String: Any] else {continue}
+            var bank_local = user_local?.banks[key]
+            if bank_local == nil{
+                bank_local = Bank()
+            }
+            for (key, value) in bank{
+                SwiftTryCatch.try({
+                    bank_local?.setValue(value, forKey: key)
+                }, catch: { (error) in
+                }, finally: {
+                })
+            }
+            user_local?.banks[key] = bank_local
+        }
+
+        sRtnTD.users[key_user] = user_local
+
+    }
+
+    fileprivate func parseTrades(trades: [String: Any]?, key_user: String){
+        guard let trades = trades else {return}
+        var user_local = sRtnTD.users[key_user]
+        if user_local == nil{
+            user_local = User()
+        }
+        for (key, value) in trades {
+            guard let trade = value as? [String: Any] else {continue}
+            var trade_local = user_local?.trades[key]
+            if trade_local == nil{
+                trade_local = Trade()
+            }
+            for (key, value) in trade{
+                SwiftTryCatch.try({
+                    trade_local?.setValue(value, forKey: key)
+                }, catch: { (error) in
+                }, finally: {
+                })
+            }
+            user_local?.trades[key] = trade_local
+        }
+        sRtnTD.users[key_user] = user_local
+
+    }
 }

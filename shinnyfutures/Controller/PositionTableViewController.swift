@@ -7,12 +7,11 @@
 //
 
 import UIKit
-import SwiftyJSON
 import DeepDiff
 
 class PositionTableViewController: UITableViewController {
     // MARK: Properties
-    var positions = [JSON]()
+    var positions = [Position]()
     let dataManager = DataManager.getInstance()
     var isRefresh = true
 
@@ -62,7 +61,7 @@ class PositionTableViewController: UITableViewController {
 
         // Fetches the appropriate quote for the data source layout.
         let position = positions[indexPath.row]
-        let instrumentId = position[PositionConstants.exchange_id].stringValue + "." + position[PositionConstants.instrument_id].stringValue
+        let instrumentId = "\(position.exchange_id ?? "")" + "." + "\(position.instrument_id ?? "")"
         if let search = dataManager.sSearchEntities[instrumentId] {
             cell.name.text = search.instrument_name
         } else {
@@ -71,11 +70,15 @@ class PositionTableViewController: UITableViewController {
 
         let decimal = dataManager.getDecimalByPtick(instrumentId: instrumentId) + 1
 
-        let volume_long = position[PositionConstants.volume_long].intValue
-        let available_long = volume_long - position[PositionConstants.volume_long_frozen_today].intValue - position[PositionConstants.volume_long_frozen_his].intValue
+        let volume_long = (position.volume_long as? Int) ?? 0
+        let volume_long_frozen_today = (position.volume_long_frozen_today as? Int) ?? 0
+        let volume_long_frozen_his = (position.volume_long_frozen_his as? Int) ?? 0
+        let available_long = volume_long - volume_long_frozen_today - volume_long_frozen_his
 
-        let volume_short = position[PositionConstants.volume_short].intValue
-        let available_short = volume_short - position[PositionConstants.volume_short_frozen_his].intValue - position[PositionConstants.volume_short_frozen_today].intValue
+        let volume_short = (position.volume_short as? Int) ?? 0
+        let volume_short_frozen_today = (position.volume_short_frozen_today as? Int) ?? 0
+        let volume_short_frozen_his = (position.volume_short_frozen_his as? Int) ?? 0
+        let available_short = volume_short - volume_short_frozen_today - volume_short_frozen_his
 
         var profit = 0.0
 
@@ -84,33 +87,35 @@ class PositionTableViewController: UITableViewController {
             cell.direction.textColor = CommonConstants.RED_TEXT
             cell.available.text = "\(available_long)"
             cell.volume.text = "\(volume_long)"
-            let open_price_long = position[PositionConstants.open_price_long].floatValue
-            cell.openPrice.text = dataManager.saveDecimalByPtick(decimal: decimal, data: "\(open_price_long)")
-            profit = position[PositionConstants.float_profit_long].doubleValue
+            let open_price_long = "\(position.open_price_long ?? 0.0)"
+            cell.openPrice.text = dataManager.saveDecimalByPtick(decimal: decimal, data: open_price_long)
+            profit = Double("\(position.float_profit_long ?? 0.0)") ?? 0.0
             cell.profit.text = dataManager.saveDecimalByPtick(decimal: 2, data: "\(profit)")
         } else if volume_long == 0 && volume_short != 0 {
             cell.direction.text = "空"
             cell.direction.textColor = CommonConstants.GREEN_TEXT
             cell.available.text = "\(available_short)"
             cell.volume.text = "\(volume_short)"
-            let open_price_short = position[PositionConstants.open_price_short].floatValue
-            cell.openPrice.text = dataManager.saveDecimalByPtick(decimal: decimal, data: "\(open_price_short)")
-            profit = position[PositionConstants.float_profit_short].doubleValue
+            let open_price_short = "\(position.open_price_short ?? 0.0)"
+            cell.openPrice.text = dataManager.saveDecimalByPtick(decimal: decimal, data: open_price_short)
+            profit = Double("\(position.float_profit_short ?? 0.0)") ?? 0.0
             cell.profit.text = dataManager.saveDecimalByPtick(decimal: 2, data: "\(profit)")
         } else if volume_long != 0 && volume_short != 0 {
             cell.direction.text = "双向"
             cell.direction.textColor = UIColor.white
             cell.available.text = "\(available_long)" + "/" + "\(available_short)"
             cell.volume.text = "\(volume_long)" + "/" + "\(volume_short)"
-            let open_price_long = position[PositionConstants.open_price_long].floatValue
-            let open_price_long_s = dataManager.saveDecimalByPtick(decimal: decimal, data: "\(open_price_long)")
-            let open_price_short = position[PositionConstants.open_price_short].floatValue
-            let open_price_short_s = dataManager.saveDecimalByPtick(decimal: decimal, data: "\(open_price_short)")
+            let open_price_long = "\(position.open_price_long ?? 0.0)"
+            let open_price_long_s = dataManager.saveDecimalByPtick(decimal: decimal, data: open_price_long)
+            let open_price_short = "\(position.open_price_short ?? 0.0)"
+            let open_price_short_s = dataManager.saveDecimalByPtick(decimal: decimal, data: open_price_short)
             cell.openPrice.text = open_price_long_s + "/" + open_price_short_s
-            let profit_long = dataManager.saveDecimalByPtick(decimal: 2, data: position[PositionConstants.float_profit_long].stringValue)
-            let profit_short = dataManager.saveDecimalByPtick(decimal: 2, data: position[PositionConstants.float_profit_short].stringValue)
+            let float_profit_long = "\(position.float_profit_long ?? 0.0)"
+            let float_profit_short = "\(position.float_profit_short ?? 0.0)"
+            let profit_long = dataManager.saveDecimalByPtick(decimal: 2, data: float_profit_long)
+            let profit_short = dataManager.saveDecimalByPtick(decimal: 2, data: float_profit_short)
             cell.profit.text = profit_long + "/" + profit_short
-            profit = position[PositionConstants.float_profit_long].doubleValue
+            profit = Double("\(position.float_profit_long ?? 0.0)") ?? 0.0
         }
 
         if profit > 0 {
@@ -126,7 +131,8 @@ class PositionTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
-        let instrumentId = positions[indexPath.row][PositionConstants.exchange_id].stringValue + "." + positions[indexPath.row][PositionConstants.instrument_id].stringValue
+        let position = positions[indexPath.row]
+        let instrumentId = "\(position.exchange_id ?? "")" + "." + "\(position.instrument_id ?? "")"
         if !dataManager.sInstrumentId.elementsEqual(instrumentId){
             dataManager.sInstrumentId = instrumentId
             NotificationCenter.default.post(name: Notification.Name(CommonConstants.SwitchQuoteNotification), object: nil)
@@ -221,13 +227,13 @@ class PositionTableViewController: UITableViewController {
     // MARK: objc Methods
     @objc private func loadData() {
         if !isRefresh {return}
-        let user = dataManager.sRtnTD[dataManager.sUser_id]
-        let rtnPositions = user[RtnTDConstants.positions].dictionaryValue.sorted(by: <).map({$0.value})
+        guard let user = dataManager.sRtnTD.users[dataManager.sUser_id] else {return}
+        let rtnPositions = user.positions.sorted{$0.key < $1.key}.map({$0.value})
         let oldData = positions
         positions.removeAll()
         for position in rtnPositions{
-            let volume_long = position[PositionConstants.volume_long].intValue
-            let volume_short = position[PositionConstants.volume_short].intValue
+            let volume_long = (position.volume_long as? Int) ?? 0
+            let volume_short = (position.volume_short as? Int) ?? 0
             if volume_long != 0 || volume_short != 0{
                 positions.append(position)
             }

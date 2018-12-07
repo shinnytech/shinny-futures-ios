@@ -7,12 +7,11 @@
 //
 
 import UIKit
-import SwiftyJSON
 import DeepDiff
 
 class OrderTableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate {
     // MARK: Properties
-    var orders = [JSON]()
+    var orders = [Order]()
     let dataManager = DataManager.getInstance()
     let dateFormat = DateFormatter()
     var isRefresh = true
@@ -72,15 +71,15 @@ class OrderTableViewController: UIViewController, UITableViewDataSource, UITable
         if orders.count != 0 {
             let order = orders[indexPath.row]
 
-            let instrumentId = order[OrderConstants.exchange_id].stringValue + "." + order[OrderConstants.instrument_id].stringValue
+            let instrumentId = "\(order.exchange_id ?? "")" + "." + "\(order.instrument_id ?? "")"
             if let search = dataManager.sSearchEntities[instrumentId] {
                 cell.name.text = search.instrument_name
             } else {
                 cell.name.text = instrumentId
             }
 
-            cell.status.text = order[OrderConstants.last_msg].stringValue
-            let offset = order[OrderConstants.offset].stringValue
+            cell.status.text = "\(order.last_msg ?? "")"
+            let offset = "\(order.offset ?? "")"
             switch offset {
             case "OPEN":
                 cell.offset.text = "开仓"
@@ -95,7 +94,7 @@ class OrderTableViewController: UIViewController, UITableViewDataSource, UITable
             default:
                 cell.offset.text = ""
             }
-            let direction = order[OrderConstants.direction].stringValue
+            let direction = "\(order.direction ?? "")"
             switch direction {
             case "BUY":
                 cell.offset.textColor = CommonConstants.RED_TEXT
@@ -106,13 +105,13 @@ class OrderTableViewController: UIViewController, UITableViewDataSource, UITable
             }
             let decimal = dataManager.getDecimalByPtick(instrumentId: instrumentId)
 
-            let price = order[OrderConstants.limit_price].stringValue
+            let price = "\(order.limit_price ?? 0.0)"
             cell.price.text = dataManager.saveDecimalByPtick(decimal: decimal, data: price)
-            let volume_left = order[OrderConstants.volume_left].intValue
-            let volume_origin = order[OrderConstants.volume_orign].intValue
+            let volume_left = (order.volume_left as? Int) ?? 0
+            let volume_origin = (order.volume_orign as? Int) ?? 0
             let volume_trade = volume_origin - volume_left
             cell.volume.text = "\(volume_trade)" + "/" + "\(volume_origin)"
-            let trade_time = order[OrderConstants.insert_date_time].doubleValue
+            let trade_time = Double("\(order.insert_date_time ?? 0)") ?? 0.0
             //错单时间为0
             if trade_time == 0{
                  cell.time.text = "--"
@@ -129,15 +128,15 @@ class OrderTableViewController: UIViewController, UITableViewDataSource, UITable
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if orders.count != 0 {
             let order = orders[indexPath.row]
-            let status = order[OrderConstants.status].stringValue
+            let status = "\(order.status ?? "")"
             if "ALIVE".elementsEqual(status) {
-                let order_id = order[OrderConstants.order_id].stringValue
-                let instrument_id = order[OrderConstants.instrument_id].stringValue
-                let exchange_id = order[OrderConstants.exchange_id].stringValue
-                let direction_title = order[OrderConstants.direction].stringValue
-                let volume = order[OrderConstants.volume_left].stringValue
+                let order_id = "\(order.order_id ?? "")"
+                let instrument_id = "\(order.instrument_id ?? "")"
+                let exchange_id = "\(order.exchange_id ?? "")"
+                let direction_title = "\(order.direction ?? "")"
+                let volume = "\(order.volume_left ?? 0)"
                 let p_decs = dataManager.getDecimalByPtick(instrumentId: exchange_id + "." + instrument_id)
-                let price = dataManager.saveDecimalByPtick(decimal: p_decs, data: order[OrderConstants.limit_price].stringValue)
+                let price = dataManager.saveDecimalByPtick(decimal: p_decs, data: "\(order.limit_price ?? 0.0)")
                 let title = "您确定要撤单吗？"
                 let message = "合约：\(instrument_id), 价格：\(price), 方向：\(direction_title), 手数：\(volume)手"
                 let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
@@ -248,15 +247,15 @@ class OrderTableViewController: UIViewController, UITableViewDataSource, UITable
     // MARK: objc Methods
     @objc private func loadData() {
         if !isRefresh{return}
-        let user = dataManager.sRtnTD[dataManager.sUser_id]
-        let orders_tmp = user[RtnTDConstants.orders].dictionaryValue.sorted{ $0.value[OrderConstants.insert_date_time].stringValue > $1.value[OrderConstants.insert_date_time].stringValue }.map {$0.value}
+        guard let user = dataManager.sRtnTD.users[dataManager.sUser_id] else {return}
+        let orders_tmp = user.orders.sorted{ "\($0.value.insert_date_time ?? 0)" > "\($1.value.insert_date_time ?? 0)" }.map {$0.value}
         let oldData = orders
         if segmentControl.selectedSegmentIndex == 1 {
             orders = orders_tmp
         } else {
             orders.removeAll()
             for order in orders_tmp {
-                let status = order[OrderConstants.status].stringValue
+                let status = "\(order.status ?? "")"
                 if "ALIVE".elementsEqual(status) {
                     orders.append(order)
                 }

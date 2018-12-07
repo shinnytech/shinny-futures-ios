@@ -7,13 +7,12 @@
 //
 
 import UIKit
-import SwiftyJSON
 import DeepDiff
 
 class TradeTableViewController: UITableViewController {
 
     // MARK: Properties
-    var trades = [JSON]()
+    var trades = [Trade]()
     let dataManager = DataManager.getInstance()
     var isRefresh = true
     let dateFormat = DateFormatter()
@@ -62,13 +61,13 @@ class TradeTableViewController: UITableViewController {
 
         // Fetches the appropriate quote for the data source layout.
         let trade = trades[indexPath.row]
-        let instrumentId = trade[TradeConstants.exchange_id].stringValue + "." +  trade[TradeConstants.instrument_id].stringValue
+        let instrumentId = "\(trade.exchange_id ?? "")" + "." +  "\(trade.instrument_id ?? "")"
         if let search = dataManager.sSearchEntities[instrumentId] {
             cell.name.text = search.instrument_name
         } else {
             cell.name.text = instrumentId
         }
-        switch trade[TradeConstants.offset].stringValue {
+        switch "\(trade.offset ?? "")" {
         case "OPEN":
             cell.offset.text = "开仓"
         case "CLOSETODAY":
@@ -82,7 +81,7 @@ class TradeTableViewController: UITableViewController {
         default:
             cell.offset.text = ""
         }
-        switch trade[TradeConstants.direction].stringValue {
+        switch "\(trade.direction ?? "")"{
         case "BUY":
             cell.offset.textColor = CommonConstants.RED_TEXT
         case "SELL":
@@ -91,10 +90,10 @@ class TradeTableViewController: UITableViewController {
             cell.offset.textColor = CommonConstants.RED_TEXT
         }
         let decimal = dataManager.getDecimalByPtick(instrumentId: instrumentId)
-        let price = trade[TradeConstants.price].stringValue
+        let price = "\(trade.price ?? 0.0)"
         cell.price.text = dataManager.saveDecimalByPtick(decimal: decimal, data: price)
-        cell.volume.text = trade[TradeConstants.volume].stringValue
-        let trade_time = trade[TradeConstants.trade_date_time].doubleValue
+        cell.volume.text = "\(trade.volume ?? 0)"
+        let trade_time = Double("\(trade.trade_date_time ?? 0)") ?? 0.0
         let date = Date(timeIntervalSince1970: (trade_time / 1000000000))
         cell.time.text = dateFormat.string(from: date)
         return cell
@@ -139,10 +138,10 @@ class TradeTableViewController: UITableViewController {
         datetime.textAlignment = .center
         datetime.textColor = UIColor.white
         stackView.addArrangedSubview(name)
-        stackView.addArrangedSubview(datetime)
+        stackView.addArrangedSubview(direction)
         stackView.addArrangedSubview(price)
         stackView.addArrangedSubview(volume)
-        stackView.addArrangedSubview(direction)
+        stackView.addArrangedSubview(datetime)
         headerView.addSubview(stackView)
         return headerView
     }
@@ -171,10 +170,10 @@ class TradeTableViewController: UITableViewController {
     // MARK: objc Methods
     @objc private func loadData() {
         if !isRefresh {return}
-        let user = dataManager.sRtnTD[dataManager.sUser_id]
-        let rtnTrades = user[RtnTDConstants.trades].dictionaryValue.sorted(by:{
-            let time0 = $0.value[TradeConstants.trade_date_time].stringValue
-            let time1 = $1.value[TradeConstants.trade_date_time].stringValue
+        guard let user = dataManager.sRtnTD.users[dataManager.sUser_id] else {return}
+        let rtnTrades = user.trades.sorted(by:{
+            let time0 = "\($0.value.trade_date_time ?? "")"
+            let time1 = "\($1.value.trade_date_time ?? "")"
             return time0 > time1
         }).map {$0.value}
         let oldData = trades

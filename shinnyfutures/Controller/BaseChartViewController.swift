@@ -8,7 +8,6 @@
 
 import UIKit
 import Charts
-import SwiftyJSON
 
 class BaseChartViewController: UIViewController, ChartViewDelegate {
 
@@ -44,7 +43,6 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
     let calendar = Calendar.autoupdatingCurrent
     var simpleDateFormat = DateFormatter()
     var xVals = [Int: Int]()
-    var dataEntities = [String: JSON]()
     var klineType = ""
     var doubleTap: UITapGestureRecognizer!
     var singleTap: UITapGestureRecognizer!
@@ -184,14 +182,14 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
             key = (dataManager.sSearchEntities[key]?.underlying_symbol)!
         }
 
-        let user = dataManager.sRtnTD[dataManager.sUser_id]
-        guard let position = user[RtnTDConstants.positions].dictionaryValue[key] else {return}
-        let volume_long = position[PositionConstants.volume_long].intValue
+        guard let user = dataManager.sRtnTD.users[dataManager.sUser_id] else {return}
+        guard let position = user.positions[key] else {return}
+        let volume_long = (position.volume_long as? Int) ?? 0
         if volume_long != 0 {
-            let limit_long =  position[PositionConstants.open_price_long].stringValue
+            let limit_long =  "\(position.open_price_long ?? 0.0)"
             let p_decs = dataManager.getDecimalByPtick(instrumentId: key)
             let limit_long_p = dataManager.saveDecimalByPtick(decimal: p_decs, data: limit_long)
-            let label_long = "\(position[PositionConstants.instrument_id].stringValue)@\(limit_long_p)/\(volume_long)手"
+            let label_long = "\(position.instrument_id ?? "")@\(limit_long_p)/\(volume_long)手"
             generatePositionLimitLine(limit: limit_long_p, label: label_long, color: colorBuy!, limitKey: key + "0", volume: volume_long)
         }
     }
@@ -202,14 +200,14 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
             key = (dataManager.sSearchEntities[key]?.underlying_symbol)!
         }
 
-        let user = dataManager.sRtnTD[dataManager.sUser_id]
-        guard let position = user[RtnTDConstants.positions].dictionaryValue[key] else {return}
-        let volume_short = position[PositionConstants.volume_short].intValue
+        guard let user = dataManager.sRtnTD.users[dataManager.sUser_id] else {return}
+        guard let position = user.positions[key] else {return}
+        let volume_short = (position.volume_short as? Int) ?? 0
         if volume_short != 0 {
-            let limit_short = position[PositionConstants.open_price_short].stringValue
+            let limit_short = "\(position.open_price_short ?? 0.0)"
             let p_decs = dataManager.getDecimalByPtick(instrumentId: key)
             let limit_short_p = dataManager.saveDecimalByPtick(decimal: p_decs, data: limit_short)
-            let label_short = "\(position[PositionConstants.instrument_id].stringValue)@\(limit_short_p)/\(volume_short)手"
+            let label_short = "\(position.instrument_id ?? "")@\(limit_short_p)/\(volume_short)手"
             generatePositionLimitLine(limit: limit_short_p, label: label_short, color: colorSell!, limitKey: key + "1", volume: volume_short)
         }
     }
@@ -221,19 +219,19 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
         }
 
         let limitKey = key + "0"
-        let user = dataManager.sRtnTD[dataManager.sUser_id]
-        guard let position = user[RtnTDConstants.positions].dictionaryValue[key] else {return}
-        let volume_long = position[PositionConstants.volume_long].intValue
+        guard let user = dataManager.sRtnTD.users[dataManager.sUser_id] else {return}
+        guard let position = user.positions[key] else {return}
+        let volume_long = (position.volume_long as? Int) ?? 0
         guard let limitLine = positionLimitLines[limitKey] else {return}
         if volume_long != 0 {
-            let limit_long = position[PositionConstants.open_price_long].stringValue
+            let limit_long = "\(position.open_price_long ?? 0.0)"
             let p_decs = dataManager.getDecimalByPtick(instrumentId: key)
             let limit_long_p = dataManager.saveDecimalByPtick(decimal: p_decs, data: limit_long)
             guard let limit_long_p_d = Double(limit_long_p) else{return}
 
             guard let volume_long_l = positionVolumes[limitKey] else {return}
             if limitLine.limit != limit_long_p_d || volume_long != volume_long_l {
-                let label_long = "\(position[PositionConstants.instrument_id].stringValue)@\(limit_long_p)/\(volume_long)手"
+                let label_long = "\(position.instrument_id ?? "")@\(limit_long_p)/\(volume_long)手"
                 chartView.leftAxis.removeLimitLine(limitLine)
                 generatePositionLimitLine(limit: limit_long_p, label: label_long, color: colorBuy!, limitKey: limitKey, volume: volume_long)
             }
@@ -252,18 +250,18 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
         }
 
         let limitKey = key + "1"
-        let user = dataManager.sRtnTD[dataManager.sUser_id]
-        guard let position = user[RtnTDConstants.positions].dictionaryValue[key] else {return}
-        let volume_short = position[PositionConstants.volume_short].intValue
+        guard let user = dataManager.sRtnTD.users[dataManager.sUser_id] else {return}
+        guard let position = user.positions[key] else {return}
+        let volume_short = (position.volume_short as? Int) ?? 0
         guard let limitLine = positionLimitLines[limitKey] else {return}
         if volume_short != 0 {
-            let limit_short = position[PositionConstants.open_price_short].stringValue
+            let limit_short = "\(position.open_price_short ?? 0.0)"
             let p_decs = dataManager.getDecimalByPtick(instrumentId: key)
             let limit_short_p = dataManager.saveDecimalByPtick(decimal: p_decs, data: limit_short)
             guard let limit_short_p_d = Double(limit_short_p) else{return}
             guard let volume_short_l = positionVolumes[limitKey] else {return}
             if limitLine.limit != limit_short_p_d || volume_short != volume_short_l{
-                let label_short = "\(position[PositionConstants.instrument_id].stringValue)@\(limit_short_p)/\(volume_short)手"
+                let label_short = "\(position.instrument_id ?? "")@\(limit_short_p)/\(volume_short)手"
                 chartView.leftAxis.removeLimitLine(limitLine)
                 generatePositionLimitLine(limit: limit_short_p, label: label_short, color: colorSell!, limitKey: limitKey, volume: volume_short)
             }
@@ -285,12 +283,12 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
 
     //挂单线增删操作
     func addOrderLimitLines() {
-        let user = dataManager.sRtnTD[dataManager.sUser_id]
-        let orders = user[RtnTDConstants.orders].dictionaryValue
+        guard let user = dataManager.sRtnTD.users[dataManager.sUser_id] else {return}
+        let orders = user.orders
         if orders.isEmpty{return}
         for orderEntity in orders.map({$0.value}) {
-            let instrumentId = orderEntity[OrderConstants.exchange_id].stringValue + "." + orderEntity[OrderConstants.instrument_id].stringValue
-            let status = orderEntity[OrderConstants.status].stringValue
+            let instrumentId = "\(orderEntity.exchange_id ?? "")" + "." + "\(orderEntity.instrument_id ?? "")"
+            let status = "\(orderEntity.status ?? "")"
             var ins = dataManager.sInstrumentId
             if ins.contains("KQ") {
                 ins = (dataManager.sSearchEntities[ins]?.underlying_symbol)!
@@ -308,13 +306,13 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
         }
     }
 
-    private func addOneOrderLimitLine(orderEntity: JSON) {
-        let direction = orderEntity[OrderConstants.direction].stringValue
+    private func addOneOrderLimitLine(orderEntity: Order) {
+        let direction = "\(orderEntity.direction ?? "")"
         let p_decs = dataManager.getDecimalByPtick(instrumentId: dataManager.sInstrumentId)
-        let price = dataManager.saveDecimalByPtick(decimal: p_decs, data: orderEntity[OrderConstants.limit_price].stringValue)
-        let order_id = orderEntity[OrderConstants.order_id].stringValue
-        let instrument_id = orderEntity[OrderConstants.instrument_id].stringValue
-        let volume = orderEntity[OrderConstants.volume_orign].intValue
+        let price = dataManager.saveDecimalByPtick(decimal: p_decs, data: "\(orderEntity.limit_price ?? 0.0)")
+        let order_id = "\(orderEntity.order_id ?? "")"
+        let instrument_id = "\(orderEntity.instrument_id ?? "")"
+        let volume = (orderEntity.volume_orign as? Int) ?? 0
         let limit = Double(price)!
         let label = "\(instrument_id)@\(price)/\(volume)手"
         let chartLimitLine = ChartLimitLine(limit: limit, label: label)
@@ -366,16 +364,16 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
         }
 
         if dataManager.sIsLogin && isShowOrderLine {
-            let user = dataManager.sRtnTD[dataManager.sUser_id]
-            let orders = user[RtnTDConstants.orders].dictionaryValue
-            for (orderId, orderEntity): (String, JSON) in orders{
-                let instrumentId = orderEntity[OrderConstants.exchange_id].stringValue + "." + orderEntity[OrderConstants.instrument_id].stringValue
+            guard let user = dataManager.sRtnTD.users[dataManager.sUser_id] else {return}
+            let orders = user.orders
+            for (orderId, orderEntity)in orders{
+                let instrumentId = "\(orderEntity.exchange_id ?? "")" + "." + "\(orderEntity.instrument_id ?? "")"
                 var ins = dataManager.sInstrumentId
                 if ins.contains("KQ") {
                     ins = (dataManager.sSearchEntities[ins]?.underlying_symbol)!
                 }
                 if instrumentId.elementsEqual(ins) {
-                    let status = orderEntity[OrderConstants.status].stringValue
+                    let status = "\(orderEntity.status ?? "")"
                     let limitLine = orderLimitLines[orderId]
                     if limitLine ==  nil {
                         if "ALIVE".elementsEqual(status) {

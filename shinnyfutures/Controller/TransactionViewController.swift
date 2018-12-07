@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SwiftyJSON
 
 class TransactionViewController: UIViewController, PriceKeyboardViewDelegate, VolumeKeyboardViewDelegate, UITextFieldDelegate {
 
@@ -115,22 +114,26 @@ class TransactionViewController: UIViewController, PriceKeyboardViewDelegate, Vo
         }
         price.text = dataManager.sPriceType
 
-        var position: JSON?
+        var position: Position?
         if dataManager.sInstrumentId.contains("KQ") {
             instrument_id_transaction = (dataManager.sSearchEntities[dataManager.sInstrumentId]?.underlying_symbol)!
         }else {
             instrument_id_transaction = dataManager.sInstrumentId
         }
         exchange_id = String(instrument_id_transaction.split(separator: ".")[0])
-        let user = dataManager.sRtnTD[dataManager.sUser_id]
-        position = user[RtnTDConstants.positions].dictionaryValue[instrument_id_transaction]
+        guard let user = dataManager.sRtnTD.users[dataManager.sUser_id] else {return}
+        position = user.positions[instrument_id_transaction]
 
         if let position = position {
 
-            let volume_long = position[PositionConstants.volume_long].intValue
-            let volume_short = position[PositionConstants.volume_short].intValue
-            let available_long = volume_long - position[PositionConstants.volume_long_frozen_today].intValue - position[PositionConstants.volume_long_frozen_his].intValue
-            let available_short = volume_short - position[PositionConstants.volume_short_frozen_today].intValue - position[PositionConstants.volume_short_frozen_his].intValue
+            let volume_long = (position.volume_long as? Int) ?? 0
+            let volume_short = (position.volume_short as? Int) ?? 0
+            let volume_long_frozen_today = (position.volume_long_frozen_today as? Int) ?? 0
+            let volume_short_frozen_today = (position.volume_short_frozen_today as? Int) ?? 0
+            let volume_long_frozen_his = (position.volume_long_frozen_his as? Int) ?? 0
+            let volume_short_frozen_his = (position.volume_short_frozen_his as? Int) ?? 0
+            let available_long = volume_long - volume_long_frozen_today - volume_long_frozen_his
+            let available_short = volume_short - volume_short_frozen_today - volume_short_frozen_his
 
             if volume_long != 0 && volume_short == 0 {
                 direction = "多"
@@ -176,64 +179,62 @@ class TransactionViewController: UIViewController, PriceKeyboardViewDelegate, Vo
     func calculator(_ calculator: PriceKeyboardView, didChangeValue value: String) {
         price.text = value
         let instrumentId = dataManager.sInstrumentId
-        let quote = dataManager.sRtnMD[RtnMDConstants.quotes][instrumentId]
+        guard let quote = dataManager.sRtnMD.quotes[instrumentId] else {return}
         let decimal = dataManager.getDecimalByPtick(instrumentId: instrumentId)
-        if !quote.isEmpty {
-            //下单板价格显示
-            let last_price = dataManager.saveDecimalByPtick(decimal: decimal, data: quote[QuoteConstants.last_price].stringValue)
-            let ask_price1 = dataManager.saveDecimalByPtick(decimal: decimal, data: quote[QuoteConstants.ask_price1].stringValue)
-            let bid_price1 = dataManager.saveDecimalByPtick(decimal: decimal, data: quote[QuoteConstants.bid_price1].stringValue)
-            switch price.text {
-            case CommonConstants.QUEUED_PRICE:
-                dataManager.sPriceType = CommonConstants.QUEUED_PRICE
-                bid_order_price.text = bid_price1
-                ask_order_price.text = ask_price1
-                if isClosePriceShow {
-                    if "多".elementsEqual(direction) {
-                        close_order_price.text = ask_price1
-                    } else if "空".elementsEqual(direction) {
-                        close_order_price.text = bid_price1
-                    }
+        //下单板价格显示
+        let last_price = dataManager.saveDecimalByPtick(decimal: decimal, data: "\(quote.last_price ?? 0.0)")
+        let ask_price1 = dataManager.saveDecimalByPtick(decimal: decimal, data: "\(quote.ask_price1 ?? 0.0)")
+        let bid_price1 = dataManager.saveDecimalByPtick(decimal: decimal, data: "\(quote.bid_price1 ?? 0.0)")
+        switch price.text {
+        case CommonConstants.QUEUED_PRICE:
+            dataManager.sPriceType = CommonConstants.QUEUED_PRICE
+            bid_order_price.text = bid_price1
+            ask_order_price.text = ask_price1
+            if isClosePriceShow {
+                if "多".elementsEqual(direction) {
+                    close_order_price.text = ask_price1
+                } else if "空".elementsEqual(direction) {
+                    close_order_price.text = bid_price1
                 }
-            case CommonConstants.COUNTERPARTY_PRICE:
-                dataManager.sPriceType = CommonConstants.COUNTERPARTY_PRICE
-                bid_order_price.text = ask_price1
-                ask_order_price.text = bid_price1
-                if isClosePriceShow {
-                    if "多".elementsEqual(direction) {
-                        close_order_price.text = bid_price1
-                    } else if "空".elementsEqual(direction) {
-                        close_order_price.text = ask_price1
-                    }
+            }
+        case CommonConstants.COUNTERPARTY_PRICE:
+            dataManager.sPriceType = CommonConstants.COUNTERPARTY_PRICE
+            bid_order_price.text = ask_price1
+            ask_order_price.text = bid_price1
+            if isClosePriceShow {
+                if "多".elementsEqual(direction) {
+                    close_order_price.text = bid_price1
+                } else if "空".elementsEqual(direction) {
+                    close_order_price.text = ask_price1
                 }
-            case CommonConstants.MARKET_PRICE:
-                dataManager.sPriceType = CommonConstants.MARKET_PRICE
-                let upper_limit = dataManager.saveDecimalByPtick(decimal: decimal, data: quote[QuoteConstants.upper_limit].stringValue)
-                let lower_limit = dataManager.saveDecimalByPtick(decimal: decimal, data: quote[QuoteConstants.lower_limit].stringValue)
+            }
+        case CommonConstants.MARKET_PRICE:
+            dataManager.sPriceType = CommonConstants.MARKET_PRICE
+            let upper_limit = dataManager.saveDecimalByPtick(decimal: decimal, data: "\(quote.upper_limit ?? 0.0)")
+            let lower_limit = dataManager.saveDecimalByPtick(decimal: decimal, data:"\(quote.lower_limit ?? 0.0)")
 
-                bid_order_price.text = upper_limit
-                ask_order_price.text = lower_limit
-                if isClosePriceShow {
-                    if "多".elementsEqual(direction) {
-                        close_order_price.text = lower_limit
-                    } else if "空".elementsEqual(direction) {
-                        close_order_price.text = upper_limit
-                    }
+            bid_order_price.text = upper_limit
+            ask_order_price.text = lower_limit
+            if isClosePriceShow {
+                if "多".elementsEqual(direction) {
+                    close_order_price.text = lower_limit
+                } else if "空".elementsEqual(direction) {
+                    close_order_price.text = upper_limit
                 }
-            case CommonConstants.LATEST_PRICE:
-                dataManager.sPriceType = CommonConstants.LATEST_PRICE
-                bid_order_price.text = last_price
-                ask_order_price.text = last_price
-                if isClosePriceShow {
-                    close_order_price.text = last_price
-                }
-            default:
-                dataManager.sPriceType = CommonConstants.USER_PRICE
-                bid_order_price.text = price.text
-                ask_order_price.text = price.text
-                if isClosePriceShow {
-                    close_order_price.text = price.text
-                }
+            }
+        case CommonConstants.LATEST_PRICE:
+            dataManager.sPriceType = CommonConstants.LATEST_PRICE
+            bid_order_price.text = last_price
+            ask_order_price.text = last_price
+            if isClosePriceShow {
+                close_order_price.text = last_price
+            }
+        default:
+            dataManager.sPriceType = CommonConstants.USER_PRICE
+            bid_order_price.text = price.text
+            ask_order_price.text = price.text
+            if isClosePriceShow {
+                close_order_price.text = price.text
             }
         }
     }
@@ -253,18 +254,18 @@ class TransactionViewController: UIViewController, PriceKeyboardViewDelegate, Vo
 
     // MARK: objc methods
     @objc func refreshAccount() {
-        let user = dataManager.sRtnTD[dataManager.sUser_id]
-        for (_, account) in user[RtnTDConstants.accounts].dictionaryValue {
-            let balance = account[AccountConstants.balance].floatValue
-            let margin = account[AccountConstants.margin].floatValue
-            let available = account[AccountConstants.available].floatValue
+        guard let user = dataManager.sRtnTD.users[dataManager.sUser_id] else {return}
+        for (_, account) in user.accounts {
+            let balance = Float("\(account.balance ?? 0.0)") ?? 0.0
+            let margin = Float("\(account.margin ?? 0.0)") ?? 0.0
+            let available = Float("\(account.available ?? 0.0)") ?? 0.0
             self.balance.text = String(format: "%.0f", balance)
             self.available.text = String(format: "%.0f", available)
             if balance != 0 {
                 let usingRate = margin / balance * 100
-                self.usingRate.text = String(format: "%.0f", usingRate) + "%"
+                self.usingRate.text = String(format: "%.2f", usingRate) + "%"
             } else {
-                self.usingRate.text = "0%"
+                self.usingRate.text = "0.00%"
             }
         }
         refreshPosition()
@@ -273,84 +274,82 @@ class TransactionViewController: UIViewController, PriceKeyboardViewDelegate, Vo
 
     @objc func refreshPrice() {
         let instrumentId = dataManager.sInstrumentId
-        let quote = dataManager.sRtnMD[RtnMDConstants.quotes][instrumentId]
+        guard let quote = dataManager.sRtnMD.quotes[instrumentId] else {return}
         let decimal = dataManager.getDecimalByPtick(instrumentId: instrumentId)
-        if !quote.isEmpty {
-            let last_price = dataManager.saveDecimalByPtick(decimal: decimal, data: quote[QuoteConstants.last_price].stringValue)
-            let last_volume = quote[QuoteConstants.volume].stringValue
-            let ask_price1 = dataManager.saveDecimalByPtick(decimal: decimal, data: quote[QuoteConstants.ask_price1].stringValue)
-            let ask_volume1 = quote[QuoteConstants.ask_volume1].stringValue
-            let bid_price1 = dataManager.saveDecimalByPtick(decimal: decimal, data: quote[QuoteConstants.bid_price1].stringValue)
-            let bid_volume1 = quote[QuoteConstants.bid_volume1].stringValue
-            self.last_price.text = last_price
-            self.last_volume.text = last_volume
-            self.ask_price1.text = ask_price1
-            self.ask_volume1.text = ask_volume1
-            self.bid_price1.text = bid_price1
-            self.bid_volume1.text = bid_volume1
+        let last_price = dataManager.saveDecimalByPtick(decimal: decimal, data: "\(quote.last_price ?? 0.0)")
+        let last_volume = "\(quote.volume ?? 0)"
+        let ask_price1 = dataManager.saveDecimalByPtick(decimal: decimal, data: "\(quote.ask_price1 ?? 0.0)")
+        let ask_volume1 = "\(quote.ask_volume1 ?? 0)"
+        let bid_price1 = dataManager.saveDecimalByPtick(decimal: decimal, data: "\(quote.bid_price1 ?? 0.0)")
+        let bid_volume1 = "\(quote.bid_price1 ?? 0)"
+        self.last_price.text = last_price
+        self.last_volume.text = last_volume
+        self.ask_price1.text = ask_price1
+        self.ask_volume1.text = ask_volume1
+        self.bid_price1.text = bid_price1
+        self.bid_volume1.text = bid_volume1
 
-            //下单板价格显示
-            switch dataManager.sPriceType {
-            case CommonConstants.QUEUED_PRICE:
-                bid_order_price.text = bid_price1
-                ask_order_price.text = ask_price1
-                if isClosePriceShow {
-                    if "多".elementsEqual(direction) {
-                        close_order_price.text = ask_price1
-                    } else if "空".elementsEqual(direction) {
-                        close_order_price.text = bid_price1
-                    }
+        //下单板价格显示
+        switch dataManager.sPriceType {
+        case CommonConstants.QUEUED_PRICE:
+            bid_order_price.text = bid_price1
+            ask_order_price.text = ask_price1
+            if isClosePriceShow {
+                if "多".elementsEqual(direction) {
+                    close_order_price.text = ask_price1
+                } else if "空".elementsEqual(direction) {
+                    close_order_price.text = bid_price1
                 }
-            case CommonConstants.COUNTERPARTY_PRICE:
-                bid_order_price.text = ask_price1
-                ask_order_price.text = bid_price1
-                if isClosePriceShow {
-                    if "多".elementsEqual(direction) {
-                        close_order_price.text = bid_price1
-                    } else if "空".elementsEqual(direction) {
-                        close_order_price.text = ask_price1
-                    }
-                }
-            case CommonConstants.MARKET_PRICE:
-                let upper_limit = dataManager.saveDecimalByPtick(decimal: decimal, data: quote[QuoteConstants.upper_limit].stringValue)
-                let lower_limit = dataManager.saveDecimalByPtick(decimal: decimal, data: quote[QuoteConstants.lower_limit].stringValue)
-                bid_order_price.text = upper_limit
-                ask_order_price.text = lower_limit
-                if isClosePriceShow {
-                    if "多".elementsEqual(direction) {
-                        close_order_price.text = lower_limit
-                    } else if "空".elementsEqual(direction) {
-                        close_order_price.text = upper_limit
-                    }
-                }
-            case CommonConstants.LATEST_PRICE:
-                bid_order_price.text = last_price
-                ask_order_price.text = last_price
-                if isClosePriceShow {
-                    close_order_price.text = last_price
-                }
-            default:
-                break
             }
+        case CommonConstants.COUNTERPARTY_PRICE:
+            bid_order_price.text = ask_price1
+            ask_order_price.text = bid_price1
+            if isClosePriceShow {
+                if "多".elementsEqual(direction) {
+                    close_order_price.text = bid_price1
+                } else if "空".elementsEqual(direction) {
+                    close_order_price.text = ask_price1
+                }
+            }
+        case CommonConstants.MARKET_PRICE:
+            let upper_limit = dataManager.saveDecimalByPtick(decimal: decimal, data: "\(quote.upper_limit ?? 0.0)")
+            let lower_limit = dataManager.saveDecimalByPtick(decimal: decimal, data: "\(quote.lower_limit ?? 0.0)")
+            bid_order_price.text = upper_limit
+            ask_order_price.text = lower_limit
+            if isClosePriceShow {
+                if "多".elementsEqual(direction) {
+                    close_order_price.text = lower_limit
+                } else if "空".elementsEqual(direction) {
+                    close_order_price.text = upper_limit
+                }
+            }
+        case CommonConstants.LATEST_PRICE:
+            bid_order_price.text = last_price
+            ask_order_price.text = last_price
+            if isClosePriceShow {
+                close_order_price.text = last_price
+            }
+        default:
+            break
         }
         refreshKeyboardPrice()
     }
 
     @objc func refreshPosition() {
-        var position: JSON?
+        var position: Position?
         if dataManager.sInstrumentId.contains("KQ") {
             instrument_id_transaction = (dataManager.sSearchEntities[dataManager.sInstrumentId]?.underlying_symbol)!
         }else {
             instrument_id_transaction = dataManager.sInstrumentId
         }
         exchange_id = String(instrument_id_transaction.split(separator: ".")[0])
-        let user = dataManager.sRtnTD[dataManager.sUser_id]
-        position = user[RtnTDConstants.positions].dictionaryValue[instrument_id_transaction]
+        guard let user = dataManager.sRtnTD.users[dataManager.sUser_id] else {return}
+        position = user.positions[instrument_id_transaction]
 
         if let position = position {
 
-            let volume_long = position[PositionConstants.volume_long].intValue
-            let volume_short = position[PositionConstants.volume_short].intValue
+            let volume_long = (position.volume_long as? Int) ?? 0
+            let volume_short = (position.volume_short as? Int) ?? 0
 
             if volume_long != 0 && volume_short == 0 {
                 direction = "多"
@@ -496,22 +495,21 @@ class TransactionViewController: UIViewController, PriceKeyboardViewDelegate, Vo
     //刷新平多仓位
     func refreshCloseBidPrice() {
         let instrumentId = dataManager.sInstrumentId
-        let quote = dataManager.sRtnMD[RtnMDConstants.quotes][instrumentId]
+        guard let quote = dataManager.sRtnMD.quotes[instrumentId] else {return}
         let decimal = dataManager.getDecimalByPtick(instrumentId: instrumentId)
-        if quote.isEmpty {return}
 
         switch dataManager.sPriceType {
         case CommonConstants.QUEUED_PRICE:
-            let ask_price1 = dataManager.saveDecimalByPtick(decimal: decimal, data: quote[QuoteConstants.ask_price1].stringValue)
+            let ask_price1 = dataManager.saveDecimalByPtick(decimal: decimal, data: "\(quote.ask_price1 ?? 0.0)")
             close_order_price.text = ask_price1
         case CommonConstants.COUNTERPARTY_PRICE:
-            let bid_price1 = dataManager.saveDecimalByPtick(decimal: decimal, data: quote[QuoteConstants.bid_price1].stringValue)
+            let bid_price1 = dataManager.saveDecimalByPtick(decimal: decimal, data: "\(quote.bid_price1 ?? 0.0)")
             close_order_price.text = bid_price1
         case CommonConstants.MARKET_PRICE:
-            let lower_limit = dataManager.saveDecimalByPtick(decimal: decimal, data: quote[QuoteConstants.lower_limit].stringValue)
+            let lower_limit = dataManager.saveDecimalByPtick(decimal: decimal, data: "\(quote.lower_limit ?? 0.0)")
             close_order_price.text = lower_limit
         case CommonConstants.LATEST_PRICE:
-            let last_price = dataManager.saveDecimalByPtick(decimal: decimal, data: quote[QuoteConstants.last_price].stringValue)
+            let last_price = dataManager.saveDecimalByPtick(decimal: decimal, data: "\(quote.last_price ?? 0.0)")
             close_order_price.text = last_price
         default:
             break
@@ -522,22 +520,21 @@ class TransactionViewController: UIViewController, PriceKeyboardViewDelegate, Vo
     //刷新平空仓位
     func refreshCloseAskPrice() {
         let instrumentId = dataManager.sInstrumentId
-        let quote = dataManager.sRtnMD[RtnMDConstants.quotes][instrumentId]
+        guard let quote = dataManager.sRtnMD.quotes[instrumentId] else {return}
         let decimal = dataManager.getDecimalByPtick(instrumentId: instrumentId)
-        if quote.isEmpty {return}
 
         switch dataManager.sPriceType {
         case CommonConstants.QUEUED_PRICE:
-            let bid_price1 = dataManager.saveDecimalByPtick(decimal: decimal, data: quote[QuoteConstants.bid_price1].stringValue)
+            let bid_price1 = dataManager.saveDecimalByPtick(decimal: decimal, data: "\(quote.bid_price1 ?? 0.0)")
             close_order_price.text = bid_price1
         case CommonConstants.COUNTERPARTY_PRICE:
-            let ask_price1 = dataManager.saveDecimalByPtick(decimal: decimal, data: quote[QuoteConstants.ask_price1].stringValue)
+            let ask_price1 = dataManager.saveDecimalByPtick(decimal: decimal, data: "\(quote.ask_price1 ?? 0.0)")
             close_order_price.text = ask_price1
         case CommonConstants.MARKET_PRICE:
-            let upper_limit = dataManager.saveDecimalByPtick(decimal: decimal, data: quote[QuoteConstants.upper_limit].stringValue)
+            let upper_limit = dataManager.saveDecimalByPtick(decimal: decimal, data: "\(quote.upper_limit ?? 0.0)")
             close_order_price.text = upper_limit
         case CommonConstants.LATEST_PRICE:
-            let last_price = dataManager.saveDecimalByPtick(decimal: decimal, data: quote[QuoteConstants.last_price].stringValue)
+            let last_price = dataManager.saveDecimalByPtick(decimal: decimal, data: "\(quote.last_price ?? 0.0)")
             close_order_price.text = last_price
         default:
             break
@@ -566,16 +563,16 @@ class TransactionViewController: UIViewController, PriceKeyboardViewDelegate, Vo
             let message_history = "\(instrument_id_transaction), \(price), 平昨, \(volume)手"
             let searchEntity = dataManager.sSearchEntities[instrument_id_transaction]
             if searchEntity != nil, let exchange_name = searchEntity?.exchange_name, "上海期货交易所".elementsEqual(exchange_name) || "上海国际能源交易中心".elementsEqual(exchange_name) {
-                let user = dataManager.sRtnTD[dataManager.sUser_id]
-                guard let position = user[RtnTDConstants.positions].dictionaryValue[instrument_id_transaction] else {return}
+                guard let user = dataManager.sRtnTD.users[dataManager.sUser_id] else {return}
+                guard let position = user.positions[instrument_id_transaction] else {return}
                 var volumre_today = 0
                 var volume_history = 0
                 if "SELL".elementsEqual(direction) {
-                    volumre_today = position[PositionConstants.volume_long_today].intValue
-                    volume_history = position[PositionConstants.volume_long_his].intValue
+                    volumre_today = (position.volume_long_today as? Int) ?? 0
+                    volume_history = (position.volume_long_his as? Int) ?? 0
                 } else if "BUY".elementsEqual(direction) {
-                    volumre_today = position[PositionConstants.volume_short_today].intValue
-                    volume_history = position[PositionConstants.volume_short_his].intValue
+                    volumre_today = (position.volume_short_today as? Int) ?? 0
+                    volume_history = (position.volume_short_his as? Int) ?? 0
                 }
 
                 if volumre_today > 0 && volume_history > 0 {

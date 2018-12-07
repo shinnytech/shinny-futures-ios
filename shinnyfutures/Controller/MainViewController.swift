@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SwiftyJSON
 
 class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocketUtilsDelegate, UIPopoverPresentationControllerDelegate {
     // MARK: Properties
@@ -17,6 +16,7 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
     @IBOutlet weak var domain: UIButton!
     @IBOutlet weak var shanghai: UIButton!
     @IBOutlet weak var nengyuan: UIButton!
+    @IBOutlet weak var dazong: UIButton!
     @IBOutlet weak var dalian: UIButton!
     @IBOutlet weak var zhengzhou: UIButton!
     @IBOutlet weak var zhongjin: UIButton!
@@ -45,23 +45,28 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
 
     func websocketDidReceiveMessage(socket: TDWebSocketUtils, text: String) {
         DispatchQueue.global().async {
-            let json = JSON(parseJSON: text)
-            let aid = json["aid"].stringValue
-            switch aid {
-            case "rtn_brokers":
-                self.tdWebSocketUtils.ping()
-                DataManager.getInstance().parseBrokers(brokers: json)
-            case "rtn_data":
-                DataManager.getInstance().parseRtnTD(transactionData: json)
-            default:
-                self.tdWebSocketUtils.reconnectTD(url: CommonConstants.TRANSACTION_URL)
-                return
-            }
+            guard let data = text.data(using: .utf8) else {return}
+            do{
+                guard let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] else {return}
+                let aid = json[RtnTDConstants.aid] as? String
+                switch aid {
+                case "rtn_brokers":
+                    self.tdWebSocketUtils.ping()
+                    DataManager.getInstance().parseBrokers(rtnData: json)
+                case "rtn_data":
+                    DataManager.getInstance().parseRtnTD(rtnData: json)
+                default:
+                    self.tdWebSocketUtils.reconnectTD(url: CommonConstants.TRANSACTION_URL)
+                    return
+                }
 
-            if (!DataManager.getInstance().isBackground){
-                socket.sendPeekMessage()
-            }
+                if (!DataManager.getInstance().isBackground){
+                    socket.sendPeekMessage()
+                }
 
+            }catch{
+                print(error.localizedDescription)
+            }
         }
     }
 
@@ -74,26 +79,32 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
 
     func websocketDidReceiveMessage(socket: MDWebSocketUtils, text: String) {
         DispatchQueue.global().async {
-            let json = JSON(parseJSON: text)
-            let aid = json["aid"].stringValue
-            switch aid {
-            case "rsp_login":
-                self.mdWebSocketUtils.ping()
-                if DataManager.getInstance().sQuotes.count != 0{
-                    socket.sendSubscribeQuote(insList: DataManager.getInstance().sQuotes[1].map {$0.key}[0..<CommonConstants.MAX_SUBSCRIBE_QUOTES].joined(separator: ","))
+            guard let data = text.data(using: .utf8) else {return}
+            do{
+                guard let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] else {return}
+                let aid = json[RtnMDConstants.aid] as? String
+                switch aid {
+                case "rsp_login":
+                    self.mdWebSocketUtils.ping()
+                    if DataManager.getInstance().sQuotes.count != 0{
+                        socket.sendSubscribeQuote(insList: DataManager.getInstance().sQuotes[1].map {$0.key}[0..<CommonConstants.MAX_SUBSCRIBE_QUOTES].joined(separator: ","))
+                    }
+                case "rtn_data":
+                    self.index = 0
+                    DataManager.getInstance().parseRtnMD(rtnData: json)
+                default:
+                    self.index = self.mdWebSocketUtils.reconnectMD(url: self.mdURLs[self.index], index: self.index)
+                    return
                 }
-            case "rtn_data":
-                self.index = 0
-                DataManager.getInstance().parseRtnMD(rtnData: json)
-            default:
-                self.index = self.mdWebSocketUtils.reconnectMD(url: self.mdURLs[self.index], index: self.index)
-                return
+
+                if (!DataManager.getInstance().isBackground){
+                    socket.sendPeekMessage()
+                }
+
+            }catch{
+                print(error.localizedDescription)
             }
 
-            if (!DataManager.getInstance().isBackground){
-                socket.sendPeekMessage()
-            }
-            
         }
     }
 
@@ -104,46 +115,22 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
 
     ////////////////////////////////////////////////////////////////////////////////
 
-    func sessionSimpleDownload(urlString: String, fileName: String) {
-        NSLog("合约列表开始下载")
-        //下载地址
-        let url = URL(string: urlString)
-        //请求
-        var request = URLRequest(url: url!)
+    func sessionSimpleDownload(urlString: String) {
+        guard let url = URL(string: urlString) else {return}
+        var request = URLRequest(url: url)
         request.addValue("application/json", forHTTPHeaderField: "Accept")
-        let session = URLSession.shared
-        let handler = { (location: URL?, _: URLResponse?, error: Error?) -> Void in
-            NSLog("合约列表下载结束")
-            if error != nil {
-                print(error.debugDescription)
-                return
+        let task = URLSession.shared.dataTask(with: request) {(data, response, error) in
+            guard let data = data else { return }
+            DataManager.getInstance().parseLatestFile(latestData: data)
+            DispatchQueue.main.async {
+                NotificationCenter.default.post(name: Notification.Name(CommonConstants.LatestFileParsedNotification), object: nil)
             }
-            do {
-                let documentsURL = try
-                    FileManager.default.url(for: .documentDirectory,
-                                            in: .userDomainMask,
-                                            appropriateFor: nil,
-                                            create: false)
-                let savedURL = documentsURL.appendingPathComponent(fileName)
-                if FileManager.default.fileExists(atPath: savedURL.path) {
-                    try FileManager.default.removeItem(at: savedURL)
-                }
-                try FileManager.default.copyItem(at: location!, to: savedURL)
-                DataManager.getInstance().parseLatestFile()
-                DispatchQueue.main.async {
-                    NotificationCenter.default.post(name: Notification.Name(CommonConstants.LatestFileParsedNotification), object: nil)
-                }
-                self.index = self.mdWebSocketUtils.connect(url: self.mdURLs[self.index], index: self.index)
-                self.tdWebSocketUtils.connect(url: CommonConstants.TRANSACTION_URL)
-            } catch {
-                print ("file error: \(error)")
-            }
+            self.index = self.mdWebSocketUtils.connect(url: self.mdURLs[self.index], index: self.index)
+            self.tdWebSocketUtils.connect(url: CommonConstants.TRANSACTION_URL)
         }
-        //下载任务
-        let downloadTask = session.downloadTask(with: request, completionHandler: handler)
-        //使用resume方法启动任务
-        downloadTask.resume()
+        task.resume()
     }
+
 
     ////////////////////////////////////////////////////////////////////////////////
     override func viewDidLoad() {
@@ -151,6 +138,7 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
         let dict: NSDictionary = [NSAttributedStringKey.foregroundColor: UIColor.white, NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 18)]
         self.navigationController?.navigationBar.titleTextAttributes = dict as? [NSAttributedStringKey: Any]
         self.navigationController?.navigationBar.barTintColor = CommonConstants.QUOTE_PAGE_HEADER
+        self.navigationController?.navigationBar.backgroundColor = CommonConstants.QUOTE_PAGE_HEADER
         self.navigationController?.navigationBar.tintColor = UIColor.white
         button.frame = CGRect(x: 0, y: 0, width: 200, height: 40)
         button.setTitle(CommonConstants.titleArray[1], for: .normal)
@@ -163,7 +151,7 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
         getAppVersion()
         self.mdWebSocketUtils.mdWebSocketUtilsDelegate = self
         self.tdWebSocketUtils.tdWebSocketUtilsDelegate = self
-        sessionSimpleDownload(urlString: CommonConstants.LATEST_FILE_URL, fileName: "latest.json")
+        sessionSimpleDownload(urlString: CommonConstants.LATEST_FILE_URL)
         self.DispatchTimer(delay: 15, timeInterval: 15){ timer in
 
             if (CACurrentMediaTime() - self.lastTDTime) > 20 {
@@ -268,7 +256,7 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
             performSegue(withIdentifier: CommonConstants.MainToQuote, sender: sender)
             let instrumentId = DataManager.getInstance().sQuotes[1].map {$0.key}[0]
             //进入合约详情页的入口有：合约列表页，登陆页，搜索页，主页
-            DataManager.getInstance().sPreInsList = DataManager.getInstance().sRtnMD[RtnMDConstants.ins_list].stringValue
+            DataManager.getInstance().sPreInsList = DataManager.getInstance().sRtnMD.ins_list
             DataManager.getInstance().sInstrumentId = instrumentId
         }
     }
@@ -329,34 +317,41 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
         switchPage(index: 3)
     }
 
-    @IBAction func toDalian(_ sender: UIButton) {
+    @IBAction func toDazong(_ sender: UIButton) {
         controlSlideMenuVisibility()
         button.setTitle(CommonConstants.titleArray[4], for: .normal)
         switchPage(index: 4)
     }
 
-    @IBAction func toZhengzhou(_ sender: UIButton) {
+
+    @IBAction func toDalian(_ sender: UIButton) {
         controlSlideMenuVisibility()
         button.setTitle(CommonConstants.titleArray[5], for: .normal)
         switchPage(index: 5)
     }
 
-    @IBAction func toZhongjin(_ sender: UIButton) {
+    @IBAction func toZhengzhou(_ sender: UIButton) {
         controlSlideMenuVisibility()
         button.setTitle(CommonConstants.titleArray[6], for: .normal)
         switchPage(index: 6)
     }
 
-    @IBAction func toDaLianZuHe(_ sender: UIButton) {
+    @IBAction func toZhongjin(_ sender: UIButton) {
         controlSlideMenuVisibility()
         button.setTitle(CommonConstants.titleArray[7], for: .normal)
         switchPage(index: 7)
     }
 
-    @IBAction func toZhengZhouZuHe(_ sender: UIButton) {
+    @IBAction func toDaLianZuHe(_ sender: UIButton) {
         controlSlideMenuVisibility()
         button.setTitle(CommonConstants.titleArray[8], for: .normal)
         switchPage(index: 8)
+    }
+
+    @IBAction func toZhengZhouZuHe(_ sender: UIButton) {
+        controlSlideMenuVisibility()
+        button.setTitle(CommonConstants.titleArray[9], for: .normal)
+        switchPage(index: 9)
     }
 
     @IBAction func left(_ sender: UIButton) {

@@ -42,57 +42,52 @@ open class CurrentDayMarkerView: MarkerView {
 
     open override func refreshContent(entry: ChartDataEntry, highlight: Highlight) {
         let x = Int(entry.x)
-        let data = dataManager.sRtnMD[RtnMDConstants.klines][dataManager.sInstrumentId][klineType][KlineConstants.data]["\(x)"]
+        guard let data = dataManager.sRtnMD.klines[dataManager.sInstrumentId]?[klineType]?.datas["\(x)"] else {return}
+        guard let dataPre = dataManager.sRtnMD.klines[dataManager.sInstrumentId]?[klineType]?.datas["\(x-1)"] else {return}
         let chart = self.chartView as! CurrentDayCombinedChartView
         guard let averageEntry = chart.lineData?.dataSets[1].entryForXValue(entry.x, closestToY: entry.y) else {return}
-        let dataPre = dataManager.sRtnMD[RtnMDConstants.klines][dataManager.sInstrumentId][klineType][KlineConstants.data]["\(x-1)"]
-        if !data.isEmpty && !dataPre.isEmpty {
-            let closePre = dataPre[KlineConstants.close].floatValue
-            let close = data[KlineConstants.close].floatValue
-            let dateTime = Date(timeIntervalSince1970: TimeInterval(data[KlineConstants.datetime].intValue / 1000000000))
-            let dateformatter = DateFormatter()
-            dateformatter.dateFormat = "yyyy-MM-dd"
-            let yValue = dateformatter.string(from: dateTime)
-            dateformatter.dateFormat = "HH:mm"
-            let xValue = dateformatter.string(from: dateTime)
-            let decimal = dataManager.getDecimalByPtick(instrumentId: dataManager.sInstrumentId)
-            let price = String(format: "%.\(decimal)f", data[KlineConstants.close].floatValue)
-            let average = String(format: "%.\(decimal)f", averageEntry.y)
-            let change = String(format: "%.\(decimal)f", close - closePre)
-            let changePercent = String(format: "%.2f", (close - closePre) / closePre * 100) + "%"
-            let volume = data[KlineConstants.volume].intValue
-            let closeOi = data[KlineConstants.close_oi].intValue
-            self.yValue.text = yValue
-            self.xValue.text = xValue
-            self.price.text = price
-            self.average.text = average
-            self.change.text = change
-            self.changePercent.text = changePercent
-            self.volume.text = "\(volume)"
-            self.closeOi.text = "\(closeOi)"
+        let closePre = Float("\(dataPre.close ?? 0.0)") ?? 0.0
+        let close = Float("\(data.close ?? 0.0)") ?? 0.0
+        let datetime = (data.datetime as? Int ?? 0) / 1000000000
+        let volume = data.volume as? Int ?? 0
+        let volumePre = dataPre.volume as? Int ?? 0
+        let closeOi = data.close_oi as? Int ?? 0
+        let closeOiPre = dataPre.close_oi as? Int ?? 0
+        let dateTime = Date(timeIntervalSince1970: TimeInterval(datetime))
+        let dateformatter = DateFormatter()
+        dateformatter.dateFormat = "yyyy-MM-dd"
+        let yValue = dateformatter.string(from: dateTime)
+        dateformatter.dateFormat = "HH:mm"
+        let xValue = dateformatter.string(from: dateTime)
+        let decimal = dataManager.getDecimalByPtick(instrumentId: dataManager.sInstrumentId)
+        let price = String(format: "%.\(decimal)f", close)
+        let average = String(format: "%.\(decimal)f", averageEntry.y)
+        let change = String(format: "%.\(decimal)f", close - closePre)
+        let changePercent = String(format: "%.2f", (close - closePre) / closePre * 100) + "%"
 
-            if !dataPre.isEmpty{
-                let volumeDelta = volume - dataPre[KlineConstants.volume].intValue
-                self.volumeDalta.text = "\(volumeDelta)"
-                if volumeDelta < 0 {
-                    self.volumeDalta.textColor = CommonConstants.GREEN_TEXT
-                }else{
-                    self.volumeDalta.textColor = CommonConstants.RED_TEXT
-                }
+        self.yValue.text = yValue
+        self.xValue.text = xValue
+        self.price.text = price
+        self.average.text = average
+        self.change.text = change
+        self.changePercent.text = changePercent
+        self.volume.text = "\(volume)"
+        self.closeOi.text = "\(closeOi)"
 
-                let closeOiDelta = closeOi - dataPre[KlineConstants.close_oi].intValue
-                self.closeOiDelta.text = "\(closeOiDelta)"
-                if closeOiDelta < 0 {
-                    self.closeOiDelta.textColor = CommonConstants.GREEN_TEXT
-                }else{
-                    self.closeOiDelta.textColor = CommonConstants.RED_TEXT
-                }
-            }else{
-                self.volumeDalta.text = "-"
-                self.closeOiDelta.text = "-"
-                self.closeOiDelta.textColor = UIColor.white
-                self.volumeDalta.textColor = UIColor.white
-            }
+        let volumeDelta = volume - volumePre
+        self.volumeDalta.text = "\(volumeDelta)"
+        if volumeDelta < 0 {
+            self.volumeDalta.textColor = CommonConstants.GREEN_TEXT
+        }else{
+            self.volumeDalta.textColor = CommonConstants.RED_TEXT
+        }
+
+        let closeOiDelta = closeOi - closeOiPre
+        self.closeOiDelta.text = "\(closeOiDelta)"
+        if closeOiDelta < 0 {
+            self.closeOiDelta.textColor = CommonConstants.GREEN_TEXT
+        }else{
+            self.closeOiDelta.textColor = CommonConstants.RED_TEXT
         }
         super.refreshContent(entry: entry, highlight: highlight)
     }

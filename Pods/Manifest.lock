@@ -3,7 +3,6 @@ PODS:
   - DeepDiff (1.2.0)
   - Siren (3.3.0)
   - Starscream (3.0.5)
-  - SwiftyJSON (4.1.0)
   - UMCAnalytics (5.5.0):
     - UMCCommon
   - UMCCommon (1.5.0)
@@ -14,7 +13,6 @@ DEPENDENCIES:
   - DeepDiff
   - Siren
   - Starscream
-  - SwiftyJSON
   - UMCAnalytics
   - UMCCommon
   - UMCSecurityPlugins
@@ -25,7 +23,6 @@ SPEC REPOS:
     - DeepDiff
     - Siren
     - Starscream
-    - SwiftyJSON
     - UMCAnalytics
     - UMCCommon
     - UMCSecurityPlugins
@@ -35,11 +32,10 @@ SPEC CHECKSUMS:
   DeepDiff: 0ee83ac6942d441f677c22e981548c6e0937f2b6
   Siren: e7183967550b986736103f24ca6c74896a475145
   Starscream: faf918b2f2eff7d5dd21180646bf015a669673bd
-  SwiftyJSON: c29297daf073d2aa016295d5809cdd68045c39b3
   UMCAnalytics: 4667788559a72f2fa5077117d1b8802a3b6eb6bb
   UMCCommon: 82d21f4bb9532a5472cc533bbd8ed48aff376a14
   UMCSecurityPlugins: 0831a08f3988f3cea9f1d3a7626cd9bee4fef150
 
-PODFILE CHECKSUM: a7505341d372f159efc2cc69dadacd7ca36f6f83
+PODFILE CHECKSUM: ad3a0d8426add2ef18a28f8a92fe030d815e9771
 
 COCOAPODS: 1.5.0

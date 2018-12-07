@@ -8,7 +8,6 @@
 
 import UIKit
 import Charts
-import SwiftyJSON
 
 class KlineViewController: BaseChartViewController {
 
@@ -173,12 +172,12 @@ class KlineViewController: BaseChartViewController {
     }
 
     override func refreshKline() {
-        let kline = dataManager.sRtnMD[RtnMDConstants.klines][dataManager.sInstrumentId][klineType]
-        let chart = dataManager.sRtnMD[RtnMDConstants.charts][klineType]
-        let ins_list = chart[ChartConstants.state][ChartConstants.ins_list].stringValue
-        last_id = kline[KlineConstants.last_id].intValue
-        let datas = kline[KlineConstants.data]
-        if last_id != -1 && !datas.isEmpty && dataManager.sInstrumentId.elementsEqual(ins_list) {
+        guard let kline = dataManager.sRtnMD.klines[dataManager.sInstrumentId]?[klineType] else {return}
+        guard let chart = dataManager.sRtnMD.charts[klineType] else {return}
+        let ins_list = "\(chart.state?.ins_list ?? "")"
+        last_id = kline.last_id as? Int ?? -1
+        let datas = kline.datas
+        if last_id != -1 && datas.count != 0 && dataManager.sInstrumentId.elementsEqual(ins_list) {
             if chartView.data != nil && (chartView.data?.dataSetCount)! > 0 {
                 let combineData = chartView.combinedData
                 let candleData = combineData?.candleData
@@ -194,8 +193,8 @@ class KlineViewController: BaseChartViewController {
                     generateLineCandleDataEntry(candleData: candleData!, left_id: left_id, index: last_id, datas: datas)
                     refreshLatestLine(data: datas["\(last_id)"])
                 } else {
-                    var left_index = chart[ChartConstants.left_id].intValue
-                    let right_index = chart[ChartConstants.right_id].intValue
+                    var left_index = chart.left_id as? Int ?? 0
+                    let right_index = chart.right_id as? Int ?? 0
                     if left_index < 0 {left_index = 0}
                     if left_index < left_id {
                         //NSLog("向前添加柱子")
@@ -220,8 +219,8 @@ class KlineViewController: BaseChartViewController {
                 chartView.xAxis.axisMinimum = (combineData?.xMin)! - 0.5
             } else {
                 NSLog("k线图初始化")
-                left_id = chart[ChartConstants.left_id].intValue
-                right_id = chart[ChartConstants.right_id].intValue
+                left_id = chart.left_id as? Int ?? 0
+                right_id = chart.right_id as? Int ?? 0
                 if left_id < 0 {left_id = 0}
                 var ma5Datas = [ChartDataEntry]()
                 var ma10Datas = [ChartDataEntry]()
@@ -259,8 +258,9 @@ class KlineViewController: BaseChartViewController {
     }
 
     //生成最新价线
-    private func generateLatestLine(data: JSON){
-        let limit = data[KlineConstants.close].stringValue
+    private func generateLatestLine(data: Kline.Data?){
+        guard let data = data else {return}
+        let limit = "\(data.close ?? 0.0)"
         let decimal = dataManager.getDecimalByPtick(instrumentId: dataManager.sInstrumentId)
         let label = dataManager.saveDecimalByPtick(decimal: decimal, data: limit)
         if let limit = Double(limit) {
@@ -280,8 +280,9 @@ class KlineViewController: BaseChartViewController {
 
 
     //刷新最新价线
-    private func refreshLatestLine(data: JSON){
-        let limit = data[KlineConstants.close].doubleValue
+    private func refreshLatestLine(data: Kline.Data?){
+        guard let data = data else {return}
+        let limit = Double("\(data.close ?? 0.0)") ?? 0.0
         guard let limitLine = latestLimitLines["latest"] else {return}
         if limitLine.limit != limit{
             chartView.leftAxis.removeLimitLine(limitLine)
@@ -291,7 +292,7 @@ class KlineViewController: BaseChartViewController {
     }
 
     //添加单个均线数据与柱子
-    private func generateLineCandleDataEntry(candleData: CandleChartData, left_id: Int, index: Int, datas: JSON) {
+    private func generateLineCandleDataEntry(candleData: CandleChartData, left_id: Int, index: Int, datas: [String: Kline.Data]) {
         let candleEntry = generateCandleDataEntry(index: index, datas: datas)
         _ = candleData.getDataSetByIndex(0).addEntryOrdered(candleEntry)
         if index >= left_id + 4 {
@@ -309,11 +310,11 @@ class KlineViewController: BaseChartViewController {
     }
 
     //产生单个均线数据
-    private func generateLineDataEntry(index: Int, lineIndex: Int, datas: JSON) -> ChartDataEntry {
+    private func generateLineDataEntry(index: Int, lineIndex: Int, datas: [String: Kline.Data]) -> ChartDataEntry {
         var sum = 0.0
         for i in (index - lineIndex)...index {
-            let data = datas["\(i)"]
-            let close = data[KlineConstants.close].doubleValue
+            guard let data = datas["\(i)"] else {continue}
+            let close = Double("\(data.close ?? 0.0)") ?? 0.0
             sum += close
         }
         let entry = ChartDataEntry(x: Double(index), y: sum / Double(lineIndex + 1))
@@ -321,13 +322,13 @@ class KlineViewController: BaseChartViewController {
     }
 
     //生成单个柱子数据
-    private func generateCandleDataEntry(index: Int, datas: JSON) -> CandleChartDataEntry {
+    private func generateCandleDataEntry(index: Int, datas: [String: Kline.Data]) -> CandleChartDataEntry {
         let data = datas["\(index)"]
-        let high = data[KlineConstants.high].doubleValue
-        let low = data[KlineConstants.low].doubleValue
-        let close = data[KlineConstants.close].doubleValue
-        let open = data[KlineConstants.open].doubleValue
-        let dateTime = data[KlineConstants.datetime].intValue / 1000000000
+        let high = Double("\(data?.high ?? 0.0)") ?? 0.0
+        let low = Double("\(data?.low ?? 0.0)") ?? 0.0
+        let close = Double("\(data?.close ?? 0.0)") ?? 0.0
+        let open = Double("\(data?.open ?? 0.0)") ?? 0.0
+        let dateTime = ((data?.datetime as? Int) ?? 0) / 1000000000
         let x = Double(index)
         let candleChartDataEntry = CandleChartDataEntry(x: x, shadowH: high, shadowL: low, open: open, close: close)
         xVals[index] = dateTime

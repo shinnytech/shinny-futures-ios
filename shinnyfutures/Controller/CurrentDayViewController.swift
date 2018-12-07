@@ -8,7 +8,6 @@
 
 import UIKit
 import Charts
-import SwiftyJSON
 
 class CurrentDayViewController: BaseChartViewController {
 
@@ -95,11 +94,11 @@ class CurrentDayViewController: BaseChartViewController {
     }
 
     override func refreshKline() {
-        let quote = dataManager.sRtnMD[RtnMDConstants.quotes][dataManager.sInstrumentId]
-        let kline = dataManager.sRtnMD[RtnMDConstants.klines][dataManager.sInstrumentId][klineType]
-        preSettlement = quote[QuoteConstants.pre_settlement].doubleValue
-        var last_id = kline[KlineConstants.last_id].intValue
-        let datas = kline[KlineConstants.data]
+        guard let quote = dataManager.sRtnMD.quotes[dataManager.sInstrumentId] else {return}
+        guard let kline = dataManager.sRtnMD.klines[dataManager.sInstrumentId]?[klineType] else {return}
+        preSettlement = quote.pre_settlement as? Double ?? 0.0
+        var last_id = kline.last_id as? Int ?? -1
+        let datas = kline.datas
         if last_id != -1 && datas.count != 0  {
             if chartView.data != nil && (chartView.data?.dataSetCount)! > 0 {
                 let combineData = chartView.combinedData
@@ -135,8 +134,8 @@ class CurrentDayViewController: BaseChartViewController {
                 combineData?.notifyDataChanged()
                 chartView.notifyDataSetChanged()
             } else {
-                trading_day_start_id = kline[KlineConstants.trading_day_start_id].intValue
-                trading_day_end_id = kline[KlineConstants.trading_day_end_id].intValue
+                trading_day_start_id = kline.trading_day_start_id as? Int ?? -1
+                trading_day_end_id = kline.trading_day_end_id as? Int ?? -1
                 if trading_day_end_id != -1 && trading_day_start_id != -1 {
                     NSLog("分时图初始化")
                     if last_id > trading_day_end_id {last_id = trading_day_end_id}
@@ -163,11 +162,11 @@ class CurrentDayViewController: BaseChartViewController {
         }
     }
 
-    private func generateLineDataEntry(index: Int, datas: JSON) -> [ChartDataEntry] {
+    private func generateLineDataEntry(index: Int, datas:[String: Kline.Data]) -> [ChartDataEntry] {
         let data = datas["\(index)"]
-        let close = data[KlineConstants.close].doubleValue
-        let volume = data[KlineConstants.volume].doubleValue
-        let dateTime = data[KlineConstants.datetime].intValue / 1000000000
+        let close = data?.close as? Double ?? 0.0
+        let volume = data?.volume as? Double ?? 0.0
+        let dateTime = (data?.datetime as? Int ?? 0) / 1000000000
         let x = Double(index)
         sumVolume += volume
         sumVolumeDic[index] = volume

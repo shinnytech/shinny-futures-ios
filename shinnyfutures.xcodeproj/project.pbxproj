@@ -31,6 +31,20 @@
 		D42EE52C20721ED000EF8066 /* SearchTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D42EE52B20721ED000EF8066 /* SearchTableViewController.swift */; };
 		D447697F21A7BDEF00620CA0 /* OptionalPopupTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D447697E21A7BDEF00620CA0 /* OptionalPopupTableViewController.swift */; };
 		D447698121A7BF8000620CA0 /* OptionalTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D447698021A7BF8000620CA0 /* OptionalTableViewCell.swift */; };
+		D44934EB21B0CFFC0069422F /* Quote.swift in Sources */ = {isa = PBXBuildFile; fileRef = D44934EA21B0CFFC0069422F /* Quote.swift */; };
+		D44934ED21B0DCA80069422F /* RtnMD.swift in Sources */ = {isa = PBXBuildFile; fileRef = D44934EC21B0DCA80069422F /* RtnMD.swift */; };
+		D466AB2721B673E100B6E4F6 /* SwiftTryCatch.m in Sources */ = {isa = PBXBuildFile; fileRef = D466AB2421B673E100B6E4F6 /* SwiftTryCatch.m */; };
+		D466AB2B21B7B99D00B6E4F6 /* Kline.swift in Sources */ = {isa = PBXBuildFile; fileRef = D466AB2A21B7B99D00B6E4F6 /* Kline.swift */; };
+		D466AB2E21B7BD6A00B6E4F6 /* Tick.swift in Sources */ = {isa = PBXBuildFile; fileRef = D466AB2D21B7BD6A00B6E4F6 /* Tick.swift */; };
+		D466AB3221B7BEFB00B6E4F6 /* Chart.swift in Sources */ = {isa = PBXBuildFile; fileRef = D466AB3121B7BEFB00B6E4F6 /* Chart.swift */; };
+		D466AB3421B7C1F500B6E4F6 /* RtnTD.swift in Sources */ = {isa = PBXBuildFile; fileRef = D466AB3321B7C1F500B6E4F6 /* RtnTD.swift */; };
+		D466AB3621B7C30B00B6E4F6 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = D466AB3521B7C30B00B6E4F6 /* User.swift */; };
+		D466AB3821B7C40E00B6E4F6 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = D466AB3721B7C40E00B6E4F6 /* Account.swift */; };
+		D466AB3A21B7C63000B6E4F6 /* Position.swift in Sources */ = {isa = PBXBuildFile; fileRef = D466AB3921B7C63000B6E4F6 /* Position.swift */; };
+		D466AB3C21B7C75000B6E4F6 /* Order.swift in Sources */ = {isa = PBXBuildFile; fileRef = D466AB3B21B7C75000B6E4F6 /* Order.swift */; };
+		D466AB3E21B7C7CF00B6E4F6 /* Trade.swift in Sources */ = {isa = PBXBuildFile; fileRef = D466AB3D21B7C7CF00B6E4F6 /* Trade.swift */; };
+		D466AB4021B7C84D00B6E4F6 /* Transfer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D466AB3F21B7C84D00B6E4F6 /* Transfer.swift */; };
+		D466AB4221B7C8AE00B6E4F6 /* Bank.swift in Sources */ = {isa = PBXBuildFile; fileRef = D466AB4121B7C8AE00B6E4F6 /* Bank.swift */; };
 		D466D4CF2137D47500FD6FBA /* BankTransferViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D466D4CE2137D47500FD6FBA /* BankTransferViewController.swift */; };
 		D466D4D32138225200FD6FBA /* BankTransferTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D466D4D22138225200FD6FBA /* BankTransferTableViewCell.swift */; };
 		D466D4D62138D4B300FD6FBA /* BankConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D466D4D52138D4B300FD6FBA /* BankConstants.swift */; };
@@ -198,6 +212,21 @@
 		D42EE52B20721ED000EF8066 /* SearchTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTableViewController.swift; sourceTree = "<group>"; };
 		D447697E21A7BDEF00620CA0 /* OptionalPopupTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionalPopupTableViewController.swift; sourceTree = "<group>"; };
 		D447698021A7BF8000620CA0 /* OptionalTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionalTableViewCell.swift; sourceTree = "<group>"; };
+		D44934EA21B0CFFC0069422F /* Quote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Quote.swift; sourceTree = "<group>"; };
+		D44934EC21B0DCA80069422F /* RtnMD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RtnMD.swift; sourceTree = "<group>"; };
+		D466AB2421B673E100B6E4F6 /* SwiftTryCatch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SwiftTryCatch.m; path = "../../Downloads/SwiftTryCatch-master/SwiftTryCatch.m"; sourceTree = "<group>"; };
+		D466AB2621B673E100B6E4F6 /* SwiftTryCatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwiftTryCatch.h; path = "../../Downloads/SwiftTryCatch-master/SwiftTryCatch.h"; sourceTree = "<group>"; };
+		D466AB2A21B7B99D00B6E4F6 /* Kline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Kline.swift; sourceTree = "<group>"; };
+		D466AB2D21B7BD6A00B6E4F6 /* Tick.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tick.swift; sourceTree = "<group>"; };
+		D466AB3121B7BEFB00B6E4F6 /* Chart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chart.swift; sourceTree = "<group>"; };
+		D466AB3321B7C1F500B6E4F6 /* RtnTD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RtnTD.swift; sourceTree = "<group>"; };
+		D466AB3521B7C30B00B6E4F6 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		D466AB3721B7C40E00B6E4F6 /* Account.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
+		D466AB3921B7C63000B6E4F6 /* Position.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Position.swift; sourceTree = "<group>"; };
+		D466AB3B21B7C75000B6E4F6 /* Order.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Order.swift; sourceTree = "<group>"; };
+		D466AB3D21B7C7CF00B6E4F6 /* Trade.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trade.swift; sourceTree = "<group>"; };
+		D466AB3F21B7C84D00B6E4F6 /* Transfer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transfer.swift; sourceTree = "<group>"; };
+		D466AB4121B7C8AE00B6E4F6 /* Bank.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bank.swift; sourceTree = "<group>"; };
 		D466D4CE2137D47500FD6FBA /* BankTransferViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankTransferViewController.swift; sourceTree = "<group>"; };
 		D466D4D22138225200FD6FBA /* BankTransferTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankTransferTableViewCell.swift; sourceTree = "<group>"; };
 		D466D4D52138D4B300FD6FBA /* BankConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankConstants.swift; sourceTree = "<group>"; };
@@ -361,6 +390,8 @@
 		D480224D20688A180033E202 = {
 			isa = PBXGroup;
 			children = (
+				D466AB2621B673E100B6E4F6 /* SwiftTryCatch.h */,
+				D466AB2421B673E100B6E4F6 /* SwiftTryCatch.m */,
 				D4A2B2DA21945F54008536F7 /* BaiduMobStat.h */,
 				D4A2B2D821945F54008536F7 /* libBaiduMobStat.a */,
 				D420B27E20DD00090045B6AF /* Charts.xcodeproj */,
@@ -449,7 +480,20 @@
 				D4195FCE20994D560072C021 /* TradeConstants.swift */,
 				D466D4D52138D4B300FD6FBA /* BankConstants.swift */,
 				D466D4D72138D4F000FD6FBA /* TransferConstants.swift */,
+				D44934EC21B0DCA80069422F /* RtnMD.swift */,
+				D44934EA21B0CFFC0069422F /* Quote.swift */,
+				D466AB2A21B7B99D00B6E4F6 /* Kline.swift */,
+				D466AB3121B7BEFB00B6E4F6 /* Chart.swift */,
+				D466AB2D21B7BD6A00B6E4F6 /* Tick.swift */,
 				D42EE5272071D3C600EF8066 /* Search.swift */,
+				D466AB3321B7C1F500B6E4F6 /* RtnTD.swift */,
+				D466AB3521B7C30B00B6E4F6 /* User.swift */,
+				D466AB3721B7C40E00B6E4F6 /* Account.swift */,
+				D466AB3921B7C63000B6E4F6 /* Position.swift */,
+				D466AB3B21B7C75000B6E4F6 /* Order.swift */,
+				D466AB3D21B7C7CF00B6E4F6 /* Trade.swift */,
+				D466AB3F21B7C84D00B6E4F6 /* Transfer.swift */,
+				D466AB4121B7C8AE00B6E4F6 /* Bank.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -616,7 +660,7 @@
 				TargetAttributes = {
 					D480225520688A180033E202 = {
 						CreatedOnToolsVersion = 9.2;
-						ProvisioningStyle = Manual;
+						ProvisioningStyle = Automatic;
 					};
 					D480226920688A180033E202 = {
 						CreatedOnToolsVersion = 9.2;
@@ -733,14 +777,12 @@
 				"${BUILT_PRODUCTS_DIR}/DeepDiff/DeepDiff.framework",
 				"${BUILT_PRODUCTS_DIR}/Siren/Siren.framework",
 				"${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework",
-				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DeepDiff.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Siren.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Starscream.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -810,16 +852,19 @@
 				D47F66E7215BA7110068C853 /* ResponsibilityView.swift in Sources */,
 				D420B2EA20E0964E0045B6AF /* MyYAxis.swift in Sources */,
 				D4B3DBC92074C58200545376 /* PositionTableViewController.swift in Sources */,
+				D466AB2B21B7B99D00B6E4F6 /* Kline.swift in Sources */,
 				D49A718120738A9B00AA947A /* TradeTableViewController.swift in Sources */,
 				D48606B220A5283800C4FEB5 /* AccountConstants.swift in Sources */,
 				D48606A820A4429200C4FEB5 /* QuoteConstants.swift in Sources */,
 				D447698121A7BF8000620CA0 /* OptionalTableViewCell.swift in Sources */,
 				D4B3DBCF207B65BE00545376 /* TransactionViewController.swift in Sources */,
 				D47A4E852089958A00255276 /* FileUtils.swift in Sources */,
+				D466AB3A21B7C63000B6E4F6 /* Position.swift in Sources */,
 				D480229E206B67FE0033E202 /* LoginViewController.swift in Sources */,
 				D480228A2068C0240033E202 /* QuoteTableViewCell.swift in Sources */,
 				D48606A020A3E0BC00C4FEB5 /* OptionalPopupCollectionViewController.swift in Sources */,
 				D415D0C520DCD6F700EA8DA3 /* CurrentDayMarkerView.swift in Sources */,
+				D466AB3621B7C30B00B6E4F6 /* User.swift in Sources */,
 				D4F4E18920AEA080007A2975 /* PriceKeyboardView.swift in Sources */,
 				D466D4CF2137D47500FD6FBA /* BankTransferViewController.swift in Sources */,
 				D48606AE20A444BA00C4FEB5 /* ChartConstants.swift in Sources */,
@@ -836,22 +881,29 @@
 				D48606B620A5286E00C4FEB5 /* OrderConstants.swift in Sources */,
 				D4A2B2D021893E3A008536F7 /* AboutViewController.swift in Sources */,
 				D4B3DBC72074C55A00545376 /* OrderTableViewCell.swift in Sources */,
+				D466AB3821B7C40E00B6E4F6 /* Account.swift in Sources */,
 				D447697F21A7BDEF00620CA0 /* OptionalPopupTableViewController.swift in Sources */,
 				D420B2F020E2207F0045B6AF /* KlineYAxisRenderer.swift in Sources */,
 				D466D4D62138D4B300FD6FBA /* BankConstants.swift in Sources */,
 				D480225C20688A180033E202 /* QuoteViewController.swift in Sources */,
 				D420B2F220E2207F0045B6AF /* MyCandleStickChartRenderer.swift in Sources */,
 				D47A4E7B20871F7A00255276 /* KlinePopupViewController.swift in Sources */,
+				D466AB3421B7C1F500B6E4F6 /* RtnTD.swift in Sources */,
 				D4B3DBD1207CB47400545376 /* TransactionPageViewController.swift in Sources */,
+				D466AB2721B673E100B6E4F6 /* SwiftTryCatch.m in Sources */,
 				D48022902069116F0033E202 /* QuotePageViewController.swift in Sources */,
 				D420B2F320E2207F0045B6AF /* MyCombinedChartRenderer.swift in Sources */,
 				D48606AC20A444A700C4FEB5 /* TickConstants.swift in Sources */,
 				D42EE52C20721ED000EF8066 /* SearchTableViewController.swift in Sources */,
 				D480225A20688A180033E202 /* AppDelegate.swift in Sources */,
+				D466AB2E21B7BD6A00B6E4F6 /* Tick.swift in Sources */,
 				D466D4D82138D4F000FD6FBA /* TransferConstants.swift in Sources */,
+				D466AB3221B7BEFB00B6E4F6 /* Chart.swift in Sources */,
 				D42EE52A2071D55700EF8066 /* SearchTableViewCell.swift in Sources */,
 				D48606A620A43FFA00C4FEB5 /* RtnMDConstants.swift in Sources */,
 				D4B3DBD5207CB80400545376 /* CurrentDayViewController.swift in Sources */,
+				D466AB3C21B7C75000B6E4F6 /* Order.swift in Sources */,
+				D466AB3E21B7C7CF00B6E4F6 /* Trade.swift in Sources */,
 				D4B3DBC52074C54F00545376 /* PositionTableViewCell.swift in Sources */,
 				D480228C2068D52C0033E202 /* QuoteTableViewController.swift in Sources */,
 				D420B2E920E0964E0045B6AF /* MyXAxis.swift in Sources */,
@@ -866,6 +918,7 @@
 				D47F66F1216B58010068C853 /* LocalCommonConstants.swift in Sources */,
 				D47A4E772085D0FF00255276 /* QuoteNavigationCollectionViewCell.swift in Sources */,
 				D4802296206B375E0033E202 /* MainViewController.swift in Sources */,
+				D466AB4221B7C8AE00B6E4F6 /* Bank.swift in Sources */,
 				D4802298206B67650033E202 /* AccountViewController.swift in Sources */,
 				D4B3DBCD207B65AB00545376 /* HandicapViewController.swift in Sources */,
 				D48606B420A5285600C4FEB5 /* PositionConstants.swift in Sources */,
@@ -875,8 +928,11 @@
 				D47A4E792085D1A700255276 /* QuoteNavigationCollectionViewController.swift in Sources */,
 				D4B1F7B9209020E800BCAD2C /* MDWebSocketUtils.swift in Sources */,
 				D48606AA20A442E200C4FEB5 /* KlineConstants.swift in Sources */,
+				D466AB4021B7C84D00B6E4F6 /* Transfer.swift in Sources */,
 				D48606A420A42BAD00C4FEB5 /* ToastUtils.swift in Sources */,
+				D44934EB21B0CFFC0069422F /* Quote.swift in Sources */,
 				D4B3DBD3207CB7BA00545376 /* KlinePageViewController.swift in Sources */,
+				D44934ED21B0DCA80069422F /* RtnMD.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1057,8 +1113,8 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = ETY2JG84H2;
 				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1075,7 +1131,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.shinnytech.zhongqihuo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = zhongqihuo;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/shinnyfutures/shinnyfutures-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1090,8 +1146,8 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = ETY2JG84H2;
 				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1110,7 +1166,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.shinnytech.zhongqihuo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = zhongqihuo;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/shinnyfutures/shinnyfutures-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

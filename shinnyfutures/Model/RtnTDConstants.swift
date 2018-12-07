@@ -21,5 +21,4 @@ class RtnTDConstants {
     public static let transfers = "transfers"
     public static let banks = "banks"
     public static let brokers = "brokers"
-    public static let ret = "ret"
 }

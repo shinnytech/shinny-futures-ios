@@ -30,7 +30,7 @@ class CommonConstants {
     public static let VIEW_WIDTH = 200
 
     //MARK: Quote page title
-    public static let titleArray = ["自选合约", "主力合约", "上海期货交易所", "上期能源", "大连商品交易所", "郑州商品交易所", "中国金融期货交易所", "大连组合", "郑州组合"]
+    public static let titleArray = ["自选合约", "主力合约", "上海期货交易所", "上期能源", "上海大宗", "大连商品交易所", "郑州商品交易所", "中国金融期货交易所", "大连组合", "郑州组合"]
 
     // MARK: Notification
     public static let RefreshOptionalInsListNotification = "RefreshOptionalInsListNotification"

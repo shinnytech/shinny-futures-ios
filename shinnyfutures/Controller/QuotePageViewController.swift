@@ -26,7 +26,7 @@ class QuotePageViewController: UIPageViewController, UIPageViewControllerDataSou
     }
 
     override func viewDidAppear(_ animated: Bool) {
-        mainViewController = self.parent as! MainViewController
+        mainViewController = self.parent as? MainViewController
     }
 
     deinit {

@@ -8,7 +8,6 @@
 
 import UIKit
 import Starscream
-import SwiftyJSON
 
 protocol TDWebSocketUtilsDelegate: NSObjectProtocol {
 
