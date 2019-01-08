@@ -1,5 +1,5 @@
 //
-//  OptionalCollectionViewCell.swift
+//  PopupCollectionViewCell.swift
 //  shinnyfutures
 //
 //  Created by chenli on 2018/5/10.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class OptionalCollectionViewCell: UICollectionViewCell {
+class PopupCollectionViewCell: UICollectionViewCell {
 
     // MARK: Properties
     @IBOutlet weak var ins: UILabel!

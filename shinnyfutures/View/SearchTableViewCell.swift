@@ -14,7 +14,9 @@ class SearchTableViewCell: UITableViewCell {
     @IBOutlet weak var instrumentName: UILabel!
     @IBOutlet weak var instrumentId: UILabel!
     @IBOutlet weak var exchangeName: UILabel!
-
+    @IBOutlet weak var save: UIButton!
+    let manager = DataManager.getInstance()
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -24,6 +26,20 @@ class SearchTableViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
+    }
+
+
+    @IBAction func save(_ sender: UIButton) {
+        if let ins = instrumentId.text {
+            manager.saveOrRemoveIns(ins: ins)
+            let optional = FileUtils.getOptional()
+            if !optional.contains(ins) {
+                save.setImage(UIImage(named: "heart_outline", in: Bundle(identifier: "com.shinnytech.futures"), compatibleWith: nil), for: .normal)
+            }else{
+                save.setImage(UIImage(named: "heart", in: Bundle(identifier: "com.shinnytech.futures"), compatibleWith: nil), for: .normal)
+            }
+
+        }
     }
 
 }

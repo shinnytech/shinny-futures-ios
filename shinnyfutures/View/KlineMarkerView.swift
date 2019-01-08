@@ -25,7 +25,6 @@ open class KlineMarkerView: MarkerView {
     @IBOutlet weak var closeOiDelta: UILabel!
     var markerViewState = "right"
     let dataManager = DataManager.getInstance()
-    var klineType = ""
 
     func resizeXib(heiht: CGFloat){
         var Rect: CGRect = self.frame
@@ -42,10 +41,9 @@ open class KlineMarkerView: MarkerView {
 
     open override func refreshContent(entry: ChartDataEntry, highlight: Highlight) {
         let x = Int(entry.x)
-        let chart = self.chartView as! KlineCombinedChartView
-        klineType = chart.klineType
-        guard let data = dataManager.sRtnMD.klines[dataManager.sInstrumentId]?[klineType]?.datas["\(x)"] else {return}
-        guard let dataPre = dataManager.sRtnMD.klines[dataManager.sInstrumentId]?[klineType]?.datas["\(x - 1)"] else {return}
+        let duration = "\(dataManager.sRtnMD.charts[CommonConstants.CHART_ID]?.state?.duration ?? "")"
+        guard let data = dataManager.sRtnMD.klines[dataManager.sInstrumentId]?[duration]?.datas["\(x)"] else {return}
+        guard let dataPre = dataManager.sRtnMD.klines[dataManager.sInstrumentId]?[duration]?.datas["\(x - 1)"] else {return}
         let closePre = Float("\(dataPre.close ?? 0.0)") ?? 0.0
         let close = Float("\(data.close ?? 0.0)") ?? 0.0
         let open = Float("\(data.open ?? 0.0)") ?? 0.0
@@ -56,7 +54,7 @@ open class KlineMarkerView: MarkerView {
         let dateformatter = DateFormatter()
         dateformatter.dateFormat = "yyyy-MM-dd"
         let yValue = dateformatter.string(from: dateTime)
-        dateformatter.dateFormat = "HH:mm"
+        dateformatter.dateFormat = "HH:mm:ss"
         let xValue = dateformatter.string(from: dateTime)
         let decimal = dataManager.getDecimalByPtick(instrumentId: dataManager.sInstrumentId)
         let change = String(format: "%.\(decimal)f", close - closePre)

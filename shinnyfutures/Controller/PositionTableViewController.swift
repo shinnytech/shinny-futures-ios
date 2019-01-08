@@ -12,6 +12,7 @@ import DeepDiff
 class PositionTableViewController: UITableViewController {
     // MARK: Properties
     var positions = [Position]()
+    var oldData = [Position]()
     let dataManager = DataManager.getInstance()
     var isRefresh = true
 
@@ -100,22 +101,6 @@ class PositionTableViewController: UITableViewController {
             cell.openPrice.text = dataManager.saveDecimalByPtick(decimal: decimal, data: open_price_short)
             profit = Double("\(position.float_profit_short ?? 0.0)") ?? 0.0
             cell.profit.text = dataManager.saveDecimalByPtick(decimal: 2, data: "\(profit)")
-        } else if volume_long != 0 && volume_short != 0 {
-            cell.direction.text = "双向"
-            cell.direction.textColor = UIColor.white
-            cell.available.text = "\(available_long)" + "/" + "\(available_short)"
-            cell.volume.text = "\(volume_long)" + "/" + "\(volume_short)"
-            let open_price_long = "\(position.open_price_long ?? 0.0)"
-            let open_price_long_s = dataManager.saveDecimalByPtick(decimal: decimal, data: open_price_long)
-            let open_price_short = "\(position.open_price_short ?? 0.0)"
-            let open_price_short_s = dataManager.saveDecimalByPtick(decimal: decimal, data: open_price_short)
-            cell.openPrice.text = open_price_long_s + "/" + open_price_short_s
-            let float_profit_long = "\(position.float_profit_long ?? 0.0)"
-            let float_profit_short = "\(position.float_profit_short ?? 0.0)"
-            let profit_long = dataManager.saveDecimalByPtick(decimal: 2, data: float_profit_long)
-            let profit_short = dataManager.saveDecimalByPtick(decimal: 2, data: float_profit_short)
-            cell.profit.text = profit_long + "/" + profit_short
-            profit = Double("\(position.float_profit_long ?? 0.0)") ?? 0.0
         }
 
         if profit > 0 {
@@ -131,6 +116,9 @@ class PositionTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
+        if let cell = tableView.cellForRow(at: indexPath) as? PositionTableViewCell{
+            dataManager.sPositionDirection = cell.direction.text ?? ""
+        }
         let position = positions[indexPath.row]
         let instrumentId = "\(position.exchange_id ?? "")" + "." + "\(position.instrument_id ?? "")"
         if !dataManager.sInstrumentId.elementsEqual(instrumentId){
@@ -195,11 +183,11 @@ class PositionTableViewController: UITableViewController {
         headerView.addSubview(stackView)
         NSLayoutConstraint.activate([
             name.widthAnchor.constraint(equalTo: stackView.widthAnchor, multiplier: 0.2),
-            direction.widthAnchor.constraint(equalTo: stackView.widthAnchor, multiplier: 0.08),
-            volume.widthAnchor.constraint(equalTo: stackView.widthAnchor, multiplier: 0.08),
-            available.widthAnchor.constraint(equalTo: stackView.widthAnchor, multiplier: 0.08),
-            openInterest.widthAnchor.constraint(equalTo: stackView.widthAnchor, multiplier: 0.28),
-            profit.widthAnchor.constraint(equalTo: stackView.widthAnchor, multiplier: 0.28)
+            direction.widthAnchor.constraint(equalTo: stackView.widthAnchor, multiplier: 0.1),
+            volume.widthAnchor.constraint(equalTo: stackView.widthAnchor, multiplier: 0.1),
+            available.widthAnchor.constraint(equalTo: stackView.widthAnchor, multiplier: 0.1),
+            openInterest.widthAnchor.constraint(equalTo: stackView.widthAnchor, multiplier: 0.25),
+            profit.widthAnchor.constraint(equalTo: stackView.widthAnchor, multiplier: 0.25)
             ])
         return headerView
     }
@@ -234,8 +222,11 @@ class PositionTableViewController: UITableViewController {
         for position in rtnPositions{
             let volume_long = (position.volume_long as? Int) ?? 0
             let volume_short = (position.volume_short as? Int) ?? 0
-            if volume_long != 0 || volume_short != 0{
-                positions.append(position)
+            if volume_long != 0 && volume_short != 0{
+                positions.append(position.copyLong())
+                positions.append(position.copyShort())
+            } else if !(volume_long == 0 && volume_short == 0){
+                positions.append(position.copy() as! Position)
             }
         }
         if oldData.count == 0 {

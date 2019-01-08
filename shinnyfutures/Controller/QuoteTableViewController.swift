@@ -384,6 +384,7 @@ class QuoteTableViewController: UITableViewController, UIPopoverPresentationCont
     @objc private func refreshDatas() {
         if !isRefresh {return}
         //两个数据集的大小必须一致，否则会出错
+        oldQuotes = quotes
         let count = quotes.count
         for ins in dataManager.sRtnMD.ins_list.split(separator: ",") {
             let instrumentId = String(ins)
@@ -391,7 +392,7 @@ class QuoteTableViewController: UITableViewController, UIPopoverPresentationCont
                 let index = insList.index(of: instrumentId)
                 let quote = dataManager.sRtnMD.quotes[instrumentId]
                 if let index = index, let quote = quote, index < count {
-                    quotes[index] = quote
+                    quotes[index] = quote.copy() as! Quote
                 }
             }
         }
@@ -403,7 +404,7 @@ class QuoteTableViewController: UITableViewController, UIPopoverPresentationCont
         }
         let change = diff(old: oldQuotes, new: quotes)
         tableView.reload(changes: change, section: 0, insertionAnimation: .none, deletionAnimation: .none, replacementAnimation: .none, completion: {_ in})
-        oldQuotes = quotes
+
     }
 
     @objc func initInsList(){

@@ -114,7 +114,7 @@ class OrderTableViewController: UIViewController, UITableViewDataSource, UITable
             let trade_time = Double("\(order.insert_date_time ?? 0)") ?? 0.0
             //错单时间为0
             if trade_time == 0{
-                 cell.time.text = "--"
+                cell.time.text = "--"
             }else {
                 let date = Date(timeIntervalSince1970: (trade_time / 1000000000))
                 cell.time.text = dateFormat.string(from: date)
@@ -143,7 +143,7 @@ class OrderTableViewController: UIViewController, UITableViewDataSource, UITable
                 alert.addAction(UIAlertAction(title: "OK", style: .default, handler: {action in
                     switch action.style {
                     case .default:
-                        TDWebSocketUtils.getInstance().sendReqCancelOrder(orderId: order_id)
+                        TDWebSocketUtils.getInstance().sendReqCancelOrder(order_id: order_id)
                     default:
                         break
                     }}))
@@ -160,7 +160,7 @@ class OrderTableViewController: UIViewController, UITableViewDataSource, UITable
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 35.0))
-         headerView.backgroundColor = CommonConstants.QUOTE_TABLE_HEADER_1
+        headerView.backgroundColor = CommonConstants.QUOTE_TABLE_HEADER_1
         let stackView = UIStackView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 35.0))
         stackView.distribution = .fillProportionally
         let name = UILabel()
@@ -250,17 +250,19 @@ class OrderTableViewController: UIViewController, UITableViewDataSource, UITable
         guard let user = dataManager.sRtnTD.users[dataManager.sUser_id] else {return}
         let orders_tmp = user.orders.sorted{ "\($0.value.insert_date_time ?? 0)" > "\($1.value.insert_date_time ?? 0)" }.map {$0.value}
         let oldData = orders
-        if segmentControl.selectedSegmentIndex == 1 {
-            orders = orders_tmp
-        } else {
-            orders.removeAll()
-            for order in orders_tmp {
+        orders.removeAll()
+        for order in orders_tmp {
+            let order_copy = order.copy() as! Order
+            if segmentControl.selectedSegmentIndex == 1 {
+                orders.append(order_copy)
+            }else{
                 let status = "\(order.status ?? "")"
                 if "ALIVE".elementsEqual(status) {
-                    orders.append(order)
+                    orders.append(order_copy)
                 }
             }
         }
+
         if oldData.count == 0 {
             tableView.reloadData()
         } else {

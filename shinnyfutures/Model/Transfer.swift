@@ -21,8 +21,8 @@ class Transfer: NSObject {
 
     override func isEqual(_ object: Any?) -> Bool {
         if let other = object as? Transfer {
-            let datetime_l = "\(self.datetime ?? "")"
-            let datetime_r = "\(other.datetime ?? "")"
+            let datetime_l = "\(self.datetime ?? 0)"
+            let datetime_r = "\(other.datetime ?? 0)"
             return (datetime_l == datetime_r)
         }else{
             return false

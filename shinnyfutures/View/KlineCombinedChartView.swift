@@ -10,8 +10,7 @@ import UIKit
 import Charts
 
 class KlineCombinedChartView: CombinedChartView {
-    //给klineMarkerView使用
-    var klineType = ""
+
     override func initialize() {
         super.initialize()
         

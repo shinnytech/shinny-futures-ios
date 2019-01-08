@@ -18,10 +18,17 @@ class SearchTableViewController: UITableViewController, UISearchResultsUpdating 
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         searchController = UISearchController(searchResultsController: nil)
         searchController.searchBar.placeholder = "合约代码\\拼音\\中文\\交易所"
-        tableView.tableHeaderView = searchController?.searchBar
+        searchController.searchBar.barStyle = .black
+
+        if #available(iOS 11.0, *) {
+            navigationItem.searchController = searchController
+            navigationItem.hidesSearchBarWhenScrolling = false
+        } else {
+            tableView.tableHeaderView = searchController.searchBar
+        }
+
         searchController.searchResultsUpdater = self
         searchController.dimsBackgroundDuringPresentation = false
 
@@ -63,8 +70,17 @@ class SearchTableViewController: UITableViewController, UISearchResultsUpdating 
         let quote = (searchController.isActive) ? searchResults[indexPath.row] : searchHistory[indexPath.row]
 
         cell.instrumentName.text = quote.instrument_name
-        cell.instrumentId.text = quote.instrument_id
+        cell.instrumentId.text = "(" + "\(quote.instrument_id ?? "")" + ")"
         cell.exchangeName.text = quote.exchange_name
+
+        let optional = FileUtils.getOptional()
+        if let ins = quote.instrument_id {
+            if !optional.contains(ins) {
+                cell.save.setImage(UIImage(named: "heart_outline", in: Bundle(identifier: "com.shinnytech.futures"), compatibleWith: nil), for: .normal)
+            }else{
+                cell.save.setImage(UIImage(named: "heart", in: Bundle(identifier: "com.shinnytech.futures"), compatibleWith: nil), for: .normal)
+            }
+        }
 
         return cell
     }

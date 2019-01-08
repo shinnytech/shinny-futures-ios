@@ -13,13 +13,38 @@ import Siren
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+
+    fileprivate func createMenuView() {
+
+        // create viewController code...
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+
+        let mainViewController = storyboard.instantiateViewController(withIdentifier: "MainViewController") as! MainViewController
+        let leftViewController = storyboard.instantiateViewController(withIdentifier: "LeftTableViewController") as! LeftTableViewController
+        let rightViewController = storyboard.instantiateViewController(withIdentifier: "RightTableViewController") as! RightTableViewController
+
+        let nvc: UINavigationController = UINavigationController(rootViewController: mainViewController)
+        leftViewController.mainViewController = mainViewController
+        rightViewController.mainViewController = mainViewController
+
+        let slideMenuController = ExSlideMenuController(mainViewController: nvc, leftMenuViewController: leftViewController, rightMenuViewController: rightViewController)
+        slideMenuController.automaticallyAdjustsScrollViewInsets = true
+        slideMenuController.delegate = mainViewController
+        self.window?.backgroundColor = UIColor(red: 236.0, green: 238.0, blue: 241.0, alpha: 1.0)
+        self.window?.rootViewController = slideMenuController
+        self.window?.makeKeyAndVisible()
+    }
+
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         Siren.shared.checkVersion(checkType: .immediately)
         if let statusBarView = UIApplication.shared.value(forKeyPath: "statusBarWindow.statusBar") as? UIView {
-            statusBarView.backgroundColor = UIColor.black
+            statusBarView.backgroundColor = CommonConstants.QUOTE_PAGE_HEADER
         }
+
+        self.createMenuView()
+
         return true
     }
 

@@ -15,13 +15,16 @@ class KlinePageViewController: UIPageViewController {
     lazy var subViewControllers: [BaseChartViewController] = {
         let viewController1 = UIStoryboard(name: "Main", bundle: Bundle(identifier: "com.shinnytech.futures")).instantiateViewController(withIdentifier: CommonConstants.CurrentDayViewController) as! CurrentDayViewController
         viewController1.klineType = CommonConstants.CURRENT_DAY
+        viewController1.fragmentType = CommonConstants.CURRENT_DAY_FRAGMENT
         let viewController2 = UIStoryboard(name: "Main", bundle: Bundle(identifier: "com.shinnytech.futures")).instantiateViewController(withIdentifier: CommonConstants.KlineViewController) as! KlineViewController
-        viewController2.klineType = CommonConstants.KLINE_DAY
+        viewController2.fragmentType = CommonConstants.DAY_FRAGMENT
         let viewController3 = UIStoryboard(name: "Main", bundle: Bundle(identifier: "com.shinnytech.futures")).instantiateViewController(withIdentifier: CommonConstants.KlineViewController) as! KlineViewController
-        viewController3.klineType = CommonConstants.KLINE_HOUR
+        viewController3.fragmentType = CommonConstants.HOUR_FRAGMENT
         let viewController4 = UIStoryboard(name: "Main", bundle: Bundle(identifier: "com.shinnytech.futures")).instantiateViewController(withIdentifier: CommonConstants.KlineViewController) as! KlineViewController
-        viewController4.klineType = CommonConstants.KLINE_MINUTE
-        return [viewController1, viewController2, viewController3, viewController4]
+        viewController4.fragmentType = CommonConstants.MINUTE_FRAGMENT
+        let viewController5 = UIStoryboard(name: "Main", bundle: Bundle(identifier: "com.shinnytech.futures")).instantiateViewController(withIdentifier: CommonConstants.KlineViewController) as! KlineViewController
+        viewController5.fragmentType = CommonConstants.SECOND_FRAGMENT
+        return [viewController1, viewController2, viewController3, viewController4, viewController5]
     }()
 
     override func viewDidLoad() {

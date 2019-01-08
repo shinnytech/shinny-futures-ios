@@ -31,6 +31,7 @@ class DataManager {
     var sBrokers = [String]()
     var sPreInsList = ""
     var sInstrumentId = ""
+    var sPositionDirection = ""
     var isBackground = false
     var sIsLogin = false
     var sIsEmpty = false
@@ -58,8 +59,6 @@ class DataManager {
         var sZhongjinInsListNameNav = [String: String]()
         var sNengyuanQuotes = [String: Quote]()
         var sNengyuanInsListNameNav = [String: String]()
-        var sDazongQuotes = [String: Quote]()
-        var sDazongInsListNameNav = [String: String]()
         var sDalianzuheQuotes = [String: Quote]()
         var sDalianzuheInsListNameNav = [String: String]()
         var sZhengzhouzeheQuotes = [String: Quote]()
@@ -137,12 +136,6 @@ class DataManager {
                             sNengyuanInsListNameNav[product_short_name] = instrument_id
                         }
                         searchEntity.exchange_name = "上海国际能源交易中心"
-                    case "SSWE":
-                        if !expired{
-                            sDazongQuotes[instrument_id] = quote
-                            sDazongInsListNameNav[product_short_name] = instrument_id
-                        }
-                        searchEntity.exchange_name = "上海大宗商品交易所"
                     default:
                         continue
                     }
@@ -191,7 +184,6 @@ class DataManager {
             sQuotes.append(sortByKey(insList: sMainQuotes))
             sQuotes.append(sortByKey(insList: sShangqiQuotes))
             sQuotes.append(sortByKey(insList: sNengyuanQuotes))
-            sQuotes.append(sortByKey(insList: sDazongQuotes))
             sQuotes.append(sortByKey(insList: sDalianQuotes))
             sQuotes.append(sortByKey(insList: sZhengzhouQuotes))
             sQuotes.append(sortByKey(insList: sZhongjinQuotes))
@@ -202,7 +194,6 @@ class DataManager {
             sInsListNames.append(sortByValue(insList: sMainInsListNameNav))
             sInsListNames.append(sortByValue(insList: sShangqiInsListNameNav))
             sInsListNames.append(sortByValue(insList: sNengyuanInsListNameNav))
-            sInsListNames.append(sortByValue(insList: sDazongInsListNameNav))
             sInsListNames.append(sortByValue(insList: sDalianInsListNameNav))
             sInsListNames.append(sortByValue(insList: sZhengzhouInsListNameNav))
             sInsListNames.append(sortByValue(insList: sZhongjinInsListNameNav))
@@ -326,12 +317,12 @@ class DataManager {
                 case RtnMDConstants.ins_list:
                     let ins_list = value as? String
                     sRtnMD.ins_list = ins_list ?? ""
+                case RtnMDConstants.mdhis_more_data:
+                    sRtnMD.mdhis_more_data = value as? Bool ?? false
                 default:
                     break
                 }
             }
-
-
         }
         DispatchQueue.main.async {
             NotificationCenter.default.post(name: Notification.Name(CommonConstants.RtnMDNotification), object: nil)
@@ -441,7 +432,6 @@ class DataManager {
         sIsLogin = false
         sIsEmpty = false
         sUser_id = ""
-        sRtnTD = RtnTD()
     }
 
     func parseBrokers(rtnData: [String: Any]) {
@@ -503,41 +493,49 @@ class DataManager {
         guard let trade = trade else {return}
         for (key_user, user) in trade{
             guard let user = user as? [String: Any] else {continue}
+            var user_local = sRtnTD.users[key_user]
+            if user_local == nil{
+                user_local = User()
+            }
             for (key_value, value) in user {
                 switch key_value {
                 case RtnTDConstants.accounts:
                     let accounts = value as? [String: Any]
-                    parseAccounts(accounts: accounts, key_user: key_user)
+                    parseAccounts(accounts: accounts, user_local: user_local)
                     break
                 case RtnTDConstants.positions:
                     let positions = value as? [String: Any]
-                    parsePositions(positions: positions, key_user: key_user)
+                    parsePositions(positions: positions, user_local: user_local)
                     break
                 case RtnTDConstants.orders:
                     let orders = value as? [String: Any]
-                    parseOrders(orders: orders, key_user: key_user)
+                    parseOrders(orders: orders, user_local: user_local)
                     break
                 case RtnTDConstants.trades:
                     let trades = value as? [String: Any]
-                    parseTrades(trades: trades, key_user: key_user)
+                    parseTrades(trades: trades, user_local: user_local)
                     break
                 case RtnTDConstants.transfers:
                     let transfers = value as? [String: Any]
-                    parseTransfers(transfers: transfers, key_user: key_user)
+                    parseTransfers(transfers: transfers, user_local: user_local)
                     break
                 case RtnTDConstants.banks:
                     let banks = value as? [String: Any]
-                    parseBanks(banks: banks, key_user: key_user)
+                    parseBanks(banks: banks, user_local: user_local)
                     break
                 case RtnTDConstants.session:
                     DispatchQueue.main.async {
                         NotificationCenter.default.post(name: Notification.Name(CommonConstants.LoginNotification), object: nil)
                     }
-                    return
+                    guard let session = value as? [String: Any] else {break}
+                    guard let user_id = session["user_id"] as? String else {break}
+                    sUser_id = user_id
+                    break
                 default:
                     break
                 }
             }
+            sRtnTD.users[key_user] = user_local
         }
         DispatchQueue.main.async {
             NotificationCenter.default.post(name: Notification.Name(CommonConstants.RtnTDNotification), object: nil)
@@ -545,12 +543,8 @@ class DataManager {
 
     }
 
-    fileprivate func parseAccounts(accounts: [String: Any]?, key_user: String){
+    fileprivate func parseAccounts(accounts: [String: Any]?, user_local: User?){
         guard let accounts = accounts else {return}
-        var user_local = sRtnTD.users[key_user]
-        if user_local == nil{
-            user_local = User()
-        }
         for (key, value) in accounts {
             guard let account = value as? [String: Any] else {continue}
             var account_local = user_local?.accounts[key]
@@ -566,15 +560,10 @@ class DataManager {
             }
             user_local?.accounts[key] = account_local
         }
-        sRtnTD.users[key_user] = user_local
     }
 
-    fileprivate func parsePositions(positions: [String: Any]?, key_user: String){
+    fileprivate func parsePositions(positions: [String: Any]?, user_local: User?){
         guard let positions = positions else {return}
-        var user_local = sRtnTD.users[key_user]
-        if user_local == nil{
-            user_local = User()
-        }
         for (key, value) in positions {
             guard let position = value as? [String: Any] else {continue}
             var position_local = user_local?.positions[key]
@@ -590,16 +579,10 @@ class DataManager {
             }
             user_local?.positions[key] = position_local
         }
-        sRtnTD.users[key_user] = user_local
-
     }
 
-    fileprivate func parseOrders(orders: [String: Any]?, key_user: String){
+    fileprivate func parseOrders(orders: [String: Any]?, user_local: User?){
         guard let orders = orders else {return}
-        var user_local = sRtnTD.users[key_user]
-        if user_local == nil{
-            user_local = User()
-        }
         for (key, value) in orders {
             guard let order = value as? [String: Any] else {continue}
             var order_local = user_local?.orders[key]
@@ -615,17 +598,10 @@ class DataManager {
             }
             user_local?.orders[key] = order_local
         }
-
-        sRtnTD.users[key_user] = user_local
-
     }
 
-    fileprivate func parseTransfers(transfers: [String: Any]?, key_user: String){
+    fileprivate func parseTransfers(transfers: [String: Any]?, user_local: User?){
         guard let transfers = transfers else {return}
-        var user_local = sRtnTD.users[key_user]
-        if user_local == nil{
-            user_local = User()
-        }
         for (key, value) in transfers {
             guard let transfer = value as? [String: Any] else {continue}
             var transfer_local = user_local?.transfers[key]
@@ -641,17 +617,10 @@ class DataManager {
             }
             user_local?.transfers[key] = transfer_local
         }
-
-        sRtnTD.users[key_user] = user_local
-
     }
 
-    fileprivate func parseBanks(banks: [String: Any]?, key_user: String){
+    fileprivate func parseBanks(banks: [String: Any]?, user_local: User?){
         guard let banks = banks else {return}
-        var user_local = sRtnTD.users[key_user]
-        if user_local == nil{
-            user_local = User()
-        }
         for (key, value) in banks {
             guard let bank = value as? [String: Any] else {continue}
             var bank_local = user_local?.banks[key]
@@ -667,17 +636,10 @@ class DataManager {
             }
             user_local?.banks[key] = bank_local
         }
-
-        sRtnTD.users[key_user] = user_local
-
     }
 
-    fileprivate func parseTrades(trades: [String: Any]?, key_user: String){
+    fileprivate func parseTrades(trades: [String: Any]?, user_local: User?){
         guard let trades = trades else {return}
-        var user_local = sRtnTD.users[key_user]
-        if user_local == nil{
-            user_local = User()
-        }
         for (key, value) in trades {
             guard let trade = value as? [String: Any] else {continue}
             var trade_local = user_local?.trades[key]
@@ -693,7 +655,5 @@ class DataManager {
             }
             user_local?.trades[key] = trade_local
         }
-        sRtnTD.users[key_user] = user_local
-
     }
 }

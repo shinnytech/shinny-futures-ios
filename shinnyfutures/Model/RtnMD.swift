@@ -15,5 +15,5 @@ class RtnMD {
     var klines = [String: [String: Kline]]()
     var ticks = [String: Tick]()
     var charts = [String: Chart]()
-    var mdhis_more_data = ""
+    var mdhis_more_data = false
 }

@@ -100,6 +100,12 @@ open class VolumeKeyboardView: UIView {
         }
     }
 
+    func setVolume(volume: String?) {
+        if let volume = volume {
+            processor.currentOperand = volume
+        }
+    }
+
     fileprivate func loadViewFromNib() -> UIView {
         let bundle = Bundle(for: type(of: self))
         let nib = UINib(nibName: "VolumeKeyboardView", bundle: bundle)
@@ -148,7 +154,7 @@ class VolumeKeyboardViewProcessor {
         var output = 0
         switch tag {
         case VolumeKey.subtract.rawValue:
-            if output >= 1{
+            if value >= 1{
                 output = value - 1
             }
         case VolumeKey.add.rawValue:
@@ -176,7 +182,7 @@ class VolumeKeyboardViewProcessor {
     }
 
     fileprivate func resetOperand() -> String {
-        let operand = "1"
+        let operand = ""
         return operand
     }
 

@@ -44,6 +44,7 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
     var simpleDateFormat = DateFormatter()
     var xVals = [Int: Int]()
     var klineType = ""
+    var fragmentType = ""
     var doubleTap: UITapGestureRecognizer!
     var singleTap: UITapGestureRecognizer!
 
@@ -54,19 +55,19 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(controlOrderLine), name: Notification.Name(CommonConstants.ControlOrderLineNotification), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(controlAverageLine), name: Notification.Name(CommonConstants.ControlAverageLineNotification), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(clearChartView), name: Notification.Name(CommonConstants.ClearChartViewNotification), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(switchKlineType(_:)), name: Notification.Name(CommonConstants.SwitchDurationNotification), object: nil)
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        refreshPage()
-
         NotificationCenter.default.addObserver(self, selector: #selector(refreshTradeLine), name: Notification.Name(CommonConstants.RtnTDNotification), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(refreshKline), name: Notification.Name(CommonConstants.RtnMDNotification), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(sendChart), name: Notification.Name(CommonConstants.SwitchQuoteNotification), object: nil)
+
+        clearChartView()
+        sendChart()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
-        cancelChart()
-
         NotificationCenter.default.removeObserver(self, name: Notification.Name(CommonConstants.RtnTDNotification), object: nil)
         NotificationCenter.default.removeObserver(self, name: Notification.Name(CommonConstants.RtnMDNotification), object: nil)
         NotificationCenter.default.removeObserver(self, name: Notification.Name(CommonConstants.SwitchQuoteNotification), object: nil)
@@ -78,42 +79,38 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
         NotificationCenter.default.removeObserver(self, name: Notification.Name(CommonConstants.ControlOrderLineNotification), object: nil)
         NotificationCenter.default.removeObserver(self, name: Notification.Name(CommonConstants.ControlAverageLineNotification), object: nil)
         NotificationCenter.default.removeObserver(self, name: Notification.Name(CommonConstants.ClearChartViewNotification), object: nil)
+        NotificationCenter.default.removeObserver(self, name: Notification.Name(CommonConstants.SwitchDurationNotification), object: nil)
     }
 
     @objc func sendChart() {
+
         let instrumentId = dataManager.sInstrumentId
-        switch klineType {
-        case CommonConstants.CURRENT_DAY:
+        if CommonConstants.CURRENT_DAY_FRAGMENT.elementsEqual(fragmentType){
             MDWebSocketUtils.getInstance().sendSetChart(insList: instrumentId)
-        case CommonConstants.KLINE_DAY:
-            MDWebSocketUtils.getInstance().sendSetChartDay(insList: instrumentId, viewWidth: CommonConstants.VIEW_WIDTH)
-        case CommonConstants.KLINE_HOUR:
-            MDWebSocketUtils.getInstance().sendSetChartHour(insList: instrumentId, viewWidth: CommonConstants.VIEW_WIDTH)
-        case CommonConstants.KLINE_MINUTE:
-            MDWebSocketUtils.getInstance().sendSetChartMinute(insList: instrumentId, viewWidth: CommonConstants.VIEW_WIDTH)
-        default:
-            break
+        }else{
+            switch fragmentType {
+            case CommonConstants.DAY_FRAGMENT:
+                if let klineType = UserDefaults.standard.string(forKey: CommonConstants.CONFIG_KLINE_DAY_TYPE){
+                    self.klineType = klineType
+                }
+            case CommonConstants.HOUR_FRAGMENT:
+                if let klineType = UserDefaults.standard.string(forKey: CommonConstants.CONFIG_KLINE_HOUR_TYPE){
+                    self.klineType = klineType
+                }
+            case CommonConstants.MINUTE_FRAGMENT:
+                if let klineType = UserDefaults.standard.string(forKey: CommonConstants.CONFIG_KLINE_MINUTE_TYPE){
+                    self.klineType = klineType
+                }
+            case CommonConstants.SECOND_FRAGMENT:
+                if let klineType = UserDefaults.standard.string(forKey: CommonConstants.CONFIG_KLINE_SECOND_TYPE){
+                    self.klineType = klineType
+                }
+            default:
+                break
+            }
+            print(self.klineType)
+            MDWebSocketUtils.getInstance().sendSetChartKline(insList: instrumentId, klineType: self.klineType, viewWidth: CommonConstants.VIEW_WIDTH)
         }
-    }
-
-    func cancelChart() {
-        switch klineType {
-        case CommonConstants.CURRENT_DAY:
-            MDWebSocketUtils.getInstance().sendSetChart(insList: "")
-        case CommonConstants.KLINE_DAY:
-            MDWebSocketUtils.getInstance().sendSetChartDay(insList: "", viewWidth: CommonConstants.VIEW_WIDTH)
-        case CommonConstants.KLINE_HOUR:
-            MDWebSocketUtils.getInstance().sendSetChartHour(insList: "", viewWidth: CommonConstants.VIEW_WIDTH)
-        case CommonConstants.KLINE_MINUTE:
-            MDWebSocketUtils.getInstance().sendSetChartMinute(insList: "", viewWidth: CommonConstants.VIEW_WIDTH)
-        default:
-            break
-        }
-    }
-
-    func refreshPage() {
-        refreshKline()
-        sendChart()
     }
 
     // MARK: functions
@@ -163,7 +160,7 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
     func generatePositionLimitLine(limit: String, label: String, color: UIColor, limitKey: String, volume: Int) {
         if let limit = Double(limit) {
             let chartLimitLine = ChartLimitLine(limit: limit, label: label)
-            chartLimitLine.lineWidth = 1.0
+            chartLimitLine.lineWidth = 0.7
             chartLimitLine.lineDashLengths = [10.0, 10.0]
             chartLimitLine.lineDashPhase = 0.0
             chartLimitLine.lineColor = color
@@ -318,7 +315,7 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
         let chartLimitLine = ChartLimitLine(limit: limit, label: label)
         orderLimitLines[order_id] = chartLimitLine
         orderVolumes[order_id] = volume
-        chartLimitLine.lineWidth = 1.0
+        chartLimitLine.lineWidth = 0.7
         if "BUY".elementsEqual(direction) {
             chartLimitLine.lineColor = colorBuy!
         } else {
@@ -425,8 +422,10 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
 
     }
 
+    //删除所有K线图
     @objc func clearChartView(){
         xVals.removeAll()
+        removeLatestLine()
         removeOrderLimitLines()
         removePositionLimitLines()
         chartView.clear()
@@ -442,6 +441,20 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
 
     }
 
+    //相同页下切换K线周期
+    @objc func switchKlineType(_ notification: NSNotification){
+        if let dict = notification.userInfo as NSDictionary? {
+            if let index = dict["durationIndex"] as? Int, let fragmentType = dict["fragmentType"] as? String{
+                let klineType = CommonConstants.klineDuration[index]
+                if fragmentType.elementsEqual(self.fragmentType) && !self.klineType.elementsEqual(klineType){
+                    self.klineType = klineType
+                    clearChartView()
+                    sendChart()
+                }
+            }
+        }
+    }
+
     //隐藏十字光标
     @objc func Unhighlight(){
         
@@ -449,6 +462,11 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
 
     //显示十字光标
     @objc func highlight(){
-     
+
+    }
+
+    //移除最新价线
+    @objc func removeLatestLine(){
+
     }
 }

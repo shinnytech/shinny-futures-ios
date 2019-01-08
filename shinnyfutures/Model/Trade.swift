@@ -33,9 +33,9 @@ class Trade: NSObject {
 
     override func isEqual(_ object: Any?) -> Bool {
         if let other = object as? Trade {
-            let trade_id_l = "\(self.trade_id ?? "")"
-            let trade_id_r = "\(other.trade_id ?? "")"
-            return (trade_id_l == trade_id_r)
+            let trade_date_time_l = "\(self.trade_date_time ?? 0)"
+            let trade_date_time_r = "\(other.trade_date_time ?? 0)"
+            return (trade_date_time_l == trade_date_time_r)
         }else{
             return false
         }

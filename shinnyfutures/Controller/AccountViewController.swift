@@ -11,6 +11,7 @@ import UIKit
 class AccountViewController: UIViewController {
 
     // MARK: Properties
+    @IBOutlet weak var user: UILabel!
     @IBOutlet weak var date: UILabel!
     @IBOutlet weak var static_balance: UILabel!
     @IBOutlet weak var close_profit: UILabel!
@@ -64,6 +65,7 @@ class AccountViewController: UIViewController {
             let deposit = "\(account.deposit ?? 0.0)"
             let withdraw = "\(account.withdraw ?? 0.0)"
 
+            self.user.text = dataManager.sUser_id
             self.static_balance.text = dataManager.saveDecimalByPtick(decimal: 2, data: static_balance)
             self.close_profit.text = dataManager.saveDecimalByPtick(decimal: 2, data: close_profit)
             self.position_profit.text = dataManager.saveDecimalByPtick(decimal: 2, data: position_profit)
@@ -79,10 +81,4 @@ class AccountViewController: UIViewController {
         }
 
     }
-
-
-    @IBAction func logout(_ sender: UIButton) {
-        dataManager.clearAccount()
-    }
-
 }
