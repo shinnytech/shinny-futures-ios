@@ -17,6 +17,7 @@ class OrderTableViewController: UIViewController, UITableViewDataSource, UITable
     var isRefresh = true
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var segmentControl: UISegmentedControl!
+    var isShowAlert = true
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,6 +27,8 @@ class OrderTableViewController: UIViewController, UITableViewDataSource, UITable
         // make tableview look better in ipad
         tableView.cellLayoutMarginsFollowReadableWidth = true
         tableView.tableFooterView = UIView()
+
+        self.isShowAlert = UserDefaults.standard.bool(forKey: CommonConstants.CONFIG_SETTING_TRANSACTION_SHOW_ORDER)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -75,7 +78,7 @@ class OrderTableViewController: UIViewController, UITableViewDataSource, UITable
             if let search = dataManager.sSearchEntities[instrumentId] {
                 cell.name.text = search.instrument_name
             } else {
-                cell.name.text = instrumentId
+                cell.name.text = "\(order.instrument_id ?? "")"
             }
 
             cell.status.text = "\(order.last_msg ?? "")"
@@ -105,7 +108,7 @@ class OrderTableViewController: UIViewController, UITableViewDataSource, UITable
             }
             let decimal = dataManager.getDecimalByPtick(instrumentId: instrumentId)
 
-            let price = "\(order.limit_price ?? 0.0)"
+            let price = "\(order.limit_price ?? "-")"
             cell.price.text = dataManager.saveDecimalByPtick(decimal: decimal, data: price)
             let volume_left = (order.volume_left as? Int) ?? 0
             let volume_origin = (order.volume_orign as? Int) ?? 0
@@ -114,7 +117,7 @@ class OrderTableViewController: UIViewController, UITableViewDataSource, UITable
             let trade_time = Double("\(order.insert_date_time ?? 0)") ?? 0.0
             //错单时间为0
             if trade_time == 0{
-                cell.time.text = "--"
+                cell.time.text = "-"
             }else {
                 let date = Date(timeIntervalSince1970: (trade_time / 1000000000))
                 cell.time.text = dateFormat.string(from: date)
@@ -131,24 +134,34 @@ class OrderTableViewController: UIViewController, UITableViewDataSource, UITable
             let status = "\(order.status ?? "")"
             if "ALIVE".elementsEqual(status) {
                 let order_id = "\(order.order_id ?? "")"
-                let instrument_id = "\(order.instrument_id ?? "")"
-                let exchange_id = "\(order.exchange_id ?? "")"
-                let direction_title = "\(order.direction ?? "")"
-                let volume = "\(order.volume_left ?? 0)"
-                let p_decs = dataManager.getDecimalByPtick(instrumentId: exchange_id + "." + instrument_id)
-                let price = dataManager.saveDecimalByPtick(decimal: p_decs, data: "\(order.limit_price ?? 0.0)")
-                let title = "您确定要撤单吗？"
-                let message = "合约：\(instrument_id), 价格：\(price), 方向：\(direction_title), 手数：\(volume)手"
-                let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: {action in
-                    switch action.style {
-                    case .default:
-                        TDWebSocketUtils.getInstance().sendReqCancelOrder(order_id: order_id)
-                    default:
-                        break
-                    }}))
-                alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-                present(alert, animated: true, completion: nil)
+                if isShowAlert {
+                    let instrument_id = "\(order.instrument_id ?? "")"
+                    let exchange_id = "\(order.exchange_id ?? "")"
+                    let direction = "\(order.direction ?? "")"
+                    var direction_title = ""
+                    if "SELL".elementsEqual(direction){
+                        direction_title = "卖"
+                    }else if "BUY".elementsEqual(direction){
+                        direction_title = "买"
+                    }
+                    let volume = "\(order.volume_left ?? 0)"
+                    let p_decs = dataManager.getDecimalByPtick(instrumentId: exchange_id + "." + instrument_id)
+                    let price = dataManager.saveDecimalByPtick(decimal: p_decs, data: "\(order.limit_price ?? 0.0)")
+                    let title = "您确定要撤单吗？"
+                    let message = "合约：\(instrument_id), 价格：\(price), 方向：\(direction_title), 手数：\(volume)手"
+                    let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "确认", style: .default, handler: {action in
+                        switch action.style {
+                        case .default:
+                            TDWebSocketUtils.getInstance().sendReqCancelOrder(order_id: order_id)
+                        default:
+                            break
+                        }}))
+                    alert.addAction(UIAlertAction(title: "取消", style: .cancel, handler: nil))
+                    present(alert, animated: true, completion: nil)
+                }else {
+                    TDWebSocketUtils.getInstance().sendReqCancelOrder(order_id: order_id)
+                }
             }
         }
         tableView.deselectRow(at: indexPath, animated: false)

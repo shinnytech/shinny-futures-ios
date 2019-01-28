@@ -18,7 +18,12 @@ class QuotePageViewController: UIPageViewController, UIPageViewControllerDataSou
         super.viewDidLoad()
         self.delegate = self
         self.dataSource = self
-        if let startingViewController = contentViewController(at: 1) {
+        if FileUtils.getOptional().isEmpty {
+            currentIndex = 1
+        }else{
+            currentIndex = 0
+        }
+        if let startingViewController = contentViewController(at: currentIndex) {
             setViewControllers([startingViewController], direction: .forward, animated: false, completion: nil)
         }
         // Do any additional setup after loading the view.
@@ -97,7 +102,12 @@ class QuotePageViewController: UIPageViewController, UIPageViewControllerDataSou
     }
 
     @objc private func refreshPage() {
-        if let startingViewController = contentViewController(at: 1) {
+        if manager.sQuotes[0].isEmpty {
+            currentIndex = 1
+        }else{
+            currentIndex = 0
+        }
+        if let startingViewController = contentViewController(at: currentIndex) {
             setViewControllers([startingViewController], direction: .forward, animated: false, completion: nil)
         }
     }

@@ -47,15 +47,13 @@ class LeftTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 44.0))
-        let stackView = UIStackView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 44.0 ))
-        stackView.distribution = .fillEqually
-        let name = UILabel()
+        let name = UILabel(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 44.0 ))
         name.textColor = UIColor.white
         name.text = "选择页面"
+        name.font = UIFont.systemFont(ofSize: 20)
         name.textAlignment = .center
-        name.backgroundColor = CommonConstants.QUOTE_TABLE_HEADER_1
-        stackView.addArrangedSubview(name)
-        headerView.addSubview(stackView)
+        headerView.backgroundColor = CommonConstants.QUOTE_PAGE_HEADER
+        headerView.addSubview(name)
         return headerView
     }
 

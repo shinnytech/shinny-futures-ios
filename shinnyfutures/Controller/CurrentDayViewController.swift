@@ -26,6 +26,7 @@ class CurrentDayViewController: BaseChartViewController {
     var last_id = -1
     var labels = [Int: String]()
     var preSettlement = 1.0
+    var kline: Kline!
 
     override func viewDidLoad() {
         chartView = currentDayChartView
@@ -95,16 +96,12 @@ class CurrentDayViewController: BaseChartViewController {
     }
 
     override func refreshKline() {
-        guard let quote = dataManager.sRtnMD.quotes[dataManager.sInstrumentId] else {return}
-        guard let kline = dataManager.sRtnMD.klines[dataManager.sInstrumentId]?[klineType] else {return}
-        preSettlement = quote.pre_settlement as? Double ?? 0.0
-        let last_id_t = kline.last_id as? Int ?? -1
-        let datas = kline.datas
-        if last_id_t == -1 || datas.isEmpty {return}
-
         if chartView.data != nil && (chartView.data?.dataSetCount)! > 0 {
             let combineData = chartView.combinedData
             let lineData = combineData?.lineData
+
+            let last_id_t = kline.last_id as? Int ?? -1
+            let datas = kline.datas
 
             if last_id_t == last_id {
                 //NSLog("分时图刷新")
@@ -132,10 +129,17 @@ class CurrentDayViewController: BaseChartViewController {
             combineData?.notifyDataChanged()
             chartView.notifyDataSetChanged()
         } else {
+            guard let quote = dataManager.sRtnMD.quotes[dataManager.sInstrumentId] else {return}
+            guard let kline = dataManager.sRtnMD.klines[dataManager.sInstrumentId]?[klineType] else {return}
+            self.kline = kline
+            let last_id_t = kline.last_id as? Int ?? -1
+            let datas = kline.datas
+            if last_id_t == -1 || datas.isEmpty {return}
             trading_day_start_id = kline.trading_day_start_id as? Int ?? -1
             trading_day_end_id = kline.trading_day_end_id as? Int ?? -1
             if trading_day_end_id == -1 || trading_day_start_id == -1 {return}
             last_id = last_id_t
+            preSettlement = quote.pre_settlement as? Double ?? 1.0
             NSLog("分时图初始化")
             (chartView.leftAxis as! MyYAxis).baseValue = preSettlement
             (chartView.rightAxis as! MyYAxis).baseValue = preSettlement
@@ -154,7 +158,7 @@ class CurrentDayViewController: BaseChartViewController {
             chartView.data = combineData
             (chartView.xAxis as! MyXAxis).labels = labels
             chartView.setVisibleXRangeMinimum(Double(trading_day_end_id - trading_day_start_id))
-            (chartView.marker as! CurrentDayMarkerView).resizeXib(heiht: chartView.viewPortHandler.contentHeight)
+            (chartView.marker as! CurrentDayMarkerView).resizeXib(heiht: chartView.viewPortHandler.contentHeight, width: chartView.viewPortHandler.contentWidth)
         }
     }
 

@@ -24,6 +24,7 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
     var mdURLs = [String]()
     var index = 0
     let button =  UIButton(type: .custom)
+    let dataManager = DataManager.getInstance()
 
     func websocketDidReceiveMessage(socket: TDWebSocketUtils, text: String) {
         DispatchQueue.global().async {
@@ -34,15 +35,15 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
                 switch aid {
                 case "rtn_brokers":
                     self.tdWebSocketUtils.ping()
-                    DataManager.getInstance().parseBrokers(rtnData: json)
+                    self.dataManager.parseBrokers(rtnData: json)
                 case "rtn_data":
-                    DataManager.getInstance().parseRtnTD(rtnData: json)
+                    self.dataManager.parseRtnTD(rtnData: json)
                 default:
                     self.tdWebSocketUtils.reconnectTD(url: CommonConstants.TRANSACTION_URL)
                     return
                 }
 
-                if (!DataManager.getInstance().isBackground){
+                if (!self.dataManager.isBackground){
                     socket.sendPeekMessage()
                 }
 
@@ -68,18 +69,25 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
                 switch aid {
                 case "rsp_login":
                     self.mdWebSocketUtils.ping()
-                    if DataManager.getInstance().sQuotes.count != 0{
-                        socket.sendSubscribeQuote(insList: DataManager.getInstance().sQuotes[1].map {$0.key}[0..<CommonConstants.MAX_SUBSCRIBE_QUOTES].joined(separator: ","))
+                    if self.dataManager.sQuotes.count != 0{
+                        if self.dataManager.sQuotes[0].isEmpty{
+                            socket.sendSubscribeQuote(insList: self.dataManager.sQuotes[1].map {$0.key}[0..<CommonConstants.MAX_SUBSCRIBE_QUOTES].joined(separator: ","))
+                        }else if self.dataManager.sQuotes[0].count < CommonConstants.MAX_SUBSCRIBE_QUOTES{
+                            socket.sendSubscribeQuote(insList: self.dataManager.sQuotes[0].map {$0.key}.joined(separator: ","))
+                        }else {
+                            socket.sendSubscribeQuote(insList: self.dataManager.sQuotes[0].map {$0.key}[0..<CommonConstants.MAX_SUBSCRIBE_QUOTES].joined(separator: ","))
+                        }
+
                     }
                 case "rtn_data":
                     self.index = 0
-                    DataManager.getInstance().parseRtnMD(rtnData: json)
+                    self.dataManager.parseRtnMD(rtnData: json)
                 default:
                     self.index = self.mdWebSocketUtils.reconnectMD(url: self.mdURLs[self.index], index: self.index)
                     return
                 }
 
-                if (!DataManager.getInstance().isBackground){
+                if (!self.dataManager.isBackground){
                     socket.sendPeekMessage()
                 }
 
@@ -103,7 +111,7 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         let task = URLSession.shared.dataTask(with: request) {(data, response, error) in
             guard let data = data else { return }
-            DataManager.getInstance().parseLatestFile(latestData: data)
+            self.dataManager.parseLatestFile(latestData: data)
             DispatchQueue.main.async {
                 NotificationCenter.default.post(name: Notification.Name(CommonConstants.LatestFileParsedNotification), object: nil)
             }
@@ -123,7 +131,11 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
         self.navigationController?.navigationBar.backgroundColor = CommonConstants.QUOTE_PAGE_HEADER
         self.navigationController?.navigationBar.tintColor = UIColor.white
         button.frame = CGRect(x: 0, y: 0, width: 200, height: 40)
-        button.setTitle(CommonConstants.titleArray[1], for: .normal)
+        if FileUtils.getOptional().isEmpty  {
+            button.setTitle(CommonConstants.titleArray[1], for: .normal)
+        }else{
+            button.setTitle(CommonConstants.titleArray[0], for: .normal)
+        }
         button.setTitleColor(UIColor.white, for: .normal)
         self.navigationItem.titleView = button
         definesPresentationContext = true
@@ -137,7 +149,7 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
         self.DispatchTimer(delay: 15, timeInterval: 15){ timer in
 
             if (CACurrentMediaTime() - self.lastTDTime) > 20 {
-                DataManager.getInstance().sIsLogin = false
+                self.dataManager.sIsLogin = false
                 self.tdWebSocketUtils.reconnectTD(url: CommonConstants.TRANSACTION_URL)
                 NSLog("TD断线重连")
             } else {
@@ -154,6 +166,7 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
         }
         NotificationCenter.default.addObserver(self, selector: #selector(refreshMenu), name: Notification.Name(CommonConstants.BrokerInfoEmptyNotification), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(popupOptionalList), name: Notification.Name(CommonConstants.PopupOptionalInsListNotification), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(refresh), name: Notification.Name(CommonConstants.LatestFileParsedNotification), object: nil)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -192,6 +205,14 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
     }
 
     // MARK: Actions
+    @IBAction func settingViewControllerUnwindSegue(segue: UIStoryboardSegue) {
+        print("我从设置页来～")
+    }
+
+    func toSetting() {
+        performSegue(withIdentifier: CommonConstants.MainToSetting, sender: nil)
+    }
+
     @IBAction func feedbackViewControllerUnwindSegue(segue: UIStoryboardSegue) {
         print("我从反馈页来～")
     }
@@ -213,7 +234,7 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
     }
 
     func toLogin() {
-        DataManager.getInstance().sToLoginTarget = "Login"
+        self.dataManager.sToLoginTarget = "Login"
         performSegue(withIdentifier: CommonConstants.MainToLogin, sender: nil)
     }
 
@@ -222,8 +243,8 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
     }
 
     func toAccount() {
-        if !DataManager.getInstance().sIsLogin {
-            DataManager.getInstance().sToLoginTarget = "Account"
+        if !self.dataManager.sIsLogin {
+            self.dataManager.sToLoginTarget = "Account"
             performSegue(withIdentifier: CommonConstants.MainToLogin, sender: nil)
         } else {
             performSegue(withIdentifier: CommonConstants.MainToAccount, sender: nil)
@@ -243,7 +264,7 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
         if let segue = segue.identifier {
             switch segue {
             case CommonConstants.QuoteViewControllerUnwindSegue:
-                MDWebSocketUtils.getInstance().sendSubscribeQuote(insList: DataManager.getInstance().sPreInsList)
+                MDWebSocketUtils.getInstance().sendSubscribeQuote(insList: self.dataManager.sPreInsList)
             default:
                 break
             }
@@ -251,16 +272,16 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
     }
 
     func toPosition() {
-        DataManager.getInstance().sToQuoteTarget = "Position"
-        if !DataManager.getInstance().sIsLogin {
-            DataManager.getInstance().sToLoginTarget = "Position"
+        self.dataManager.sToQuoteTarget = "Position"
+        if !self.dataManager.sIsLogin {
+            self.dataManager.sToLoginTarget = "Position"
             performSegue(withIdentifier: CommonConstants.MainToLogin, sender: nil)
         } else {
             performSegue(withIdentifier: CommonConstants.MainToQuote, sender: nil)
-            let instrumentId = DataManager.getInstance().sQuotes[1].map {$0.key}[0]
+            let instrumentId = self.dataManager.sQuotes[1].map {$0.key}[0]
             //进入合约详情页的入口有：合约列表页，登陆页，搜索页，主页
-            DataManager.getInstance().sPreInsList = DataManager.getInstance().sRtnMD.ins_list
-            DataManager.getInstance().sInstrumentId = instrumentId
+            self.dataManager.sPreInsList = self.dataManager.sRtnMD.ins_list
+            self.dataManager.sInstrumentId = instrumentId
         }
     }
 
@@ -269,8 +290,8 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
     }
 
     func toTrade() {
-        if !DataManager.getInstance().sIsLogin {
-            DataManager.getInstance().sToLoginTarget = "Trade"
+        if !self.dataManager.sIsLogin {
+            self.dataManager.sToLoginTarget = "Trade"
             performSegue(withIdentifier: CommonConstants.MainToLogin, sender: nil)
         } else {
             performSegue(withIdentifier: CommonConstants.MainToTrade, sender: nil)
@@ -282,12 +303,18 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
     }
 
     func toBankTransfer(){
-        if !DataManager.getInstance().sIsLogin {
-            DataManager.getInstance().sToLoginTarget = "BankTransfer"
+        if !self.dataManager.sIsLogin {
+            self.dataManager.sToLoginTarget = "BankTransfer"
             performSegue(withIdentifier: CommonConstants.MainToLogin, sender: nil)
         } else {
             performSegue(withIdentifier: CommonConstants.MainToBankTransfer, sender: nil)
         }
+    }
+
+    func toOpenAccount() {
+        let appString = "https://itunes.apple.com/cn/app/%E6%9C%9F%E8%B4%A7%E5%BC%80%E6%88%B7%E4%BA%91/id1058174819?mt=8"
+        let appUrl = URL(string: appString)
+        UIApplication.shared.open(appUrl!)
     }
 
     @IBAction func navigation(_ sender: UIBarButtonItem) {
@@ -299,9 +326,9 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
     @IBAction func right_navigation(_ sender: UIBarButtonItem) {
         if let slide = self.slideMenuController() {
             if let right = slide.rightViewController as? RightTableViewController{
-                if DataManager.getInstance().sIsEmpty{
+                if self.dataManager.sIsEmpty{
                     right.datas = CommonConstants.rightArray
-                }else if DataManager.getInstance().sIsLogin {
+                }else if self.dataManager.sIsLogin {
                     right.datas = CommonConstants.rightTitleArrayLogged
                 }else{
                     right.datas = CommonConstants.rightTitleArray
@@ -363,6 +390,15 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
 
     //初始化默认配置
     func initDefaultConfig() {
+
+        if UserDefaults.standard.object(forKey: CommonConstants.CONFIG_SETTING_PARA_MA) == nil {
+        UserDefaults.standard.set(CommonConstants.PARA_MA, forKey: CommonConstants.CONFIG_SETTING_PARA_MA)
+        }
+
+        if UserDefaults.standard.object(forKey: CommonConstants.CONFIG_SETTING_TRANSACTION_SHOW_ORDER) == nil {
+            UserDefaults.standard.set(true, forKey: CommonConstants.CONFIG_SETTING_TRANSACTION_SHOW_ORDER)
+        }
+
         if UserDefaults.standard.object(forKey: CommonConstants.CONFIG_POSITION_LINE) == nil {
             UserDefaults.standard.set(true, forKey: CommonConstants.CONFIG_POSITION_LINE)
         }
@@ -437,8 +473,8 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
     //获取软件版本
     func getAppVersion() {
         if let appVersion = Bundle.main.infoDictionary!["CFBundleShortVersionString"] as? String, let appBuild = Bundle.main.infoDictionary!["CFBundleVersion"] as? String{
-            DataManager.getInstance().sAppVersion = appVersion
-            DataManager.getInstance().sAppBuild = appBuild
+            self.dataManager.sAppVersion = appVersion
+            self.dataManager.sAppBuild = appBuild
             let versionCode = UserDefaults.standard.integer(forKey: "versionCode")
             if let versionCodeNow = Int(appBuild){
                 if versionCode < versionCodeNow {
@@ -485,6 +521,15 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
 
     func popoverPresentationControllerDidDismissPopover(_ popoverPresentationController: UIPopoverPresentationController) {
         MDWebSocketUtils.getInstance().sendSubscribeQuote(insList: FileUtils.getOptional().joined(separator: ","))
+    }
+
+    //latestFile文件解析完毕后刷新导航列表
+    @objc func refresh() {
+        if dataManager.sQuotes[0].isEmpty {
+            loadQuoteNavigation(index: 1)
+        }else{
+            loadQuoteNavigation(index: 0)
+        }
     }
 
 }

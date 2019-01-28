@@ -34,9 +34,12 @@ open class VolumeKeyboardView: UIView {
     open weak var delegate: VolumeKeyboardViewDelegate?
     var view: UIView!
     fileprivate var processor = VolumeKeyboardViewProcessor()
+
+    @IBOutlet weak var priceTickTitle: UILabel!
     @IBOutlet weak var priceTick: UILabel!
-    @IBOutlet weak var openVolume: UILabel!
+    @IBOutlet weak var upperLimitTitle: UILabel!
     @IBOutlet weak var upperLimit: UILabel!
+    @IBOutlet weak var lowerLimitTitle: UILabel!
     @IBOutlet weak var lowerLimit: UILabel!
     
     public required init?(coder aDecoder: NSCoder) {
@@ -64,7 +67,6 @@ open class VolumeKeyboardView: UIView {
 
     func initData() {
         refreshPrice()
-        refreshAccount()
     }
 
     func refreshPrice() {
@@ -79,25 +81,6 @@ open class VolumeKeyboardView: UIView {
         let lower = "\(quote.lower_limit ?? 0.0)"
         upperLimit.text = dataManager.saveDecimalByPtick(decimal: decimal, data: upper)
         lowerLimit.text = dataManager.saveDecimalByPtick(decimal: decimal, data: lower)
-    }
-
-    func refreshAccount() {
-        let dataManager = DataManager.getInstance()
-        var instrument_id = dataManager.sInstrumentId
-
-        if instrument_id.contains("KQ"){
-            instrument_id = (dataManager.sSearchEntities[instrument_id]?.underlying_symbol)!
-        }
-        let margin = (dataManager.sSearchEntities[instrument_id]?.margin)!
-        if margin == 0{
-            openVolume.text = "0"
-        }else {
-            guard let user = dataManager.sRtnTD.users[dataManager.sUser_id] else {return}
-            for (_, account) in user.accounts {
-                let available = Int("\(account.available ?? 0)") ?? 0
-                openVolume.text = "\(available / margin)"
-            }
-        }
     }
 
     func setVolume(volume: String?) {

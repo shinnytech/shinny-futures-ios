@@ -11,6 +11,7 @@ import UIKit
 class LoginViewController: UIViewController {
     
     //MARK：Properties
+    @IBOutlet weak var brokerImage: UIImageView!
     @IBOutlet weak var brokerLabel: UILabel!
     @IBOutlet weak var login: UIButton!
     @IBOutlet weak var userName: UITextField!
@@ -29,8 +30,10 @@ class LoginViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(toBrokerList))
-        brokerLabel.addGestureRecognizer(gestureRecognizer)
+        let gestureRecognizerLabel = UITapGestureRecognizer(target: self, action: #selector(toBrokerList))
+        brokerLabel.addGestureRecognizer(gestureRecognizerLabel)
+        let gestureRecognizerImage = UITapGestureRecognizer(target: self, action: #selector(toBrokerList))
+        brokerImage.addGestureRecognizer(gestureRecognizerImage)
         if let brokerInfo = UserDefaults.standard.string(forKey: CommonConstants.CONFIG_BROKER) {
             self.brokerLabel.text = brokerInfo
         }else if !sDataManager.sBrokers.isEmpty{

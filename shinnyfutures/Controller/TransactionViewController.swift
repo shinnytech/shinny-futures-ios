@@ -18,6 +18,7 @@ class TransactionViewController: UIViewController, PriceKeyboardViewDelegate, Vo
     var instrument_id_transaction = ""
     var isClosePriceShow = false
     var isRefreshPosition = true
+    var isShowAlert = true
 
     @IBOutlet weak var balance: UILabel!
     @IBOutlet weak var available: UILabel!
@@ -46,6 +47,8 @@ class TransactionViewController: UIViewController, PriceKeyboardViewDelegate, Vo
     override func viewDidLoad() {
         super.viewDidLoad()
         let frame =  CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 300)
+
+        self.isShowAlert = UserDefaults.standard.bool(forKey: CommonConstants.CONFIG_SETTING_TRANSACTION_SHOW_ORDER)
 
         let priceKeyboardView = PriceKeyboardView(frame: frame)
         priceKeyboardView.delegate = self
@@ -101,12 +104,6 @@ class TransactionViewController: UIViewController, PriceKeyboardViewDelegate, Vo
     func refreshKeyboardPrice() {
         (volume.inputView as! VolumeKeyboardView).refreshPrice()
         (price.inputView as! PriceKeyboardView).refreshPrice()
-    }
-
-    //刷新软键盘最大可开仓手数
-    func refreshKeyboardVolume() {
-        (volume.inputView as! VolumeKeyboardView).refreshAccount()
-        (price.inputView as! PriceKeyboardView).refreshAccount()
     }
 
     func initPosition() {
@@ -307,25 +304,51 @@ class TransactionViewController: UIViewController, PriceKeyboardViewDelegate, Vo
             }
         }
         if isRefreshPosition{ refreshPosition() }
-        refreshKeyboardVolume()
+    }
+
+    //设置价格颜色
+    func setPriceColor(quote: Quote) {
+        let pre_settlement = "\(quote.pre_settlement ?? "-")"
+        setLabelColor(label: last_price, pre_settlement: pre_settlement)
+        setLabelColor(label: ask_price1, pre_settlement: pre_settlement)
+        setLabelColor(label: bid_price1, pre_settlement: pre_settlement)
+    }
+
+    func setLabelColor(label: UILabel, pre_settlement: String) {
+        if let price = Float(label.text ?? "-"), let pre_settlement = Float(pre_settlement) {
+            let value = price - pre_settlement
+            if value < 0 {
+                label.textColor = CommonConstants.ASK_BUTTON
+            }else if value > 0{
+                label.textColor = CommonConstants.BID_BUTTON
+            }else{
+                label.textColor = CommonConstants.WHITE_TEXT
+            }
+        }else{
+            label.textColor = CommonConstants.WHITE_TEXT
+        }
     }
 
     @objc func refreshPrice() {
         let instrumentId = dataManager.sInstrumentId
-        guard let quote = dataManager.sRtnMD.quotes[instrumentId] else {return}
+        guard var quote = dataManager.sRtnMD.quotes[instrumentId] else {return}
+        if instrumentId.contains("&") && instrumentId.contains(" ") {
+            quote = dataManager.calculateCombineQuotePart(quote: quote.copy() as! Quote)
+        }
         let decimal = dataManager.getDecimalByPtick(instrumentId: instrumentId)
-        let last_price = dataManager.saveDecimalByPtick(decimal: decimal, data: "\(quote.last_price ?? 0.0)")
-        let last_volume = "\(quote.volume ?? 0)"
-        let ask_price1 = dataManager.saveDecimalByPtick(decimal: decimal, data: "\(quote.ask_price1 ?? 0.0)")
-        let ask_volume1 = "\(quote.ask_volume1 ?? 0)"
-        let bid_price1 = dataManager.saveDecimalByPtick(decimal: decimal, data: "\(quote.bid_price1 ?? 0.0)")
-        let bid_volume1 = "\(quote.bid_volume1 ?? 0)"
+        let last_price = dataManager.saveDecimalByPtick(decimal: decimal, data: "\(quote.last_price ?? "-")")
+        let last_volume = "\(quote.volume ?? "-")"
+        let ask_price1 = dataManager.saveDecimalByPtick(decimal: decimal, data: "\(quote.ask_price1 ?? "-")")
+        let ask_volume1 = "\(quote.ask_volume1 ?? "-")"
+        let bid_price1 = dataManager.saveDecimalByPtick(decimal: decimal, data: "\(quote.bid_price1 ?? "-")")
+        let bid_volume1 = "\(quote.bid_volume1 ?? "-")"
         self.last_price.text = last_price
         self.last_volume.text = last_volume
         self.ask_price1.text = ask_price1
         self.ask_volume1.text = ask_volume1
         self.bid_price1.text = bid_price1
         self.bid_volume1.text = bid_volume1
+        setPriceColor(quote: quote)
 
         //下单板价格显示
         switch dataManager.sPriceType {
@@ -645,43 +668,58 @@ class TransactionViewController: UIViewController, PriceKeyboardViewDelegate, Vo
 
     //下单对话框
     func initOrderAlert(title: String, message: String, exchangeId: String, instrumentId: String, direction: String, offset: String, volume: Int, priceType: String, price: Double) {
-        self.isRefreshPosition = false
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "确认", style: .default, handler: {action in
-            switch action.style {
-            case .default:
-                TDWebSocketUtils.getInstance().sendReqInsertOrder(exchange_id: exchangeId, instrument_id: instrumentId, direction: direction, offset: offset, volume: volume, price_type: priceType, limit_price: price)
+        if self.isShowAlert {
+            self.isRefreshPosition = false
+            let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "确认", style: .default, handler: {action in
+                switch action.style {
+                case .default:
+                    TDWebSocketUtils.getInstance().sendReqInsertOrder(exchange_id: exchangeId, instrument_id: instrumentId, direction: direction, offset: offset, volume: volume, price_type: priceType, limit_price: price)
+                    self.refreshPosition()
+                    self.isRefreshPosition = true
+                default:
+                    break
+                }}))
+            alert.addAction(UIAlertAction(title: "取消", style: .cancel, handler: {action in
                 self.refreshPosition()
                 self.isRefreshPosition = true
-            default:
-                break
-            }}))
-        alert.addAction(UIAlertAction(title: "取消", style: .cancel, handler: {action in
+            }))
+            present(alert, animated: true, completion: nil)
+        }else {
+             TDWebSocketUtils.getInstance().sendReqInsertOrder(exchange_id: exchangeId, instrument_id: instrumentId, direction: direction, offset: offset, volume: volume, price_type: priceType, limit_price: price)
             self.refreshPosition()
             self.isRefreshPosition = true
-        }))
-        present(alert, animated: true, completion: nil)
+        }
+
     }
 
     //平今平昨对话框
     func initOrderAlert(title: String, message1: String, message2: String, exchangeId: String, instrumentId: String, direction: String, offset1: String, offset2: String, volume1: Int, volume2: Int, priceType: String, price: Double) {
-        self.isRefreshPosition = false
-        let alert = UIAlertController(title: title, message: "\(message1)\n\(message2)", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "确认", style: .default, handler: {action in
-            switch action.style {
-            case .default:
-                TDWebSocketUtils.getInstance().sendReqInsertOrder(exchange_id: exchangeId, instrument_id: instrumentId, direction: direction, offset: offset1, volume: volume1, price_type: priceType, limit_price: price)
-                TDWebSocketUtils.getInstance().sendReqInsertOrder(exchange_id: exchangeId, instrument_id: instrumentId, direction: direction, offset: offset2, volume: volume2, price_type: priceType, limit_price: price)
+        if self.isShowAlert {
+            self.isRefreshPosition = false
+            let alert = UIAlertController(title: title, message: "\(message1)\n\(message2)", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "确认", style: .default, handler: {action in
+                switch action.style {
+                case .default:
+                    TDWebSocketUtils.getInstance().sendReqInsertOrder(exchange_id: exchangeId, instrument_id: instrumentId, direction: direction, offset: offset1, volume: volume1, price_type: priceType, limit_price: price)
+                    TDWebSocketUtils.getInstance().sendReqInsertOrder(exchange_id: exchangeId, instrument_id: instrumentId, direction: direction, offset: offset2, volume: volume2, price_type: priceType, limit_price: price)
+                    self.refreshPosition()
+                    self.isRefreshPosition = true
+                default:
+                    break
+                }}))
+            alert.addAction(UIAlertAction(title: "取消", style: .cancel, handler: {action in
                 self.refreshPosition()
                 self.isRefreshPosition = true
-            default:
-                break
-            }}))
-        alert.addAction(UIAlertAction(title: "取消", style: .cancel, handler: {action in
+            }))
+            present(alert, animated: true, completion: nil)
+        }else {
+            TDWebSocketUtils.getInstance().sendReqInsertOrder(exchange_id: exchangeId, instrument_id: instrumentId, direction: direction, offset: offset1, volume: volume1, price_type: priceType, limit_price: price)
+            TDWebSocketUtils.getInstance().sendReqInsertOrder(exchange_id: exchangeId, instrument_id: instrumentId, direction: direction, offset: offset2, volume: volume2, price_type: priceType, limit_price: price)
             self.refreshPosition()
             self.isRefreshPosition = true
-        }))
-        present(alert, animated: true, completion: nil)
+        }
+
     }
 
 }

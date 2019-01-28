@@ -90,10 +90,10 @@ class TradeTableViewController: UITableViewController {
             cell.offset.textColor = CommonConstants.RED_TEXT
         }
         let decimal = dataManager.getDecimalByPtick(instrumentId: instrumentId)
-        let price = "\(trade.price ?? 0.0)"
+        let price = "\(trade.price ?? "-")"
         cell.price.text = dataManager.saveDecimalByPtick(decimal: decimal, data: price)
-        cell.volume.text = "\(trade.volume ?? 0)"
-        let trade_time = Double("\(trade.trade_date_time ?? 0)") ?? 0.0
+        cell.volume.text = "\(trade.volume ?? "-")"
+        let trade_time = Double("\(trade.trade_date_time ?? "-")") ?? 0.0
         let date = Date(timeIntervalSince1970: (trade_time / 1000000000))
         cell.time.text = dateFormat.string(from: date)
         return cell

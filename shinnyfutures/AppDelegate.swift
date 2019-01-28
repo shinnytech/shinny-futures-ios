@@ -27,7 +27,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         leftViewController.mainViewController = mainViewController
         rightViewController.mainViewController = mainViewController
 
-        let slideMenuController = ExSlideMenuController(mainViewController: nvc, leftMenuViewController: leftViewController, rightMenuViewController: rightViewController)
+        let slideMenuController = SlideMenuController(mainViewController: nvc, leftMenuViewController: leftViewController, rightMenuViewController: rightViewController)
         slideMenuController.automaticallyAdjustsScrollViewInsets = true
         slideMenuController.delegate = mainViewController
         self.window?.backgroundColor = UIColor(red: 236.0, green: 238.0, blue: 241.0, alpha: 1.0)
@@ -40,7 +40,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         Siren.shared.checkVersion(checkType: .immediately)
         if let statusBarView = UIApplication.shared.value(forKeyPath: "statusBarWindow.statusBar") as? UIView {
-            statusBarView.backgroundColor = CommonConstants.QUOTE_PAGE_HEADER
+            statusBarView.backgroundColor = UIColor.black
         }
 
         self.createMenuView()

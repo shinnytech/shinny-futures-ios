@@ -67,42 +67,41 @@ class DataManager {
             guard let latestJson = try JSONSerialization.jsonObject(with: latestData, options: []) as? [String: Any] else { return }
             for (instrument_id, value) in latestJson {
                 let subJson = value as! [String: Any]
-                guard let classN = subJson["class"] as? String else {continue}
-                if !"FUTURE_CONT".elementsEqual(classN) && !"FUTURE".elementsEqual(classN) && !"FUTURE_COMBINE".elementsEqual(classN) && !"SPOT".elementsEqual(classN){continue}
-                guard let ins_name = subJson["ins_name"] as? String else {continue}
-                let expired = subJson["expired"] as? Bool
-                let exchange_id = subJson["exchange_id"] as? String
-                let price_tick = (subJson["price_tick"] as? NSNumber)?.stringValue
-                let price_decs = subJson["price_decs"] as? Int
-                let volume_multiple = (subJson["volume_multiple"] as? NSNumber)?.stringValue
-                let sort_key = subJson["sort_key"] as? Int
+                let classN = subJson["class"] as? String ?? ""
+                if !"FUTURE_CONT".elementsEqual(classN) && !"FUTURE".elementsEqual(classN) && !"FUTURE_COMBINE".elementsEqual(classN) && !"FUTURE_OPTION".elementsEqual(classN){continue}
+                let ins_name = subJson["ins_name"] as? String ?? ""
+                let ins_id = subJson["ins_id"] as? String ?? ""
+                let expired = subJson["expired"] as? Bool ?? false
+                let exchange_id = subJson["exchange_id"] as? String ?? ""
+                let price_tick = (subJson["price_tick"] as? NSNumber)?.stringValue ?? ""
+                let price_decs = subJson["price_decs"] as? Int ?? 0
+                let volume_multiple = (subJson["volume_multiple"] as? NSNumber)?.stringValue ?? ""
+                let sort_key = subJson["sort_key"] as? Int ?? 0
+                let py = subJson["py"] as? String ?? ""
+                let pre_volume = subJson["pre_volume"] as? Int ?? 0
+                let product_id = subJson["product_id"] as? String ?? ""
 
-                let searchEntity = Search(instrument_id: instrument_id, instrument_name: ins_name, exchange_name: "", exchange_id: exchange_id, py: "", p_tick: price_tick, p_decs: price_decs, vm: volume_multiple, sort_key: sort_key, margin: 0, underlying_symbol: "", pre_volume: 0)
+                let searchEntity = Search(ins_id: ins_id, product_id: product_id, instrument_id: instrument_id, instrument_name: ins_name, exchange_name: "", exchange_id: exchange_id, py: py, p_tick: price_tick, p_decs: price_decs, vm: volume_multiple, sort_key: sort_key, margin: 0, underlying_symbol: "", pre_volume: pre_volume, leg1_symbol: "", leg2_symbol: "")
 
                 if "FUTURE_CONT".elementsEqual(classN){
-                    let py = subJson["py"] as? String
-                    searchEntity.py = py
-                    guard let underlying_symbol = subJson["underlying_symbol"] as? String else {continue}
+                    let underlying_symbol = subJson["underlying_symbol"] as? String ?? ""
                     if "".elementsEqual(underlying_symbol){continue}
                     searchEntity.underlying_symbol = underlying_symbol
                     guard let subJsonFuture = latestJson[underlying_symbol] as? [String: Any] else {continue}
-                    let pre_volume = subJsonFuture["pre_volume"] as? Int
+                    let pre_volume = subJsonFuture["pre_volume"] as? Int ?? 0
+                    let ins_id = subJsonFuture["ins_id"] as? String ?? ""
+                    let product_id = subJsonFuture["product_id"] as? String ?? ""
                     searchEntity.pre_volume = pre_volume
+                    searchEntity.ins_id = ins_id
+                    searchEntity.product_id = product_id
                     let quote = Quote()
-                    quote.instrument_id = instrument_id
-                    sMainQuotes[instrument_id] = quote
-                    sMainInsListNameNav[ins_name.replacingOccurrences(of: "主连", with: "")] = instrument_id
+                    quote.instrument_id = underlying_symbol
+                    sMainQuotes[underlying_symbol] = quote
+                    sMainInsListNameNav[ins_name.replacingOccurrences(of: "主连", with: "")] = underlying_symbol
                 }
 
-                if "FUTURE".elementsEqual(classN) || "SPOT".elementsEqual(classN){
+                if "FUTURE".elementsEqual(classN){
                     guard let product_short_name = subJson["product_short_name"] as? String else {continue}
-                    guard let expired = expired else {continue}
-                    let py = subJson["py"] as? String
-                    let margin = subJson["margin"] as? Int
-                    let pre_volume = subJson["pre_volume"] as? Int
-                    searchEntity.pre_volume = pre_volume
-                    searchEntity.py = py
-                    searchEntity.margin = margin
                     let quote = Quote()
                     quote.instrument_id = instrument_id
                     switch exchange_id {
@@ -144,13 +143,13 @@ class DataManager {
 
                 if "FUTURE_COMBINE".elementsEqual(classN){
                     guard let leg1_symbol = subJson["leg1_symbol"] as? String else {continue}
+                    guard let leg2_symbol = subJson["leg2_symbol"] as? String else {continue}
                     guard let subJsonFuture = latestJson[leg1_symbol] as? [String: Any] else {continue}
                     guard let product_short_name = subJsonFuture["product_short_name"] as? String else {continue}
-                    guard let expired = expired else {continue}
-                    let py = subJsonFuture["py"] as? String
-                    let pre_volume = subJson["pre_volume"] as? Int
-                    searchEntity.pre_volume = pre_volume
+                    let py = subJsonFuture["py"] as? String ?? ""
                     searchEntity.py = py
+                    searchEntity.leg1_symbol = leg1_symbol
+                    searchEntity.leg2_symbol = leg2_symbol
                     let quote = Quote()
                     quote.instrument_id = instrument_id
                     switch exchange_id {
@@ -297,6 +296,136 @@ class DataManager {
         }else {
             return sSearchEntities[sInstrumentId]?.instrument_name
         }
+    }
+
+    //计算组合部分行情
+    func calculateCombineQuotePart(quote: Quote) -> Quote {
+        let instrument_id = "\(quote.instrument_id ?? "")"
+        guard let search = sSearchEntities[instrument_id] else {return quote}
+        guard let leg1_symbol = search.leg1_symbol else {return quote}
+        guard let leg2_symbol = search.leg2_symbol else {return quote}
+        guard let quote_leg1 = sRtnMD.quotes[leg1_symbol] else {return quote}
+        guard let quote_leg2 = sRtnMD.quotes[leg2_symbol] else {return quote}
+        let last_leg1 = "\(quote_leg1.last_price ?? "")"
+        let last_leg2 = "\(quote_leg2.last_price ?? "")"
+        if let last_leg1 = Float(last_leg1), let last_leg2 = Float(last_leg2){
+            let last = last_leg1 - last_leg2
+            quote.last_price = last
+        }
+        let ask_price1_leg1 = "\(quote_leg1.ask_price1 ?? "")"
+        let bid_price1_leg2 = "\(quote_leg2.bid_price1 ?? "")"
+        if let ask_price1_leg1 = Float(ask_price1_leg1), let bid_price1_leg2 = Float(bid_price1_leg2){
+            let ask_price1 = ask_price1_leg1 - bid_price1_leg2
+            quote.ask_price1 = ask_price1
+        }
+        let ask_volume1_leg1 = "\(quote_leg1.ask_volume1 ?? "")"
+        let bid_volume1_leg2 = "\(quote_leg2.bid_volume1 ?? "")"
+        if let ask_volume1_leg1 = Int(ask_volume1_leg1), let bid_volume1_leg2 = Int(bid_volume1_leg2){
+            let ask_volume1 = min(ask_volume1_leg1, bid_volume1_leg2)
+            quote.ask_volume1 = ask_volume1
+        }
+        let bid_price1_leg1 = "\(quote_leg1.bid_price1 ?? "")"
+        let ask_price1_leg2 = "\(quote_leg2.ask_price1 ?? "")"
+        if let bid_price1_leg1 = Float(bid_price1_leg1), let ask_price1_leg2 = Float(ask_price1_leg2){
+            let bid_price1 = bid_price1_leg1 - ask_price1_leg2
+            quote.bid_price1 = bid_price1
+        }
+        let bid_volume1_leg1 = "\(quote_leg1.bid_volume1 ?? "")"
+        let ask_volume1_leg2 = "\(quote_leg2.ask_volume1 ?? "")"
+        if let bid_volume1_leg1 = Int(bid_volume1_leg1), let ask_volume1_leg2 = Int(ask_volume1_leg2){
+            let bid_volume1 = min(bid_volume1_leg1, ask_volume1_leg2)
+            quote.bid_volume1 = bid_volume1
+        }
+        let pre_settlement_leg1 = "\(quote_leg1.pre_settlement ?? "")"
+        let pre_settlement_leg2 = "\(quote_leg2.pre_settlement ?? "")"
+        if let pre_settlement_leg1 = Float(pre_settlement_leg1), let pre_settlement_leg2 = Float(pre_settlement_leg2){
+            let pre_settlement = pre_settlement_leg1 - pre_settlement_leg2
+            quote.pre_settlement = pre_settlement
+        }
+        return quote
+    }
+
+    //计算组合完整行情
+    func calculateCombineQuoteFull(quote: Quote) -> Quote {
+        let instrument_id = "\(quote.instrument_id ?? "")"
+        guard let search = sSearchEntities[instrument_id] else {return quote}
+        guard let leg1_symbol = search.leg1_symbol else {return quote}
+        guard let leg2_symbol = search.leg2_symbol else {return quote}
+        guard let quote_leg1 = sRtnMD.quotes[leg1_symbol] else {return quote}
+        guard let quote_leg2 = sRtnMD.quotes[leg2_symbol] else {return quote}
+        let last_leg1 = "\(quote_leg1.last_price ?? "")"
+        let last_leg2 = "\(quote_leg2.last_price ?? "")"
+        if let last_leg1 = Float(last_leg1), let last_leg2 = Float(last_leg2){
+            let last = last_leg1 - last_leg2
+            quote.last_price = last
+        }
+        let ask_price1_leg1 = "\(quote_leg1.ask_price1 ?? "")"
+        let bid_price1_leg2 = "\(quote_leg2.bid_price1 ?? "")"
+        if let ask_price1_leg1 = Float(ask_price1_leg1), let bid_price1_leg2 = Float(bid_price1_leg2){
+            let ask_price1 = ask_price1_leg1 - bid_price1_leg2
+            quote.ask_price1 = ask_price1
+        }
+        let ask_volume1_leg1 = "\(quote_leg1.ask_volume1 ?? "")"
+        let bid_volume1_leg2 = "\(quote_leg2.bid_volume1 ?? "")"
+        if let ask_volume1_leg1 = Int(ask_volume1_leg1), let bid_volume1_leg2 = Int(bid_volume1_leg2){
+            let ask_volume1 = min(ask_volume1_leg1, bid_volume1_leg2)
+            quote.ask_volume1 = ask_volume1
+        }
+        let bid_price1_leg1 = "\(quote_leg1.bid_price1 ?? "")"
+        let ask_price1_leg2 = "\(quote_leg2.ask_price1 ?? "")"
+        if let bid_price1_leg1 = Float(bid_price1_leg1), let ask_price1_leg2 = Float(ask_price1_leg2){
+            let bid_price1 = bid_price1_leg1 - ask_price1_leg2
+            quote.bid_price1 = bid_price1
+        }
+        let bid_volume1_leg1 = "\(quote_leg1.bid_volume1 ?? "")"
+        let ask_volume1_leg2 = "\(quote_leg2.ask_volume1 ?? "")"
+        if let bid_volume1_leg1 = Int(bid_volume1_leg1), let ask_volume1_leg2 = Int(ask_volume1_leg2){
+            let bid_volume1 = min(bid_volume1_leg1, ask_volume1_leg2)
+            quote.bid_volume1 = bid_volume1
+        }
+        let open_leg1 = "\(quote_leg1.open ?? "")"
+        let open_leg2 = "\(quote_leg2.open ?? "")"
+        if let open_leg1 = Float(open_leg1), let open_leg2 = Float(open_leg2){
+            let open = open_leg1 - open_leg2
+            quote.open = open
+        }
+        let highest_leg1 = "\(quote_leg1.highest ?? "")"
+        let highest_leg2 = "\(quote_leg2.highest ?? "")"
+        if let highest_leg1 = Float(highest_leg1), let highest_leg2 = Float(highest_leg2){
+            let highest = highest_leg1 - highest_leg2
+            quote.highest = highest
+        }
+        let lowest_leg1 = "\(quote_leg1.lowest ?? "")"
+        let lowest_leg2 = "\(quote_leg2.lowest ?? "")"
+        if let lowest_leg1 = Float(lowest_leg1), let lowest_leg2 = Float(lowest_leg2){
+            let lowest = lowest_leg1 - lowest_leg2
+            quote.lowest = lowest
+        }
+        let average_leg1 = "\(quote_leg1.average ?? "")"
+        let average_leg2 = "\(quote_leg2.average ?? "")"
+        if let average_leg1 = Float(average_leg1), let average_leg2 = Float(average_leg2){
+            let average = average_leg1 - average_leg2
+            quote.average = average
+        }
+        let pre_close_leg1 = "\(quote_leg1.pre_close ?? "")"
+        let pre_close_leg2 = "\(quote_leg2.pre_close ?? "")"
+        if let pre_close_leg1 = Float(pre_close_leg1), let pre_close_leg2 = Float(pre_close_leg2){
+            let pre_close = pre_close_leg1 - pre_close_leg2
+            quote.pre_close = pre_close
+        }
+        let pre_settlement_leg1 = "\(quote_leg1.pre_settlement ?? "")"
+        let pre_settlement_leg2 = "\(quote_leg2.pre_settlement ?? "")"
+        if let pre_settlement_leg1 = Float(pre_settlement_leg1), let pre_settlement_leg2 = Float(pre_settlement_leg2){
+            let pre_settlement = pre_settlement_leg1 - pre_settlement_leg2
+            quote.pre_settlement = pre_settlement
+        }
+        let settlement_leg1 = "\(quote_leg1.settlement ?? "")"
+        let settlement_leg2 = "\(quote_leg2.settlement ?? "")"
+        if let settlement_leg1 = Float(settlement_leg1), let settlement_leg2 = Float(settlement_leg2){
+            let settlement = settlement_leg1 - settlement_leg2
+            quote.settlement = settlement
+        }
+        return quote
     }
 
     func parseRtnMD(rtnData: [String: Any]) {

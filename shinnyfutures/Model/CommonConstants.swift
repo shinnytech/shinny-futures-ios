@@ -22,6 +22,8 @@ class CommonConstants {
     public static let REDMINE_URL = "http://ask.shinnytech.com/src/indexm.html"
 
     //MARK: default config
+    public static let CONFIG_SETTING_PARA_MA = "maOrder"
+    public static let CONFIG_SETTING_TRANSACTION_SHOW_ORDER = "orderSetting"
     public static let CONFIG_POSITION_LINE = "positionLine"
     public static let CONFIG_ORDER_LINE = "orderLine"
     public static let CONFIG_AVERAGE_LINE = "averageLine"
@@ -74,11 +76,11 @@ class CommonConstants {
     //MARK: Quote page title
     public static let titleArray = ["自选合约", "主力合约", "上海期货交易所", "上海能源交易中心", "大连商品交易所", "郑州商品交易所", "中国金融期货交易所", "大连组合", "郑州组合"]
 
-    public static let rightTitleArrayLogged = [["login","退出交易"], ["account","资金详情"], ["password","修改密码"], ["position","持仓汇总"], ["trade","成交记录"], ["bank","银期转帐"], ["feedback","问题反馈"], ["about","关于"]]
+    public static let rightTitleArrayLogged = [[["login","退出交易"]], [["setting", "选项设置"]], [["account","资金详情"], ["password","修改密码"], ["position","持仓汇总"], ["trade","成交记录"], ["bank","银期转帐"], ["open_account", "在线开户"], ["feedback","问题反馈"], ["about","关于"]]]
 
-     public static let rightTitleArray = [["login","登录交易"], ["account","资金详情"], ["position","持仓汇总"], ["trade","成交记录"], ["bank","银期转帐"], ["feedback","问题反馈"], ["about","关于"]]
+     public static let rightTitleArray = [[["login","登录交易"]], [["setting", "选项设置"]], [["account","资金详情"], ["position","持仓汇总"], ["trade","成交记录"], ["bank","银期转帐"], ["open_account", "在线开户"], ["feedback","问题反馈"], ["about","关于"]]]
 
-    public static let rightArray = [["feedback","问题反馈"], ["about","关于"]]
+    public static let rightArray = [[["feedback","问题反馈"], ["about","关于"]]]
 
     // MARK: Notification
     public static let RefreshOptionalInsListNotification = "RefreshOptionalInsListNotification"
@@ -107,6 +109,7 @@ class CommonConstants {
     public static let QuotePageViewController = "QuotePageViewController"
     public static let MainToQuote = "MainToQuote"
     public static let MainToLogin = "MainToLogin"
+    public static let MainToSetting = "MainToSetting"
     public static let MainToChangePassword = "MainToChangePassword"
     public static let MainToAccount = "MainToAccount"
     public static let MainToTrade = "MainToTrade"
@@ -154,20 +157,36 @@ class CommonConstants {
     public static let RED_TEXT = UIColor(red: 160/255.0, green: 20/255.0, blue: 20/255.0, alpha: 1)
     public static let GREEN_TEXT = UIColor(red: 26/255.0, green: 197/255.0, blue: 26/255.0, alpha: 1)
     public static let WHITE_TEXT = UIColor(red: 225/255.0, green: 225/255.0, blue: 225/255.0, alpha:1)
+    public static let MARK_RED = UIColor(red: 255/255.0, green: 60/255.0, blue: 60/255.0, alpha:1)
+    public static let MARK_GREEN = UIColor(red: 0/255.0, green: 220/255.0, blue: 0/255.0, alpha:1)
+    public static let MARK_YELLOW = UIColor(red: 220/255.0, green: 220/255.0, blue: 10/255.0, alpha:1)
 
     //MARK: 合约详情页
     public static let NAV_TEXT = UIColor(red: 153/255.0, green: 153/255.0, blue: 153/255.0, alpha: 1)
     public static let NAV_TEXT_HIGHLIGHTED = UIColor(red: 255/255.0, green: 255/255.0, blue: 0/255.0, alpha: 1)
     public static let NAV_TEXT_UNHIGHLIGHTED = UIColor(red: 68/255.0, green: 68/255.0, blue: 68/255.0, alpha: 1)
     public static let KLINE_GRID = UIColor(red: 180/255.0, green: 0/255.0, blue: 0/255.0, alpha: 1)
-    public static let KLINE_MD5 = UIColor(red: 255/255.0, green: 255/255.0, blue: 255/255.0, alpha: 1)
-    public static let KLINE_MD10 = UIColor(red: 255/255.0, green: 255/255.0, blue: 0/255.0, alpha: 1)
-    public static let KLINE_MD20 = UIColor(red: 198/255.0, green: 0/255.0, blue: 223/255.0, alpha: 1)
+    public static let KLINE_MD1 = UIColor(red: 255/255.0, green: 255/255.0, blue: 255/255.0, alpha: 1)
+    public static let KLINE_MD2 = UIColor(red: 255/255.0, green: 255/255.0, blue: 0/255.0, alpha: 1)
+    public static let KLINE_MD3 = UIColor(red: 255/255.0, green: 0/255.0, blue: 255/255.0, alpha: 1)
+    public static let KLINE_MD4 = UIColor(red: 0/255.0, green: 255/255.0, blue: 0/255.0, alpha: 1)
+    public static let KLINE_MD5 = UIColor(red: 178/255.0, green: 178/255.0, blue: 178/255.0, alpha: 1)
+    public static let KLINE_MD6 = UIColor(red: 255/255.0, green: 60/255.0, blue: 60/255.0, alpha: 1)
+    public static let KLINE_MDs = [KLINE_MD1, KLINE_MD2, KLINE_MD3, KLINE_MD4, KLINE_MD5, KLINE_MD6]
     public static let KLINE_PO_LINE_SELL = UIColor(red: 26/255.0, green: 197/255.0, blue: 26/255.0, alpha: 1)
     public static let KLINE_PO_LINE_BUY = UIColor(red: 160/255.0, green: 20/255.0, blue: 20/255.0, alpha: 1)
 
     //MARK: 登录页
     public static let LOGIN_COLOR = UIColor(red: 190/255, green: 0, blue: 15/255, alpha: 1).cgColor
 
+    //MARK: 交易页
+    public static let BID_BUTTON = UIColor(red: 179/255, green: 69/255, blue: 69/255, alpha: 1)
+    public static let ASK_BUTTON = UIColor(red: 54/255, green: 142/255, blue: 95/255, alpha: 1)
+
+    //MARK: 设置页
+    public static let BOLD_DEVIDER = UIColor(red: 45/255, green: 45/255, blue: 45/255, alpha: 1)
+    public static let PARA_NAV_SELECTED = UIColor(red: 190/255, green: 0, blue: 15/255, alpha: 1)
+    public static let PARA_CONTENT_FOOTER = UIColor(red: 44/255, green: 44/255, blue: 44/255, alpha: 1)
+    public static let PARA_MA = [5, 10, 20, 60, 0, 0]
 
 }

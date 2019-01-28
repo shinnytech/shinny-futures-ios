@@ -17,7 +17,6 @@ class QuoteTableViewController: UITableViewController, UIPopoverPresentationCont
     var index = 1
     var isChangePercent = true
     var isOpenInterest = true
-    var isUpperLimit = true
     var isRefresh = true
     var quotes = [Quote]()
     var oldQuotes = [Quote]()
@@ -33,7 +32,7 @@ class QuoteTableViewController: UITableViewController, UIPopoverPresentationCont
         tableView.addGestureRecognizer(longPressGusture)
 
         NotificationCenter.default.addObserver(self, selector: #selector(initInsList), name: Notification.Name(CommonConstants.RefreshOptionalInsListNotification), object: nil)
-        
+
         quotes = dataManager.sQuotes[self.index].map {$0.value}
         insList = dataManager.sQuotes[self.index].map {$0.key}
     }
@@ -76,81 +75,83 @@ class QuoteTableViewController: UITableViewController, UIPopoverPresentationCont
 
         // Fetches the appropriate quote for the data source layout.
         let quote = quotes[indexPath.row]
-        let instrumentId = quote.instrument_id as? String
-        var insturmentName = instrumentId
-        var decimal = 0
-        if let instrumentId = instrumentId {
-            decimal = dataManager.getDecimalByPtick(instrumentId: instrumentId)
-            insturmentName = dataManager.sSearchEntities[instrumentId]?.instrument_name
-        }
-        cell.name.text = insturmentName
-
-        if index == 8 || index == 9 {
-            if isUpperLimit {
-                let upper_limit = "\(quote.upper_limit ?? 0)"
-                if let upper_limit = Float(upper_limit){
-                    if upper_limit < 0 {
-                        cell.last.textColor = CommonConstants.GREEN_TEXT
-                    } else if upper_limit > 0{
-                        cell.last.textColor = CommonConstants.RED_TEXT
-                    } else {
-                        cell.last.textColor = CommonConstants.WHITE_TEXT
-                    }
-                }
-                cell.last.text = dataManager.saveDecimalByPtick(decimal: decimal, data: upper_limit)
-            }else{
-                let lower_limit = "\(quote.lower_limit ?? 0)"
-                if let lower_limit = Float(lower_limit){
-                    if lower_limit < 0 {
-                        cell.last.textColor = CommonConstants.GREEN_TEXT
-                    } else if lower_limit > 0{
-                        cell.last.textColor = CommonConstants.RED_TEXT
-                    }else {
-                        cell.last.textColor = CommonConstants.WHITE_TEXT
-                    }
-                }
-                cell.last.text = dataManager.saveDecimalByPtick(decimal: decimal, data: lower_limit)
-            }
-
-            if isChangePercent {
-                let bid_price1 = "\(quote.bid_price1 ?? 0)"
-                if let bid_price1 = Float(bid_price1){
-                    if bid_price1 < 0 {cell.changePercent.textColor = CommonConstants.GREEN_TEXT}
-                    else if bid_price1 > 0 {cell.changePercent.textColor = CommonConstants.RED_TEXT}
-                    else {cell.changePercent.textColor = CommonConstants.WHITE_TEXT}
-                }
-                cell.changePercent.text = dataManager.saveDecimalByPtick(decimal: decimal, data: bid_price1)
-            } else {
-                let ask_price1 = "\(quote.ask_price1 ?? 0)"
-                if let ask_price1 = Float(ask_price1){
-                    if ask_price1 < 0 {cell.changePercent.textColor = CommonConstants.GREEN_TEXT}
-                    else if ask_price1 > 0 {cell.changePercent.textColor = CommonConstants.RED_TEXT}
-                    else {cell.changePercent.textColor = CommonConstants.WHITE_TEXT}
-                }
-                cell.changePercent.text = dataManager.saveDecimalByPtick(decimal: decimal, data: ask_price1)
-            }
-            if isOpenInterest {
-                let bid_volume1 = "\(quote.bid_volume1 ?? 0)"
-                cell.openInterest.text = dataManager.saveDecimalByPtick(decimal: decimal, data: bid_volume1)
-            } else {
-                let ask_volume1 = "\(quote.ask_volume1 ?? 0)"
-                cell.openInterest.text = dataManager.saveDecimalByPtick(decimal: decimal, data: ask_volume1)
-            }
+        let instrumentId = quote.instrument_id as? String ?? ""
+        let decimal = dataManager.getDecimalByPtick(instrumentId: instrumentId)
+        if let insturmentName = dataManager.sSearchEntities[instrumentId]?.instrument_name{
+            cell.name.text = insturmentName
         }else{
-            let last = "\(quote.last_price ?? 0)"
-            let pre_settlement = "\(quote.pre_settlement ?? 0)"
-            cell.last.text = dataManager.saveDecimalByPtick(decimal: decimal, data: "\(last)")
+            cell.name.text = instrumentId
+        }
+
+        let last = "\(quote.last_price ?? "-")"
+        cell.last.text = dataManager.saveDecimalByPtick(decimal: decimal, data: "\(last)")
+        let pre_settlement = "\(quote.pre_settlement ?? "-")"
+
+        if self.index == 7 || self.index == 8{
             if let last = Float(last), let pre_settlement = Float(pre_settlement){
                 let change = last - pre_settlement
                 if change < 0 {
-                    cell.changePercent.textColor = CommonConstants.GREEN_TEXT
                     cell.last.textColor = CommonConstants.GREEN_TEXT
                 } else if change > 0{
-                    cell.changePercent.textColor = CommonConstants.RED_TEXT
                     cell.last.textColor = CommonConstants.RED_TEXT
                 }else {
-                    cell.changePercent.textColor = CommonConstants.WHITE_TEXT
                     cell.last.textColor = CommonConstants.WHITE_TEXT
+                }
+                
+            }else{
+                cell.last.textColor = CommonConstants.WHITE_TEXT
+            }
+
+            if isChangePercent {
+                let bid_price1 = "\(quote.bid_price1 ?? "-")"
+                cell.changePercent.text = dataManager.saveDecimalByPtick(decimal: decimal, data: bid_price1)
+                if let bid_price1_f = Float(bid_price1), let pre_settlement = Float(pre_settlement){
+                    let change = bid_price1_f - pre_settlement
+                    if change < 0 {
+                        cell.changePercent.textColor = CommonConstants.GREEN_TEXT
+                    } else if change > 0{
+                        cell.changePercent.textColor = CommonConstants.RED_TEXT
+                    }else {
+                        cell.changePercent.textColor = CommonConstants.WHITE_TEXT
+                    }
+                }else{
+                    cell.changePercent.textColor = CommonConstants.WHITE_TEXT
+                }
+            } else {
+                let ask_price1 = "\(quote.ask_price1 ?? "-")"
+                cell.changePercent.text = dataManager.saveDecimalByPtick(decimal: decimal, data: ask_price1)
+                if let ask_price1_f = Float(ask_price1), let pre_settlement = Float(pre_settlement){
+                    let change = ask_price1_f - pre_settlement
+                    if change < 0 {
+                        cell.changePercent.textColor = CommonConstants.GREEN_TEXT
+                    } else if change > 0{
+                        cell.changePercent.textColor = CommonConstants.RED_TEXT
+                    }else {
+                        cell.changePercent.textColor = CommonConstants.WHITE_TEXT
+                    }
+                }else {
+                    cell.changePercent.textColor = CommonConstants.WHITE_TEXT
+                }
+            }
+
+            if isOpenInterest {
+                cell.openInterest.text = "\(quote.bid_volume1 ?? "-")"
+            } else {
+                cell.openInterest.text = "\(quote.ask_volume1 ?? "-")"
+            }
+
+        } else {
+            if let last = Float(last), let pre_settlement = Float(pre_settlement){
+                let change = last - pre_settlement
+                if change < 0 {
+                    cell.last.textColor = CommonConstants.GREEN_TEXT
+                    cell.changePercent.textColor = CommonConstants.GREEN_TEXT
+                } else if change > 0{
+                    cell.last.textColor = CommonConstants.RED_TEXT
+                    cell.changePercent.textColor = CommonConstants.RED_TEXT
+                }else {
+                    cell.last.textColor = CommonConstants.WHITE_TEXT
+                    cell.changePercent.textColor = CommonConstants.WHITE_TEXT
                 }
 
                 if isChangePercent {
@@ -161,16 +162,17 @@ class QuoteTableViewController: UITableViewController, UIPopoverPresentationCont
                 }
 
             }else{
+                cell.last.textColor = CommonConstants.WHITE_TEXT
                 cell.changePercent.text = "-"
+                cell.changePercent.textColor = CommonConstants.WHITE_TEXT
             }
 
             if isOpenInterest {
-                cell.openInterest.text = "\(quote.open_interest ?? 0)"
+                cell.openInterest.text = "\(quote.open_interest ?? "-")"
             } else {
-                cell.openInterest.text = "\(quote.volume ?? 0)"
+                cell.openInterest.text = "\(quote.volume ?? "-")"
             }
         }
-
         return cell
     }
     
@@ -195,9 +197,6 @@ class QuoteTableViewController: UITableViewController, UIPopoverPresentationCont
         let last = UILabel()
         last.textColor = UIColor.white
         last.textAlignment = .right
-        let tapUpperLimit = UITapGestureRecognizer(target: self, action: #selector(QuoteTableViewController.tapUpperLimit))
-        last.isUserInteractionEnabled = true
-        last.addGestureRecognizer(tapUpperLimit)
         last.backgroundColor = CommonConstants.QUOTE_TABLE_HEADER_1
 
         let changePercent = UILabel()
@@ -216,12 +215,8 @@ class QuoteTableViewController: UITableViewController, UIPopoverPresentationCont
         openInterest.isUserInteractionEnabled = true
         openInterest.addGestureRecognizer(tapOpenInterest)
 
-        if index == 8 || index == 9 {
-            if isUpperLimit {
-                last.text = "涨停价⇲"
-            }else{
-                last.text = "跌停价⇲"
-            }
+        last.text = "最新价"
+        if index == 7 || index == 8 {
 
             if isChangePercent {
                 changePercent.text = "买价⇲"
@@ -235,7 +230,7 @@ class QuoteTableViewController: UITableViewController, UIPopoverPresentationCont
                 openInterest.text = "卖量⇲"
             }
         }else {
-            last.text = "最新价"
+
             if isChangePercent {
                 changePercent.text = "涨跌幅%⇲"
             } else {
@@ -311,24 +306,53 @@ class QuoteTableViewController: UITableViewController, UIPopoverPresentationCont
             if  indexPaths.count > 0 {
                 let firstIndex = indexPaths[0].row
                 let lastIndex = firstIndex + CommonConstants.MAX_SUBSCRIBE_QUOTES
-                let ins = insList.count < lastIndex ? insList[firstIndex..<insList.count].joined(separator: ","): insList[firstIndex..<lastIndex].joined(separator: ",")
-                if !ins.elementsEqual(dataManager.sRtnMD.ins_list) {
-                    MDWebSocketUtils.getInstance().sendSubscribeQuote(insList: ins)
-                }
+                sendInsList(data: getInsList(data: insList, firstIndex: firstIndex, lastIndex: lastIndex))
             }else{
                 //当自选合约列表从无到有，从主力合约滑动过来时，虽然indexPaths.count==0，但是需要重新加载合约列表，订阅刚添加的合约行情
-                let ins = insList.count < CommonConstants.MAX_SUBSCRIBE_QUOTES ? insList[0..<insList.count].joined(separator: ","): insList[0..<CommonConstants.MAX_SUBSCRIBE_QUOTES].joined(separator: ",")
-                if !ins.elementsEqual(dataManager.sRtnMD.ins_list) {
-                    MDWebSocketUtils.getInstance().sendSubscribeQuote(insList: ins)
-                }
+                sendInsList(data: getInsList(data: insList, firstIndex: 0, lastIndex: CommonConstants.MAX_SUBSCRIBE_QUOTES))
             }
         } else {
             //导航栏切换页面时订阅
-            let ins = insList.count < CommonConstants.MAX_SUBSCRIBE_QUOTES ? insList[0..<insList.count].joined(separator: ","): insList[0..<CommonConstants.MAX_SUBSCRIBE_QUOTES].joined(separator: ",")
-            if !ins.elementsEqual(dataManager.sRtnMD.ins_list) {
-                MDWebSocketUtils.getInstance().sendSubscribeQuote(insList: ins)
+            sendInsList(data: getInsList(data: insList, firstIndex: 0, lastIndex: CommonConstants.MAX_SUBSCRIBE_QUOTES))
+        }
+    }
+
+    //发送订阅合约
+    private func sendInsList(data: [String]){
+        var insList = data
+        if index == 7 || index == 8 {
+            insList = getCombineInsList(data: data)
+        }
+        let ins = insList[0..<insList.count].joined(separator: ",")
+        if !ins.elementsEqual(dataManager.sRtnMD.ins_list) {
+            MDWebSocketUtils.getInstance().sendSubscribeQuote(insList: ins)
+        }
+    }
+
+    private func getInsList(data: [String], firstIndex: Int, lastIndex: Int) -> [String] {
+        if data.count < lastIndex {
+            if firstIndex == 0{
+                return data
+            }else {
+                return Array(data[firstIndex..<data.count])
+            }
+        }else{
+            return Array(data[firstIndex..<lastIndex])
+        }
+    }
+
+    private func getCombineInsList(data: [String]) -> [String]{
+        var insList = [String]()
+        for ins in data {
+            insList.append(ins)
+            if let search = dataManager.sSearchEntities[ins]{
+                if let leg1_symbol = search.leg1_symbol, let leg2_symbol = search.leg2_symbol{
+                    insList.append(leg1_symbol)
+                    insList.append(leg2_symbol)
+                }
             }
         }
+        return insList
     }
     
     // MARK: objc Methods
@@ -365,11 +389,6 @@ class QuoteTableViewController: UITableViewController, UIPopoverPresentationCont
             }
         }
     }
-    
-    @objc func tapUpperLimit() {
-        isUpperLimit = !isUpperLimit
-        tableView.reloadData()
-    }
 
     @objc func tapChangePercent() {
         isChangePercent = !isChangePercent
@@ -392,7 +411,11 @@ class QuoteTableViewController: UITableViewController, UIPopoverPresentationCont
                 let index = insList.index(of: instrumentId)
                 let quote = dataManager.sRtnMD.quotes[instrumentId]
                 if let index = index, let quote = quote, index < count {
-                    quotes[index] = quote.copy() as! Quote
+                    var quote_copy = quote.copy() as! Quote
+                    if self.index == 7 || self.index == 8{
+                        quote_copy = dataManager.calculateCombineQuotePart(quote: quote_copy)
+                    }
+                    quotes[index] = quote_copy
                 }
             }
         }

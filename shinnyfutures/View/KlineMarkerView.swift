@@ -26,9 +26,10 @@ open class KlineMarkerView: MarkerView {
     var markerViewState = "right"
     let dataManager = DataManager.getInstance()
 
-    func resizeXib(heiht: CGFloat){
+    func resizeXib(heiht: CGFloat, width: CGFloat){
         var Rect: CGRect = self.frame
         Rect.size.height = heiht
+        Rect.size.width = width / 6
         self.frame = Rect
         self.layoutIfNeeded()
     }
@@ -52,7 +53,7 @@ open class KlineMarkerView: MarkerView {
         let datetime = (data.datetime as? Int ?? 0) / 1000000000
         let dateTime = Date(timeIntervalSince1970: TimeInterval(datetime))
         let dateformatter = DateFormatter()
-        dateformatter.dateFormat = "yyyy-MM-dd"
+        dateformatter.dateFormat = "yyyyMMdd"
         let yValue = dateformatter.string(from: dateTime)
         dateformatter.dateFormat = "HH:mm:ss"
         let xValue = dateformatter.string(from: dateTime)
@@ -73,12 +74,44 @@ open class KlineMarkerView: MarkerView {
         self.volume.text = "\(volume)"
         self.closeOi.text = "\(closeOi)"
 
+        if open < closePre {
+            self.open.textColor = CommonConstants.MARK_GREEN
+        }else{
+            self.open.textColor = CommonConstants.MARK_RED
+        }
+
+        if high < closePre {
+            self.high.textColor = CommonConstants.MARK_GREEN
+        }else{
+            self.high.textColor = CommonConstants.MARK_RED
+        }
+
+        if low < closePre {
+            self.low.textColor = CommonConstants.MARK_GREEN
+        }else{
+            self.low.textColor = CommonConstants.MARK_RED
+        }
+
+        if close < closePre {
+            self.close.textColor = CommonConstants.MARK_GREEN
+        }else{
+            self.close.textColor = CommonConstants.MARK_RED
+        }
+
+        if close - closePre < 0 {
+            self.closeChange.textColor = CommonConstants.MARK_GREEN
+            self.closeChangePercent.textColor = CommonConstants.MARK_GREEN
+        }else {
+            self.closeChange.textColor = CommonConstants.MARK_RED
+            self.closeChangePercent.textColor = CommonConstants.MARK_RED
+        }
+
         let closeOiDelta = closeOi - closeOiPre
         self.closeOiDelta.text = "\(closeOiDelta)"
         if closeOiDelta < 0 {
-            self.closeOiDelta.textColor = CommonConstants.GREEN_TEXT
+            self.closeOiDelta.textColor = CommonConstants.MARK_GREEN
         }else{
-            self.closeOiDelta.textColor = CommonConstants.RED_TEXT
+            self.closeOiDelta.textColor = CommonConstants.MARK_RED
         }
 
         super.refreshContent(entry: entry, highlight: highlight)

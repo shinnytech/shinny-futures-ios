@@ -18,10 +18,6 @@ class KlineViewController: BaseChartViewController {
     var scaleX = CGFloat(0.0)
     //均线数据
     var lineData: LineChartData!
-    //均线颜色
-    var colorMa5: UIColor!
-    var colorMa10: UIColor!
-    var colorMa20: UIColor!
     var viewWidth = 0
     var left_id = -1
     var right_id = -1
@@ -31,6 +27,9 @@ class KlineViewController: BaseChartViewController {
     var startX = CGFloat(0.0)
     //最新价数据
     var latestLimitLines = [String: ChartLimitLine]()
+    var chart: Chart!
+    var kline: Kline!
+    var mas: [Int]!
 
     override func viewDidLoad() {
         chartView = klineChartView
@@ -60,9 +59,11 @@ class KlineViewController: BaseChartViewController {
         simpleDateFormat = DateFormatter()
         simpleDateFormat.dateFormat = xValsFormat
         simpleDateFormat.locale = Locale.autoupdatingCurrent
-        colorMa5 = CommonConstants.KLINE_MD5
-        colorMa10 = CommonConstants.KLINE_MD10
-        colorMa20 = CommonConstants.KLINE_MD20
+
+        mas = UserDefaults.standard.array(forKey: CommonConstants.CONFIG_SETTING_PARA_MA) as? [Int]
+        mas = mas.filter(){
+            return $0 != 0
+        }
         viewWidth = CommonConstants.VIEW_WIDTH
 
         chartView.scaleYEnabled = false
@@ -96,11 +97,16 @@ class KlineViewController: BaseChartViewController {
         let rightAxis = chartView.rightAxis
         rightAxis.enabled = false
 
-        let ma5 = LegendEntry(label: "MA5", form: .square, formSize: CGFloat.nan, formLineWidth: CGFloat.nan, formLineDashPhase: CGFloat.nan, formLineDashLengths: [CGFloat.nan], formColor: colorMa5)
-        let ma10 = LegendEntry(label: "MA10", form: .square, formSize: CGFloat.nan, formLineWidth: CGFloat.nan, formLineDashPhase: CGFloat.nan, formLineDashLengths: [CGFloat.nan], formColor: colorMa10)
-        let ma20 = LegendEntry(label: "MA20", form: .square, formSize: CGFloat.nan, formLineWidth: CGFloat.nan, formLineDashPhase: CGFloat.nan, formLineDashLengths: [CGFloat.nan], formColor: colorMa20)
+        var maLengendEntries = [LegendEntry]()
+        for index in Array(0..<mas.count) {
+            let para = mas[index]
+            let color = CommonConstants.KLINE_MDs[index]
+            let maLegendEntry = LegendEntry(label: "MA\(para)", form: .square, formSize: CGFloat.nan, formLineWidth: CGFloat.nan, formLineDashPhase: CGFloat.nan, formLineDashLengths: [CGFloat.nan], formColor: color)
+            maLengendEntries.append(maLegendEntry)
+        }
+
         let l = chartView.legend
-        l.setCustom(entries: [ma5, ma10, ma20])
+        l.setCustom(entries: maLengendEntries)
         l.horizontalAlignment = .right
         l.verticalAlignment = .top
         l.textColor = UIColor.white
@@ -163,30 +169,22 @@ class KlineViewController: BaseChartViewController {
     }
 
     override func refreshKline() {
-        guard let chart = dataManager.sRtnMD.charts[CommonConstants.CHART_ID] else {return}
-        let left_id_t = chart.left_id as? Int ?? -1
-        let right_id_t = chart.right_id as? Int ?? -1
-        let mdhis_more_data = dataManager.sRtnMD.mdhis_more_data
-        if (left_id_t == -1 && right_id_t == -1) || mdhis_more_data{return}
-        let ins_list = "\(chart.state?.ins_list ?? "")"
-        let duration = "\(chart.state?.duration ?? "")"
-        if !ins_list.elementsEqual(dataManager.sInstrumentId) || !duration.elementsEqual(klineType) {return}
-        guard let kline = dataManager.sRtnMD.klines[dataManager.sInstrumentId]?[klineType] else {return}
-        let datas = kline.datas
-        let last_id_t = kline.last_id as? Int ?? -1
-        if last_id_t == -1 || datas.isEmpty {return}
-
+        
         if chartView.data != nil && (chartView.data?.dataSetCount)! > 0 {
             let combineData = chartView.combinedData
             let candleData = combineData?.candleData
+            let datas = kline.datas
+            let left_id_t = chart.left_id as? Int ?? -1
+            let right_id_t = chart.right_id as? Int ?? -1
+            let last_id_t = kline.last_id as? Int ?? -1
 
             if right_id_t == right_id && left_id_t == left_id{
                 //print("k线图刷新")
                 let xValue = Double(last_id)
                 candleData?.removeEntry(xValue: xValue, dataSetIndex: 0)
-                lineData.removeEntry(xValue: xValue, dataSetIndex: 0)
-                lineData.removeEntry(xValue: xValue, dataSetIndex: 1)
-                lineData.removeEntry(xValue: xValue, dataSetIndex: 2)
+                for index in Array(0..<lineData.dataSetCount){
+                    lineData.removeEntry(xValue: xValue, dataSetIndex: index)
+                }
                 generateLineCandleDataEntry(candleData: candleData!, left_id: left_id, index: last_id, datas: datas)
                 refreshLatestLine(data: datas["\(last_id)"])
             } else if right_id_t > right_id && left_id_t > left_id{
@@ -212,31 +210,27 @@ class KlineViewController: BaseChartViewController {
             chartView.xAxis.axisMinimum = (combineData?.xMin)! - 0.5
         } else {
             NSLog("k线图初始化")
+            guard let chart = dataManager.sRtnMD.charts[CommonConstants.CHART_ID] else {return}
+            self.chart = chart
+            let left_id_t = chart.left_id as? Int ?? -1
+            let right_id_t = chart.right_id as? Int ?? -1
+            let mdhis_more_data = dataManager.sRtnMD.mdhis_more_data
+            if (left_id_t == -1 && right_id_t == -1) || mdhis_more_data{return}
+            let ins_list = "\(chart.state?.ins_list ?? "")"
+            let duration = "\(chart.state?.duration ?? "")"
+            if !ins_list.elementsEqual(dataManager.sInstrumentId) || !duration.elementsEqual(klineType) {return}
+            guard let kline = dataManager.sRtnMD.klines[dataManager.sInstrumentId]?[klineType] else {return}
+            self.kline = kline
+            let datas = kline.datas
+            let last_id_t = kline.last_id as? Int ?? -1
+            if last_id_t == -1 || datas.isEmpty {return}
             left_id = left_id_t
             right_id = right_id_t
             last_id = last_id_t
-            var ma5Datas = [ChartDataEntry]()
-            var ma10Datas = [ChartDataEntry]()
-            var ma20Datas = [ChartDataEntry]()
-            var candleDatas = [CandleChartDataEntry]()
-            for index in left_id...last_id {
-                candleDatas.append(generateCandleDataEntry(index: index, datas: datas))
-                if index >= left_id + 4 {
-                    let entry = generateLineDataEntry(index: index, lineIndex: 4, datas: datas)
-                    ma5Datas.append(entry)
-                }
-                if index >= left_id + 9 {
-                    let entry = generateLineDataEntry(index: index, lineIndex: 9, datas: datas)
-                    ma10Datas.append(entry)
-                }
-                if index >= left_id + 19 {
-                    let entry = generateLineDataEntry(index: index, lineIndex: 19, datas: datas)
-                    ma20Datas.append(entry)
-                }
-            }
+
             let combineData = CombinedChartData()
-            combineData.candleData = generateCandleData(candles: candleDatas)
-            lineData = generateLineData(ma5Datas: ma5Datas, ma10Datas: ma10Datas, ma20Datas: ma20Datas)
+            combineData.candleData = generateCandleData()
+            lineData = generateLineData()
             if isShowAverageLine {combineData.lineData = lineData } else {combineData.lineData = LineChartData()}
             chartView.data = combineData
             chartView.xAxis.axisMaximum = combineData.xMax + 2.5
@@ -246,7 +240,7 @@ class KlineViewController: BaseChartViewController {
             chartView.zoom(scaleX: scaleX, scaleY: 1.0, xValue: Double(last_id), yValue: 0.0, axis: YAxis.AxisDependency.left)
             chartView.moveViewToX(Double(right_id))
             generateLatestLine(data: datas["\(right_id)"])
-            (chartView.marker as! KlineMarkerView).resizeXib(heiht: chartView.viewPortHandler.contentHeight)
+            (chartView.marker as! KlineMarkerView).resizeXib(heiht: chartView.viewPortHandler.contentHeight, width: chartView.viewPortHandler.contentWidth)
         }
     }
 
@@ -294,17 +288,13 @@ class KlineViewController: BaseChartViewController {
     private func generateLineCandleDataEntry(candleData: CandleChartData, left_id: Int, index: Int, datas: [String: Kline.Data]) {
         let candleEntry = generateCandleDataEntry(index: index, datas: datas)
         _ = candleData.getDataSetByIndex(0).addEntryOrdered(candleEntry)
-        if index >= left_id + 4 {
-            let entry = generateLineDataEntry(index: index, lineIndex: 4, datas: datas)
-            _ = lineData.getDataSetByIndex(0).addEntryOrdered(entry)
-        }
-        if index >= left_id + 9 {
-            let entry = generateLineDataEntry(index: index, lineIndex: 9, datas: datas)
-            _ = lineData.getDataSetByIndex(1).addEntryOrdered(entry)
-        }
-        if index >= left_id + 19 {
-            let entry = generateLineDataEntry(index: index, lineIndex: 19, datas: datas)
-            _ = lineData.getDataSetByIndex(2).addEntryOrdered(entry)
+
+        for i in Array(0..<mas.count) {
+            let para = mas[i]
+            if index >= left_id + para - 1 {
+                let entry = generateLineDataEntry(index: index, lineIndex: para - 1, datas: datas)
+                _ = lineData.getDataSetByIndex(i).addEntryOrdered(entry)
+            }
         }
     }
 
@@ -335,8 +325,12 @@ class KlineViewController: BaseChartViewController {
     }
 
     //生成蜡烛图数据
-    private func generateCandleData(candles: [CandleChartDataEntry]) -> CandleChartData {
-        let set = CandleChartDataSet(values: candles, label: "kline")
+    private func generateCandleData() -> CandleChartData {
+        var candleDatas = [CandleChartDataEntry]()
+        for index in left_id...last_id {
+            candleDatas.append(generateCandleDataEntry(index: index, datas: kline.datas))
+        }
+        let set = CandleChartDataSet(values: candleDatas, label: "kline")
         set.axisDependency = .left
         set.shadowWidth = 0.7
         set.decreasingColor = UIColor(red: 0.0, green: 252.0/255.0, blue: 252.0/255.0, alpha: 1)
@@ -358,28 +352,30 @@ class KlineViewController: BaseChartViewController {
     }
 
     //产生均线数据
-    private func generateLineData(ma5Datas: [ChartDataEntry], ma10Datas: [ChartDataEntry], ma20Datas: [ChartDataEntry]) -> LineChartData {
-        let lineData: LineChartData!
-        if ma5Datas.isEmpty {
-            lineData = LineChartData()
-        } else if ma10Datas.isEmpty {
-            lineData = LineChartData(dataSet: generateLineDataSet(entries: ma5Datas, color: colorMa5, label: "MA5"))
-        } else if ma20Datas.isEmpty {
-            let ma5 = generateLineDataSet(entries: ma5Datas, color: colorMa5, label: "MA5")
-            let ma10 = generateLineDataSet(entries: ma10Datas, color: colorMa10, label: "MA10")
-            lineData = LineChartData(dataSets: [ma5, ma10])
-        } else {
-            let ma5 = generateLineDataSet(entries: ma5Datas, color: colorMa5, label: "MA5")
-            let ma10 = generateLineDataSet(entries: ma10Datas, color: colorMa10, label: "MA10")
-            let ma20 = generateLineDataSet(entries: ma20Datas, color: colorMa20, label: "MA20")
-            lineData = LineChartData(dataSets: [ma5, ma10, ma20])
+    private func generateLineData() -> LineChartData {
+        var sets = [LineChartDataSet]()
+
+        for index in Array(0..<mas.count) {
+            let para = mas[index]
+            let color = CommonConstants.KLINE_MDs[index]
+            sets.append(generateLineDataSet(para: para, color: color, label: "MA\(para)"))
         }
+
+        let lineData: LineChartData!
+        lineData = LineChartData(dataSets: sets)
         return lineData
     }
 
     //生成均线数据集
-    private func generateLineDataSet(entries: [ChartDataEntry], color: UIColor, label: String) -> LineChartDataSet {
-        let set = LineChartDataSet(values: entries, label: label)
+    private func generateLineDataSet(para: Int, color: UIColor, label: String) -> LineChartDataSet {
+        var entities = [ChartDataEntry]()
+        for index in left_id...last_id {
+            if index >= (left_id + para - 1) {
+                let entry = generateLineDataEntry(index: index, lineIndex: para - 1, datas: kline.datas)
+                entities.append(entry)
+            }
+        }
+        let set = LineChartDataSet(values: entities, label: label)
         set.setColor(color)
         set.lineWidth = 0.7
         set.drawCirclesEnabled = false

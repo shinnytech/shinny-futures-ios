@@ -66,7 +66,7 @@ class PositionTableViewController: UITableViewController {
         if let search = dataManager.sSearchEntities[instrumentId] {
             cell.name.text = search.instrument_name
         } else {
-            cell.name.text = instrumentId
+            cell.name.text = "\(position.instrument_id ?? "")"
         }
 
         let decimal = dataManager.getDecimalByPtick(instrumentId: instrumentId) + 1

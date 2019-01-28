@@ -73,6 +73,18 @@ class Quote: NSObject, NSCopying {
             let last_l = "\(self.last_price ?? 0.0)"
             let last_r = "\(other.last_price ?? 0.0)"
 
+            let ask_price1_l = "\(self.ask_price1 ?? 0.0)"
+            let ask_price1_r = "\(other.ask_price1 ?? 0.0)"
+
+            let ask_volume1_l = "\(self.ask_volume1 ?? 0)"
+            let ask_volume1_r = "\(other.ask_volume1 ?? 0)"
+
+            let bid_price1_l = "\(self.bid_price1 ?? 0.0)"
+            let bid_price1_r = "\(other.bid_price1 ?? 0.0)"
+
+            let bid_volume1_l = "\(self.bid_volume1 ?? 0)"
+            let bid_volume1_r = "\(other.bid_volume1 ?? 0)"
+
             let pre_settlement_l = "\(self.pre_settlement ?? 0.0)"
             let pre_settlement_r = "\(other.pre_settlement ?? 0.0)"
 
@@ -81,7 +93,8 @@ class Quote: NSObject, NSCopying {
 
             let volume_l = "\(self.volume ?? 0)"
             let volume_r = "\(other.volume ?? 0)"
-            return (last_l == last_r) && (pre_settlement_l == pre_settlement_r) && (open_insterest_l == open_insterest_r) && (volume_l == volume_r)
+
+            return (last_l == last_r) && (pre_settlement_l == pre_settlement_r) && (open_insterest_l == open_insterest_r) && (volume_l == volume_r) && (ask_price1_l == ask_price1_r) && (ask_volume1_l == ask_volume1_r) && (bid_price1_l == bid_price1_r) && (bid_volume1_l == bid_volume1_r)
         }else{
             return false
         }

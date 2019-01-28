@@ -15,6 +15,7 @@ class SearchTableViewCell: UITableViewCell {
     @IBOutlet weak var instrumentId: UILabel!
     @IBOutlet weak var exchangeName: UILabel!
     @IBOutlet weak var save: UIButton!
+    var instrument_id: String?
     let manager = DataManager.getInstance()
     
     override func awakeFromNib() {
@@ -30,13 +31,13 @@ class SearchTableViewCell: UITableViewCell {
 
 
     @IBAction func save(_ sender: UIButton) {
-        if let ins = instrumentId.text {
+        if let ins = instrument_id {
             manager.saveOrRemoveIns(ins: ins)
             let optional = FileUtils.getOptional()
             if !optional.contains(ins) {
-                save.setImage(UIImage(named: "heart_outline", in: Bundle(identifier: "com.shinnytech.futures"), compatibleWith: nil), for: .normal)
+                save.setImage(UIImage(named: "favorite_border", in: Bundle(identifier: "com.shinnytech.futures"), compatibleWith: nil), for: .normal)
             }else{
-                save.setImage(UIImage(named: "heart", in: Bundle(identifier: "com.shinnytech.futures"), compatibleWith: nil), for: .normal)
+                save.setImage(UIImage(named: "favorite", in: Bundle(identifier: "com.shinnytech.futures"), compatibleWith: nil), for: .normal)
             }
 
         }

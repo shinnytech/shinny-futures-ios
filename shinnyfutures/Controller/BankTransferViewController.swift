@@ -27,6 +27,9 @@ class BankTransferViewController:  UIViewController, UITableViewDataSource, UITa
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tap)
+        
         dateFormat.dateFormat = "HH:mm:ss"
 
         self.tableview.tableFooterView = UIView()
@@ -119,9 +122,9 @@ class BankTransferViewController:  UIViewController, UITableViewDataSource, UITa
             if amount > 0 {cell.amount.textColor = CommonConstants.RED_TEXT}
             else {cell.amount.textColor = CommonConstants.GREEN_TEXT}
             cell.amount.text = String(format: "%.2f", amount)
-            let currency = "\(transfer.currency ?? "")"
+            let currency = "\(transfer.currency ?? "-")"
             cell.currency.text = currency
-            let result = "\(transfer.error_msg ?? "")"
+            let result = "\(transfer.error_msg ?? "-")"
             cell.result.text = result
         }
 
@@ -258,6 +261,12 @@ class BankTransferViewController:  UIViewController, UITableViewDataSource, UITa
                             self.view.layoutIfNeeded()
             }, completion: nil)
         }
+    }
+
+    //Calls this function when the tap is recognized.
+    @objc func dismissKeyboard() {
+        //Causes the view (or one of its embedded text fields) to resign the first responder status.
+        view.endEditing(true)
     }
 
     //MARK: Actions

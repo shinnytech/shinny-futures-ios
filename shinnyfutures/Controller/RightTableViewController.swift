@@ -25,43 +25,48 @@ class RightTableViewController: UITableViewController {
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 1
+        return datas.count
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return datas.count
+        return datas[section].count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "RightNavigationTableViewCell", for: indexPath) as! RightNavigationTableViewCell
 
-        let data = datas[indexPath.row]
-
+        let data = datas[indexPath.section][indexPath.row]
         cell.icon.setImage(UIImage(named: data[0]), for: .normal)
         cell.title.text = data[1]
         cell.id = data[0]
-
         return cell
     }
 
 
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 44.0
+        if section == 0 {
+            return 44.0
+        }
+        return 3
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 44.0))
-        let stackView = UIStackView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 44.0 ))
-        stackView.distribution = .fillEqually
-        let name = UILabel()
-        name.textColor = UIColor.white
-        name.text = "菜单栏"
-        name.textAlignment = .center
-        name.backgroundColor = CommonConstants.QUOTE_TABLE_HEADER_1
-        stackView.addArrangedSubview(name)
-        headerView.addSubview(stackView)
-        return headerView
+        if section == 0 {
+            let headerView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 44.0))
+            let name = UILabel(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 44.0))
+            name.textColor = UIColor.white
+            name.text = "菜单栏"
+            name.font = UIFont.systemFont(ofSize: 20)
+            name.textAlignment = .center
+            headerView.backgroundColor = CommonConstants.QUOTE_PAGE_HEADER
+            headerView.addSubview(name)
+            return headerView
+        }else{
+            let headerView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 5))
+            headerView.backgroundColor = CommonConstants.BOLD_DEVIDER
+            return headerView
+        }
     }
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -85,6 +90,9 @@ class RightTableViewController: UITableViewController {
                 mainViewController.toLogin()
             }
             break
+        case "setting":
+            mainViewController.toSetting()
+            break
         case "account":
             mainViewController.toAccount()
             break
@@ -99,6 +107,9 @@ class RightTableViewController: UITableViewController {
             break
         case "bank":
             mainViewController.toBankTransfer()
+            break
+        case "open_account":
+            mainViewController.toOpenAccount()
             break
         case "feedback":
             mainViewController.toFeedback()

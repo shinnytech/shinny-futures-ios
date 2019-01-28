@@ -56,31 +56,36 @@ class HandicapViewController: UIViewController {
     @objc private func refreshDatas() {
         let instrumentId = dataManager.sInstrumentId
         let decimal = dataManager.getDecimalByPtick(instrumentId: instrumentId)
-        guard let quote = dataManager.sRtnMD.quotes[instrumentId] else {return}
-        let ask_price1 = "\(quote.ask_price1 ?? 0)"
-        let ask_volume1 = "\(quote.ask_volume1 ?? 0)"
-        let bid_price1 = "\(quote.bid_price1 ?? 0)"
-        let bid_volume1 = "\(quote.bid_volume1 ?? 0)"
-        let last_price = "\(quote.last_price ?? 0)"
-        let open = "\(quote.open ?? 0)"
-        let volume = "\(quote.volume ?? 0)"
-        let highest = "\(quote.highest ?? 0)"
-        let open_interest = "\(quote.open_interest ?? 0)"
-        let pre_open_interest = "\(quote.pre_open_interest ?? 0)"
-        let lowest = "\(quote.lowest ?? 0)"
-        let average = "\(quote.average ?? 0)"
-        let pre_close = "\(quote.pre_close ?? 0)"
-        let upper_limit = "\(quote.upper_limit ?? 0)"
-        let pre_settlement = "\(quote.pre_settlement ?? 0)"
-        let lower_limit = "\(quote.lower_limit ?? 0)"
-        let settlement = "\(quote.settlement ?? 0)"
-        var change = Float()
-        if let last = Float(last_price), let pre_settlement = Float(pre_settlement){
-            change = last - pre_settlement
+        guard var quote = dataManager.sRtnMD.quotes[instrumentId] else {return}
+        if instrumentId.contains("&") && instrumentId.contains(" ") {
+            quote = dataManager.calculateCombineQuoteFull(quote: quote.copy() as! Quote)
         }
-        var sub_open_interest = Int()
+        let ask_price1 = "\(quote.ask_price1 ?? "-")"
+        let ask_volume1 = "\(quote.ask_volume1 ?? "-")"
+        let bid_price1 = "\(quote.bid_price1 ?? "-")"
+        let bid_volume1 = "\(quote.bid_volume1 ?? "-")"
+        let last_price = "\(quote.last_price ?? "-")"
+        let open = "\(quote.open ?? "-")"
+        let volume = "\(quote.volume ?? "-")"
+        let highest = "\(quote.highest ?? "-")"
+        let open_interest = "\(quote.open_interest ?? "-")"
+        let pre_open_interest = "\(quote.pre_open_interest ?? "-")"
+        let lowest = "\(quote.lowest ?? "-")"
+        let average = "\(quote.average ?? "-")"
+        let pre_close = "\(quote.pre_close ?? "-")"
+        let upper_limit = "\(quote.upper_limit ?? "-")"
+        let pre_settlement = "\(quote.pre_settlement ?? "-")"
+        let lower_limit = "\(quote.lower_limit ?? "-")"
+        let settlement = "\(quote.settlement ?? "-")"
+        
+        if let last = Float(last_price), let pre_settlement = Float(pre_settlement){
+            let change = last - pre_settlement
+            self.change.text = String(format: "%.\(decimal)f", change)
+        }
+        
         if let open_interest = Int(open_interest), let pre_open_interest = Int(pre_open_interest){
-            sub_open_interest = open_interest - pre_open_interest
+            let sub_open_interest = open_interest - pre_open_interest
+            self.sub_open_interest.text = "\(sub_open_interest)"
         }
         
         self.ask_price1.text = dataManager.saveDecimalByPtick(decimal: decimal, data: ask_price1)
@@ -88,21 +93,18 @@ class HandicapViewController: UIViewController {
         self.bid_price1.text = dataManager.saveDecimalByPtick(decimal: decimal, data: bid_price1)
         self.bid_volume1.text = bid_volume1
         self.latest.text = dataManager.saveDecimalByPtick(decimal: decimal, data: last_price)
-        self.change.text = String(format: "%.\(decimal)f", change)
+
         self.open.text = dataManager.saveDecimalByPtick(decimal: decimal, data: open)
         self.volume.text = volume
         self.highest.text = dataManager.saveDecimalByPtick(decimal: decimal, data: highest)
         self.lowest.text = dataManager.saveDecimalByPtick(decimal: decimal, data: lowest)
         self.open_interest.text = open_interest
-        self.sub_open_interest.text = "\(sub_open_interest)"
+
         self.average.text = dataManager.saveDecimalByPtick(decimal: decimal, data: average)
         self.settlement.text = dataManager.saveDecimalByPtick(decimal: decimal, data: settlement)
         self.pre_close.text = dataManager.saveDecimalByPtick(decimal: decimal, data: pre_close)
         self.upper_limit.text = dataManager.saveDecimalByPtick(decimal: decimal, data: upper_limit)
         self.pre_settlement.text = dataManager.saveDecimalByPtick(decimal: decimal, data: pre_settlement)
         self.lower_limit.text = dataManager.saveDecimalByPtick(decimal: decimal, data: lower_limit)
-        
-        
     }
-    
 }

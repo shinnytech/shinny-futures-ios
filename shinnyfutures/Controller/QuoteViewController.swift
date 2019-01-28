@@ -358,23 +358,17 @@ class QuoteViewController: UIViewController, UIPopoverPresentationControllerDele
             viewWithTag.removeFromSuperview()
         }
 
+        let width = UIScreen.main.bounds.width / 4
+
         let lineView0 = UIView(frame: CGRect(x: 0, y: 0, width: 2, height: view.frame.size.height))
         lineView0.backgroundColor = CommonConstants.NAV_TEXT_HIGHLIGHTED
         lineView0.tag = 100
 
-        let lineView1 = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 2))
+        let lineView1 = UIView(frame: CGRect(x: 0, y: 0, width: width, height: 2))
         lineView1.backgroundColor = CommonConstants.NAV_TEXT_HIGHLIGHTED
         lineView1.tag = 101
 
-        //打补丁，真机时宽度计算错误
-        var x = view.frame.size.width
-        let width = UIScreen.main.bounds.width / 4
-        if x > width {
-            x = width - 1.5
-        }else {
-            x -= 2
-        }
-        let lineView2 = UIView(frame: CGRect(x: x, y: 0, width: 2, height: view.frame.size.height))
+        let lineView2 = UIView(frame: CGRect(x: width - 2, y: 0, width: 2, height: view.frame.size.height))
         lineView2.backgroundColor = CommonConstants.NAV_TEXT_HIGHLIGHTED
         lineView2.tag = 102
 
@@ -396,8 +390,7 @@ class QuoteViewController: UIViewController, UIPopoverPresentationControllerDele
         if let viewWithTag = view.viewWithTag(103) {
             viewWithTag.removeFromSuperview()
         }
-
-        let lineView3 = UIView(frame: CGRect(x: 0, y: view.frame.size.height - 2, width: view.frame.size.width, height: 2))
+        let lineView3 = UIView(frame: CGRect(x: 0, y: view.frame.size.height - 2, width: UIScreen.main.bounds.width / 4, height: 2))
         lineView3.backgroundColor = CommonConstants.NAV_TEXT_HIGHLIGHTED
         lineView3.tag = 103
 
@@ -462,6 +455,7 @@ class QuoteViewController: UIViewController, UIPopoverPresentationControllerDele
 
     // MARK: objc methods
     @objc func optionalInsListPopup() {
+        if FileUtils.getOptional().isEmpty{return}
         if let optionalPopupView = UIStoryboard(name: "Main", bundle: Bundle(identifier: "com.shinnytech.futures")).instantiateViewController(withIdentifier: CommonConstants.PopupCollectionViewController) as? PopupCollectionViewController {
             optionalPopupView.modalPresentationStyle = .popover
             //箭头所指向的区域
@@ -514,7 +508,14 @@ class QuoteViewController: UIViewController, UIPopoverPresentationControllerDele
 
     //订阅合约行情
     @objc func sendSuscribeQuote(){
-        let instrumentId = dataManager.sInstrumentId
+        var instrumentId = dataManager.sInstrumentId
+        if instrumentId.contains("&") && instrumentId.contains(" ") {
+            if let search = dataManager.sSearchEntities[instrumentId]{
+                if let leg1_symbol = search.leg1_symbol, let leg2_symbol = search.leg2_symbol{
+                    instrumentId = instrumentId + "," + leg1_symbol + "," + leg2_symbol
+                }
+            }
+        }
         MDWebSocketUtils.getInstance().sendSubscribeQuote(insList: instrumentId)
         //设置按钮背景
         let optional = FileUtils.getOptional()
@@ -523,7 +524,6 @@ class QuoteViewController: UIViewController, UIPopoverPresentationControllerDele
         }else{
             save.image = UIImage(named: "heart_outline", in: Bundle(identifier: "com.shinnytech.futures"), compatibleWith: nil)
         }
-
     }
 
     //切换K线图标

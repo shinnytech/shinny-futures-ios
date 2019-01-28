@@ -9,6 +9,8 @@
 import UIKit
 
 class Search {
+    var ins_id: String?
+    var product_id: String?
     var instrument_id: String?
     var instrument_name: String?
     var exchange_name: String?
@@ -21,9 +23,12 @@ class Search {
     var margin: Int?
     var underlying_symbol: String?
     var pre_volume: Int?
+    var leg1_symbol: String?
+    var leg2_symbol: String?
 
-
-    init(instrument_id: String?, instrument_name: String?, exchange_name: String?, exchange_id: String?, py: String?, p_tick: String?, p_decs: Int?, vm: String?, sort_key: Int?, margin: Int?, underlying_symbol: String?, pre_volume: Int?) {
+    init(ins_id: String?, product_id: String?, instrument_id: String?, instrument_name: String?, exchange_name: String?, exchange_id: String?, py: String?, p_tick: String?, p_decs: Int?, vm: String?, sort_key: Int?, margin: Int?, underlying_symbol: String?, pre_volume: Int?, leg1_symbol: String?, leg2_symbol: String?) {
+        self.ins_id = ins_id
+        self.product_id = product_id
         self.instrument_id = instrument_id
         self.instrument_name = instrument_name
         self.exchange_name = exchange_name
@@ -36,9 +41,13 @@ class Search {
         self.margin = margin
         self.underlying_symbol = underlying_symbol
         self.pre_volume = pre_volume
+        self.leg1_symbol = leg1_symbol
+        self.leg2_symbol = leg2_symbol
     }
 
     required init?() {
+        self.ins_id = ""
+        self.product_id = ""
         self.instrument_id = ""
         self.instrument_name = ""
         self.exchange_name = ""
@@ -51,6 +60,8 @@ class Search {
         self.margin = 0
         self.underlying_symbol = ""
         self.pre_volume = 0
+        self.leg1_symbol = ""
+        self.leg2_symbol = ""
     }
 
 }

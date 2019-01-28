@@ -67,18 +67,19 @@ class SearchTableViewController: UITableViewController, UISearchResultsUpdating 
         }
 
         // Fetches the appropriate quote for the data source layout.
-        let quote = (searchController.isActive) ? searchResults[indexPath.row] : searchHistory[indexPath.row]
+        let search = (searchController.isActive) ? searchResults[indexPath.row] : searchHistory[indexPath.row]
 
-        cell.instrumentName.text = quote.instrument_name
-        cell.instrumentId.text = "(" + "\(quote.instrument_id ?? "")" + ")"
-        cell.exchangeName.text = quote.exchange_name
+        cell.instrumentName.text = search.instrument_name
+        cell.instrumentId.text = "(" + "\(search.ins_id ?? "")" + ")"
+        cell.exchangeName.text = search.exchange_name
+        cell.instrument_id = search.instrument_id
 
         let optional = FileUtils.getOptional()
-        if let ins = quote.instrument_id {
+        if let ins = search.instrument_id {
             if !optional.contains(ins) {
-                cell.save.setImage(UIImage(named: "heart_outline", in: Bundle(identifier: "com.shinnytech.futures"), compatibleWith: nil), for: .normal)
+                cell.save.setImage(UIImage(named: "favorite_border", in: Bundle(identifier: "com.shinnytech.futures"), compatibleWith: nil), for: .normal)
             }else{
-                cell.save.setImage(UIImage(named: "heart", in: Bundle(identifier: "com.shinnytech.futures"), compatibleWith: nil), for: .normal)
+                cell.save.setImage(UIImage(named: "favorite", in: Bundle(identifier: "com.shinnytech.futures"), compatibleWith: nil), for: .normal)
             }
         }
 
@@ -118,7 +119,7 @@ class SearchTableViewController: UITableViewController, UISearchResultsUpdating 
             owningNavigationController.popViewController(animated: true)
         }
     }
-
+    
     // MARK: Private Methods
     private func loadData() {
         searchHistory = dataManager.sSearchHistoryEntities.sorted(by: {
@@ -135,27 +136,72 @@ class SearchTableViewController: UITableViewController, UISearchResultsUpdating 
     }
 
     func filterContent(for searchText: String) {
-        searchResults = dataManager.sSearchEntities.filter({ (_, search) -> Bool in
-            let isMatch = search.instrument_id!.localizedCaseInsensitiveContains(searchText) || search.instrument_name!.localizedCaseInsensitiveContains(searchText) ||
-                search.py!.localizedCaseInsensitiveContains(searchText)
-            return isMatch
-        }).sorted(by: {
-            if let pre_volume0 = (dataManager.sSearchEntities[$0.key]?.pre_volume), let pre_volume1 = (dataManager.sSearchEntities[$1.key]?.pre_volume){
-                if pre_volume0 != pre_volume1{
-                    return pre_volume0 > pre_volume1
-                }else{
-                    return $0.key > $1.key
-                }
+        searchResults.removeAll()
+        var results0 = [String: Search]()
+        var results1 = [String: Search]()
+        var results2 = [String: Search]()
+        var results3 = [String: Search]()
+        var results4 = [String: Search]()
+        for (key, value) in dataManager.sSearchEntities{
+            if value.ins_id!.localizedCaseInsensitiveContains(searchText){
+                results0[key] = value
+                continue
             }
-            return $0.key > $1.key
+            if value.py!.localizedCaseInsensitiveContains(searchText){
+                results1[key] = value
+                continue
+            }
+            if value.instrument_name!.localizedCaseInsensitiveContains(searchText){
+                results2[key] = value
+                continue
+            }
+            if value.exchange_id!.localizedCaseInsensitiveContains(searchText){
+                results3[key] = value
+                continue
+            }
+            if value.exchange_name!.localizedCaseInsensitiveContains(searchText){
+                results4[key] = value
+                continue
+            }
 
+        }
+        searchResults.append(contentsOf: sort(datas: results0))
+        searchResults.append(contentsOf: sort(datas: results1))
+        searchResults.append(contentsOf: sort(datas: results2))
+        searchResults.append(contentsOf: sort(datas: results3))
+        searchResults.append(contentsOf: sort(datas: results4))
+        tableView.reloadData()
+    }
+
+    func sort(datas: [String: Search]) -> [Search] {
+        return datas.sorted(by: {
+            let search0 = dataManager.sSearchEntities[$0.key]
+            let search1 = dataManager.sSearchEntities[$1.key]
+            let product_id0 = search0?.product_id ?? ""
+            let product_id1 = search1?.product_id ?? ""
+            if product_id0.count != product_id1.count{
+                if product_id0.isEmpty{return false}
+                if product_id1.isEmpty{return true}
+                return product_id0.count < product_id1.count
+            }else {
+                if product_id0 == product_id1{
+                    let pre_volume0 = search0?.pre_volume ?? 0
+                    let pre_volume1 = search1?.pre_volume ?? 0
+                    if pre_volume0 == pre_volume1{
+                        let ins_id0 = search0?.ins_id ?? ""
+                        let ins_id1 = search1?.ins_id ?? ""
+                        return ins_id0 > ins_id1
+                    }
+                    return pre_volume0 > pre_volume1
+                }
+                return product_id0 < product_id1
+            }
         }).map {$0.value}
     }
 
     func updateSearchResults(for searchController: UISearchController) {
         if let searchText = searchController.searchBar.text {
             filterContent(for: searchText)
-            tableView.reloadData()
         }
     }
 }

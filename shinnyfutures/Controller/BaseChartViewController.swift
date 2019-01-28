@@ -161,7 +161,7 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
         if let limit = Double(limit) {
             let chartLimitLine = ChartLimitLine(limit: limit, label: label)
             chartLimitLine.lineWidth = 0.7
-            chartLimitLine.lineDashLengths = [10.0, 10.0]
+            chartLimitLine.lineDashLengths = [5.0, 5.0]
             chartLimitLine.lineDashPhase = 0.0
             chartLimitLine.lineColor = color
             chartLimitLine.labelPosition = .leftBottom

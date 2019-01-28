@@ -26,9 +26,10 @@ open class CurrentDayMarkerView: MarkerView {
     let dataManager = DataManager.getInstance()
     let klineType = CommonConstants.CURRENT_DAY
 
-    func resizeXib(heiht: CGFloat){
+    func resizeXib(heiht: CGFloat, width: CGFloat){
         var Rect: CGRect = self.frame
-        Rect.size.height = heiht
+        Rect.size.height = heiht * 0.9
+        Rect.size.width = width / 6
         self.frame = Rect
         self.layoutIfNeeded()
     }
@@ -55,7 +56,7 @@ open class CurrentDayMarkerView: MarkerView {
         let closeOiPre = dataPre.close_oi as? Int ?? 0
         let dateTime = Date(timeIntervalSince1970: TimeInterval(datetime))
         let dateformatter = DateFormatter()
-        dateformatter.dateFormat = "yyyy-MM-dd"
+        dateformatter.dateFormat = "yyyyMMdd"
         let yValue = dateformatter.string(from: dateTime)
         dateformatter.dateFormat = "HH:mm"
         let xValue = dateformatter.string(from: dateTime)
@@ -77,17 +78,17 @@ open class CurrentDayMarkerView: MarkerView {
         let volumeDelta = volume - volumePre
         self.volumeDalta.text = "\(volumeDelta)"
         if volumeDelta < 0 {
-            self.volumeDalta.textColor = CommonConstants.GREEN_TEXT
+            self.volumeDalta.textColor = CommonConstants.MARK_GREEN
         }else{
-            self.volumeDalta.textColor = CommonConstants.RED_TEXT
+            self.volumeDalta.textColor = CommonConstants.MARK_RED
         }
 
         let closeOiDelta = closeOi - closeOiPre
         self.closeOiDelta.text = "\(closeOiDelta)"
         if closeOiDelta < 0 {
-            self.closeOiDelta.textColor = CommonConstants.GREEN_TEXT
+            self.closeOiDelta.textColor = CommonConstants.MARK_GREEN
         }else{
-            self.closeOiDelta.textColor = CommonConstants.RED_TEXT
+            self.closeOiDelta.textColor = CommonConstants.MARK_RED
         }
         super.refreshContent(entry: entry, highlight: highlight)
     }
