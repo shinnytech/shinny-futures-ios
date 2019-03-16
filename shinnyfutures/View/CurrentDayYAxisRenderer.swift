@@ -22,7 +22,8 @@ open class CurrentDayYAxisrenderer: YAxisRenderer {
         let base = yAxis.baseValue
         let labelCount = yAxis.labelCount
         if base == 0.0{
-            super.computeAxisValues(min: min, max: max)
+            let interval = (max - min) / Double(labelCount)
+            yAxis.entries = [max - interval]
             return
         }
         let interval = (base - min) / Double(labelCount)
@@ -107,9 +108,9 @@ open class CurrentDayYAxisrenderer: YAxisRenderer {
             
             var pos = positions[i].y - labelHeight / 2
 
-            if (pos - labelHeight / 2) <= viewPortHandler.contentTop {
+            if (pos - labelHeight) < viewPortHandler.contentTop {
                 pos = pos + labelHeight / 2
-            }else if (pos + labelHeight / 2) >= viewPortHandler.contentBottom{
+            }else if (pos + labelHeight) > viewPortHandler.contentBottom{
                 pos = pos - labelHeight / 2
             }
 
@@ -168,6 +169,13 @@ open class CurrentDayYAxisrenderer: YAxisRenderer {
             // draw the grid
             for i in 0 ..< positions.count
             {
+                //分时图成交量情况
+                if yAxis.baseValue == 0.0{
+                    context.setLineDash(phase: yAxis.gridLineDashPhase, lengths: yAxis.gridLineDashLengths)
+                    drawGridLine(context: context, position: positions[i])
+                    continue
+                }
+
                 //顶部底部不画线
                 if i == 0 || i == (positions.count - 1) {
                     continue

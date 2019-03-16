@@ -13,7 +13,9 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
 
     // MARK: Properties
     //组合图
-    weak var chartView: CombinedChartView!
+    weak var topChartViewBase: CombinedChartView!
+    weak var middleChartViewBase: CombinedChartView!
+    weak var bottomChartViewBase: CombinedChartView!
     //图表背景色
     var colorChartBackground: UIColor?
     //文字颜色
@@ -24,6 +26,10 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
     var colorBuy: UIColor?
     //卖颜色
     var colorSell: UIColor?
+    //跌颜色
+    var decreasingColor: NSUIColor?
+    //涨颜色
+    var increasingColor: NSUIColor?
     //是否显示持仓线
     var isShowPositionLine = true
     //是否显示挂单线
@@ -45,8 +51,9 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
     var xVals = [Int: Int]()
     var klineType = ""
     var fragmentType = ""
-    var doubleTap: UITapGestureRecognizer!
-    var singleTap: UITapGestureRecognizer!
+    var topMoveGesture: UIPanGestureRecognizer!
+    var middleMoveGesture: UIPanGestureRecognizer!
+    var isMoveHighlight = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -62,6 +69,8 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(refreshTradeLine), name: Notification.Name(CommonConstants.RtnTDNotification), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(refreshKline), name: Notification.Name(CommonConstants.RtnMDNotification), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(sendChart), name: Notification.Name(CommonConstants.SwitchQuoteNotification), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(controlMiddleBottomChartView), name: Notification.Name(CommonConstants.ControlMiddleBottomChartViewNotification), object: nil)
+
 
         clearChartView()
         sendChart()
@@ -71,6 +80,7 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
         NotificationCenter.default.removeObserver(self, name: Notification.Name(CommonConstants.RtnTDNotification), object: nil)
         NotificationCenter.default.removeObserver(self, name: Notification.Name(CommonConstants.RtnMDNotification), object: nil)
         NotificationCenter.default.removeObserver(self, name: Notification.Name(CommonConstants.SwitchQuoteNotification), object: nil)
+        NotificationCenter.default.removeObserver(self, name: Notification.Name(CommonConstants.ControlMiddleBottomChartViewNotification), object: nil)
     }
 
     deinit {
@@ -88,29 +98,24 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
         if CommonConstants.CURRENT_DAY_FRAGMENT.elementsEqual(fragmentType){
             MDWebSocketUtils.getInstance().sendSetChart(insList: instrumentId)
         }else{
-            switch fragmentType {
-            case CommonConstants.DAY_FRAGMENT:
-                if let klineType = UserDefaults.standard.string(forKey: CommonConstants.CONFIG_KLINE_DAY_TYPE){
-                    self.klineType = klineType
-                }
-            case CommonConstants.HOUR_FRAGMENT:
-                if let klineType = UserDefaults.standard.string(forKey: CommonConstants.CONFIG_KLINE_HOUR_TYPE){
-                    self.klineType = klineType
-                }
-            case CommonConstants.MINUTE_FRAGMENT:
-                if let klineType = UserDefaults.standard.string(forKey: CommonConstants.CONFIG_KLINE_MINUTE_TYPE){
-                    self.klineType = klineType
-                }
-            case CommonConstants.SECOND_FRAGMENT:
-                if let klineType = UserDefaults.standard.string(forKey: CommonConstants.CONFIG_KLINE_SECOND_TYPE){
-                    self.klineType = klineType
-                }
-            default:
-                break
-            }
-            print(self.klineType)
             MDWebSocketUtils.getInstance().sendSetChartKline(insList: instrumentId, klineType: self.klineType, viewWidth: CommonConstants.VIEW_WIDTH)
         }
+    }
+
+    @objc func controlMiddleBottomChartView() {
+
+        if middleChartViewBase.isHidden{
+            middleChartViewBase.isHidden = false
+        }else{
+            middleChartViewBase.isHidden = true
+        }
+
+//        if bottomChartViewBase.isHidden{
+//            bottomChartViewBase.isHidden = false
+//        }else{
+//            bottomChartViewBase.isHidden = true
+//        }
+
     }
 
     // MARK: functions
@@ -120,22 +125,69 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
         colorGrid = CommonConstants.KLINE_GRID
         colorSell = CommonConstants.KLINE_PO_LINE_SELL
         colorBuy = CommonConstants.KLINE_PO_LINE_BUY
-        chartView.delegate = self
-        chartView.chartDescription?.enabled = false
-        chartView.drawValueAboveBarEnabled = false
-        chartView.autoScaleMinMaxEnabled = true
-        chartView.dragEnabled = true
-        chartView.doubleTapToZoomEnabled = false
-        chartView.highlightPerTapEnabled = false
-        chartView.drawBordersEnabled = true
-        chartView.borderColor = colorGrid!
-        chartView.setViewPortOffsets(left: 0, top: 15, right: 0, bottom: 15)
+        decreasingColor = UIColor(red: 0.0, green: 252.0/255.0, blue: 252.0/255.0, alpha: 1)
+        increasingColor = UIColor(red: 218.0/255.0, green: 0.0, blue: 0.0, alpha: 1)
+        topChartViewBase.delegate = self
+        topChartViewBase.chartDescription?.enabled = false
+        topChartViewBase.drawValueAboveBarEnabled = false
+        topChartViewBase.autoScaleMinMaxEnabled = true
+        topChartViewBase.dragEnabled = true
+        topChartViewBase.doubleTapToZoomEnabled = false
+        topChartViewBase.highlightPerTapEnabled = false
+        topChartViewBase.highlightPerDragEnabled = false
+        topChartViewBase.drawBordersEnabled = true
+        topChartViewBase.borderLineWidth = 0.5
+        topChartViewBase.borderColor = colorGrid!
+        topChartViewBase.setViewPortOffsets(left: 0, top: 15, right: 0, bottom: 0)
+        topChartViewBase.noDataText = "数据申请中"
 
-        singleTap = UITapGestureRecognizer(target: self, action: #selector(Unhighlight))
+        middleChartViewBase.delegate = self
+        middleChartViewBase.chartDescription?.enabled = false
+        middleChartViewBase.drawValueAboveBarEnabled = false
+        middleChartViewBase.autoScaleMinMaxEnabled = true
+        middleChartViewBase.dragEnabled = true
+        middleChartViewBase.doubleTapToZoomEnabled = false
+        middleChartViewBase.highlightPerTapEnabled = false
+        middleChartViewBase.highlightPerDragEnabled = false
+        middleChartViewBase.drawBordersEnabled = false
+        middleChartViewBase.borderColor = colorGrid!
+        middleChartViewBase.setViewPortOffsets(left: 0, top: 0, right: 0, bottom: 15)
+        middleChartViewBase.noDataText = "数据申请中"
         
-        doubleTap = UITapGestureRecognizer(target: self, action: #selector(highlight))
-        doubleTap.numberOfTapsRequired = 2
-        chartView.addGestureRecognizer(doubleTap)
+        bottomChartViewBase.delegate = self
+        bottomChartViewBase.chartDescription?.enabled = false
+        bottomChartViewBase.drawValueAboveBarEnabled = false
+        bottomChartViewBase.autoScaleMinMaxEnabled = true
+        bottomChartViewBase.dragEnabled = true
+        bottomChartViewBase.doubleTapToZoomEnabled = false
+        bottomChartViewBase.highlightPerTapEnabled = false
+        bottomChartViewBase.highlightPerDragEnabled = false
+        bottomChartViewBase.drawBordersEnabled = false
+        bottomChartViewBase.borderColor = colorGrid!
+        bottomChartViewBase.setViewPortOffsets(left: 0, top: 0, right: 0, bottom: 15)
+        bottomChartViewBase.noDataText = "数据申请中"
+
+        topMoveGesture = UIPanGestureRecognizer(target: self, action: #selector(topMovePan(gesture:)))
+        middleMoveGesture = UIPanGestureRecognizer(target: self, action: #selector(middleMovePan(gesture:)))
+
+        let longPressGestureTop = UILongPressGestureRecognizer(target: self, action: #selector(longPressDetectedTop(gesture:)))
+        topChartViewBase.addGestureRecognizer(longPressGestureTop)
+
+        let longPressGestureMiddle = UILongPressGestureRecognizer(target: self, action: #selector(longPressDetectedMiddle(gesture:)))
+        middleChartViewBase.addGestureRecognizer(longPressGestureMiddle)
+
+        //        let longPressGestureBottom = UILongPressGestureRecognizer(target: self, action: #selector(longPressDetectedBottom(gesture:)))
+        //        longPressGestureBottom.allowableMovement = 50
+        //        bottomChartViewBase.addGestureRecognizer(longPressGestureBottom)
+
+        let tapGestureTop = UITapGestureRecognizer(target: self, action: #selector(tapDetectedTop(gesture:)))
+        topChartViewBase.addGestureRecognizer(tapGestureTop)
+
+        let tapGestureMiddle = UITapGestureRecognizer(target: self, action: #selector(tapDetectedMiddle(gesture:)))
+        middleChartViewBase.addGestureRecognizer(tapGestureMiddle)
+
+        //        let tapGestureBottom = UITapGestureRecognizer(target: self, action: #selector(tapDetectedBottom(gesture:)))
+        //        bottomChartViewBase.addGestureRecognizer(tapGestureBottom)
 
         isShowOrderLine = UserDefaults.standard.bool(forKey: "orderLine")
         isShowPositionLine = UserDefaults.standard.bool(forKey: "positionLine")
@@ -147,6 +199,15 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
             if isShowOrderLine {
                 addOrderLimitLines()
             }
+        }
+
+        //切换k线周期时保持图表显示隐藏状态
+        if dataManager.isShowDownStack {
+            middleChartViewBase.isHidden = true
+//            bottomChartViewBase.isHidden = true
+        }else{
+            middleChartViewBase.isHidden = false
+//            bottomChartViewBase.isHidden = false
         }
 
     }
@@ -169,7 +230,7 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
             chartLimitLine.valueTextColor = colorText!
             positionLimitLines[limitKey] = chartLimitLine
             positionVolumes[limitKey] = volume
-            chartView.leftAxis.addLimitLine(chartLimitLine)
+            topChartViewBase.leftAxis.addLimitLine(chartLimitLine)
         }
     }
 
@@ -229,11 +290,11 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
             guard let volume_long_l = positionVolumes[limitKey] else {return}
             if limitLine.limit != limit_long_p_d || volume_long != volume_long_l {
                 let label_long = "\(position.instrument_id ?? "")@\(limit_long_p)/\(volume_long)手"
-                chartView.leftAxis.removeLimitLine(limitLine)
+                topChartViewBase.leftAxis.removeLimitLine(limitLine)
                 generatePositionLimitLine(limit: limit_long_p, label: label_long, color: colorBuy!, limitKey: limitKey, volume: volume_long)
             }
         } else {
-            chartView.leftAxis.removeLimitLine(limitLine)
+            topChartViewBase.leftAxis.removeLimitLine(limitLine)
             positionLimitLines.removeValue(forKey: limitKey)
             positionVolumes.removeValue(forKey: limitKey)
         }
@@ -259,11 +320,11 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
             guard let volume_short_l = positionVolumes[limitKey] else {return}
             if limitLine.limit != limit_short_p_d || volume_short != volume_short_l{
                 let label_short = "\(position.instrument_id ?? "")@\(limit_short_p)/\(volume_short)手"
-                chartView.leftAxis.removeLimitLine(limitLine)
+                topChartViewBase.leftAxis.removeLimitLine(limitLine)
                 generatePositionLimitLine(limit: limit_short_p, label: label_short, color: colorSell!, limitKey: limitKey, volume: volume_short)
             }
         } else {
-            chartView.leftAxis.removeLimitLine(limitLine)
+            topChartViewBase.leftAxis.removeLimitLine(limitLine)
             positionLimitLines.removeValue(forKey: limitKey)
             positionVolumes.removeValue(forKey: limitKey)
         }
@@ -272,7 +333,7 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
     func removePositionLimitLines() {
         if positionLimitLines.isEmpty {return}
         for value in positionLimitLines.map({$0.value}) {
-            chartView.leftAxis.removeLimitLine(value)
+            topChartViewBase.leftAxis.removeLimitLine(value)
         }
         positionLimitLines.removeAll()
         positionVolumes.removeAll()
@@ -324,12 +385,12 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
         chartLimitLine.labelPosition = .leftBottom
         chartLimitLine.valueFont = UIFont.systemFont(ofSize: 10.0)
         chartLimitLine.valueTextColor = colorText!
-        chartView.leftAxis.addLimitLine(chartLimitLine)
+        topChartViewBase.leftAxis.addLimitLine(chartLimitLine)
     }
 
     private func removeOneOrderLimitLine(key: String) {
         let limitLine = orderLimitLines[key]!
-        chartView.leftAxis.removeLimitLine(limitLine)
+        topChartViewBase.leftAxis.removeLimitLine(limitLine)
         orderLimitLines.removeValue(forKey: key)
         orderVolumes.removeValue(forKey: key)
     }
@@ -396,8 +457,8 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
         } else {
             removePositionLimitLines()
         }
-        chartView.combinedData?.notifyDataChanged()
-        chartView.setNeedsDisplay()
+        topChartViewBase.combinedData?.notifyDataChanged()
+        topChartViewBase.setNeedsDisplay()
     }
 
     //控制挂单线显示与否
@@ -409,8 +470,8 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
         } else {
             removeOrderLimitLines()
         }
-        chartView.combinedData?.notifyDataChanged()
-        chartView.setNeedsDisplay()
+        topChartViewBase.combinedData?.notifyDataChanged()
+        topChartViewBase.setNeedsDisplay()
     }
 
     //控制均线显示与否
@@ -428,7 +489,8 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
         removeLatestLine()
         removeOrderLimitLines()
         removePositionLimitLines()
-        chartView.clear()
+        topChartViewBase.clear()
+        middleChartViewBase.clear()
 
         if dataManager.sIsLogin {
             if isShowPositionLine {
@@ -444,10 +506,8 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
     //相同页下切换K线周期
     @objc func switchKlineType(_ notification: NSNotification){
         if let dict = notification.userInfo as NSDictionary? {
-            if let index = dict["durationIndex"] as? Int, let fragmentType = dict["fragmentType"] as? String{
-                let klineType = CommonConstants.klineDuration[index]
-                if fragmentType.elementsEqual(self.fragmentType) && !self.klineType.elementsEqual(klineType){
-                    self.klineType = klineType
+            if let fragmentType = dict["fragmentType"] as? String{
+                if fragmentType.elementsEqual(self.fragmentType){
                     clearChartView()
                     sendChart()
                 }
@@ -455,18 +515,165 @@ class BaseChartViewController: UIViewController, ChartViewDelegate {
         }
     }
 
-    //隐藏十字光标
-    @objc func Unhighlight(){
-        
-    }
-
-    //显示十字光标
-    @objc func highlight(){
-
-    }
-
     //移除最新价线
     @objc func removeLatestLine(){
 
+    }
+
+    //长按显示十字光标
+    @objc func longPressDetectedTop(gesture: UILongPressGestureRecognizer) {
+        let point = gesture.location(in: self.topChartViewBase)
+        if gesture.state == .began{
+            guard let h_top = self.topChartViewBase.getHighlightByTouchPoint(point) else {return}
+            h_top.setDraw(pt: point)
+            self.topChartViewBase.highlightValue(h_top)
+            highlight()
+            topChartValueSelected(h_top: h_top)
+        }else{
+            topMove(point: point)
+        }
+
+    }
+
+    @objc func longPressDetectedMiddle(gesture: UILongPressGestureRecognizer) {
+        let point = gesture.location(in: self.middleChartViewBase)
+        if gesture.state == .began {
+            guard let h_middle = self.middleChartViewBase.getHighlightByTouchPoint(point)else {return}
+            h_middle.setDraw(pt: point)
+            self.middleChartViewBase.highlightValue(h_middle)
+            highlight()
+            middleChartValueSelected(h_middle: h_middle)
+        }else{
+            middleMove(point: point)
+        }
+
+    }
+
+    //单击隐藏十字光标
+    @objc func tapDetectedTop(gesture: UITapGestureRecognizer) {
+        self.topChartViewBase.highlightValue(nil)
+        self.middleChartViewBase.highlightValue(nil)
+        unHighlight()
+    }
+
+    @objc func tapDetectedMiddle(gesture: UITapGestureRecognizer) {
+        self.topChartViewBase.highlightValue(nil)
+        self.middleChartViewBase.highlightValue(nil)
+        unHighlight()
+    }
+
+    //拖动十字光标
+    @objc func topMovePan(gesture: UIPanGestureRecognizer){
+        if isMoveHighlight {
+            let position = gesture.location(in: self.topChartViewBase)
+            topMove(point: position)
+        }
+    }
+
+    @objc func middleMovePan(gesture: UIPanGestureRecognizer){
+        if isMoveHighlight {
+            let position = gesture.location(in: self.middleChartViewBase)
+            middleMove(point: position)
+        }
+    }
+
+    //高亮状态
+    func highlight() {
+        isMoveHighlight = true
+        topChartViewBase.dragEnabled = false
+        middleChartViewBase.dragEnabled = false
+        topChartViewBase.addGestureRecognizer(topMoveGesture)
+        middleChartViewBase.addGestureRecognizer(middleMoveGesture)
+    }
+
+    //非高亮状态
+    func unHighlight() {
+        topChartViewBase.dragEnabled = true
+        middleChartViewBase.dragEnabled = true
+        isMoveHighlight = false
+        topChartViewBase.removeGestureRecognizer(topMoveGesture)
+        middleChartViewBase.removeGestureRecognizer(middleMoveGesture)
+    }
+
+    //topChart高亮回调
+    func topChartValueSelected(h_top: Highlight) {
+        let transformer = topChartViewBase.getTransformer(forAxis: .left)
+        let yMaxValue = topChartViewBase.chartYMax
+        let yMinValue = topChartViewBase.chartYMin
+        let xValue = h_top.x
+        let yMin = transformer.pixelForValues(x: xValue, y: yMaxValue).y
+        let yMax = transformer.pixelForValues(x: xValue, y: yMinValue).y
+        let yMaxValue_f = CGFloat(yMaxValue)
+        let yMinValue_f = CGFloat(yMinValue)
+        let xValue_f = CGFloat(xValue)
+        let touchY = h_top.drawY
+        let yData = (yMax - touchY) / (yMax - yMin) * (yMaxValue_f - yMinValue_f) + yMinValue_f
+        dataManager.yData = dataManager.saveDecimalByPtick(decimal: dataManager.getDecimalByPtick(instrumentId: dataManager.sInstrumentId), data: "\(yData)")
+        let y = touchY - topChartViewBase.viewPortHandler.chartHeight
+        let h_middle = middleChartViewBase.getHighlightByTouchPoint(CGPoint(x: h_top.xPx, y: 0))
+        h_middle?.setDraw(x: xValue_f, y: y)
+        middleChartViewBase.highlightValue(h_middle)
+    }
+
+    //middleChart高亮回调
+    func middleChartValueSelected(h_middle: Highlight) {
+        let transformer = middleChartViewBase.getTransformer(forAxis: .left)
+        let yMaxValue = middleChartViewBase.chartYMax
+        let xValue = h_middle.x
+        let yMin = transformer.pixelForValues(x: xValue, y: yMaxValue).y
+        let yMax = transformer.pixelForValues(x: xValue, y: 0).y
+        let yMaxValue_f = CGFloat(yMaxValue)
+        let xValue_f = CGFloat(xValue)
+        let touchY = h_middle.drawY
+        let yData = Int((yMax - touchY) / (yMax - yMin) * yMaxValue_f)
+        dataManager.yData = "\(yData)"
+        let y = touchY + topChartViewBase.viewPortHandler.chartHeight
+        let h_top = topChartViewBase.getHighlightByTouchPoint(CGPoint(x: h_middle.xPx, y: topChartViewBase.viewPortHandler.contentHeight / 2))
+        h_top?.setDraw(x: xValue_f, y: y)
+        topChartViewBase.highlightValue(h_top)
+    }
+
+    //topChart滑动
+    func topMove(point: CGPoint) {
+        var position = point
+        var y = position.y
+        let offset = topChartViewBase.viewPortHandler.contentHeight
+        if position.y > topChartViewBase.viewPortHandler.chartHeight{
+            if y > offset { y = y - offset}
+            position.y = y
+            guard let h_middle = middleChartViewBase.getHighlightByTouchPoint(position) else {return}
+            h_middle.setDraw(pt: position)
+            middleChartViewBase.highlightValue(h_middle)
+            middleChartValueSelected(h_middle: h_middle)
+        }else{
+            if y < 0 { y = y + offset}
+            position.y = y
+            guard let h_top = topChartViewBase.getHighlightByTouchPoint(position) else {return}
+            h_top.setDraw(pt: position)
+            topChartViewBase.highlightValue(h_top)
+            topChartValueSelected(h_top: h_top)
+        }
+    }
+
+     //middleChart滑动
+    func middleMove(point: CGPoint) {
+        var position = point
+        var y = position.y
+        let offset = topChartViewBase.viewPortHandler.contentHeight
+        if position.y < 0 {
+            if y < 0 { y = y + offset}
+            position.y = y
+            guard let h_top = topChartViewBase.getHighlightByTouchPoint(position) else {return}
+            h_top.setDraw(pt: position)
+            topChartViewBase.highlightValue(h_top)
+            topChartValueSelected(h_top: h_top)
+        }else {
+            if y > offset { y = y - offset}
+            position.y = y
+            guard let h_middle = middleChartViewBase.getHighlightByTouchPoint(position) else {return}
+            h_middle.setDraw(pt: position)
+            middleChartViewBase.highlightValue(h_middle)
+            middleChartValueSelected(h_middle: h_middle)
+        }
     }
 }

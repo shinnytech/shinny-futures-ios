@@ -13,6 +13,7 @@ open class KlineMarkerView: MarkerView {
 
     // MARK: Properties
     @IBOutlet weak var yValue: UILabel!
+    @IBOutlet weak var date: UILabel!
     @IBOutlet weak var xValue: UILabel!
     @IBOutlet weak var open: UILabel!
     @IBOutlet weak var high: UILabel!
@@ -25,13 +26,22 @@ open class KlineMarkerView: MarkerView {
     @IBOutlet weak var closeOiDelta: UILabel!
     var markerViewState = "right"
     let dataManager = DataManager.getInstance()
+    let dateformatter = DateFormatter()
 
     func resizeXib(heiht: CGFloat, width: CGFloat){
         var Rect: CGRect = self.frame
         Rect.size.height = heiht
-        Rect.size.width = width / 6
+//        Rect.size.width = width / 6
         self.frame = Rect
         self.layoutIfNeeded()
+    }
+
+    func setDateFormat(fragmentType: String) {
+        if CommonConstants.DAY_FRAGMENT.elementsEqual(fragmentType) {
+            date.isHidden = true
+        }else{
+            date.isHidden = false
+        }
     }
 
     open override func awakeFromNib() {
@@ -52,10 +62,17 @@ open class KlineMarkerView: MarkerView {
         let low =  Float("\(data.low ?? 0.0)") ?? 0.0
         let datetime = (data.datetime as? Int ?? 0) / 1000000000
         let dateTime = Date(timeIntervalSince1970: TimeInterval(datetime))
-        let dateformatter = DateFormatter()
-        dateformatter.dateFormat = "yyyyMMdd"
-        let yValue = dateformatter.string(from: dateTime)
-        dateformatter.dateFormat = "HH:mm:ss"
+        if !date.isHidden {
+            dateformatter.dateFormat = "yyyyMMdd"
+            let date = dateformatter.string(from: dateTime)
+            self.date.text = date
+        }
+        if date.isHidden{
+            dateformatter.dateFormat = "yyyyMMdd"
+        }else {
+            dateformatter.dateFormat = "HH:mm:ss"
+        }
+
         let xValue = dateformatter.string(from: dateTime)
         let decimal = dataManager.getDecimalByPtick(instrumentId: dataManager.sInstrumentId)
         let change = String(format: "%.\(decimal)f", close - closePre)
@@ -63,7 +80,7 @@ open class KlineMarkerView: MarkerView {
         let volume = data.volume as? Int ?? 0
         let closeOi = data.close_oi as? Int ?? 0
         let closeOiPre = dataPre.close_oi as? Int ?? 0
-        self.yValue.text = yValue
+        self.yValue.text = dataManager.yData
         self.xValue.text = xValue
         self.high.text = String(format: "%.\(decimal)f", high)
         self.open.text = String(format: "%.\(decimal)f", open)

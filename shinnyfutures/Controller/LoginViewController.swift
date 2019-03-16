@@ -150,7 +150,7 @@ class LoginViewController: UIViewController {
             //手动式segue，代码触发；自动式指通过点击某个按钮出发
             switch self.sDataManager.sToLoginTarget {
             case "Login":
-                self.performSegue(withIdentifier: CommonConstants.LoginToMain, sender: self.login)
+                self.navigationController?.popViewController(animated: true)
             case "Account":
                 self.performSegue(withIdentifier: CommonConstants.LoginToAccount, sender: self.login)
             case "Position":
@@ -158,11 +158,6 @@ class LoginViewController: UIViewController {
                 let instrumentId = self.sDataManager.sQuotes[1].map {$0.key}[0]
                 self.sDataManager.sInstrumentId = instrumentId
                 self.sDataManager.sPreInsList = self.sDataManager.sRtnMD.ins_list
-                //                MDWebSocketUtils.getInstance().sendSubscribeQuote(insList: instrumentId)
-                //                MDWebSocketUtils.getInstance().sendSetChart(insList: instrumentId)
-                //                MDWebSocketUtils.getInstance().sendSetChartDay(insList: instrumentId, viewWidth: CommonConstants.VIEW_WIDTH)
-                //                MDWebSocketUtils.getInstance().sendSetChartHour(insList: instrumentId, viewWidth: CommonConstants.VIEW_WIDTH)
-            //                MDWebSocketUtils.getInstance().sendSetChartMinute(insList: instrumentId, viewWidth: CommonConstants.VIEW_WIDTH)
             case "Trade":
                 self.performSegue(withIdentifier: CommonConstants.LoginToTrade, sender: self.login)
             case "BankTransfer":
@@ -275,6 +270,11 @@ class LoginViewController: UIViewController {
             UserDefaults.standard.set(true, forKey: CommonConstants.CONFIG_LOCK_USER_NAME)
         }
     }
+
+    @IBAction func back(_ sender: UIBarButtonItem) {
+        navigationController?.popViewController(animated: true)
+    }
+    
 }
 
 

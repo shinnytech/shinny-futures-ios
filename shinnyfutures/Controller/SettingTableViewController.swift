@@ -36,12 +36,21 @@ class SettingTableViewController: UITableViewController {
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 2
+        return 3
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 1
+        switch section {
+        case 0:
+            return 2
+        case 1:
+            return 1
+        case 2:
+            return 1
+        default:
+            return 0
+        }
     }
 
     /*
@@ -79,6 +88,15 @@ class SettingTableViewController: UITableViewController {
                 break
             }
             break
+        case 2:
+            switch indexPath.row{
+            case 0:
+                ToastUtils.showPositiveMessage(message: "日志上传成功")
+                break
+            default:
+                break
+            }
+            break
         default:
             break
         }
@@ -98,6 +116,8 @@ class SettingTableViewController: UITableViewController {
             name.text = "图表设置"
         }else if section == 1 {
             name.text = "交易设置"
+        }else if section == 2{
+            name.text = "系统设置"
         }
         name.textAlignment = .left
         headerView.addSubview(name)
@@ -117,6 +137,10 @@ class SettingTableViewController: UITableViewController {
     // MARK: Actions
     @IBAction func paraViewControllerUnwindSegue(segue: UIStoryboardSegue) {
         print("我从指标参数修改页来～")
+    }
+
+    @IBAction func klineDurationViewControllerUnwindSegue(segue: UIStoryboardSegue) {
+        print("我从k线周期设置页来～")
     }
 
 }

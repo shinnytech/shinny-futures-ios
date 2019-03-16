@@ -10,6 +10,7 @@
 		165C045C54F86506FDF1502D /* Pods_shinnyfuturesTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FB6826955F27A22A338B5C7 /* Pods_shinnyfuturesTests.framework */; };
 		85BAAAC148A0034F65548EEC /* Pods_shinnyfuturesUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 114248B9D168CF863B279BC2 /* Pods_shinnyfuturesUITests.framework */; };
 		A201C1B9C6E1BC86E298943E /* Pods_shinnyfutures.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 757606269397994F1BC181D6 /* Pods_shinnyfutures.framework */; settings = {ATTRIBUTES = (Required, ); }; };
+		D406B2AB22141986005AACAA /* DurationCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D406B2AA22141986005AACAA /* DurationCollectionViewCell.swift */; };
 		D415D0C520DCD6F700EA8DA3 /* CurrentDayMarkerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D415D0C320DCD6F700EA8DA3 /* CurrentDayMarkerView.swift */; };
 		D415D0C620DCD6F700EA8DA3 /* KlineMarkerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D415D0C420DCD6F700EA8DA3 /* KlineMarkerView.swift */; };
 		D4195FC120907C550072C021 /* TDWebSocketUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4195FC020907C550072C021 /* TDWebSocketUtils.swift */; };
@@ -24,11 +25,15 @@
 		D420B2EA20E0964E0045B6AF /* MyYAxis.swift in Sources */ = {isa = PBXBuildFile; fileRef = D420B2E620E0964E0045B6AF /* MyYAxis.swift */; };
 		D420B2F020E2207F0045B6AF /* KlineYAxisRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D420B2EB20E2207E0045B6AF /* KlineYAxisRenderer.swift */; };
 		D420B2F220E2207F0045B6AF /* MyCandleStickChartRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D420B2ED20E2207E0045B6AF /* MyCandleStickChartRenderer.swift */; };
-		D420B2F320E2207F0045B6AF /* MyCombinedChartRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D420B2EE20E2207F0045B6AF /* MyCombinedChartRenderer.swift */; };
+		D420B2F320E2207F0045B6AF /* KlineCombinedChartRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D420B2EE20E2207F0045B6AF /* KlineCombinedChartRenderer.swift */; };
 		D420B2F420E2207F0045B6AF /* KlineXAxisRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D420B2EF20E2207F0045B6AF /* KlineXAxisRenderer.swift */; };
 		D42EE5282071D3C600EF8066 /* Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = D42EE5272071D3C600EF8066 /* Search.swift */; };
 		D42EE52A2071D55700EF8066 /* SearchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D42EE5292071D55700EF8066 /* SearchTableViewCell.swift */; };
 		D42EE52C20721ED000EF8066 /* SearchTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D42EE52B20721ED000EF8066 /* SearchTableViewController.swift */; };
+		D4418165221AAD0E00458C1F /* CurrentDayCombinedChartRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4418164221AAD0E00458C1F /* CurrentDayCombinedChartRenderer.swift */; };
+		D4418167221AADB800458C1F /* MyBarChartRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4418166221AADB800458C1F /* MyBarChartRenderer.swift */; };
+		D441816B222816EB00458C1F /* MD5ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D441816A222816EA00458C1F /* MD5ViewController.swift */; };
+		D441816F222B92D700458C1F /* MyLineChartRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D441816E222B92D700458C1F /* MyLineChartRenderer.swift */; };
 		D447697F21A7BDEF00620CA0 /* OptionalPopupTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D447697E21A7BDEF00620CA0 /* OptionalPopupTableViewController.swift */; };
 		D447698121A7BF8000620CA0 /* OptionalTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D447698021A7BF8000620CA0 /* OptionalTableViewCell.swift */; };
 		D44934EB21B0CFFC0069422F /* Quote.swift in Sources */ = {isa = PBXBuildFile; fileRef = D44934EA21B0CFFC0069422F /* Quote.swift */; };
@@ -142,6 +147,10 @@
 		D4EBC91E20AEB55700A9163F /* VolumeKeyboardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D4EBC91D20AEB55700A9163F /* VolumeKeyboardView.xib */; };
 		D4EBC92220AEB71A00A9163F /* VolumeKeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4EBC92120AEB71A00A9163F /* VolumeKeyboardView.swift */; };
 		D4F10EA320A5780000DC9E1C /* ConfirmSettlementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F10EA220A5780000DC9E1C /* ConfirmSettlementView.swift */; };
+		D4F48C352212ABC900FD2143 /* KlineDurationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F48C342212ABC900FD2143 /* KlineDurationViewController.swift */; };
+		D4F48C382212B07100FD2143 /* KlineDurationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F48C372212B07100FD2143 /* KlineDurationTableViewCell.swift */; };
+		D4F48C3A2213BF7200FD2143 /* AddDurationCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F48C392213BF7200FD2143 /* AddDurationCollectionViewController.swift */; };
+		D4F48C3C221400ED00FD2143 /* AddDurationCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F48C3B221400ED00FD2143 /* AddDurationCollectionViewCell.swift */; };
 		D4F4E18920AEA080007A2975 /* PriceKeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F4E18820AEA080007A2975 /* PriceKeyboardView.swift */; };
 		D4F4E18B20AEA2CA007A2975 /* PriceKeyboardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D4F4E18A20AEA2CA007A2975 /* PriceKeyboardView.xib */; };
 /* End PBXBuildFile section */
@@ -216,6 +225,7 @@
 		5D84120F90633A05113A6FBE /* Pods-shinnyfuturesUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-shinnyfuturesUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-shinnyfuturesUITests/Pods-shinnyfuturesUITests.release.xcconfig"; sourceTree = "<group>"; };
 		757606269397994F1BC181D6 /* Pods_shinnyfutures.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_shinnyfutures.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9FB6826955F27A22A338B5C7 /* Pods_shinnyfuturesTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_shinnyfuturesTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D406B2AA22141986005AACAA /* DurationCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DurationCollectionViewCell.swift; sourceTree = "<group>"; };
 		D415D0C320DCD6F700EA8DA3 /* CurrentDayMarkerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrentDayMarkerView.swift; sourceTree = "<group>"; };
 		D415D0C420DCD6F700EA8DA3 /* KlineMarkerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KlineMarkerView.swift; sourceTree = "<group>"; };
 		D4195FC020907C550072C021 /* TDWebSocketUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TDWebSocketUtils.swift; sourceTree = "<group>"; };
@@ -229,11 +239,15 @@
 		D420B2E620E0964E0045B6AF /* MyYAxis.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyYAxis.swift; sourceTree = "<group>"; };
 		D420B2EB20E2207E0045B6AF /* KlineYAxisRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KlineYAxisRenderer.swift; sourceTree = "<group>"; };
 		D420B2ED20E2207E0045B6AF /* MyCandleStickChartRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyCandleStickChartRenderer.swift; sourceTree = "<group>"; };
-		D420B2EE20E2207F0045B6AF /* MyCombinedChartRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyCombinedChartRenderer.swift; sourceTree = "<group>"; };
+		D420B2EE20E2207F0045B6AF /* KlineCombinedChartRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KlineCombinedChartRenderer.swift; sourceTree = "<group>"; };
 		D420B2EF20E2207F0045B6AF /* KlineXAxisRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KlineXAxisRenderer.swift; sourceTree = "<group>"; };
 		D42EE5272071D3C600EF8066 /* Search.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Search.swift; sourceTree = "<group>"; };
 		D42EE5292071D55700EF8066 /* SearchTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTableViewCell.swift; sourceTree = "<group>"; };
 		D42EE52B20721ED000EF8066 /* SearchTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTableViewController.swift; sourceTree = "<group>"; };
+		D4418164221AAD0E00458C1F /* CurrentDayCombinedChartRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrentDayCombinedChartRenderer.swift; sourceTree = "<group>"; };
+		D4418166221AADB800458C1F /* MyBarChartRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyBarChartRenderer.swift; sourceTree = "<group>"; };
+		D441816A222816EA00458C1F /* MD5ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MD5ViewController.swift; sourceTree = "<group>"; };
+		D441816E222B92D700458C1F /* MyLineChartRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyLineChartRenderer.swift; sourceTree = "<group>"; };
 		D447697E21A7BDEF00620CA0 /* OptionalPopupTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionalPopupTableViewController.swift; sourceTree = "<group>"; };
 		D447698021A7BF8000620CA0 /* OptionalTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionalTableViewCell.swift; sourceTree = "<group>"; };
 		D44934EA21B0CFFC0069422F /* Quote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Quote.swift; sourceTree = "<group>"; };
@@ -356,6 +370,10 @@
 		D4EBC91D20AEB55700A9163F /* VolumeKeyboardView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VolumeKeyboardView.xib; sourceTree = "<group>"; };
 		D4EBC92120AEB71A00A9163F /* VolumeKeyboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolumeKeyboardView.swift; sourceTree = "<group>"; };
 		D4F10EA220A5780000DC9E1C /* ConfirmSettlementView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfirmSettlementView.swift; sourceTree = "<group>"; };
+		D4F48C342212ABC900FD2143 /* KlineDurationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KlineDurationViewController.swift; sourceTree = "<group>"; };
+		D4F48C372212B07100FD2143 /* KlineDurationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KlineDurationTableViewCell.swift; sourceTree = "<group>"; };
+		D4F48C392213BF7200FD2143 /* AddDurationCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddDurationCollectionViewController.swift; sourceTree = "<group>"; };
+		D4F48C3B221400ED00FD2143 /* AddDurationCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddDurationCollectionViewCell.swift; sourceTree = "<group>"; };
 		D4F4E18820AEA080007A2975 /* PriceKeyboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceKeyboardView.swift; sourceTree = "<group>"; };
 		D4F4E18A20AEA2CA007A2975 /* PriceKeyboardView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PriceKeyboardView.xib; sourceTree = "<group>"; };
 		EC3CBB6F47B2110E1B2E2365 /* Pods-shinnyfuturesTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-shinnyfuturesTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-shinnyfuturesTests/Pods-shinnyfuturesTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -561,6 +579,8 @@
 		D4F1E1AA206E339B00BC1C50 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				D4F48C372212B07100FD2143 /* KlineDurationTableViewCell.swift */,
+				D4F48C3B221400ED00FD2143 /* AddDurationCollectionViewCell.swift */,
 				D4CA2A1721EDC2810054528A /* ParaNavTableViewCell.swift */,
 				D4CA2A1921EDC29C0054528A /* ParaContentTableViewCell.swift */,
 				D4805D1921DA1B5400286ED4 /* LeftNavigationTableViewCell.swift */,
@@ -573,6 +593,7 @@
 				D42EE5292071D55700EF8066 /* SearchTableViewCell.swift */,
 				D49A7186207399C000AA947A /* TradeTableViewCell.swift */,
 				D466D4D22138225200FD6FBA /* BankTransferTableViewCell.swift */,
+				D406B2AA22141986005AACAA /* DurationCollectionViewCell.swift */,
 				D4B3DBC42074C54F00545376 /* PositionTableViewCell.swift */,
 				D4B3DBC62074C55A00545376 /* OrderTableViewCell.swift */,
 				D47A4E7C2087353100255276 /* DrawerStackView.swift */,
@@ -582,15 +603,18 @@
 				D4EBC92120AEB71A00A9163F /* VolumeKeyboardView.swift */,
 				D420B2E520E0964E0045B6AF /* MyXAxis.swift */,
 				D420B2E620E0964E0045B6AF /* MyYAxis.swift */,
+				D4418166221AADB800458C1F /* MyBarChartRenderer.swift */,
 				D420B2D020E0912F0045B6AF /* CurrentDayCombinedChartView.swift */,
+				D4418164221AAD0E00458C1F /* CurrentDayCombinedChartRenderer.swift */,
+				D441816E222B92D700458C1F /* MyLineChartRenderer.swift */,
 				D420B2E420E0964E0045B6AF /* CurrentDayXAxisRenderer.swift */,
 				D420B2E320E0964E0045B6AF /* CurrentDayYAxisRenderer.swift */,
 				D415D0C320DCD6F700EA8DA3 /* CurrentDayMarkerView.swift */,
 				D420B2D420E0912F0045B6AF /* KlineCombinedChartView.swift */,
+				D420B2EE20E2207F0045B6AF /* KlineCombinedChartRenderer.swift */,
+				D420B2ED20E2207E0045B6AF /* MyCandleStickChartRenderer.swift */,
 				D420B2EF20E2207F0045B6AF /* KlineXAxisRenderer.swift */,
 				D420B2EB20E2207E0045B6AF /* KlineYAxisRenderer.swift */,
-				D420B2EE20E2207F0045B6AF /* MyCombinedChartRenderer.swift */,
-				D420B2ED20E2207E0045B6AF /* MyCandleStickChartRenderer.swift */,
 				D415D0C420DCD6F700EA8DA3 /* KlineMarkerView.swift */,
 				D4B2347021DDFF590073498C /* DropDownBtn.swift */,
 			);
@@ -604,6 +628,8 @@
 				D4805D1F21DA1C3600286ED4 /* RightTableViewController.swift */,
 				D4805CEB21D893AE00286ED4 /* SlideMenuController.swift */,
 				D4CA2A1521EDB2B40054528A /* SettingTableViewController.swift */,
+				D4F48C342212ABC900FD2143 /* KlineDurationViewController.swift */,
+				D4F48C392213BF7200FD2143 /* AddDurationCollectionViewController.swift */,
 				D4775A3F21EDE55900CC3C55 /* ParaViewController.swift */,
 				D4802295206B375E0033E202 /* MainViewController.swift */,
 				D480228B2068D52C0033E202 /* QuoteTableViewController.swift */,
@@ -621,6 +647,7 @@
 				D480229D206B67FE0033E202 /* LoginViewController.swift */,
 				D4B2345721DDAFB90073498C /* BrokerTableViewController.swift */,
 				D480225B20688A180033E202 /* QuoteViewController.swift */,
+				D441816A222816EA00458C1F /* MD5ViewController.swift */,
 				D486069F20A3E0BC00C4FEB5 /* PopupCollectionViewController.swift */,
 				D4B3DBCC207B65AB00545376 /* HandicapViewController.swift */,
 				D4B3DBC82074C58200545376 /* PositionTableViewController.swift */,
@@ -930,6 +957,7 @@
 				D4B3DBC92074C58200545376 /* PositionTableViewController.swift in Sources */,
 				D466AB2B21B7B99D00B6E4F6 /* Kline.swift in Sources */,
 				D49A718120738A9B00AA947A /* TradeTableViewController.swift in Sources */,
+				D4F48C352212ABC900FD2143 /* KlineDurationViewController.swift in Sources */,
 				D48606B220A5283800C4FEB5 /* AccountConstants.swift in Sources */,
 				D48606A820A4429200C4FEB5 /* QuoteConstants.swift in Sources */,
 				D447698121A7BF8000620CA0 /* OptionalTableViewCell.swift in Sources */,
@@ -953,6 +981,7 @@
 				D48606A220A3EA8100C4FEB5 /* PopupCollectionViewCell.swift in Sources */,
 				D4B3DBCB2074C59300545376 /* OrderTableViewController.swift in Sources */,
 				D485107920CB7A4C00EC0B19 /* RtnTDConstants.swift in Sources */,
+				D4418165221AAD0E00458C1F /* CurrentDayCombinedChartRenderer.swift in Sources */,
 				D49A7187207399C000AA947A /* TradeTableViewCell.swift in Sources */,
 				D420B2F420E2207F0045B6AF /* KlineXAxisRenderer.swift in Sources */,
 				D47A4E7D2087353100255276 /* DrawerStackView.swift in Sources */,
@@ -964,7 +993,9 @@
 				D4B3DBC72074C55A00545376 /* OrderTableViewCell.swift in Sources */,
 				D466AB3821B7C40E00B6E4F6 /* Account.swift in Sources */,
 				D447697F21A7BDEF00620CA0 /* OptionalPopupTableViewController.swift in Sources */,
+				D4F48C382212B07100FD2143 /* KlineDurationTableViewCell.swift in Sources */,
 				D420B2F020E2207F0045B6AF /* KlineYAxisRenderer.swift in Sources */,
+				D441816B222816EB00458C1F /* MD5ViewController.swift in Sources */,
 				D466D4D62138D4B300FD6FBA /* BankConstants.swift in Sources */,
 				D480225C20688A180033E202 /* QuoteViewController.swift in Sources */,
 				D420B2F220E2207F0045B6AF /* MyCandleStickChartRenderer.swift in Sources */,
@@ -974,8 +1005,10 @@
 				D4B3DBD1207CB47400545376 /* TransactionPageViewController.swift in Sources */,
 				D466AB2721B673E100B6E4F6 /* SwiftTryCatch.m in Sources */,
 				D4805CED21D893AF00286ED4 /* SlideMenuController.swift in Sources */,
+				D441816F222B92D700458C1F /* MyLineChartRenderer.swift in Sources */,
 				D48022902069116F0033E202 /* QuotePageViewController.swift in Sources */,
-				D420B2F320E2207F0045B6AF /* MyCombinedChartRenderer.swift in Sources */,
+				D4F48C3C221400ED00FD2143 /* AddDurationCollectionViewCell.swift in Sources */,
+				D420B2F320E2207F0045B6AF /* KlineCombinedChartRenderer.swift in Sources */,
 				D48606AC20A444A700C4FEB5 /* TickConstants.swift in Sources */,
 				D42EE52C20721ED000EF8066 /* SearchTableViewController.swift in Sources */,
 				D480225A20688A180033E202 /* AppDelegate.swift in Sources */,
@@ -1003,11 +1036,14 @@
 				D47A4E812088928300255276 /* DataManager.swift in Sources */,
 				D4B3DBD7207CB82C00545376 /* KlineViewController.swift in Sources */,
 				D4B2346D21DDEEE50073498C /* ReqSetChart.swift in Sources */,
+				D4418167221AADB800458C1F /* MyBarChartRenderer.swift in Sources */,
 				D420B2DD20E091300045B6AF /* CurrentDayCombinedChartView.swift in Sources */,
 				D47F66F1216B58010068C853 /* LocalCommonConstants.swift in Sources */,
+				D4F48C3A2213BF7200FD2143 /* AddDurationCollectionViewController.swift in Sources */,
 				D4B2345B21DDAFD20073498C /* BrokerTableViewCell.swift in Sources */,
 				D4B2346521DDEDA90073498C /* ReqConfirmSettlement.swift in Sources */,
 				D47A4E772085D0FF00255276 /* QuoteNavigationCollectionViewCell.swift in Sources */,
+				D406B2AB22141986005AACAA /* DurationCollectionViewCell.swift in Sources */,
 				D4802296206B375E0033E202 /* MainViewController.swift in Sources */,
 				D466AB4221B7C8AE00B6E4F6 /* Bank.swift in Sources */,
 				D4805D1A21DA1B5400286ED4 /* LeftNavigationTableViewCell.swift in Sources */,

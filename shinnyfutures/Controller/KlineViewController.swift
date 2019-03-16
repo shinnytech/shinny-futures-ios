@@ -12,18 +12,18 @@ import Charts
 class KlineViewController: BaseChartViewController {
 
     // MARK: Properties
-    @IBOutlet weak var klineChartView: KlineCombinedChartView!
+    @IBOutlet weak var topChartView: KlineCombinedChartView!
+    @IBOutlet weak var middleChartView: KlineCombinedChartView!
+    @IBOutlet weak var bottomChartView: KlineCombinedChartView!
     //X轴显示格式，“年/月”--“2017/07” “月/日”--“07/09”
     var xValsFormat = ""
     var scaleX = CGFloat(0.0)
     //均线数据
-    var lineData: LineChartData!
+    var maLineData: LineChartData!
     var viewWidth = 0
     var left_id = -1
     var right_id = -1
     var last_id = -1
-    var moveGesture: UIPanGestureRecognizer!
-    var isMoveHighlight = false
     var startX = CGFloat(0.0)
     //最新价数据
     var latestLimitLines = [String: ChartLimitLine]()
@@ -32,7 +32,9 @@ class KlineViewController: BaseChartViewController {
     var mas: [Int]!
 
     override func viewDidLoad() {
-        chartView = klineChartView
+        topChartViewBase = topChartView
+        middleChartViewBase = middleChartView
+        bottomChartViewBase = bottomChartView
         super.viewDidLoad()
     }
 
@@ -41,7 +43,7 @@ class KlineViewController: BaseChartViewController {
 
         isShowAverageLine = UserDefaults.standard.bool(forKey: "averageLine")
         if !isShowAverageLine {
-            chartView.legend.enabled = false
+            topChartViewBase.legend.enabled = false
         }
 
         switch fragmentType {
@@ -66,25 +68,25 @@ class KlineViewController: BaseChartViewController {
         }
         viewWidth = CommonConstants.VIEW_WIDTH
 
-        chartView.scaleYEnabled = false
-        chartView.drawOrder = [CombinedChartView.DrawOrder.candle.rawValue, CombinedChartView.DrawOrder.line.rawValue]
+        topChartViewBase.scaleYEnabled = false
+        topChartViewBase.highlightPerDragEnabled = false
+        topChartViewBase.drawOrder = [CombinedChartView.DrawOrder.candle.rawValue, CombinedChartView.DrawOrder.line.rawValue]
         let markView = KlineMarkerView.viewFromXib()!
-        markView.chartView = chartView
-        chartView.marker = markView
-        chartView.highlightPerDragEnabled = false
-        moveGesture = UIPanGestureRecognizer(target: self, action: #selector(movePan))
+        markView.chartView = topChartViewBase
+        topChartViewBase.marker = markView
 
-        let bottomAxis = chartView.xAxis
-        bottomAxis.labelPosition = .bottom
-        bottomAxis.valueFormatter = MyXAxisValueFormat(parent: self)
+        let bottomAxis = topChartViewBase.xAxis
+        bottomAxis.drawAxisLineEnabled = true
+        bottomAxis.drawLabelsEnabled = false
         bottomAxis.gridLineDashLengths = [2, 2, 2, 2]
         bottomAxis.gridLineWidth = 0.2
-        bottomAxis.axisLineColor = colorGrid!
         bottomAxis.gridColor = colorGrid!
-        bottomAxis.labelTextColor = colorText!
-        bottomAxis.granularity = 1
+        bottomAxis.axisLineColor = colorGrid!
+        bottomAxis.labelPosition = .bottom
 
-        let leftAxis = chartView.leftAxis
+        let leftAxis = topChartViewBase.leftAxis
+        leftAxis.spaceBottom = 0.02
+        leftAxis.spaceTop = 0.02
         leftAxis.labelPosition = .insideChart
         leftAxis.drawAxisLineEnabled = false
         leftAxis.gridLineDashLengths = [2, 2, 2, 2]
@@ -94,7 +96,7 @@ class KlineViewController: BaseChartViewController {
         leftAxis.labelCount = 6
         leftAxis.valueFormatter = MyYAxisValueFormat(parent: self)
 
-        let rightAxis = chartView.rightAxis
+        let rightAxis = topChartViewBase.rightAxis
         rightAxis.enabled = false
 
         var maLengendEntries = [LegendEntry]()
@@ -105,37 +107,66 @@ class KlineViewController: BaseChartViewController {
             maLengendEntries.append(maLegendEntry)
         }
 
-        let l = chartView.legend
+        let l = topChartViewBase.legend
         l.setCustom(entries: maLengendEntries)
         l.horizontalAlignment = .right
         l.verticalAlignment = .top
         l.textColor = UIColor.white
+
+        middleChartViewBase.scaleYEnabled = false
+        middleChartViewBase.highlightPerDragEnabled = false
+
+        let middleBottomAxis = middleChartViewBase.xAxis
+        middleBottomAxis.drawAxisLineEnabled = true
+        middleBottomAxis.drawLabelsEnabled = true
+        middleBottomAxis.gridLineDashLengths = [2, 2, 2, 2]
+        middleBottomAxis.gridLineWidth = 0.2
+        middleBottomAxis.gridColor = colorGrid!
+        middleBottomAxis.axisLineColor = colorGrid!
+        middleBottomAxis.labelTextColor = colorText!
+        middleBottomAxis.labelPosition = .bottom
+        middleBottomAxis.valueFormatter = MyXAxisValueFormat(parent: self)
+
+        let middleLeftAxis = middleChartViewBase.leftAxis
+        middleLeftAxis.labelPosition = .insideChart
+        middleLeftAxis.drawAxisLineEnabled = false
+        middleLeftAxis.gridLineDashLengths = [2, 2, 2, 2]
+        middleLeftAxis.gridLineWidth = 0.2
+        middleLeftAxis.gridColor = colorGrid!
+        middleLeftAxis.labelTextColor = colorText!
+        middleLeftAxis.labelCount = 4
+        middleLeftAxis.axisMinimum = 0
+        middleLeftAxis.spaceBottom = 0
+
+        let middleRightAxis = middleChartViewBase.rightAxis
+        middleRightAxis.drawLabelsEnabled = false
+        middleRightAxis.drawAxisLineEnabled = false
+        middleRightAxis.drawGridLinesEnabled = false
+
+        let middleLegend = middleChartViewBase.legend
+        middleLegend.enabled = false
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        scaleX = CGFloat(UserDefaults.standard.double(forKey: "scaleX"))
-        if chartView.scaleX != scaleX {
-            chartView.fitScreen()
-            chartView.zoom(scaleX: scaleX, scaleY: 1, x: CGFloat(last_id), y: 0)
-        }
+        scaleX = CGFloat(UserDefaults.standard.double(forKey: CommonConstants.SCALE_X))
     }
 
-    func chartScaled(_ chartView: ChartViewBase, scaleX: CGFloat, scaleY: CGFloat) {
-        UserDefaults.standard.set(self.chartView.scaleX, forKey: "scaleX")
+    override func viewWillDisappear(_ animated: Bool) {
+        UserDefaults.standard.set(scaleX, forKey: CommonConstants.SCALE_X)
     }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         let touch = (touches as NSSet).allObjects[0] as! UITouch
-        let location = touch.location(in: chartView)
+        let location = touch.location(in: topChartViewBase)
         startX = location.x
     }
 
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
         if !isMoveHighlight {
             let touch = (touches as NSSet).allObjects[0] as! UITouch
-            let location = touch.location(in: chartView)
-            if abs(location.x - startX) > 10 && Int(chartView.lowestVisibleX + 0.5) == left_id && xVals.count >= viewWidth {
+            let location = touch.location(in: topChartViewBase)
+            if abs(location.x - startX) > 10 && Int(topChartViewBase.lowestVisibleX + 0.5) == left_id && xVals.count >= viewWidth {
                 viewWidth = viewWidth + 100
                 let instrumentId = dataManager.sInstrumentId
                 MDWebSocketUtils.getInstance().sendSetChartKline(insList: instrumentId, klineType: klineType, viewWidth: viewWidth)
@@ -143,71 +174,73 @@ class KlineViewController: BaseChartViewController {
         }
     }
 
-    override func highlight() {
-        isMoveHighlight = true
-        chartView.dragEnabled = false
-        let position = doubleTap.location(in: chartView)
-        let highlight = chartView.getHighlightByTouchPoint(position)
-        chartView.highlightValue(highlight)
-        chartView.addGestureRecognizer(moveGesture)
-        chartView.addGestureRecognizer(singleTap)
+    func chartScaled(_ chartView: ChartViewBase, scaleX: CGFloat, scaleY: CGFloat) {
+        if (scaleX > 1 && scaleX > self.scaleX) || (scaleX < 1 && scaleX < self.scaleX){self.scaleX = scaleX}
+        let srcMatrix = chartView.viewPortHandler.touchMatrix
+        topChartViewBase.viewPortHandler.refresh(newMatrix: srcMatrix, chart: topChartViewBase, invalidate: true)
+        middleChartViewBase.viewPortHandler.refresh(newMatrix: srcMatrix, chart: middleChartViewBase, invalidate: true)
     }
 
-    override func Unhighlight() {
-        chartView.highlightValue(nil)
-        chartView.dragEnabled = true
-        isMoveHighlight = false
-        chartView.removeGestureRecognizer(moveGesture)
-        chartView.removeGestureRecognizer(singleTap)
-    }
-
-    @objc func movePan(){
-        if isMoveHighlight {
-            let highlight = chartView.getHighlightByTouchPoint(moveGesture.location(in: moveGesture.view))
-            chartView.highlightValue(highlight)
-        }
+    func chartTranslated(_ chartView: ChartViewBase, dX: CGFloat, dY: CGFloat) {
+        let srcMatrix = chartView.viewPortHandler.touchMatrix
+        topChartViewBase.viewPortHandler.refresh(newMatrix: srcMatrix, chart: topChartViewBase, invalidate: true)
+        middleChartViewBase.viewPortHandler.refresh(newMatrix: srcMatrix, chart: middleChartViewBase, invalidate: true)
     }
 
     override func refreshKline() {
-        
-        if chartView.data != nil && (chartView.data?.dataSetCount)! > 0 {
-            let combineData = chartView.combinedData
-            let candleData = combineData?.candleData
+
+        if topChartViewBase.data != nil && (topChartViewBase.data?.dataSetCount)! > 0 {
+            let topCombineData = topChartViewBase.combinedData
+            let candleData = topCombineData?.candleData
+            let middleCombineData = middleChartViewBase.combinedData
+            let middleLineData = middleCombineData?.lineData
+            let middleBarData = middleCombineData?.barData
+
             let datas = kline.datas
-            let left_id_t = chart.left_id as? Int ?? -1
-            let right_id_t = chart.right_id as? Int ?? -1
-            let last_id_t = kline.last_id as? Int ?? -1
+            var left_id_t = chart.left_id as? Int ?? -1
+            if left_id_t < 0 {left_id_t = 0}
+            var right_id_t = chart.right_id as? Int ?? -1
+            if right_id_t < 0 {right_id_t = 0}
+            var last_id_t = kline.last_id as? Int ?? -1
+            if last_id_t < 0 {last_id_t = 0}
 
             if right_id_t == right_id && left_id_t == left_id{
-                //print("k线图刷新")
+//                print("k线图刷新")
                 let xValue = Double(last_id)
                 candleData?.removeEntry(xValue: xValue, dataSetIndex: 0)
-                for index in Array(0..<lineData.dataSetCount){
-                    lineData.removeEntry(xValue: xValue, dataSetIndex: index)
+                for index in Array(0..<maLineData.dataSetCount){
+                    maLineData.removeEntry(xValue: xValue, dataSetIndex: index)
                 }
-                generateLineCandleDataEntry(candleData: candleData!, left_id: left_id, index: last_id, datas: datas)
+                middleLineData?.removeEntry(xValue: xValue, dataSetIndex: 0)
+                middleBarData?.removeEntry(xValue: xValue, dataSetIndex: 0)
+                generateLineCandleDataEntry(left_id: left_id, index: last_id, datas: datas)
                 refreshLatestLine(data: datas["\(last_id)"])
             } else if right_id_t > right_id && left_id_t > left_id{
                 //NSLog("向后添加柱子")
                 for index in (right_id + 1)...right_id_t {
-                    generateLineCandleDataEntry(candleData: candleData!, left_id: left_id, index: index, datas: datas)
+                    generateLineCandleDataEntry(left_id: left_id, index: index, datas: datas)
                 }
                 refreshLatestLine(data: datas["\(last_id)"])
             }else if left_id_t < left_id{
                 //NSLog("向前添加柱子")
                 var index = left_id - 1
                 while index >= left_id_t {
-                    generateLineCandleDataEntry(candleData: candleData!, left_id: left_id_t, index: index, datas: datas)
+                    generateLineCandleDataEntry(left_id: left_id_t, index: index, datas: datas)
                     index -= 1
                 }
             }
             right_id = right_id_t
             last_id = last_id_t
             left_id = left_id_t
-            combineData?.notifyDataChanged()
-            chartView.notifyDataSetChanged()
-            chartView.xAxis.axisMaximum = (combineData?.xMax)! + 2.5
-            chartView.xAxis.axisMinimum = (combineData?.xMin)! - 0.5
+            topCombineData?.notifyDataChanged()
+            topChartViewBase.notifyDataSetChanged()
+            topChartViewBase.xAxis.axisMaximum = (topCombineData?.xMax)! + 2.5
+            topChartViewBase.xAxis.axisMinimum = (topCombineData?.xMin)! - 0.5
+
+            middleCombineData?.notifyDataChanged()
+            middleChartViewBase.notifyDataSetChanged()
+            middleChartViewBase.xAxis.axisMaximum = (middleCombineData?.xMax)! + 2.5
+            middleChartViewBase.xAxis.axisMinimum = (middleCombineData?.xMin)! - 0.5
         } else {
             NSLog("k线图初始化")
             guard let chart = dataManager.sRtnMD.charts[CommonConstants.CHART_ID] else {return}
@@ -225,22 +258,55 @@ class KlineViewController: BaseChartViewController {
             let last_id_t = kline.last_id as? Int ?? -1
             if last_id_t == -1 || datas.isEmpty {return}
             left_id = left_id_t
+            if left_id < 0{left_id = 0}
             right_id = right_id_t
+            if right_id < 0{right_id = 0}
             last_id = last_id_t
+            if last_id < 0{last_id = 0}
 
-            let combineData = CombinedChartData()
-            combineData.candleData = generateCandleData()
-            lineData = generateLineData()
-            if isShowAverageLine {combineData.lineData = lineData } else {combineData.lineData = LineChartData()}
-            chartView.data = combineData
-            chartView.xAxis.axisMaximum = combineData.xMax + 2.5
-            chartView.xAxis.axisMinimum = combineData.xMin - 0.5
-            chartView.setVisibleXRangeMaximum(200)
-            chartView.setVisibleXRangeMinimum(7)
-            chartView.zoom(scaleX: scaleX, scaleY: 1.0, xValue: Double(last_id), yValue: 0.0, axis: YAxis.AxisDependency.left)
-            chartView.moveViewToX(Double(right_id))
+            let topCombineData = CombinedChartData()
+            var candleEntries = [CandleChartDataEntry]()
+            let middleCombineData = CombinedChartData()
+            var oiEntries = [ChartDataEntry]()
+            var volumeEntries = [BarChartDataEntry]()
+            for index in left_id...last_id {
+                guard let data = datas["\(index)"] else {continue}
+                let entries = generateMultiDataEntry(index: index, data: data)
+                candleEntries.append(entries[0] as! CandleChartDataEntry)
+                oiEntries.append(entries[1])
+                volumeEntries.append(entries[2] as! BarChartDataEntry)
+            }
+            
+            topCombineData.candleData = generateCandleData(candleEntries: candleEntries)
+            maLineData = generateMALineData()
+            if isShowAverageLine {topCombineData.lineData = maLineData } else {topCombineData.lineData = LineChartData()}
+            topChartViewBase.data = topCombineData
+
+            let oiDataSet = generateLineDataSet(entries: oiEntries, color: UIColor.white, label: "OI", isHighlight: false, axisDependency: .right)
+            let volumeDataSet = generateBarDataSet(entries: volumeEntries, color: UIColor.yellow, label: "Volume", isHighlight: true)
+            let oiLineData = LineChartData(dataSet: oiDataSet)
+            let volumeBarData = BarChartData(dataSet: volumeDataSet)
+            middleCombineData.lineData = oiLineData
+            middleCombineData.barData = volumeBarData
+            middleChartViewBase.data = middleCombineData
+
+            topChartViewBase.xAxis.axisMaximum = topCombineData.xMax + 2.5
+            topChartViewBase.xAxis.axisMinimum = topCombineData.xMin - 0.5
+            topChartViewBase.setVisibleXRangeMaximum(200)
+            topChartViewBase.setVisibleXRangeMinimum(10)
+            topChartViewBase.zoom(scaleX: scaleX, scaleY: 1.0, xValue: Double(last_id), yValue: 0.0, axis: YAxis.AxisDependency.left)
+            topChartViewBase.moveViewToX(Double(right_id))
             generateLatestLine(data: datas["\(right_id)"])
-            (chartView.marker as! KlineMarkerView).resizeXib(heiht: chartView.viewPortHandler.contentHeight, width: chartView.viewPortHandler.contentWidth)
+            (topChartViewBase.marker as! KlineMarkerView).setDateFormat(fragmentType: fragmentType)
+            (topChartViewBase.marker as! KlineMarkerView).resizeXib(heiht: topChartViewBase.viewPortHandler.contentHeight, width: topChartViewBase.viewPortHandler.contentWidth)
+
+            middleChartViewBase.xAxis.axisMaximum = middleCombineData.xMax + 2.5
+            middleChartViewBase.xAxis.axisMinimum = middleCombineData.xMin - 0.5
+            middleChartViewBase.setVisibleXRangeMaximum(200)
+            middleChartViewBase.setVisibleXRangeMinimum(10)
+            middleChartViewBase.zoom(scaleX: scaleX, scaleY: 1.0, xValue: Double(last_id), yValue: 0.0, axis: YAxis.AxisDependency.left)
+            middleChartViewBase.moveViewToX(Double(right_id))
+
         }
     }
 
@@ -260,7 +326,7 @@ class KlineViewController: BaseChartViewController {
             chartLimitLine.valueFont = UIFont.systemFont(ofSize: 10.0)
             chartLimitLine.valueTextColor = UIColor(red: 63/255.0, green: 63/255.0, blue: 63/255.0, alpha: 1)
             latestLimitLines["latest"] = chartLimitLine
-            chartView.leftAxis.addLimitLine(chartLimitLine)
+            topChartViewBase.leftAxis.addLimitLine(chartLimitLine)
         }
 
     }
@@ -272,7 +338,7 @@ class KlineViewController: BaseChartViewController {
         let limit = Double("\(data.close ?? 0.0)") ?? 0.0
         guard let limitLine = latestLimitLines["latest"] else {return}
         if limitLine.limit != limit{
-            chartView.leftAxis.removeLimitLine(limitLine)
+            topChartViewBase.leftAxis.removeLimitLine(limitLine)
             latestLimitLines.removeValue(forKey: "latest")
             generateLatestLine(data: data)
         }
@@ -280,26 +346,32 @@ class KlineViewController: BaseChartViewController {
 
     override func removeLatestLine() {
         guard let limitLine = latestLimitLines["latest"] else {return}
-        chartView.leftAxis.removeLimitLine(limitLine)
+        topChartViewBase.leftAxis.removeLimitLine(limitLine)
         latestLimitLines.removeValue(forKey: "latest")
     }
 
     //添加单个均线数据与柱子
-    private func generateLineCandleDataEntry(candleData: CandleChartData, left_id: Int, index: Int, datas: [String: Kline.Data]) {
-        let candleEntry = generateCandleDataEntry(index: index, datas: datas)
-        _ = candleData.getDataSetByIndex(0).addEntryOrdered(candleEntry)
+    private func generateLineCandleDataEntry(left_id: Int, index: Int, datas: [String: Kline.Data]) {
+        guard let data = datas["\(index)"] else {return}
+        let entries = generateMultiDataEntry(index: index, data: data)
+        let candleEntry = entries[0]
+        let oiEntry = entries[1]
+        let volumeEntry = entries[2]
+        _ = topChartViewBase.candleData?.getDataSetByIndex(0).addEntryOrdered(candleEntry)
+        _ = middleChartViewBase.lineData?.getDataSetByIndex(0).addEntryOrdered(oiEntry)
+        _ = middleChartViewBase.barData?.getDataSetByIndex(0).addEntryOrdered(volumeEntry)
 
         for i in Array(0..<mas.count) {
             let para = mas[i]
             if index >= left_id + para - 1 {
-                let entry = generateLineDataEntry(index: index, lineIndex: para - 1, datas: datas)
-                _ = lineData.getDataSetByIndex(i).addEntryOrdered(entry)
+                let entry = generateMALineDataEntry(index: index, lineIndex: para - 1, datas: datas)
+                _ = maLineData.getDataSetByIndex(i).addEntryOrdered(entry)
             }
         }
     }
 
     //产生单个均线数据
-    private func generateLineDataEntry(index: Int, lineIndex: Int, datas: [String: Kline.Data]) -> ChartDataEntry {
+    private func generateMALineDataEntry(index: Int, lineIndex: Int, datas: [String: Kline.Data]) -> ChartDataEntry {
         var sum = 0.0
         for i in (index - lineIndex)...index {
             guard let data = datas["\(i)"] else {continue}
@@ -311,31 +383,31 @@ class KlineViewController: BaseChartViewController {
     }
 
     //生成单个柱子数据
-    private func generateCandleDataEntry(index: Int, datas: [String: Kline.Data]) -> CandleChartDataEntry {
-        let data = datas["\(index)"]
-        let high = Double("\(data?.high ?? 0.0)") ?? 0.0
-        let low = Double("\(data?.low ?? 0.0)") ?? 0.0
-        let close = Double("\(data?.close ?? 0.0)") ?? 0.0
-        let open = Double("\(data?.open ?? 0.0)") ?? 0.0
-        let dateTime = ((data?.datetime as? Int) ?? 0) / 1000000000
+    private func generateMultiDataEntry(index: Int, data: Kline.Data) -> [ChartDataEntry] {
+        let high = Double("\(data.high ?? 0.0)") ?? 0.0
+        let low = Double("\(data.low ?? 0.0)") ?? 0.0
+        let close = Double("\(data.close ?? 0.0)") ?? 0.0
+        let open = Double("\(data.open ?? 0.0)") ?? 0.0
+        let dateTime = ((data.datetime as? Int) ?? 0) / 1000000000
+        let oi = Double("\(data.close_oi ?? 0)") ?? 0.0
+        let volume = Double("\(data.volume ?? 0)") ?? 0.0
+        let sub = open - close
         let x = Double(index)
         let candleChartDataEntry = CandleChartDataEntry(x: x, shadowH: high, shadowL: low, open: open, close: close)
+        let oiEntry = ChartDataEntry(x: x, y: oi)
+        let volumeEntry = BarChartDataEntry(x: x, y: volume, data: sub as AnyObject)
         xVals[index] = dateTime
-        return candleChartDataEntry
+        return [candleChartDataEntry, oiEntry, volumeEntry]
     }
 
     //生成蜡烛图数据
-    private func generateCandleData() -> CandleChartData {
-        var candleDatas = [CandleChartDataEntry]()
-        for index in left_id...last_id {
-            candleDatas.append(generateCandleDataEntry(index: index, datas: kline.datas))
-        }
-        let set = CandleChartDataSet(values: candleDatas, label: "kline")
+    private func generateCandleData(candleEntries: [CandleChartDataEntry]) -> CandleChartData {
+        let set = CandleChartDataSet(values: candleEntries, label: "kline")
         set.axisDependency = .left
         set.shadowWidth = 0.7
-        set.decreasingColor = UIColor(red: 0.0, green: 252.0/255.0, blue: 252.0/255.0, alpha: 1)
+        set.decreasingColor = decreasingColor
         set.decreasingFilled = true
-        set.increasingColor = UIColor(red: 218.0/255.0, green: 0.0, blue: 0.0, alpha: 1)
+        set.increasingColor = increasingColor
         set.increasingFilled = false
         set.neutralColor = UIColor.white
         set.shadowColorSameAsCandle = true
@@ -352,13 +424,13 @@ class KlineViewController: BaseChartViewController {
     }
 
     //产生均线数据
-    private func generateLineData() -> LineChartData {
+    private func generateMALineData() -> LineChartData {
         var sets = [LineChartDataSet]()
 
         for index in Array(0..<mas.count) {
             let para = mas[index]
             let color = CommonConstants.KLINE_MDs[index]
-            sets.append(generateLineDataSet(para: para, color: color, label: "MA\(para)"))
+            sets.append(generateMALineDataSet(para: para, color: color, label: "MA\(para)"))
         }
 
         let lineData: LineChartData!
@@ -367,11 +439,11 @@ class KlineViewController: BaseChartViewController {
     }
 
     //生成均线数据集
-    private func generateLineDataSet(para: Int, color: UIColor, label: String) -> LineChartDataSet {
+    private func generateMALineDataSet(para: Int, color: UIColor, label: String) -> LineChartDataSet {
         var entities = [ChartDataEntry]()
         for index in left_id...last_id {
             if index >= (left_id + para - 1) {
-                let entry = generateLineDataEntry(index: index, lineIndex: para - 1, datas: kline.datas)
+                let entry = generateMALineDataEntry(index: index, lineIndex: para - 1, datas: kline.datas)
                 entities.append(entry)
             }
         }
@@ -386,18 +458,53 @@ class KlineViewController: BaseChartViewController {
         return set
     }
 
+    //生成成交量数据集
+    func generateBarDataSet(entries: [BarChartDataEntry], color: UIColor, label: String, isHighlight: Bool) -> BarChartDataSet {
+        let set = BarChartDataSet(values: entries, label: label)
+        set.barBorderColor = color
+        set.barBorderWidth = 0
+        set.colors = [decreasingColor!, increasingColor!]
+        set.drawValuesEnabled = false
+        set.axisDependency = .left
+        if isHighlight {
+            set.highlightLineWidth = 0.7
+            set.highlightColor = UIColor.white
+        } else {
+            set.highlightEnabled = false
+        }
+        return set
+    }
+
+    //生成持仓量数据集
+    private func generateLineDataSet(entries: [ChartDataEntry], color: UIColor, label: String, isHighlight: Bool, axisDependency: YAxis.AxisDependency) -> LineChartDataSet {
+        let set = LineChartDataSet(values: entries, label: label)
+        set.setColor(color)
+        set.lineWidth = 0.7
+        set.drawCirclesEnabled = false
+        set.drawCircleHoleEnabled = false
+        set.drawValuesEnabled = false
+        set.axisDependency = axisDependency
+        if isHighlight {
+            set.highlightLineWidth = 0.7
+            set.highlightColor = UIColor.white
+        } else {
+            set.highlightEnabled = false
+        }
+        return set
+    }
+
     //控制均线显示与否
     @objc override func controlAverageLine(notification: Notification) {
         isShowAverageLine = notification.object as! Bool
         if isShowAverageLine {
-            chartView.combinedData?.lineData = lineData
-            chartView.legend.enabled = true
+            topChartViewBase.combinedData?.lineData = maLineData
+            topChartViewBase.legend.enabled = true
         } else {
-            chartView.combinedData?.lineData = LineChartData()
-            chartView.legend.enabled = false
+            topChartViewBase.combinedData?.lineData = LineChartData()
+            topChartViewBase.legend.enabled = false
         }
-        chartView.combinedData?.notifyDataChanged()
-        chartView.setNeedsDisplay()
+        topChartViewBase.combinedData?.notifyDataChanged()
+        topChartViewBase.setNeedsDisplay()
     }
 
     //格式化X轴数据

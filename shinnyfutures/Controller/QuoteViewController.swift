@@ -8,10 +8,10 @@
 
 import UIKit
 
-class QuoteViewController: UIViewController, UIPopoverPresentationControllerDelegate {
+class QuoteViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UIPopoverPresentationControllerDelegate {
 
     // MARK: Properties
-    let button =  UIButton(type: .custom)
+    let button = UIButton(type: .custom)
     let dataManager = DataManager.getInstance()
     var transactionPageViewController: TransactionPageViewController!
     var klinePageViewController: KlinePageViewController!
@@ -19,58 +19,32 @@ class QuoteViewController: UIViewController, UIPopoverPresentationControllerDele
     @IBOutlet weak var duration: UIButton!
     @IBOutlet weak var save: UIBarButtonItem!
     @IBOutlet weak var upView: UIStackView!
-    @IBOutlet weak var currentDay: UIButton!
-    @IBOutlet weak var klineDay: UIButton!
-    @IBOutlet weak var klineHour: UIButton!
-    @IBOutlet weak var klineMinute: UIButton!
-    @IBOutlet weak var klineSecond: UIButton!
     @IBOutlet weak var handicap: UIButton!
     @IBOutlet weak var position: UIButton!
     @IBOutlet weak var order: UIButton!
     @IBOutlet weak var transaction: UIButton!
     @IBOutlet weak var downStackView: UIStackView!
-
+    @IBOutlet weak var durationCollectionView: UICollectionView!
+    @IBOutlet weak var downStackViewHeight: NSLayoutConstraint!
+    @IBOutlet weak var md5View: DesignableView!
+    var durations = [String]()
+    var klineIndex = 0
+    var transactionIndex = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        let title = dataManager.getButtonTitle()
-        button.frame = CGRect(x: 0, y: 0, width: 100, height: 40)
-        button.setTitle(title, for: .normal)
-        button.setImage(UIImage(named: "down", in: Bundle(identifier: "com.shinnytech.futures"), compatibleWith: nil), for: .normal)
-        button.layoutIfNeeded()
-        button.imageEdgeInsets = UIEdgeInsetsMake(0, (button.titleLabel?.frame.size.width)!, 0, -(button.titleLabel?.frame.size.width)!)
-        button.titleEdgeInsets = UIEdgeInsetsMake(0, -(button.titleLabel?.frame.origin.x)!, 0, (button.titleLabel?.frame.origin.x)!)
+        updateTitle()
         button.setTitleColor(UIColor.white, for: .normal)
         button.addTarget(self, action: #selector(self.optionalInsListPopup), for: .touchUpInside)
         self.navigationItem.titleView = button
         //设置按钮背景
-        let optional = FileUtils.getOptional()
-        if optional.contains(dataManager.sInstrumentId){
-            save.image = UIImage(named: "heart", in: Bundle(identifier: "com.shinnytech.futures"), compatibleWith: nil)
-        }
+        setOptionalBackground()
 
-        if let klineType = UserDefaults.standard.string(forKey: CommonConstants.CONFIG_KLINE_DAY_TYPE){
-            klineDay.setTitle(getDurationTitle(duration: klineType), for: .normal)
-        }
-        if let klineType = UserDefaults.standard.string(forKey: CommonConstants.CONFIG_KLINE_HOUR_TYPE){
-            klineHour.setTitle(getDurationTitle(duration: klineType), for: .normal)
-        }
-        if let klineType = UserDefaults.standard.string(forKey: CommonConstants.CONFIG_KLINE_MINUTE_TYPE){
-            klineMinute.setTitle(getDurationTitle(duration: klineType), for: .normal)
-        }
-        if let klineType = UserDefaults.standard.string(forKey: CommonConstants.CONFIG_KLINE_SECOND_TYPE){
-            klineSecond.setTitle(getDurationTitle(duration: klineType), for: .normal)
-        }
-
-        initUpNavBottomLine(view: currentDay)
-        initUpNavBottomLine(view: klineDay)
-        initUpNavBottomLine(view: klineHour)
-        initUpNavBottomLine(view: klineMinute)
-        initUpNavBottomLine(view: klineSecond)
-        currentDay.setTitleColor(UIColor.yellow, for: .normal)
-        highlightUpNavBottomLine(view: currentDay)
+        durations.append("分时图")
+        let data = UserDefaults.standard.stringArray(forKey: CommonConstants.CONFIG_SETTING_KLINE_DURATION_DEFAULT) ?? [String]()
+        durations.append(contentsOf: data)
 
         handicap.setTitleColor(UIColor.yellow, for: .normal)
-
         if dataManager.sIsEmpty {
             position.isHidden = true
             order.isHidden = true
@@ -81,20 +55,98 @@ class QuoteViewController: UIViewController, UIPopoverPresentationControllerDele
             unhighlightBottomNavBorderLine(view: order)
             unhighlightBottomNavBorderLine(view: transaction)
 
-            //从主页导航栏而来
+            //从主页导航栏而来，默认展开持仓页
             if dataManager.sToQuoteTarget.elementsEqual("Position") {
                 switchToPosition()
+                downStackViewHeight.constant = 250
+                dataManager.isShowDownStack = true
+                handicap.setTitle(CommonConstants.HANDICAP_DOWN, for: .normal)
+                position.setTitle(CommonConstants.POSITION_DOWN, for: .normal)
+                order.setTitle(CommonConstants.ORDER_DOWN, for: .normal)
+                transaction.setTitle(CommonConstants.TRANSACTION_DOWN, for: .normal)
             }
         }
 
+        //控制五档行情显示
+        initMD5ViewVisibility()
 
+        //控制图表显示
+        if dataManager.isShowDownStack {
+            downStackViewHeight.constant = 250
+            handicap.setTitle(CommonConstants.HANDICAP_DOWN, for: .normal)
+            position.setTitle(CommonConstants.POSITION_DOWN, for: .normal)
+            order.setTitle(CommonConstants.ORDER_DOWN, for: .normal)
+            transaction.setTitle(CommonConstants.TRANSACTION_DOWN, for: .normal)
+        }else {
+            downStackViewHeight.constant = 40
+            handicap.setTitle(CommonConstants.HANDICAP_UP, for: .normal)
+            position.setTitle(CommonConstants.POSITION_UP, for: .normal)
+            order.setTitle(CommonConstants.ORDER_UP, for: .normal)
+            transaction.setTitle(CommonConstants.TRANSACTION_UP, for: .normal)
+        }
+
+        NotificationCenter.default.addObserver(self, selector: #selector(updateMD5ViewVisibility), name: Notification.Name(CommonConstants.ControlMD5Notification), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(showUpView), name: Notification.Name(CommonConstants.ShowUpViewNotification), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(hideUpView), name: Notification.Name(CommonConstants.HideUpViewNotification), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(switchToPosition), name: Notification.Name(CommonConstants.SwitchToPositionNotification), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(switchToOrder), name: Notification.Name(CommonConstants.SwitchToOrderNotification), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(switchToTransaction), name: Notification.Name(CommonConstants.SwitchToTransactionNotification), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(sendSuscribeQuote), name: Notification.Name(CommonConstants.SwitchQuoteNotification), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(switchKlineTitle(_:)), name: Notification.Name(CommonConstants.SwitchKlineNotification), object: nil)
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: 60, height: 30)
+    }
+
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 1
+    }
+
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return durations.count
+    }
+
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DurationCollectionViewCell", for: indexPath) as! DurationCollectionViewCell
+
+        let duration = durations[indexPath.row]
+        cell.duration.text = duration
+        if self.klineIndex == indexPath.row {
+            cell.duration.textColor = CommonConstants.NAV_TEXT_HIGHLIGHTED
+            cell.underline.backgroundColor = CommonConstants.NAV_TEXT_HIGHLIGHTED
+        }else{
+            cell.duration.textColor = CommonConstants.NAV_TEXT
+            cell.underline.backgroundColor = CommonConstants.NAV_TEXT_UNHIGHLIGHTED
+        }
+        return cell
+    }
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+
+        if let cell = durationCollectionView.cellForItem(at: indexPath) as? DurationCollectionViewCell{
+            let durationTitle = cell.duration.text ?? ""
+            switchDuration(durationTitle: durationTitle)
+        }
+        self.klineIndex = indexPath.row
+        durationCollectionView.reloadData()
+    }
+
+    func switchDuration(durationTitle: String) {
+
+        if "分时图".elementsEqual(durationTitle){
+            switchKlinePage(index: 0, klineType: CommonConstants.CURRENT_DAY)
+        }else {
+            let duration = getDuration(durationTitle: durationTitle)
+            if durationTitle.contains("秒"){
+                switchKlinePage(index: 4, klineType: duration)
+            }else if durationTitle.contains("分"){
+                switchKlinePage(index: 3, klineType: duration)
+            }else if durationTitle.contains("时"){
+                switchKlinePage(index: 2, klineType: duration)
+            }else{
+                switchKlinePage(index: 1, klineType: duration)
+            }
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -114,6 +166,10 @@ class QuoteViewController: UIViewController, UIPopoverPresentationControllerDele
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier {
+        case CommonConstants.QuoteToSearch:
+            if let searchViewController = segue.destination as? SearchTableViewController{
+                searchViewController.segueIdentify = CommonConstants.QuoteToSearch
+            }
         case CommonConstants.TransactionPageViewController:
             if let pageViewController = segue.destination as? TransactionPageViewController {
                 transactionPageViewController = pageViewController
@@ -133,7 +189,7 @@ class QuoteViewController: UIViewController, UIPopoverPresentationControllerDele
                 //设置代理
                 popupView.popoverPresentationController?.delegate = self
                 //弹出框口大小
-                popupView.preferredContentSize = CGSize(width: 110, height: 125)
+                popupView.preferredContentSize = CGSize(width: 110, height: 160)
             }
         default:
             return
@@ -146,64 +202,21 @@ class QuoteViewController: UIViewController, UIPopoverPresentationControllerDele
             dataManager.saveOrRemoveIns(ins: dataManager.sInstrumentId)
         }
         //设置按钮背景
-        let optional = FileUtils.getOptional()
-        if optional.contains(dataManager.sInstrumentId){
-            save.image = UIImage(named: "heart", in: Bundle(identifier: "com.shinnytech.futures"), compatibleWith: nil)
-        }else{
-            save.image = UIImage(named: "heart_outline", in: Bundle(identifier: "com.shinnytech.futures"), compatibleWith: nil)
-        }
+        setOptionalBackground()
+
     }
 
     @IBAction func klineDuration(_ sender: UIButton) {
-        if let klineDurationPopupView = UIStoryboard(name: "Main", bundle: Bundle(identifier: "com.shinnytech.futures")).instantiateViewController(withIdentifier: CommonConstants.PopupCollectionViewController) as? PopupCollectionViewController {
-            klineDurationPopupView.modalPresentationStyle = .popover
-            //箭头所指向的区域
-            klineDurationPopupView.popoverPresentationController?.sourceView = sender
-            klineDurationPopupView.popoverPresentationController?.sourceRect = sender.bounds
-            //箭头方向
-            klineDurationPopupView.popoverPresentationController?.permittedArrowDirections = .up
-            //设置代理
-            klineDurationPopupView.popoverPresentationController?.delegate = self
-            klineDurationPopupView.insList = CommonConstants.klineTypeTitle
-            let columnNum = ceilf(Float(klineDurationPopupView.insList.count) / 8.0)
-            let collectionHeight = CGFloat(columnNum * 50 + 20 + (columnNum - 1) * 10)
-            //弹出框口大小
-            let screenSize = UIScreen.main.bounds
-            let screenWidth = screenSize.width
-            klineDurationPopupView.preferredContentSize = CGSize(width: screenWidth, height: collectionHeight)
-            let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
-            layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-            layout.itemSize = CGSize(width: screenWidth / 8, height: 50)
-            layout.minimumInteritemSpacing = 10
-            layout.minimumLineSpacing = 10
-            klineDurationPopupView.collectionView!.collectionViewLayout = layout
-            klineDurationPopupView.flag = "duration"
-            self.present(klineDurationPopupView, animated: true, completion: nil)
-        }
-    }
-    
-
-    @IBAction func currentDay(_ sender: UIButton) {
-        switchKlinePage(index: 0)
-    }
-
-    @IBAction func klineDay(_ sender: UIButton) {
-        switchKlinePage(index: 1)
-    }
-
-    @IBAction func klineHour(_ sender: UIButton) {
-        switchKlinePage(index: 2)
-    }
-
-    @IBAction func klineMinute(_ sender: UIButton) {
-        switchKlinePage(index: 3)
-    }
-
-    @IBAction func klineSecond(_ sender: UIButton) {
-        switchKlinePage(index: 4)
+        self.klineIndex = self.klineIndex + 1
+        if self.klineIndex == durations.count {self.klineIndex = 0}
+        let durationTitle = durations[self.klineIndex]
+        switchDuration(durationTitle: durationTitle)
+        self.durationCollectionView.reloadData()
+        durationCollectionView.scrollToItem(at: IndexPath(row: self.klineIndex, section: 0), at: .right, animated: false)
     }
 
     @IBAction func handicap(_ sender: UIButton) {
+        controlDownStackViewHeight(index: 0)
         switchTransactionPage(index: 0)
     }
 
@@ -212,6 +225,7 @@ class QuoteViewController: UIViewController, UIPopoverPresentationControllerDele
             DataManager.getInstance().sToLoginTarget = "SwitchToPosition"
             performSegue(withIdentifier: CommonConstants.QuoteToLogin, sender: sender)
         } else {
+            controlDownStackViewHeight(index: 1)
             switchTransactionPage(index: 1)
         }
     }
@@ -221,6 +235,7 @@ class QuoteViewController: UIViewController, UIPopoverPresentationControllerDele
             DataManager.getInstance().sToLoginTarget = "SwitchToOrder"
             performSegue(withIdentifier: CommonConstants.QuoteToLogin, sender: sender)
         } else {
+            controlDownStackViewHeight(index: 2)
             switchTransactionPage(index: 2)
         }
     }
@@ -230,24 +245,69 @@ class QuoteViewController: UIViewController, UIPopoverPresentationControllerDele
             DataManager.getInstance().sToLoginTarget = "SwitchToTransaction"
             performSegue(withIdentifier: CommonConstants.QuoteToLogin, sender: sender)
         } else {
+            controlDownStackViewHeight(index: 3)
             switchTransactionPage(index: 3)
         }
     }
 
     // MARK: functions
-    private func switchKlinePage(index: Int) {
-        if klinePageViewController.currentIndex < index {
-            klinePageViewController.setViewControllers([klinePageViewController.subViewControllers[index]], direction: .forward, animated: false, completion: nil)
-        } else if klinePageViewController.currentIndex > index {
-            klinePageViewController.setViewControllers([klinePageViewController.subViewControllers[index]], direction: .reverse, animated: false, completion: nil)
-        }
-        if klinePageViewController.currentIndex != index {
-            controlKlineVisibility(index: index)
-            klinePageViewController.currentIndex = index
+    private func controlDownStackViewHeight(index: Int){
+        if transactionIndex == index {
+            if downStackViewHeight.constant == 40{
+                downStackViewHeight.constant = 250
+                dataManager.isShowDownStack = true
+                handicap.setTitle(CommonConstants.HANDICAP_DOWN, for: .normal)
+                position.setTitle(CommonConstants.POSITION_DOWN, for: .normal)
+                order.setTitle(CommonConstants.ORDER_DOWN, for: .normal)
+                transaction.setTitle(CommonConstants.TRANSACTION_DOWN, for: .normal)
+            }else {
+                downStackViewHeight.constant = 40
+                dataManager.isShowDownStack = false
+                handicap.setTitle(CommonConstants.HANDICAP_UP, for: .normal)
+                position.setTitle(CommonConstants.POSITION_UP, for: .normal)
+                order.setTitle(CommonConstants.ORDER_UP, for: .normal)
+                transaction.setTitle(CommonConstants.TRANSACTION_UP, for: .normal)
+            }
+            NotificationCenter.default.post(name: Notification.Name(CommonConstants.ControlMiddleBottomChartViewNotification), object: nil)
+        }else{
+            if downStackViewHeight.constant == 40{
+                downStackViewHeight.constant = 250
+                dataManager.isShowDownStack = true
+                handicap.setTitle(CommonConstants.HANDICAP_DOWN, for: .normal)
+                position.setTitle(CommonConstants.POSITION_DOWN, for: .normal)
+                order.setTitle(CommonConstants.ORDER_DOWN, for: .normal)
+                transaction.setTitle(CommonConstants.TRANSACTION_DOWN, for: .normal)
+                NotificationCenter.default.post(name: Notification.Name(CommonConstants.ControlMiddleBottomChartViewNotification), object: nil)
+            }
+            transactionIndex = index
         }
     }
 
-    private func switchTransactionPage(index: Int) {
+    private func switchKlinePage(index: Int, klineType: String) {
+        if index >= klinePageViewController.subViewControllers.count || index < 0{
+            return
+        }
+        let subView = klinePageViewController.subViewControllers[index]
+        subView.klineType = klineType
+        if klinePageViewController.currentIndex != index {
+            klinePageViewController.setViewControllers([subView], direction: .forward, animated: false, completion: nil)
+            klinePageViewController.currentIndex = index
+        }else {
+            var fragmengType = ""
+            if index == 4{
+                fragmengType = CommonConstants.SECOND_FRAGMENT
+            }else if index == 3{
+                fragmengType = CommonConstants.MINUTE_FRAGMENT
+            }else if index == 2 {
+                fragmengType = CommonConstants.HOUR_FRAGMENT
+            }else if index == 1{
+                fragmengType = CommonConstants.DAY_FRAGMENT
+            }
+            NotificationCenter.default.post(name: Notification.Name(CommonConstants.SwitchDurationNotification), object: nil, userInfo: ["fragmentType": fragmengType])
+        }
+    }
+
+    func switchTransactionPage(index: Int) {
         if transactionPageViewController.currentIndex < index {
             transactionPageViewController.setViewControllers([transactionPageViewController.subViewControllers[index]], direction: .forward, animated: false, completion: nil)
         } else if transactionPageViewController.currentIndex > index {
@@ -276,70 +336,6 @@ class QuoteViewController: UIViewController, UIPopoverPresentationControllerDele
     func unhighlightUpNavBottomLine(view: UIButton) {
         if let viewWithTag = view.viewWithTag(100) {
             viewWithTag.backgroundColor = CommonConstants.NAV_TEXT_UNHIGHLIGHTED
-        }
-    }
-
-
-    func controlKlineVisibility(index: Int) {
-        switch index {
-        case 0:
-            currentDay.setTitleColor(CommonConstants.NAV_TEXT_HIGHLIGHTED, for: .normal)
-            highlightUpNavBottomLine(view: currentDay)
-            klineDay.setTitleColor(CommonConstants.NAV_TEXT, for: .normal)
-            unhighlightUpNavBottomLine(view: klineDay)
-            klineHour.setTitleColor(CommonConstants.NAV_TEXT, for: .normal)
-            unhighlightUpNavBottomLine(view: klineHour)
-            klineMinute.setTitleColor(CommonConstants.NAV_TEXT, for: .normal)
-            unhighlightUpNavBottomLine(view: klineMinute)
-            klineSecond.setTitleColor(CommonConstants.NAV_TEXT, for: .normal)
-            unhighlightUpNavBottomLine(view: klineSecond)
-        case 1:
-            currentDay.setTitleColor(CommonConstants.NAV_TEXT, for: .normal)
-            unhighlightUpNavBottomLine(view: currentDay)
-            klineDay.setTitleColor(CommonConstants.NAV_TEXT_HIGHLIGHTED, for: .normal)
-            highlightUpNavBottomLine(view: klineDay)
-            klineHour.setTitleColor(CommonConstants.NAV_TEXT, for: .normal)
-            unhighlightUpNavBottomLine(view: klineHour)
-            klineMinute.setTitleColor(CommonConstants.NAV_TEXT, for: .normal)
-            unhighlightUpNavBottomLine(view: klineMinute)
-            klineSecond.setTitleColor(CommonConstants.NAV_TEXT, for: .normal)
-            unhighlightUpNavBottomLine(view: klineSecond)
-        case 2:
-            currentDay.setTitleColor(CommonConstants.NAV_TEXT, for: .normal)
-            unhighlightUpNavBottomLine(view: currentDay)
-            klineDay.setTitleColor(CommonConstants.NAV_TEXT, for: .normal)
-            unhighlightUpNavBottomLine(view: klineDay)
-            klineHour.setTitleColor(CommonConstants.NAV_TEXT_HIGHLIGHTED, for: .normal)
-            highlightUpNavBottomLine(view: klineHour)
-            klineMinute.setTitleColor(CommonConstants.NAV_TEXT, for: .normal)
-            unhighlightUpNavBottomLine(view: klineMinute)
-            klineSecond.setTitleColor(CommonConstants.NAV_TEXT, for: .normal)
-            unhighlightUpNavBottomLine(view: klineSecond)
-        case 3:
-            currentDay.setTitleColor(CommonConstants.NAV_TEXT, for: .normal)
-            unhighlightUpNavBottomLine(view: currentDay)
-            klineDay.setTitleColor(CommonConstants.NAV_TEXT, for: .normal)
-            unhighlightUpNavBottomLine(view: klineDay)
-            klineHour.setTitleColor(CommonConstants.NAV_TEXT, for: .normal)
-            unhighlightUpNavBottomLine(view: klineHour)
-            klineMinute.setTitleColor(CommonConstants.NAV_TEXT_HIGHLIGHTED, for: .normal)
-            highlightUpNavBottomLine(view: klineMinute)
-            klineSecond.setTitleColor(CommonConstants.NAV_TEXT, for: .normal)
-            unhighlightUpNavBottomLine(view: klineSecond)
-        case 4:
-            currentDay.setTitleColor(CommonConstants.NAV_TEXT, for: .normal)
-            unhighlightUpNavBottomLine(view: currentDay)
-            klineDay.setTitleColor(CommonConstants.NAV_TEXT, for: .normal)
-            unhighlightUpNavBottomLine(view: klineDay)
-            klineHour.setTitleColor(CommonConstants.NAV_TEXT, for: .normal)
-            unhighlightUpNavBottomLine(view: klineHour)
-            klineMinute.setTitleColor(CommonConstants.NAV_TEXT, for: .normal)
-            unhighlightUpNavBottomLine(view: klineMinute)
-            klineSecond.setTitleColor(CommonConstants.NAV_TEXT_HIGHLIGHTED, for: .normal)
-            highlightUpNavBottomLine(view: klineSecond)
-        default:
-            break
-
         }
     }
 
@@ -438,19 +434,52 @@ class QuoteViewController: UIViewController, UIPopoverPresentationControllerDele
             highlightBottomNavBorderLine(view: transaction)
         default:
             break
-
         }
+
+        //控制交易部分视图上下移动的标志，涵盖点击切换和滑动切换产生的效果
+        transactionIndex = index
     }
 
     func getDurationTitle(duration: String) -> String {
         var i = 0;
         for value in CommonConstants.klineDuration {
             if value.elementsEqual(duration){
-                return CommonConstants.klineTypeTitle[i]
+                return CommonConstants.klineDurationAll[i]
             }
             i += 1
         }
         return ""
+    }
+
+    func getDuration(durationTitle: String) -> String {
+        var i = 0;
+        for value in CommonConstants.klineDurationAll {
+            if value.elementsEqual(durationTitle){
+                return CommonConstants.klineDuration[i]
+            }
+            i += 1
+        }
+        return ""
+    }
+
+    //刷新页面标题
+    func updateTitle() {
+        var title = dataManager.getButtonTitle() ?? ""
+        title = title + " ▼"
+        let size = title.size(withAttributes:[.font: UIFont.systemFont(ofSize:15.0)])
+        button.frame = CGRect(x: 0, y: 0, width: size.width + 40, height: 40)
+        button.setTitle(title, for: .normal)
+        button.layoutIfNeeded()
+    }
+
+    //设置添加自选按钮背景
+    func setOptionalBackground() {
+        let optional = FileUtils.getOptional()
+        if optional.contains(dataManager.sInstrumentId){
+            save.image = UIImage(named: "heart", in: Bundle(identifier: "com.shinnytech.futures"), compatibleWith: nil)
+        }else{
+            save.image = UIImage(named: "heart_outline", in: Bundle(identifier: "com.shinnytech.futures"), compatibleWith: nil)
+        }
     }
 
     // MARK: objc methods
@@ -478,7 +507,6 @@ class QuoteViewController: UIViewController, UIPopoverPresentationControllerDele
             layout.minimumInteritemSpacing = 10
             layout.minimumLineSpacing = 10
             optionalPopupView.collectionView!.collectionViewLayout = layout
-            optionalPopupView.flag = "optional"
             self.present(optionalPopupView, animated: true, completion: nil)
         }
 
@@ -501,9 +529,10 @@ class QuoteViewController: UIViewController, UIPopoverPresentationControllerDele
     }
 
     @objc func switchToTransaction() {
+        //更新一下合约代码标题
+        updateTitle()
+
         switchTransactionPage(index: 3)
-        let title = dataManager.getButtonTitle()
-        button.setTitle(title, for: .normal)
     }
 
     //订阅合约行情
@@ -518,55 +547,49 @@ class QuoteViewController: UIViewController, UIPopoverPresentationControllerDele
         }
         MDWebSocketUtils.getInstance().sendSubscribeQuote(insList: instrumentId)
         //设置按钮背景
-        let optional = FileUtils.getOptional()
-        if optional.contains(instrumentId){
-            save.image = UIImage(named: "heart", in: Bundle(identifier: "com.shinnytech.futures"), compatibleWith: nil)
-        }else{
-            save.image = UIImage(named: "heart_outline", in: Bundle(identifier: "com.shinnytech.futures"), compatibleWith: nil)
-        }
+        setOptionalBackground()
+
+        //刷新五档行情
+        updateMD5ViewVisibility()
     }
 
-    //切换K线图标
-    @objc func switchKlineTitle(_ notification: NSNotification){
-        if let dict = notification.userInfo as NSDictionary? {
-            if let index = dict["durationIndex"] as? Int, let fragmentType = dict["fragmentType"] as? String{
-                let klineTitle = CommonConstants.klineTypeTitle[index]
-                switch fragmentType {
-                case CommonConstants.DAY_FRAGMENT:
-                    klineDay.setTitle(klineTitle, for: .normal)
-                    if klinePageViewController.currentIndex == 1{
-                        NotificationCenter.default.post(name: Notification.Name(CommonConstants.SwitchDurationNotification), object: nil, userInfo: notification.userInfo)
-                    }else {
-                        switchKlinePage(index: 1)
-                    }
-                case CommonConstants.HOUR_FRAGMENT:
-                    klineHour.setTitle(klineTitle, for: .normal)
-                    if klinePageViewController.currentIndex == 2{
-                        NotificationCenter.default.post(name: Notification.Name(CommonConstants.SwitchDurationNotification), object: nil, userInfo: notification.userInfo)
-                    }else {
-                        switchKlinePage(index: 2)
-                    }
-                case CommonConstants.MINUTE_FRAGMENT:
-                    klineMinute.setTitle(klineTitle, for: .normal)
-                    if klinePageViewController.currentIndex == 3{
-                        NotificationCenter.default.post(name: Notification.Name(CommonConstants.SwitchDurationNotification), object: nil, userInfo: notification.userInfo)
-                    }else {
-                        switchKlinePage(index: 3)
-                    }
-                case CommonConstants.SECOND_FRAGMENT:
-                    klineSecond.setTitle(klineTitle, for: .normal)
-                    if klinePageViewController.currentIndex == 4{
-                        NotificationCenter.default.post(name: Notification.Name(CommonConstants.SwitchDurationNotification), object: nil, userInfo: notification.userInfo)
-                    }else {
-                        switchKlinePage(index: 4)
-                    }
-                default:
-                    break
+    //进入页面初始化五档行情
+    func initMD5ViewVisibility() {
+        if !dataManager.sInstrumentId.contains("SHFE") && !dataManager.sInstrumentId.contains("INE"){
+            md5View.isHidden = true
+        }else {
+            //判断有无五档行情
+            if let quote = dataManager.sRtnMD.quotes[dataManager.sInstrumentId], let ask_price5 = quote.ask_price5{
+                if ask_price5 is NSNull{
+                    UserDefaults.standard.set(false, forKey: CommonConstants.CONFIG_MD5)
                 }
+            }
+            let isShowMD5 = UserDefaults.standard.bool(forKey: CommonConstants.CONFIG_MD5)
+            if isShowMD5 {
+                md5View.isHidden = false
+            }else{
+                md5View.isHidden = true
             }
         }
     }
 
+    //切换合约刷新五档行情
+    @objc func updateMD5ViewVisibility() {
+        if !dataManager.sInstrumentId.contains("SHFE") && !dataManager.sInstrumentId.contains("INE"){
+            md5View.isHidden = true
+        }else {
+            let isShowMD5 = UserDefaults.standard.bool(forKey: CommonConstants.CONFIG_MD5)
+            if isShowMD5 {
+                md5View.isHidden = false
+            }else{
+                md5View.isHidden = true
+            }
+        }
+    }
+
+    @IBAction func searchViewToQuoteControllerUnwindSegue(segue: UIStoryboardSegue) {
+        print("我从搜索页来～")
+    }
 }
 
 @IBDesignable

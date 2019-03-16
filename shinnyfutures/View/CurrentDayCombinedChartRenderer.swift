@@ -1,5 +1,5 @@
 //
-//  MyCombinedChartRenderer.swift
+//  CurrentDayCombinedChartRenderer.swift
 //  shinnyfutures
 //
 //  Created by chenli on 2018/5/24.
@@ -9,7 +9,7 @@
 import UIKit
 import Charts
 
-open class MyCombinedChartRenderer: CombinedChartRenderer {
+open class CurrentDayCombinedChartRenderer: CombinedChartRenderer {
 
     override init(chart: CombinedChartView, animator: Animator, viewPortHandler: ViewPortHandler) {
         super.init(chart: chart, animator: animator, viewPortHandler: viewPortHandler)
@@ -28,22 +28,21 @@ open class MyCombinedChartRenderer: CombinedChartRenderer {
             case .bar:
                 if chart.barData !== nil
                 {
-                    _renderers.append(BarChartRenderer(dataProvider: chart, animator: animator, viewPortHandler: viewPortHandler))
+                    _renderers.append(MyBarChartRenderer(dataProvider: chart, animator: animator, viewPortHandler: viewPortHandler))
                 }
                 break
                 
             case .line:
                 if chart.lineData !== nil
                 {
-                    _renderers.append(LineChartRenderer(dataProvider: chart, animator: animator, viewPortHandler: viewPortHandler))
+                    _renderers.append(MyLineChartRenderer(dataProvider: chart, animator: animator, viewPortHandler: viewPortHandler))
                 }
                 break
                 
             case .candle:
                 if chart.candleData !== nil
                 {
-                    //使用自定义的蜡烛图渲染器
-                    _renderers.append(MyCandleStickChartRenderer(dataProvider: chart, animator: animator, viewPortHandler: viewPortHandler))
+                    _renderers.append(CandleStickChartRenderer(dataProvider: chart, animator: animator, viewPortHandler: viewPortHandler))
                 }
                 break
                 

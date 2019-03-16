@@ -358,15 +358,27 @@ open class MyCandleStickChartRenderer: CandleStickChartRenderer {
                 context.setLineDash(phase: 0.0, lengths: [])
             }
 
-            //使十字光标落在收盘价上
-            let y = e.close * Double(animator.phaseY)
-            
-            let pt = trans.pixelForValues(x: e.x, y: y)
-            
-            high.setDraw(pt: pt)
-            
-            // draw the lines
-            drawHighlightLines(context: context, point: pt, set: set)
+            let lowValue = e.low * animator.phaseY
+            let highValue = e.high * animator.phaseY
+            let pt = trans.pixelForValues(x: e.x, y: (lowValue + highValue) / 2)
+            let xp = pt.x
+
+            let xMax = viewPortHandler.contentRight
+            let contentBottom = viewPortHandler.contentBottom
+
+            //绘制竖线
+            context.beginPath()
+            context.move(to: CGPoint(x: xp, y: 15))
+            context.addLine(to: CGPoint(x: xp, y: viewPortHandler.chartHeight))
+            context.strokePath()
+
+            let y = high.drawY
+            if y >= 0 && y <= contentBottom{
+                context.beginPath()
+                context.move(to: CGPoint(x: 0, y: y))
+                context.addLine(to: CGPoint(x: xMax, y: y))
+                context.strokePath()
+            }
         }
         
         context.restoreGState()

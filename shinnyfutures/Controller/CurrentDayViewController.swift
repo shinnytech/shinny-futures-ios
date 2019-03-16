@@ -12,7 +12,9 @@ import Charts
 class CurrentDayViewController: BaseChartViewController {
 
     // MARK: Properties
-    @IBOutlet weak var currentDayChartView: CurrentDayCombinedChartView!
+    @IBOutlet weak var topChartView: CurrentDayCombinedChartView!
+    @IBOutlet weak var middleChartView: CurrentDayCombinedChartView!
+    @IBOutlet weak var bottomChartView: CurrentDayCombinedChartView!
     var colorOneMinuteLine: UIColor?
     var colorAverageLine: UIColor?
     var sumVolume = 0.0
@@ -29,7 +31,9 @@ class CurrentDayViewController: BaseChartViewController {
     var kline: Kline!
 
     override func viewDidLoad() {
-        chartView = currentDayChartView
+        topChartViewBase = topChartView
+        middleChartViewBase = middleChartView
+        bottomChartViewBase = bottomChartView
         super.viewDidLoad()
         
     }
@@ -40,25 +44,23 @@ class CurrentDayViewController: BaseChartViewController {
         colorOneMinuteLine = UIColor.white
         colorAverageLine = UIColor.yellow
         simpleDateFormat = DateFormatter()
-        simpleDateFormat.dateFormat = "HH:mm:ss"
+        simpleDateFormat.dateFormat = "HH:mm"
         simpleDateFormat.locale = Locale.autoupdatingCurrent
 
-        chartView.setScaleEnabled(false)
+        topChartViewBase.setScaleEnabled(false)
         let markerView = CurrentDayMarkerView.viewFromXib()!
-        markerView.chartView = chartView
-        chartView.marker = markerView
+        markerView.chartView = topChartViewBase
+        topChartViewBase.marker = markerView
 
-        let xAxis = chartView.xAxis
-        xAxis.labelPosition = .bottom
-        xAxis.axisLineWidth = 0.5
-        xAxis.axisLineColor = colorGrid!
+        let xAxis = topChartViewBase.xAxis
+        xAxis.drawLabelsEnabled = false
+        xAxis.drawAxisLineEnabled = true
         xAxis.gridColor = colorGrid!
-        xAxis.labelTextColor = colorText!
-        xAxis.granularity = 1
+        xAxis.axisLineColor = colorGrid!
         xAxis.gridLineWidth = 0.2
-        xAxis.valueFormatter = MyXAxisValueFormat(parent: self)
+        xAxis.labelPosition = .bottom
 
-        let rightAxis = chartView.rightAxis
+        let rightAxis = topChartViewBase.rightAxis
         rightAxis.labelPosition = .insideChart
         rightAxis.drawGridLinesEnabled = false
         rightAxis.drawAxisLineEnabled = false
@@ -66,7 +68,7 @@ class CurrentDayViewController: BaseChartViewController {
         rightAxis.labelTextColor = colorText!
         rightAxis.valueFormatter = MyRightYAxisValueFormat(parent: self)
 
-        let leftAxis = chartView.leftAxis
+        let leftAxis = topChartViewBase.leftAxis
         leftAxis.labelPosition = .insideChart
         leftAxis.drawAxisLineEnabled = false
         leftAxis.labelCount = 3
@@ -77,57 +79,106 @@ class CurrentDayViewController: BaseChartViewController {
         leftAxis.labelTextColor = colorText!
         leftAxis.valueFormatter = MyLeftYAxisValueFormat(parent: self)
 
-        let l = chartView.legend
+        let l = topChartViewBase.legend
         l.horizontalAlignment = .right
         l.verticalAlignment = .top
         l.textColor = UIColor.white
-    }
 
-    override func highlight() {
-        let position = doubleTap.location(in: chartView)
-        let highlight = chartView.getHighlightByTouchPoint(position)
-        chartView.highlightValue(highlight)
-        chartView.addGestureRecognizer(singleTap)
-    }
 
-    override func Unhighlight() {
-        chartView.highlightValue(nil)
-        chartView.removeGestureRecognizer(singleTap)
-    }
+        middleChartViewBase.setScaleEnabled(false)
 
+        let middleXAxis = middleChartViewBase.xAxis
+        middleXAxis.drawLabelsEnabled = true
+        middleXAxis.drawAxisLineEnabled = true
+        middleXAxis.gridColor = colorGrid!
+        middleXAxis.gridLineWidth = 0.2
+        middleXAxis.labelPosition = .bottom
+        middleXAxis.axisLineColor = colorGrid!
+        middleXAxis.labelTextColor = colorText!
+        middleXAxis.axisLineWidth = 1
+
+        let middleRightAxis = middleChartViewBase.rightAxis
+        middleRightAxis.drawLabelsEnabled = false
+        middleRightAxis.drawAxisLineEnabled = false
+        middleRightAxis.drawGridLinesEnabled = false
+
+        let middleLeftAxis = middleChartViewBase.leftAxis
+        middleLeftAxis.labelPosition = .insideChart
+        middleLeftAxis.drawAxisLineEnabled = false
+        middleLeftAxis.gridLineWidth = 0.2
+        middleLeftAxis.gridLineDashLengths = [2, 2, 2, 2]
+        middleLeftAxis.gridLineDashPhase = 0
+        middleLeftAxis.gridColor = colorGrid!
+        middleLeftAxis.labelTextColor = colorText!
+        middleLeftAxis.labelCount = 4
+        middleLeftAxis.axisMinimum = 0
+        middleLeftAxis.spaceBottom = 0
+
+        let middleLegend = middleChartViewBase.legend
+        middleLegend.enabled = false
+
+    }
+    
     override func refreshKline() {
-        if chartView.data != nil && (chartView.data?.dataSetCount)! > 0 {
-            let combineData = chartView.combinedData
-            let lineData = combineData?.lineData
+        
+        if topChartViewBase.data != nil && (topChartViewBase.data?.dataSetCount)! > 0 {
+            let topCombineData = topChartViewBase.combinedData
+            let topLineData = topCombineData?.lineData
+
+            let middleCombineData = middleChartView.combinedData
+            let middleLineData = middleCombineData?.lineData
+            let middleBarData = middleCombineData?.barData
 
             let last_id_t = kline.last_id as? Int ?? -1
             let datas = kline.datas
 
             if last_id_t == last_id {
                 //NSLog("分时图刷新")
-                lineData?.removeEntry(xValue: Double(last_id), dataSetIndex: 0)
-                lineData?.removeEntry(xValue: Double(last_id), dataSetIndex: 1)
+                guard let data = datas["\(last_id)"] else {return}
+                topLineData?.removeEntry(xValue: Double(last_id), dataSetIndex: 0)
+                topLineData?.removeEntry(xValue: Double(last_id), dataSetIndex: 1)
+                middleLineData?.removeEntry(xValue: Double(last_id), dataSetIndex: 0)
+                middleBarData?.removeEntry(xValue: Double(last_id), dataSetIndex: 0)
                 guard let volume = sumVolumeDic[last_id] else {return}
                 sumVolume -= volume
                 guard let cv = sumCVDic[last_id] else {return}
                 sumCV -= cv
-                let entries = generateLineDataEntry(index: last_id, datas: datas)
-                lineData?.addEntry(entries[0], dataSetIndex: 0)
-                lineData?.addEntry(entries[1], dataSetIndex: 1)
+                let entries = generateMultiDataEntry(index: last_id, data: data)
+                topLineData?.addEntry(entries[0], dataSetIndex: 0)
+                topLineData?.addEntry(entries[1], dataSetIndex: 1)
+                middleLineData?.addEntry(entries[2], dataSetIndex: 0)
+                middleBarData?.addEntry(entries[3], dataSetIndex: 0)
 
-            } else {
+            } else if last_id_t > last_id{
                 //NSLog("分时图加载多个数据")
                 for index in (last_id + 1)...last_id_t {
-                    let entries = generateLineDataEntry(index: index, datas: datas)
-                    lineData?.addEntry(entries[0], dataSetIndex: 0)
-                    lineData?.addEntry(entries[1], dataSetIndex: 1)
+                    guard let data = datas["\(index)"] else {continue}
+                    let entries = generateMultiDataEntry(index: index, data: data)
+                    topLineData?.addEntry(entries[0], dataSetIndex: 0)
+                    topLineData?.addEntry(entries[1], dataSetIndex: 1)
+                    middleLineData?.addEntry(entries[2], dataSetIndex: 0)
+                    middleBarData?.addEntry(entries[3], dataSetIndex: 0)
                 }
                 last_id = last_id_t
             }
-            refreshYAxisRange(lineDataSet: lineData?.getDataSetByIndex(0) as! ILineChartDataSet)
-            (chartView.xAxis as! MyXAxis).labels = labels
-            combineData?.notifyDataChanged()
-            chartView.notifyDataSetChanged()
+            refreshYAxisRange(lineDataSet: topLineData?.getDataSetByIndex(0) as! ILineChartDataSet)
+            let range = Double(trading_day_end_id - trading_day_start_id)
+
+
+            topCombineData?.notifyDataChanged()
+            topChartViewBase.notifyDataSetChanged()
+            topChartViewBase.setVisibleXRangeMinimum(range)
+            topChartViewBase.xAxis.axisMinimum = topCombineData?.xMin ?? 0 - 0.35
+            topChartViewBase.xAxis.axisMaximum = topCombineData?.xMax ?? 0 + 0.35
+            (topChartViewBase.xAxis as! MyXAxis).labels = labels
+
+            middleCombineData?.notifyDataChanged()
+            middleChartViewBase.notifyDataSetChanged()
+            middleChartViewBase.setVisibleXRangeMinimum(range)
+            middleChartViewBase.xAxis.axisMinimum = middleCombineData?.xMin ?? 0 - 0.35
+            middleChartViewBase.xAxis.axisMaximum = middleCombineData?.xMax ?? 0 + 0.35
+            (middleChartViewBase.xAxis as! MyXAxis).labels = labels
+
         } else {
             guard let quote = dataManager.sRtnMD.quotes[dataManager.sInstrumentId] else {return}
             guard let kline = dataManager.sRtnMD.klines[dataManager.sInstrumentId]?[klineType] else {return}
@@ -140,33 +191,62 @@ class CurrentDayViewController: BaseChartViewController {
             if trading_day_end_id == -1 || trading_day_start_id == -1 {return}
             last_id = last_id_t
             preSettlement = quote.pre_settlement as? Double ?? 1.0
+            let range = Double(trading_day_end_id - trading_day_start_id)
             NSLog("分时图初始化")
-            (chartView.leftAxis as! MyYAxis).baseValue = preSettlement
-            (chartView.rightAxis as! MyYAxis).baseValue = preSettlement
-            var oneMinuteList = [ChartDataEntry]()
-            var averageList = [ChartDataEntry]()
-            let combineData = CombinedChartData()
+            (topChartViewBase.leftAxis as! MyYAxis).baseValue = preSettlement
+            (topChartViewBase.rightAxis as! MyYAxis).baseValue = preSettlement
+            (middleChartViewBase.leftAxis as! MyYAxis).baseValue = 0
+            (middleChartViewBase.rightAxis as! MyYAxis).baseValue = 0
+            var oneMinuteEntries = [ChartDataEntry]()
+            var averageEntries = [ChartDataEntry]()
+            let topCombineData = CombinedChartData()
+            var oiEntries = [ChartDataEntry]()
+            var volumeEntries = [BarChartDataEntry]()
+            let middleCombineData = CombinedChartData()
             for index in trading_day_start_id...last_id {
-                let entries = generateLineDataEntry(index: index, datas: datas)
-                oneMinuteList.append(entries[0])
-                averageList.append(entries[1])
+                guard let data = datas["\(index)"] else {continue}
+                let entries = generateMultiDataEntry(index: index, data: data)
+                oneMinuteEntries.append(entries[0])
+                averageEntries.append(entries[1])
+                oiEntries.append(entries[2])
+                volumeEntries.append(entries[3] as! BarChartDataEntry)
             }
-            let oneMinuteDataSet = generateLineDataSet(entries: oneMinuteList, color: colorOneMinuteLine!, label: "分时图", isHighlight: true)
-            let averageDataSet = generateLineDataSet(entries: averageList, color: colorAverageLine!, label: "均线", isHighlight: false)
+
+            let oneMinuteDataSet = generateLineDataSet(entries: oneMinuteEntries, color: colorOneMinuteLine!, label: "分时图", isHighlight: true, axisDependency: .left)
+            let averageDataSet = generateLineDataSet(entries: averageEntries, color: colorAverageLine!, label: "均线", isHighlight: false, axisDependency: .left)
             let lineData = LineChartData(dataSets: [oneMinuteDataSet, averageDataSet])
-            combineData.lineData = lineData
-            chartView.data = combineData
-            (chartView.xAxis as! MyXAxis).labels = labels
-            chartView.setVisibleXRangeMinimum(Double(trading_day_end_id - trading_day_start_id))
-            (chartView.marker as! CurrentDayMarkerView).resizeXib(heiht: chartView.viewPortHandler.contentHeight, width: chartView.viewPortHandler.contentWidth)
+            topCombineData.lineData = lineData
+
+            let oiDataSet = generateLineDataSet(entries: oiEntries, color: colorOneMinuteLine!, label: "OI", isHighlight: false, axisDependency: .right)
+            let volumeDataSet = generateBarDataSet(entries: volumeEntries, color: colorAverageLine!, label: "Volume", isHighlight: true)
+            let oiLineData = LineChartData(dataSet: oiDataSet)
+            let volumeBarData = BarChartData(dataSet: volumeDataSet)
+            middleCombineData.lineData = oiLineData
+            middleCombineData.barData = volumeBarData
+            middleCombineData.barData.barWidth = 0.01
+
+            topChartViewBase.data = topCombineData
+            (topChartViewBase.xAxis as! MyXAxis).labels = labels
+            topChartViewBase.setVisibleXRangeMinimum(range)
+            topChartViewBase.xAxis.axisMinimum = topCombineData.xMin - 0.35
+            topChartViewBase.xAxis.axisMaximum = topCombineData.xMax + 0.35
+            (topChartViewBase.marker as! CurrentDayMarkerView).resizeXib(heiht: topChartViewBase.viewPortHandler.contentHeight, width: topChartViewBase.viewPortHandler.contentWidth)
+
+            middleChartViewBase.data = middleCombineData
+            (middleChartViewBase.xAxis as! MyXAxis).labels = labels
+            middleChartViewBase.setVisibleXRangeMinimum(range)
+            middleChartViewBase.xAxis.axisMinimum = middleCombineData.xMin - 0.35
+            middleChartViewBase.xAxis.axisMaximum = middleCombineData.xMax + 0.35
+
         }
     }
 
-    private func generateLineDataEntry(index: Int, datas:[String: Kline.Data]) -> [ChartDataEntry] {
-        let data = datas["\(index)"]
-        let close = data?.close as? Double ?? 0.0
-        let volume = data?.volume as? Double ?? 0.0
-        let dateTime = (data?.datetime as? Int ?? 0) / 1000000000
+
+    private func generateMultiDataEntry(index: Int, data: Kline.Data) -> [ChartDataEntry] {
+        let oi = Double("\(data.close_oi ?? 0)") ?? 0.0
+        let volume = Double("\(data.volume ?? 0)") ?? 0.0
+        let close = Double("\(data.close ?? 0.0)") ?? 0.0
+        let dateTime = (data.datetime as? Int ?? 0) / 1000000000
         let x = Double(index)
         sumVolume += volume
         sumVolumeDic[index] = volume
@@ -176,6 +256,8 @@ class CurrentDayViewController: BaseChartViewController {
         let average = sumVolume != 0 ? (sumCV / sumVolume) : 0
         let oneMinuteEntry = ChartDataEntry(x: x, y: close)
         let averageEntry = ChartDataEntry(x: x, y: average)
+        let oiEntry = ChartDataEntry(x: x, y: oi)
+        let volumeEntry = BarChartDataEntry(x: x, y: volume)
         xVals[index] = dateTime
         let date = Date(timeIntervalSince1970: TimeInterval(dateTime))
         let time = simpleDateFormat.string(from: date)
@@ -190,17 +272,35 @@ class CurrentDayViewController: BaseChartViewController {
                 labels[index] = time
             }
         }
-        return [oneMinuteEntry, averageEntry]
+        return [oneMinuteEntry, averageEntry, oiEntry, volumeEntry]
     }
 
-    private func generateLineDataSet(entries: [ChartDataEntry], color: UIColor, label: String, isHighlight: Bool) -> LineChartDataSet {
+    //生成成交量数据集
+    func generateBarDataSet(entries: [BarChartDataEntry], color: UIColor, label: String, isHighlight: Bool) -> BarChartDataSet {
+        let set = BarChartDataSet(values: entries, label: label)
+        set.barBorderColor = color
+        set.colors = [color]
+        set.barBorderWidth = 0
+        set.drawValuesEnabled = false
+        set.axisDependency = .left
+        if isHighlight {
+            set.highlightLineWidth = 0.7
+            set.highlightColor = UIColor.white
+        } else {
+            set.highlightEnabled = false
+        }
+        return set
+    }
+
+    //生成持仓量数据集
+    private func generateLineDataSet(entries: [ChartDataEntry], color: UIColor, label: String, isHighlight: Bool, axisDependency: YAxis.AxisDependency) -> LineChartDataSet {
         let set = LineChartDataSet(values: entries, label: label)
         set.setColor(color)
         set.lineWidth = 0.7
         set.drawCirclesEnabled = false
         set.drawCircleHoleEnabled = false
         set.drawValuesEnabled = false
-        set.axisDependency = .left
+        set.axisDependency = axisDependency
         if isHighlight {
             refreshYAxisRange(lineDataSet: set)
             set.highlightLineWidth = 0.7
@@ -215,15 +315,15 @@ class CurrentDayViewController: BaseChartViewController {
         let lowDel = abs(lineDataSet.yMin - preSettlement)
         let highDel = abs(lineDataSet.yMax - preSettlement)
         if lowDel > highDel {
-            chartView.leftAxis.axisMinimum = preSettlement - lowDel
-            chartView.rightAxis.axisMinimum = preSettlement - lowDel
-            chartView.leftAxis.axisMaximum = preSettlement + lowDel
-            chartView.rightAxis.axisMaximum = preSettlement + lowDel
+            topChartViewBase.leftAxis.axisMinimum = preSettlement - lowDel
+            topChartViewBase.rightAxis.axisMinimum = preSettlement - lowDel
+            topChartViewBase.leftAxis.axisMaximum = preSettlement + lowDel
+            topChartViewBase.rightAxis.axisMaximum = preSettlement + lowDel
         }else {
-            chartView.leftAxis.axisMinimum = preSettlement - highDel
-            chartView.rightAxis.axisMinimum = preSettlement - highDel
-            chartView.leftAxis.axisMaximum = preSettlement + highDel
-            chartView.rightAxis.axisMaximum = preSettlement + highDel
+            topChartViewBase.leftAxis.axisMinimum = preSettlement - highDel
+            topChartViewBase.rightAxis.axisMinimum = preSettlement - highDel
+            topChartViewBase.leftAxis.axisMaximum = preSettlement + highDel
+            topChartViewBase.rightAxis.axisMaximum = preSettlement + highDel
         }
     }
 

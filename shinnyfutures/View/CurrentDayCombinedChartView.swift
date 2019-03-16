@@ -10,7 +10,7 @@ import UIKit
 import Charts
 
 class CurrentDayCombinedChartView: CombinedChartView {
-    
+
     override func initialize() {
         super.initialize()
         
@@ -22,6 +22,8 @@ class CurrentDayCombinedChartView: CombinedChartView {
 
         rightAxis = MyYAxis(position: .right)
         rightYAxisRenderer = CurrentDayYAxisrenderer(viewPortHandler: viewPortHandler, yAxis: rightAxis as? MyYAxis, transformer: getTransformer(forAxis: .right))
+
+        renderer = CurrentDayCombinedChartRenderer(chart: self, animator: _animator, viewPortHandler: viewPortHandler)
 
     }
 
@@ -41,7 +43,7 @@ class CurrentDayCombinedChartView: CombinedChartView {
 
         if drawBordersEnabled
         {
-            context.setLineWidth(0.5)
+            context.setLineWidth(borderLineWidth)
             context.setStrokeColor(borderColor.cgColor)
             context.strokeLineSegments(between: [CGPoint(x: 0, y: viewPortHandler.offsetTop), CGPoint(x: viewPortHandler.chartWidth, y: viewPortHandler.offsetTop)])
         }
@@ -62,6 +64,7 @@ class CurrentDayCombinedChartView: CombinedChartView {
                 valuesToHighlight()
             else { return }
 
+
         for highlight in _indicesToHighlight
         {
 
@@ -79,10 +82,10 @@ class CurrentDayCombinedChartView: CombinedChartView {
             let pos = getMarkerPosition(highlight: highlight)
 
             // check bounds
-            if !_viewPortHandler.isInBounds(x: pos.x, y: pos.y)
-            {
-                continue
-            }
+//            if !_viewPortHandler.isInBounds(x: pos.x, y: pos.y)
+//            {
+//                continue
+//            }
 
             // callbacks to update the content
             marker.refreshContent(entry: e, highlight: highlight)
@@ -99,7 +102,9 @@ class CurrentDayCombinedChartView: CombinedChartView {
     @objc open func entryForHighlight(_ highlight: Highlight) -> ChartDataEntry?
     {
         guard let dataObjects = combinedData?.allData else {return nil}
-        if highlight.dataIndex >= dataObjects.count {
+
+        //打个补丁，如果dataIndex == -1也退出
+        if highlight.dataIndex == -1 || highlight.dataIndex >= dataObjects.count {
             return nil
         }
 
@@ -115,4 +120,5 @@ class CurrentDayCombinedChartView: CombinedChartView {
             return entries[0]
         }
     }
+
 }

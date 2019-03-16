@@ -15,6 +15,7 @@ class SearchTableViewController: UITableViewController, UISearchResultsUpdating 
     var searchController: UISearchController!
     var searchResults: [Search] = []
     var dataManager = DataManager.getInstance()
+    var segueIdentify = ""
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -204,4 +205,17 @@ class SearchTableViewController: UITableViewController, UISearchResultsUpdating 
             filterContent(for: searchText)
         }
     }
+
+    @IBAction func returnBack(_ sender: UIBarButtonItem) {
+        switch segueIdentify {
+        case CommonConstants.MainToSearch:
+            performSegue(withIdentifier: CommonConstants.SearchToMain, sender: nil)
+        case CommonConstants.QuoteToSearch:
+            performSegue(withIdentifier: CommonConstants.SearchToQuote, sender: nil)
+        default:
+            print("你从哪来啊")
+        }
+    }
+
+
 }

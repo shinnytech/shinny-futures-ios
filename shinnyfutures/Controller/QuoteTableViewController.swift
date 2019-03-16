@@ -320,8 +320,8 @@ class QuoteTableViewController: UITableViewController, UIPopoverPresentationCont
     //发送订阅合约
     private func sendInsList(data: [String]){
         var insList = data
-        if index == 7 || index == 8 {
-            insList = getCombineInsList(data: data)
+        if index == 7 || index == 8 || index == 0{
+            insList = dataManager.getCombineInsList(data: data)
         }
         let ins = insList[0..<insList.count].joined(separator: ",")
         if !ins.elementsEqual(dataManager.sRtnMD.ins_list) {
@@ -341,19 +341,7 @@ class QuoteTableViewController: UITableViewController, UIPopoverPresentationCont
         }
     }
 
-    private func getCombineInsList(data: [String]) -> [String]{
-        var insList = [String]()
-        for ins in data {
-            insList.append(ins)
-            if let search = dataManager.sSearchEntities[ins]{
-                if let leg1_symbol = search.leg1_symbol, let leg2_symbol = search.leg2_symbol{
-                    insList.append(leg1_symbol)
-                    insList.append(leg2_symbol)
-                }
-            }
-        }
-        return insList
-    }
+   
     
     // MARK: objc Methods
     @objc func longPress(longPressGestureRecognizer: UILongPressGestureRecognizer) {
@@ -412,8 +400,10 @@ class QuoteTableViewController: UITableViewController, UIPopoverPresentationCont
                 let quote = dataManager.sRtnMD.quotes[instrumentId]
                 if let index = index, let quote = quote, index < count {
                     var quote_copy = quote.copy() as! Quote
-                    if self.index == 7 || self.index == 8{
-                        quote_copy = dataManager.calculateCombineQuotePart(quote: quote_copy)
+                    if self.index == 7 || self.index == 8 || self.index == 0{
+                        if instrumentId.contains("&") && instrumentId.contains(" "){
+                            quote_copy = dataManager.calculateCombineQuotePart(quote: quote_copy)
+                        }
                     }
                     quotes[index] = quote_copy
                 }
@@ -436,6 +426,16 @@ class QuoteTableViewController: UITableViewController, UIPopoverPresentationCont
 
             insList = dataManager.sQuotes[self.index].map {$0.key}
         }
+    }
+
+    @IBAction func searchViewControllerUnwindSegue(segue: UIStoryboardSegue) {
+        print("我从搜索页来～")
+        if index == 0 {
+            quotes = dataManager.sQuotes[self.index].map {$0.value}
+            insList = dataManager.sQuotes[self.index].map {$0.key}
+            sendSubscribeQuotes()
+        }
+
     }
 
 }

@@ -32,17 +32,22 @@ class DataManager {
     var sPreInsList = ""
     var sInstrumentId = ""
     var sPositionDirection = ""
-    var isBackground = false
     var sIsLogin = false
     var sIsEmpty = false
     var sUser_id = ""
     var sAppVersion = ""
     var sAppBuild = ""
     var sPriceType = CommonConstants.COUNTERPARTY_PRICE
+    var isShowDownStack = false
     //进入登陆页的来源
     var sToLoginTarget = ""
     //进入合约详情页的来源
     var sToQuoteTarget = ""
+    //十字光标浮动窗口y值
+    var yData = ""
+    //行情服务器地址及编号
+    var mdURLs = [String]()
+    var index = 0
 
     func parseLatestFile(latestData: Data) {
         NSLog("解析开始")
@@ -342,6 +347,20 @@ class DataManager {
             let pre_settlement = pre_settlement_leg1 - pre_settlement_leg2
             quote.pre_settlement = pre_settlement
         }
+
+        let volume_leg1 = "\(quote_leg1.volume ?? "")"
+        let volume_leg2 = "\(quote_leg2.volume ?? "")"
+        if let volume_leg1 = Int(volume_leg1), let volume_leg2 = Int(volume_leg2){
+            let volume = min(volume_leg1, volume_leg2)
+            quote.volume = volume
+        }
+
+        let open_interest_leg1 = "\(quote_leg1.open_interest ?? "")"
+        let open_interest_leg2 = "\(quote_leg2.open_interest ?? "")"
+        if let open_interest_leg1 = Int(open_interest_leg1), let open_interest_leg2 = Int(open_interest_leg2){
+            let open_interest = min(open_interest_leg1, open_interest_leg2)
+            quote.open_interest = open_interest
+        }
         return quote
     }
 
@@ -425,7 +444,37 @@ class DataManager {
             let settlement = settlement_leg1 - settlement_leg2
             quote.settlement = settlement
         }
+        
+        let volume_leg1 = "\(quote_leg1.volume ?? "")"
+        let volume_leg2 = "\(quote_leg2.volume ?? "")"
+        if let volume_leg1 = Int(volume_leg1), let volume_leg2 = Int(volume_leg2){
+            let volume = min(volume_leg1, volume_leg2)
+            quote.volume = volume
+        }
+
+        let open_interest_leg1 = "\(quote_leg1.open_interest ?? "")"
+        let open_interest_leg2 = "\(quote_leg2.open_interest ?? "")"
+        if let open_interest_leg1 = Int(open_interest_leg1), let open_interest_leg2 = Int(open_interest_leg2){
+            let open_interest = min(open_interest_leg1, open_interest_leg2)
+            quote.open_interest = open_interest
+        }
         return quote
+    }
+
+    func getCombineInsList(data: [String]) -> [String]{
+        var insList = [String]()
+        for ins in data {
+            insList.append(ins)
+            if ins.contains("&") && ins.contains(" "){
+                if let search = sSearchEntities[ins]{
+                    if let leg1_symbol = search.leg1_symbol, let leg2_symbol = search.leg2_symbol{
+                        insList.append(leg1_symbol)
+                        insList.append(leg2_symbol)
+                    }
+                }
+            }
+        }
+        return insList
     }
 
     func parseRtnMD(rtnData: [String: Any]) {

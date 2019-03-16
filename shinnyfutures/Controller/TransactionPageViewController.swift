@@ -32,17 +32,20 @@ class TransactionPageViewController: UIPageViewController, UIPageViewControllerD
         super.viewDidLoad()
         self.delegate = self
         self.dataSource = self
+        //删除点击页面左右边缘切换页面效果
+        self.view.removeGestureRecognizer(self.gestureRecognizers[1])
         setViewControllers([subViewControllers[currentIndex]], direction: .forward, animated: false, completion: nil)
 
+        //滑动到持仓页进行判断h是否需要登录
+        NotificationCenter.default.addObserver(self, selector: #selector(switchToPosition), name: Notification.Name(CommonConstants.SwitchToPositionNotification), object: nil)
     }
 
     override func viewDidAppear(_ animated: Bool) {
         quoteViewController = self.parent as? QuoteViewController
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
 
     // MARK: UIPageViewControllerDataSource
@@ -50,8 +53,8 @@ class TransactionPageViewController: UIPageViewController, UIPageViewControllerD
     func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
         if completed {
             if let contentViewController = pageViewController.viewControllers?.first {
-                let index = identifiers.index(of: contentViewController.restorationIdentifier!)
-                quoteViewController?.controlTransactionVisibility(index: index ?? 0)
+                let index = identifiers.index(of: contentViewController.restorationIdentifier!) ?? 0
+                quoteViewController?.controlTransactionVisibility(index: index)
             }
         }
     }
@@ -61,18 +64,47 @@ class TransactionPageViewController: UIPageViewController, UIPageViewControllerD
     }
 
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-        let index: Int = subViewControllers.index(of: viewController) ?? 0
+        var index: Int = subViewControllers.index(of: viewController) ?? 0
         if index <= 0 {return nil}
         if index > subViewControllers.count {return nil}
-        currentIndex = index - 1
+        index = index - 1
+        //滑动到持仓页进行判断h是否需要登录
+        if !DataManager.getInstance().sIsLogin {
+            switch index {
+            case 1:
+                quoteViewController?.position(UIButton())
+                return nil
+            default:
+                break
+            }
+        }
+        currentIndex = index
         return subViewControllers[currentIndex]
     }
 
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-        let index: Int = subViewControllers.index(of: viewController) ?? 0
+        var index: Int = subViewControllers.index(of: viewController) ?? 0
         if index >= subViewControllers.count - 1 {return nil}
-        currentIndex = index + 1
+        index = index + 1
+        //滑动到持仓页进行判断h是否需要登录
+        if !DataManager.getInstance().sIsLogin {
+            switch index {
+            case 1:
+                quoteViewController?.position(UIButton())
+                return nil
+            default:
+                break
+            }
+        }
+        currentIndex = index
         return subViewControllers[currentIndex]
     }
+
+
+    //滑动到持仓页进行判断h是否需要登录
+    @objc func switchToPosition() {
+        quoteViewController?.switchTransactionPage(index: 1)
+    }
+
 
 }

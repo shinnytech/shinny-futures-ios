@@ -19,14 +19,16 @@ class CommonConstants {
     public static let MARKET_URL_6 = "ws://106.15.82.189/t/md/front/mobile"
     public static let MARKET_URL_7 = "ws://106.15.219.160/t/md/front/mobile"
     public static var TRANSACTION_URL = "ws://opentd.shinnytech.com/trade/user0"
-    public static let REDMINE_URL = "http://ask.shinnytech.com/src/indexm.html"
+    public static let REDMINE_URL = "https://ask.shinnytech.com/src/indexm.html"
 
     //MARK: default config
+    public static let CONFIG_SETTING_KLINE_DURATION_DEFAULT = "klineDurationDefault"
     public static let CONFIG_SETTING_PARA_MA = "maOrder"
     public static let CONFIG_SETTING_TRANSACTION_SHOW_ORDER = "orderSetting"
     public static let CONFIG_POSITION_LINE = "positionLine"
     public static let CONFIG_ORDER_LINE = "orderLine"
     public static let CONFIG_AVERAGE_LINE = "averageLine"
+    public static let CONFIG_MD5 = "md5"
     public static let CONFIG_LOCK_USER_NAME = "isLocked"
     public static let CONFIG_LOCK_PASSWORD = "isLocked"
     public static let CONFIG_PASSWORD = "userPassword"
@@ -63,14 +65,18 @@ class CommonConstants {
     public static let KLINE_4_HOUR = "14400000000000"
     public static let KLINE_1_DAY = "86400000000000"
     public static let KLINE_7_DAY = "604800000000000"
+    public static let KLINE_28_DAY = "2419200000000000"
     public static let MAX_SUBSCRIBE_QUOTES = 24
     public static let VIEW_WIDTH = 200
-    public static let klineTypeTitle = ["3秒", "5秒", "10秒", "15秒", "20秒", "30秒", "1分", "2分", "3分",
-                          "5分", "10分", "15分", "30分", "1时", "2时", "4时", "1日", "1周"]
+    public static let SCALE_X = "scaleX"
+    public static let klineDurationDefault = ["3秒", "5秒", "10秒", "15秒", "1分钟", "3分钟",
+                                              "5分钟", "10分钟", "15分钟", "30分钟", "1小时", "4小时", "1日", "1周", "4周"]
+    public static let klineDurationAll = ["3秒", "5秒", "10秒", "15秒", "20秒", "30秒", "1分钟", "2分钟", "3分钟",
+                          "5分钟", "10分钟", "15分钟", "30分钟", "1小时", "2小时", "4小时", "1日", "1周", "4周"]
     public static let klineDuration = [CommonConstants.KLINE_3_SECOND, CommonConstants.KLINE_5_SECOND, CommonConstants.KLINE_10_SECOND,
                          CommonConstants.KLINE_15_SECOND, CommonConstants.KLINE_20_SECOND, CommonConstants.KLINE_30_SECOND, CommonConstants.KLINE_1_MINUTE, CommonConstants.KLINE_2_MINUTE, CommonConstants.KLINE_3_MINUTE,
                          CommonConstants.KLINE_5_MINUTE, CommonConstants.KLINE_10_MINUTE, CommonConstants.KLINE_15_MINUTE, CommonConstants.KLINE_30_MINUTE, CommonConstants.KLINE_1_HOUR, CommonConstants.KLINE_2_HOUR,
-                         CommonConstants.KLINE_4_HOUR, CommonConstants.KLINE_1_DAY, CommonConstants.KLINE_7_DAY]
+                         CommonConstants.KLINE_4_HOUR, CommonConstants.KLINE_1_DAY, CommonConstants.KLINE_7_DAY, CommonConstants.KLINE_28_DAY]
     
 
     //MARK: Quote page title
@@ -90,9 +96,9 @@ class CommonConstants {
     public static let BrokerInfoEmptyNotification = "BrokerInfoEmptyNotification"
     public static let LoginNotification = "LoginNotification"
     public static let RtnTDNotification = "RtnTDNotification"
+    public static let ControlMiddleBottomChartViewNotification = "ControlMiddleBottomChartViewNotification"
     public static let SwitchQuoteNotification = "SwitchQuoteNotification"
     public static let SwitchDurationNotification = "SwitchDurationNotification"
-    public static let SwitchKlineNotification = "SwitchKlineNotification"
     public static let ClearChartViewNotification = "ClearChartViewNotification"
     public static let SwitchToPositionNotification = "SwitchToPositionNotification"
     public static let SwitchToOrderNotification = "SwitchToOrderNotification"
@@ -102,6 +108,7 @@ class CommonConstants {
     public static let ControlPositionLineNotification = "ControlPositionLineNotification"
     public static let ControlOrderLineNotification = "ControlOrderLineNotification"
     public static let ControlAverageLineNotification = "ControlAverageLineNotification"
+    public static let ControlMD5Notification = "ControlMD5Notification"
     public static let LatestFileParsedNotification = "LatestFileParsedNotification"
 
     // MARK: Identifier
@@ -109,6 +116,7 @@ class CommonConstants {
     public static let QuotePageViewController = "QuotePageViewController"
     public static let MainToQuote = "MainToQuote"
     public static let MainToLogin = "MainToLogin"
+    public static let MainToSearch = "MainToSearch"
     public static let MainToSetting = "MainToSetting"
     public static let MainToChangePassword = "MainToChangePassword"
     public static let MainToAccount = "MainToAccount"
@@ -116,6 +124,8 @@ class CommonConstants {
     public static let MainToBankTransfer = "MainToBankTransfer"
     public static let MainToFeedback = "MainToFeedback"
     public static let MainToAbout = "MainToAbout"
+    public static let SearchToMain = "SearchToMain"
+    public static let SearchToQuote = "SearchToQuote"
     public static let LoginToMain = "LoginToMain"
     public static let LoginToQuote = "LoginToQuote"
     public static let LoginToBroker = "LoginToBroker"
@@ -124,6 +134,7 @@ class CommonConstants {
     public static let LoginToBankTransfer = "LoginToBankTransfer"
     public static let LoginToSettlement = "LoginToSettlement"
     public static let QuoteToLogin = "QuoteToLogin"
+    public static let QuoteToSearch = "QuoteToSearch"
     public static let BrokerToLogin = "BrokerToLogin"
     public static let KlinePageViewController = "KlinePageViewController"
     public static let CurrentDayViewController = "CurrentDayViewController"
@@ -149,8 +160,17 @@ class CommonConstants {
     public static let MARKET_PRICE = "市价"
     public static let QUEUED_PRICE = "排队价"
     public static let USER_PRICE = "用户设置价"
+    public static let HANDICAP_UP = "盘口▴"
+    public static let POSITION_UP = "持仓▴"
+    public static let ORDER_UP = "委托▴"
+    public static let TRANSACTION_UP = "交易▴"
+    public static let HANDICAP_DOWN = "盘口▾"
+    public static let POSITION_DOWN = "持仓▾"
+    public static let ORDER_DOWN = "委托▾"
+    public static let TRANSACTION_DOWN = "交易▾"
 
     //MARK: 合约页配色
+    public static let STATUS_BAR = UIColor(red: 29/255.0, green: 29/255.0, blue: 29/255.0, alpha: 1)
     public static let QUOTE_PAGE_HEADER = UIColor(red: 29/255.0, green: 29/255.0, blue: 29/255.0, alpha: 1)
     public static let QUOTE_TABLE_HEADER_1 = UIColor(red: 68/255.0, green: 68/255.0, blue: 68/255.0, alpha: 1)
     public static let QUOTE_TABLE_HEADER_2 = UIColor(red: 99/255.0, green: 99/255.0, blue: 99/255.0, alpha: 1)
@@ -188,5 +208,6 @@ class CommonConstants {
     public static let PARA_NAV_SELECTED = UIColor(red: 190/255, green: 0, blue: 15/255, alpha: 1)
     public static let PARA_CONTENT_FOOTER = UIColor(red: 44/255, green: 44/255, blue: 44/255, alpha: 1)
     public static let PARA_MA = [5, 10, 20, 60, 0, 0]
+    public static let ADD_DURATION_SELECTED = UIColor(red: 190/255, green: 0, blue: 15/255, alpha: 0.8)
 
 }

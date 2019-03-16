@@ -86,6 +86,7 @@ class RightTableViewController: UITableViewController {
         case "login":
             if DataManager.getInstance().sIsLogin{
                 DataManager.getInstance().clearAccount()
+                TDWebSocketUtils.getInstance().reconnectTD(url: CommonConstants.TRANSACTION_URL)
             }else{
                 mainViewController.toLogin()
             }

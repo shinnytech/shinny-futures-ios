@@ -29,7 +29,7 @@ open class CurrentDayMarkerView: MarkerView {
     func resizeXib(heiht: CGFloat, width: CGFloat){
         var Rect: CGRect = self.frame
         Rect.size.height = heiht * 0.9
-        Rect.size.width = width / 6
+//        Rect.size.width = width / 6
         self.frame = Rect
         self.layoutIfNeeded()
     }
@@ -56,8 +56,6 @@ open class CurrentDayMarkerView: MarkerView {
         let closeOiPre = dataPre.close_oi as? Int ?? 0
         let dateTime = Date(timeIntervalSince1970: TimeInterval(datetime))
         let dateformatter = DateFormatter()
-        dateformatter.dateFormat = "yyyyMMdd"
-        let yValue = dateformatter.string(from: dateTime)
         dateformatter.dateFormat = "HH:mm"
         let xValue = dateformatter.string(from: dateTime)
         let decimal = dataManager.getDecimalByPtick(instrumentId: dataManager.sInstrumentId)
@@ -66,7 +64,7 @@ open class CurrentDayMarkerView: MarkerView {
         let change = String(format: "%.\(decimal)f", close - closePre)
         let changePercent = String(format: "%.2f", (close - closePre) / closePre * 100) + "%"
 
-        self.yValue.text = yValue
+        self.yValue.text = dataManager.yData
         self.xValue.text = xValue
         self.price.text = price
         self.average.text = average

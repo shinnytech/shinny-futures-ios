@@ -13,7 +13,6 @@ class PopupCollectionViewController: UICollectionViewController {
     // MARK: Properties
     var insList: [String]!
     let dataManager = DataManager.getInstance()
-    var flag: String!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,31 +52,18 @@ class PopupCollectionViewController: UICollectionViewController {
         let index = indexPath.row
         let data = insList[index]
 
-        if flag.elementsEqual("optional") {
-            if let button = self.popoverPresentationController?.sourceView as? UIButton {
-                dataManager.sInstrumentId = data
-                let title = dataManager.getButtonTitle()
-                button.setTitle(title, for: .normal)
-            }
-            NotificationCenter.default.post(name: Notification.Name(CommonConstants.SwitchQuoteNotification), object: nil)
-            NotificationCenter.default.post(name: Notification.Name(CommonConstants.ClearChartViewNotification), object: nil)
-        }else{
-            var fragmengType = ""
-            if data.contains("秒"){
-                UserDefaults.standard.set(CommonConstants.klineDuration[index], forKey: CommonConstants.CONFIG_KLINE_SECOND_TYPE)
-                fragmengType = CommonConstants.SECOND_FRAGMENT
-            }else if data.contains("分"){
-                UserDefaults.standard.set(CommonConstants.klineDuration[index], forKey: CommonConstants.CONFIG_KLINE_MINUTE_TYPE)
-                fragmengType = CommonConstants.MINUTE_FRAGMENT
-            }else if data.contains("时") {
-                UserDefaults.standard.set(CommonConstants.klineDuration[index], forKey: CommonConstants.CONFIG_KLINE_HOUR_TYPE)
-                fragmengType = CommonConstants.HOUR_FRAGMENT
-            }else{
-                UserDefaults.standard.set(CommonConstants.klineDuration[index], forKey: CommonConstants.CONFIG_KLINE_DAY_TYPE)
-                fragmengType = CommonConstants.DAY_FRAGMENT
-            }
-            NotificationCenter.default.post(name: Notification.Name(CommonConstants.SwitchKlineNotification), object: nil, userInfo: ["durationIndex": index, "fragmentType": fragmengType])
+        if let button = self.popoverPresentationController?.sourceView as? UIButton {
+            dataManager.sInstrumentId = data
+            //刷新标题
+            var title = dataManager.getButtonTitle() ?? ""
+            title = title + " ▼"
+            let size = title.size(withAttributes:[.font: UIFont.systemFont(ofSize:15.0)])
+            button.frame = CGRect(x: 0, y: 0, width: size.width + 40, height: 40)
+            button.setTitle(title, for: .normal)
+            button.layoutIfNeeded()
         }
+        NotificationCenter.default.post(name: Notification.Name(CommonConstants.SwitchQuoteNotification), object: nil)
+        NotificationCenter.default.post(name: Notification.Name(CommonConstants.ClearChartViewNotification), object: nil)
 
         self.dismiss(animated: true, completion: nil)
     }

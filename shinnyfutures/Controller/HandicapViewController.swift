@@ -106,5 +106,27 @@ class HandicapViewController: UIViewController {
         self.upper_limit.text = dataManager.saveDecimalByPtick(decimal: decimal, data: upper_limit)
         self.pre_settlement.text = dataManager.saveDecimalByPtick(decimal: decimal, data: pre_settlement)
         self.lower_limit.text = dataManager.saveDecimalByPtick(decimal: decimal, data: lower_limit)
+
+        setLabelColor(label: self.ask_price1, pre_settlement: pre_settlement)
+        setLabelColor(label: self.bid_price1, pre_settlement: pre_settlement)
+        setLabelColor(label: self.latest, pre_settlement: pre_settlement)
+        setLabelColor(label: self.highest, pre_settlement: pre_settlement)
+        setLabelColor(label: self.lowest, pre_settlement: pre_settlement)
+        setLabelColor(label: self.open, pre_settlement: pre_settlement)
+    }
+
+    func setLabelColor(label: UILabel, pre_settlement: String) {
+        if let price = Float(label.text ?? "-"), let pre_settlement = Float(pre_settlement) {
+            let value = price - pre_settlement
+            if value < 0 {
+                label.textColor = CommonConstants.ASK_BUTTON
+            }else if value > 0{
+                label.textColor = CommonConstants.BID_BUTTON
+            }else{
+                label.textColor = CommonConstants.WHITE_TEXT
+            }
+        }else{
+            label.textColor = CommonConstants.WHITE_TEXT
+        }
     }
 }
