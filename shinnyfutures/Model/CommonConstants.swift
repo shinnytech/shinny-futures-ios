@@ -34,6 +34,7 @@ class CommonConstants {
     public static let CONFIG_PASSWORD = "userPassword"
     public static let CONFIG_USER_NAME = "userName"
     public static let CONFIG_BROKER = "brokerInfo"
+    public static let CONFIG_LOGIN_DATE = "loginDate"
     public static let CONFIG_KLINE_DAY_TYPE = "klineDay"
     public static let CONFIG_KLINE_HOUR_TYPE = "klineHour"
     public static let CONFIG_KLINE_MINUTE_TYPE = "klineMinute"

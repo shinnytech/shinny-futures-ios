@@ -75,6 +75,7 @@ class MDWebSocketUtils: NSObject, WebSocketDelegate, WebSocketPongDelegate {
             let jsonData = try jsonEncoder.encode(subscribeQuote)
             guard let json = String(data: jsonData, encoding: String.Encoding.utf8) else {return}
             socket_.write(string: json)
+            DataManager.getInstance().sQuotesText = json
         } catch {
             print(error)
         }
@@ -106,6 +107,7 @@ class MDWebSocketUtils: NSObject, WebSocketDelegate, WebSocketPongDelegate {
             let jsonData = try jsonEncoder.encode(setChart)
             guard let json = String(data: jsonData, encoding: String.Encoding.utf8) else {return}
             socket_.write(string: json)
+            DataManager.getInstance().sChartsText = json
         } catch {
             print(error)
         }
@@ -121,6 +123,7 @@ class MDWebSocketUtils: NSObject, WebSocketDelegate, WebSocketPongDelegate {
             let jsonData = try jsonEncoder.encode(setChart)
             guard let json = String(data: jsonData, encoding: String.Encoding.utf8) else {return}
             socket_.write(string: json)
+            DataManager.getInstance().sChartsText = json
         } catch {
             print(error)
         }

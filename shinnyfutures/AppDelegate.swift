@@ -44,6 +44,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             statusBarView.backgroundColor = CommonConstants.STATUS_BAR
         }
         self.createMenuView()
+        UIApplication.shared.isIdleTimerDisabled = true
 
         return true
     }
@@ -64,7 +65,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillEnterForeground(_ application: UIApplication) {
         // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
         Siren.shared.checkVersion(checkType: .immediately)
-        dataManager.index = MDWebSocketUtils.getInstance().connect(url: dataManager.mdURLs[dataManager.index], index: dataManager.index)
+        dataManager.sIndex = MDWebSocketUtils.getInstance().connect(url: dataManager.sMdURLs[dataManager.sIndex], index: dataManager.sIndex)
         TDWebSocketUtils.getInstance().connect(url: CommonConstants.TRANSACTION_URL)
     }
 

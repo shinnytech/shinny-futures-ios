@@ -34,6 +34,7 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
                 case "rtn_brokers":
                     self.tdWebSocketUtils.ping()
                     self.dataManager.parseBrokers(rtnData: json)
+                    self.loginConfig(socket: socket)
                 case "rtn_data":
                     self.dataManager.parseRtnTD(rtnData: json)
                 default:
@@ -54,6 +55,22 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
         NSLog("TDPong")
     }
 
+    //登录设置，自动登录
+    func loginConfig(socket: TDWebSocketUtils) {
+        if UserDefaults.standard.object(forKey: CommonConstants.CONFIG_LOGIN_DATE) != nil {
+            guard let loginDate = UserDefaults.standard.string(forKey: CommonConstants.CONFIG_LOGIN_DATE) else {return}
+            let dateFormat = DateFormatter()
+            dateFormat.dateFormat = "yyyy年MM日dd日"
+            let date = dateFormat.string(from: Date())
+            if date.elementsEqual(loginDate){
+                guard let name = UserDefaults.standard.string(forKey: CommonConstants.CONFIG_USER_NAME) else {return}
+                guard let password = UserDefaults.standard.string(forKey: CommonConstants.CONFIG_PASSWORD) else {return}
+                guard let broker = UserDefaults.standard.string(forKey: CommonConstants.CONFIG_BROKER) else {return}
+                socket.sendReqLogin(bid: broker, user_name: name, password: password)
+            }
+        }
+    }
+
     ////////////////////////////////////////////////////////////////////////////////
 
     func websocketDidReceiveMessage(socket: MDWebSocketUtils, text: String) {
@@ -65,41 +82,12 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
                 switch aid {
                 case "rsp_login":
                     self.mdWebSocketUtils.ping()
-
-                    let ins_list = self.dataManager.sRtnMD.ins_list
-                    if !ins_list.isEmpty{
-                        socket.sendSubscribeQuote(insList: ins_list)
-                    }else if self.dataManager.sQuotes.count != 0{
-                        if self.dataManager.sQuotes[0].isEmpty{
-                            socket.sendSubscribeQuote(insList: self.dataManager.sQuotes[1].map {$0.key}[0..<CommonConstants.MAX_SUBSCRIBE_QUOTES].joined(separator: ","))
-                        }else if self.dataManager.sQuotes[0].count < CommonConstants.MAX_SUBSCRIBE_QUOTES{
-                            let insList = self.dataManager.getCombineInsList(data: self.dataManager.sQuotes[0].map {$0.key})
-                            socket.sendSubscribeQuote(insList: insList.joined(separator: ","))
-                        }else {
-                            let insList = self.dataManager.getCombineInsList(data: Array(self.dataManager.sQuotes[0].map {$0.key}[0..<CommonConstants.MAX_SUBSCRIBE_QUOTES]))
-                            socket.sendSubscribeQuote(insList: insList.joined(separator: ","))
-                        }
-                    }
-
-                    let charts = self.dataManager.sRtnMD.charts
-                    if charts.count != 0{
-                        for key in charts.keys{
-                            guard let chart = charts[key] else {continue}
-                            let duration = "\(chart.state?.duration ?? "")"
-                            let ins = "\(chart.state?.ins_list ?? "")"
-                            if CommonConstants.CURRENT_DAY_FRAGMENT.elementsEqual(key){
-                                socket.sendSetChart(insList: ins)
-                            }else{
-                                socket.sendSetChartKline(insList: ins, klineType: duration, viewWidth: CommonConstants.VIEW_WIDTH)
-                            }
-                        }
-                    }
-
+                    self.sendSubscribeAfterConnect(socket: socket)
                 case "rtn_data":
-                    self.dataManager.index = 0
+                    self.dataManager.sIndex = 0
                     self.dataManager.parseRtnMD(rtnData: json)
                 default:
-                    self.dataManager.index = self.mdWebSocketUtils.reconnectMD(url: self.dataManager.mdURLs[self.dataManager.index], index: self.dataManager.index)
+                    self.dataManager.sIndex = self.mdWebSocketUtils.reconnectMD(url: self.dataManager.sMdURLs[self.dataManager.sIndex], index: self.dataManager.sIndex)
                     return
                 }
 
@@ -117,6 +105,26 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
         NSLog("MDPong")
     }
 
+    //首次连接行情服务器与断开重连的行情订阅处理
+    func sendSubscribeAfterConnect(socket: MDWebSocketUtils) {
+        if !self.dataManager.sQuotesText.isEmpty{
+            socket.socket?.write(string: self.dataManager.sQuotesText)
+        }else if self.dataManager.sQuotes.count != 0{
+            if self.dataManager.sQuotes[0].isEmpty{
+                socket.sendSubscribeQuote(insList: self.dataManager.sQuotes[1].map {$0.key}[0..<CommonConstants.MAX_SUBSCRIBE_QUOTES].joined(separator: ","))
+            }else if self.dataManager.sQuotes[0].count < CommonConstants.MAX_SUBSCRIBE_QUOTES{
+                let insList = self.dataManager.getCombineInsList(data: self.dataManager.sQuotes[0].map {$0.key})
+                socket.sendSubscribeQuote(insList: insList.joined(separator: ","))
+            }else {
+                let insList = self.dataManager.getCombineInsList(data: Array(self.dataManager.sQuotes[0].map {$0.key}[0..<CommonConstants.MAX_SUBSCRIBE_QUOTES]))
+                socket.sendSubscribeQuote(insList: insList.joined(separator: ","))
+            }
+        }
+
+        if !self.dataManager.sChartsText.isEmpty{
+            socket.socket?.write(string: self.dataManager.sChartsText)
+        }    }
+
     ////////////////////////////////////////////////////////////////////////////////
 
     func sessionSimpleDownload(urlString: String) {
@@ -129,7 +137,7 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
             DispatchQueue.main.async {
                 NotificationCenter.default.post(name: Notification.Name(CommonConstants.LatestFileParsedNotification), object: nil)
             }
-            self.dataManager.index = self.mdWebSocketUtils.connect(url: self.dataManager.mdURLs[self.dataManager.index], index: self.dataManager.index)
+            self.dataManager.sIndex = self.mdWebSocketUtils.connect(url: self.dataManager.sMdURLs[self.dataManager.sIndex], index: self.dataManager.sIndex)
             self.tdWebSocketUtils.connect(url: CommonConstants.TRANSACTION_URL)
         }
         task.resume()
@@ -177,7 +185,7 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
             }
 
             if (CACurrentMediaTime() - self.lastMDTime) > 20 {
-                self.dataManager.index = self.mdWebSocketUtils.reconnectMD(url: self.dataManager.mdURLs[self.dataManager.index], index: self.dataManager.index)
+                self.dataManager.sIndex = self.mdWebSocketUtils.reconnectMD(url: self.dataManager.sMdURLs[self.dataManager.sIndex], index: self.dataManager.sIndex)
                 NSLog("MD断线重连")
             } else {
                 self.mdWebSocketUtils.ping()
@@ -289,7 +297,7 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
             let json_url = cl.value(forKey: "LATEST_FILE_URL") as! String
             CommonConstants.LATEST_FILE_URL = json_url
             CommonConstants.TRANSACTION_URL = transaction_url
-            self.dataManager.mdURLs.append(url)
+            self.dataManager.sMdURLs.append(url)
             let bugly_key = cl.value(forKey: "BUGLY_KEY") as! String
             let umeng_key = cl.value(forKey: "UMENG_KEY") as! String
             let baidu_key = cl.value(forKey: "BAIDU_KEY") as! String
@@ -302,9 +310,9 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
             baidu.start(withAppId: baidu_key)
             #endif
         }else{
-            self.dataManager.mdURLs.append(CommonConstants.MARKET_URL_1)
+            self.dataManager.sMdURLs.append(CommonConstants.MARKET_URL_1)
         }
-        self.dataManager.mdURLs += mdURLGroup
+        self.dataManager.sMdURLs += mdURLGroup
     }
 
     func shuffle(group: [String]) -> [String] {

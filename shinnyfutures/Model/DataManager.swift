@@ -46,8 +46,11 @@ class DataManager {
     //十字光标浮动窗口y值
     var yData = ""
     //行情服务器地址及编号
-    var mdURLs = [String]()
-    var index = 0
+    var sMdURLs = [String]()
+    var sIndex = 0
+    //用户最后一次发送的订阅请求
+    var sQuotesText = ""
+    var sChartsText = ""
 
     func parseLatestFile(latestData: Data) {
         NSLog("解析开始")
@@ -708,6 +711,7 @@ class DataManager {
                     guard let session = value as? [String: Any] else {break}
                     guard let user_id = session["user_id"] as? String else {break}
                     sUser_id = user_id
+                    sIsLogin = true
                     break
                 default:
                     break
