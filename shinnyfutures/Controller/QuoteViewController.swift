@@ -40,7 +40,7 @@ class QuoteViewController: UIViewController, UICollectionViewDataSource, UIColle
         //设置按钮背景
         setOptionalBackground()
 
-        durations.append("分时图")
+        durations.append(CommonConstants.klineDurationDay)
         let data = UserDefaults.standard.stringArray(forKey: CommonConstants.CONFIG_SETTING_KLINE_DURATION_DEFAULT) ?? [String]()
         durations.append(contentsOf: data)
 
@@ -95,7 +95,7 @@ class QuoteViewController: UIViewController, UICollectionViewDataSource, UIColle
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 60, height: 30)
+        return CGSize(width: 45, height: 30)
     }
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -133,7 +133,7 @@ class QuoteViewController: UIViewController, UICollectionViewDataSource, UIColle
 
     func switchDuration(durationTitle: String) {
 
-        if "分时图".elementsEqual(durationTitle){
+        if CommonConstants.klineDurationDay.elementsEqual(durationTitle){
             switchKlinePage(index: 0, klineType: CommonConstants.CURRENT_DAY)
         }else {
             let duration = getDuration(durationTitle: durationTitle)

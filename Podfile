@@ -19,8 +19,6 @@ target 'shinnyfutures' do
 
   pod 'UMCSecurityPlugins'
 
-  pod 'Amplitude-iOS'
-
   # Pods for shinnyfutures
 
   target 'shinnyfuturesTests' do

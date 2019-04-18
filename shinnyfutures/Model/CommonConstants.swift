@@ -70,10 +70,11 @@ class CommonConstants {
     public static let MAX_SUBSCRIBE_QUOTES = 24
     public static let VIEW_WIDTH = 200
     public static let SCALE_X = "scaleX"
-    public static let klineDurationDefault = ["3秒", "5秒", "10秒", "15秒", "1分钟", "3分钟",
-                                              "5分钟", "10分钟", "15分钟", "30分钟", "1小时", "4小时", "1日", "1周", "4周"]
-    public static let klineDurationAll = ["3秒", "5秒", "10秒", "15秒", "20秒", "30秒", "1分钟", "2分钟", "3分钟",
-                          "5分钟", "10分钟", "15分钟", "30分钟", "1小时", "2小时", "4小时", "1日", "1周", "4周"]
+    public static let klineDurationDefault = ["3秒", "5秒", "10秒", "15秒", "1分", "3分",
+                                              "5分", "10分", "15分", "30分", "1时", "4时", "1日", "1周", "4周"]
+    public static let klineDurationAll = ["3秒", "5秒", "10秒", "15秒", "20秒", "30秒", "1分", "2分", "3分",
+                          "5分", "10分", "15分", "30分", "1时", "2时", "4时", "1日", "1周", "4周"]
+    public static let klineDurationDay = "分时"
     public static let klineDuration = [CommonConstants.KLINE_3_SECOND, CommonConstants.KLINE_5_SECOND, CommonConstants.KLINE_10_SECOND,
                          CommonConstants.KLINE_15_SECOND, CommonConstants.KLINE_20_SECOND, CommonConstants.KLINE_30_SECOND, CommonConstants.KLINE_1_MINUTE, CommonConstants.KLINE_2_MINUTE, CommonConstants.KLINE_3_MINUTE,
                          CommonConstants.KLINE_5_MINUTE, CommonConstants.KLINE_10_MINUTE, CommonConstants.KLINE_15_MINUTE, CommonConstants.KLINE_30_MINUTE, CommonConstants.KLINE_1_HOUR, CommonConstants.KLINE_2_HOUR,
@@ -96,6 +97,8 @@ class CommonConstants {
     public static let BrokerInfoNotification = "BrokerInfoNotification"
     public static let BrokerInfoEmptyNotification = "BrokerInfoEmptyNotification"
     public static let LoginNotification = "LoginNotification"
+    public static let ChangeSuccessNotification = "ChangeSuccessNotification"
+    public static let WeakPasswordNotification = "WeakPasswordNotification"
     public static let RtnTDNotification = "RtnTDNotification"
     public static let ControlMiddleBottomChartViewNotification = "ControlMiddleBottomChartViewNotification"
     public static let SwitchQuoteNotification = "SwitchQuoteNotification"
@@ -130,6 +133,7 @@ class CommonConstants {
     public static let LoginToMain = "LoginToMain"
     public static let LoginToQuote = "LoginToQuote"
     public static let LoginToBroker = "LoginToBroker"
+    public static let LoginToChangePassword = "LoginToChangePassword"
     public static let LoginToAccount = "LoginToAccount"
     public static let LoginToTrade = "LoginToTrade"
     public static let LoginToBankTransfer = "LoginToBankTransfer"

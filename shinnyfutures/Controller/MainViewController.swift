@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AliyunLOGiOS
 
 class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocketUtilsDelegate, UIPopoverPresentationControllerDelegate, SlideMenuControllerDelegate {
     // MARK: Properties
@@ -123,7 +124,8 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
 
         if !self.dataManager.sChartsText.isEmpty{
             socket.socket?.write(string: self.dataManager.sChartsText)
-        }    }
+        }
+    }
 
     ////////////////////////////////////////////////////////////////////////////////
 
@@ -241,6 +243,16 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
 
         if UserDefaults.standard.object(forKey: CommonConstants.CONFIG_SETTING_KLINE_DURATION_DEFAULT) == nil {
             UserDefaults.standard.set(CommonConstants.klineDurationDefault, forKey: CommonConstants.CONFIG_SETTING_KLINE_DURATION_DEFAULT)
+        }else{
+            let durations = UserDefaults.standard.stringArray(forKey: CommonConstants.CONFIG_SETTING_KLINE_DURATION_DEFAULT) ?? [String]()
+            var datas = [String]()
+            var data = ""
+            for duration in durations{
+                data = duration.replacingOccurrences(of: "钟", with: "")
+                data = data.replacingOccurrences(of: "小", with: "")
+                datas.append(data)
+            }
+            UserDefaults.standard.set(datas, forKey: CommonConstants.CONFIG_SETTING_KLINE_DURATION_DEFAULT)
         }
 
         if UserDefaults.standard.object(forKey: CommonConstants.CONFIG_SETTING_PARA_MA) == nil {
@@ -301,6 +313,8 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
             let bugly_key = cl.value(forKey: "BUGLY_KEY") as! String
             let umeng_key = cl.value(forKey: "UMENG_KEY") as! String
             let baidu_key = cl.value(forKey: "BAIDU_KEY") as! String
+            dataManager.ak = cl.value(forKey: "AK") as! String
+            dataManager.sk = cl.value(forKey: "SK") as! String
             #if DEBUG // 判断是否在测试环境下
             // TODO
             #else
@@ -308,6 +322,7 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
             UMConfigure.initWithAppkey(umeng_key, channel: "AppStore")
             let baidu = BaiduMobStat()
             baidu.start(withAppId: baidu_key)
+            initAliLog()
             #endif
         }else{
             self.dataManager.sMdURLs.append(CommonConstants.MARKET_URL_1)
@@ -325,6 +340,20 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
             last -= 1
         }
         return items
+    }
+
+    //初始化阿里日志服务
+    func initAliLog() {
+        // 初始化配置信息
+        let cf = SLSConfig(connectType: .wifiOrwwan, cachable: true)
+        dataManager.sClient = LOGClient(endPoint: "http://cn-shanghai.log.aliyuncs.com",
+                            accessKeyID: dataManager.ak,
+                            accessKeySecret: dataManager.sk,
+                            projectName: "kq-xq",
+                            token: nil,
+                            config: cf)
+        //打开调试开关
+        dataManager.sClient?.mIsLogEnable = true
     }
 
     //获取软件版本

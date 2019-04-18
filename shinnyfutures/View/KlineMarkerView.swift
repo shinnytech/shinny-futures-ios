@@ -54,8 +54,8 @@ open class KlineMarkerView: MarkerView {
         let x = Int(entry.x)
         let duration = "\(dataManager.sRtnMD.charts[CommonConstants.CHART_ID]?.state?.duration ?? "")"
         guard let data = dataManager.sRtnMD.klines[dataManager.sInstrumentId]?[duration]?.datas["\(x)"] else {return}
-        guard let dataPre = dataManager.sRtnMD.klines[dataManager.sInstrumentId]?[duration]?.datas["\(x - 1)"] else {return}
-        let closePre = Float("\(dataPre.close ?? 0.0)") ?? 0.0
+        let dataPre = dataManager.sRtnMD.klines[dataManager.sInstrumentId]?[duration]?.datas["\(x - 1)"]
+        let closePre = Float("\(dataPre?.close ?? 0.0)") ?? 0.0
         let close = Float("\(data.close ?? 0.0)") ?? 0.0
         let open = Float("\(data.open ?? 0.0)") ?? 0.0
         let high = Float("\(data.high ?? 0.0)") ?? 0.0
@@ -76,10 +76,14 @@ open class KlineMarkerView: MarkerView {
         let xValue = dateformatter.string(from: dateTime)
         let decimal = dataManager.getDecimalByPtick(instrumentId: dataManager.sInstrumentId)
         let change = String(format: "%.\(decimal)f", close - closePre)
-        let changePercent = String(format: "%.2f", (close - closePre) / closePre * 100) + "%"
+        var changePercent = "-"
+        if closePre != 0 {
+            changePercent = String(format: "%.2f", (close - closePre) / closePre * 100) + "%"
+        }
+
         let volume = data.volume as? Int ?? 0
         let closeOi = data.close_oi as? Int ?? 0
-        let closeOiPre = dataPre.close_oi as? Int ?? 0
+        let closeOiPre = (dataPre?.close_oi ?? 0) as? Int ?? 0
         self.yValue.text = dataManager.yData
         self.xValue.text = xValue
         self.high.text = String(format: "%.\(decimal)f", high)

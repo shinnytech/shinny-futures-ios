@@ -84,6 +84,7 @@ class TDWebSocketUtils: NSObject, WebSocketDelegate, WebSocketPongDelegate {
             let jsonData = try jsonEncoder.encode(reqLogin)
             guard let json = String(data: jsonData, encoding: String.Encoding.utf8) else {return}
             socket_.write(string: json)
+            DataManager.getInstance().insertRecordsToDB(log: json)
         } catch {
             print(error)
         }
@@ -98,6 +99,7 @@ class TDWebSocketUtils: NSObject, WebSocketDelegate, WebSocketPongDelegate {
             let jsonData = try jsonEncoder.encode(confirmSettlement)
             guard let json = String(data: jsonData, encoding: String.Encoding.utf8) else {return}
             socket_.write(string: json)
+            DataManager.getInstance().insertRecordsToDB(log: json)
         } catch {
             print(error)
         }
@@ -113,6 +115,7 @@ class TDWebSocketUtils: NSObject, WebSocketDelegate, WebSocketPongDelegate {
             let jsonData = try jsonEncoder.encode(reqInsertOrder)
             guard let json = String(data: jsonData, encoding: String.Encoding.utf8) else {return}
             socket_.write(string: json)
+            DataManager.getInstance().insertRecordsToDB(log: json)
         } catch {
             print(error)
         }
@@ -128,6 +131,7 @@ class TDWebSocketUtils: NSObject, WebSocketDelegate, WebSocketPongDelegate {
             let jsonData = try jsonEncoder.encode(reqCancelOrder)
             guard let json = String(data: jsonData, encoding: String.Encoding.utf8) else {return}
             socket_.write(string: json)
+            DataManager.getInstance().insertRecordsToDB(log: json)
         } catch {
             print(error)
         }
@@ -142,6 +146,7 @@ class TDWebSocketUtils: NSObject, WebSocketDelegate, WebSocketPongDelegate {
             let jsonData = try jsonEncoder.encode(sendReqBankTransfer)
             guard let json = String(data: jsonData, encoding: String.Encoding.utf8) else {return}
             socket_.write(string: json)
+            DataManager.getInstance().insertRecordsToDB(log: json)
         } catch {
             print(error)
         }
@@ -156,6 +161,7 @@ class TDWebSocketUtils: NSObject, WebSocketDelegate, WebSocketPongDelegate {
             let jsonData = try jsonEncoder.encode(reqPassword)
             guard let json = String(data: jsonData, encoding: String.Encoding.utf8) else {return}
             socket_.write(string: json)
+            DataManager.getInstance().insertRecordsToDB(log: json)
         } catch {
             print(error)
         }

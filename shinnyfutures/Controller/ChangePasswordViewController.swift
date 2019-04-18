@@ -20,10 +20,12 @@ class ChangePasswordViewController: UIViewController {
     @IBOutlet weak var confirmPassword: UITextField!
     @IBOutlet weak var deleteConfirmPassword: UIButton!
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func viewWillAppear(_ animated: Bool) {
+        NotificationCenter.default.addObserver(self, selector: #selector(changeResult), name: Notification.Name(CommonConstants.ChangeSuccessNotification), object: nil)
+    }
 
-        // Do any additional setup after loading the view.
+    override func viewWillDisappear(_ animated: Bool) {
+        NotificationCenter.default.removeObserver(self)
     }
 
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -118,6 +120,18 @@ class ChangePasswordViewController: UIViewController {
         TDWebSocketUtils.getInstance().sendReqPassword(new_password: new_password, old_password: old_password)
         
     }
+
+    // MARK: objc methods
+    @objc func changeResult() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
+            self.navigationController?.popViewController(animated: true)
+        })
+    }
+
+    @IBAction func back(_ sender: UIBarButtonItem) {
+        navigationController?.popViewController(animated: true)
+    }
+
 
 
 }

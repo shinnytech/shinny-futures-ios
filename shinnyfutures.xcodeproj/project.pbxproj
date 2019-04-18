@@ -38,6 +38,29 @@
 		D447698121A7BF8000620CA0 /* OptionalTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D447698021A7BF8000620CA0 /* OptionalTableViewCell.swift */; };
 		D44934EB21B0CFFC0069422F /* Quote.swift in Sources */ = {isa = PBXBuildFile; fileRef = D44934EA21B0CFFC0069422F /* Quote.swift */; };
 		D44934ED21B0DCA80069422F /* RtnMD.swift in Sources */ = {isa = PBXBuildFile; fileRef = D44934EC21B0DCA80069422F /* RtnMD.swift */; };
+		D45DCA2D2241E06300596084 /* AMPLocationManagerDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D45DCA092241E06300596084 /* AMPLocationManagerDelegate.m */; };
+		D45DCA2E2241E06300596084 /* AMPUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = D45DCA0C2241E06300596084 /* AMPUtils.m */; };
+		D45DCA2F2241E06300596084 /* ComodoCaLimitedRsaCertificationAuthority.der in Resources */ = {isa = PBXBuildFile; fileRef = D45DCA0D2241E06300596084 /* ComodoCaLimitedRsaCertificationAuthority.der */; };
+		D45DCA302241E06300596084 /* ISPCertificatePinning.m in Sources */ = {isa = PBXBuildFile; fileRef = D45DCA122241E06300596084 /* ISPCertificatePinning.m */; };
+		D45DCA312241E06300596084 /* ISPPinnedNSURLSessionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D45DCA142241E06300596084 /* ISPPinnedNSURLSessionDelegate.m */; };
+		D45DCA322241E06300596084 /* ISPPinnedNSURLConnectionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D45DCA152241E06300596084 /* ISPPinnedNSURLConnectionDelegate.m */; };
+		D45DCA332241E06300596084 /* AMPRevenue.m in Sources */ = {isa = PBXBuildFile; fileRef = D45DCA172241E06300596084 /* AMPRevenue.m */; };
+		D45DCA342241E06300596084 /* api.amplitude.com.der in Resources */ = {isa = PBXBuildFile; fileRef = D45DCA182241E06300596084 /* api.amplitude.com.der */; };
+		D45DCA352241E06300596084 /* AMPTrackingOptions.m in Sources */ = {isa = PBXBuildFile; fileRef = D45DCA192241E06300596084 /* AMPTrackingOptions.m */; };
+		D45DCA362241E06300596084 /* ComodoRsaDomainValidationCA.der in Resources */ = {isa = PBXBuildFile; fileRef = D45DCA1A2241E06300596084 /* ComodoRsaDomainValidationCA.der */; };
+		D45DCA372241E06300596084 /* AMPURLSession.m in Sources */ = {isa = PBXBuildFile; fileRef = D45DCA1B2241E06300596084 /* AMPURLSession.m */; };
+		D45DCA382241E06300596084 /* AppledocSettings.plist in Resources */ = {isa = PBXBuildFile; fileRef = D45DCA1C2241E06300596084 /* AppledocSettings.plist */; };
+		D45DCA392241E06300596084 /* AMPDatabaseHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = D45DCA1E2241E06300596084 /* AMPDatabaseHelper.m */; };
+		D45DCA3A2241E06300596084 /* AMPDeviceInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = D45DCA1F2241E06300596084 /* AMPDeviceInfo.m */; };
+		D45DCA3B2241E06300596084 /* AMPIdentify.m in Sources */ = {isa = PBXBuildFile; fileRef = D45DCA202241E06300596084 /* AMPIdentify.m */; };
+		D45DCA3C2241E06300596084 /* AMPURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = D45DCA222241E06300596084 /* AMPURLConnection.m */; };
+		D45DCA3D2241E06300596084 /* ComodoRsaCA.der in Resources */ = {isa = PBXBuildFile; fileRef = D45DCA232241E06300596084 /* ComodoRsaCA.der */; };
+		D45DCA3E2241E06300596084 /* AMPConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = D45DCA262241E06300596084 /* AMPConstants.m */; };
+		D45DCA3F2241E06300596084 /* Amplitude.m in Sources */ = {isa = PBXBuildFile; fileRef = D45DCA2B2241E06300596084 /* Amplitude.m */; };
+		D45DCA932249F40A00596084 /* FMDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D45DCA802249F37300596084 /* FMDB.framework */; };
+		D45DCA942249F40A00596084 /* FMDB.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D45DCA802249F37300596084 /* FMDB.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		D45DCA972249F40A00596084 /* AliyunLOGiOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D45DCA8C2249F38500596084 /* AliyunLOGiOS.framework */; };
+		D45DCA982249F40A00596084 /* AliyunLOGiOS.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D45DCA8C2249F38500596084 /* AliyunLOGiOS.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D466AB2721B673E100B6E4F6 /* SwiftTryCatch.m in Sources */ = {isa = PBXBuildFile; fileRef = D466AB2421B673E100B6E4F6 /* SwiftTryCatch.m */; };
 		D466AB2B21B7B99D00B6E4F6 /* Kline.swift in Sources */ = {isa = PBXBuildFile; fileRef = D466AB2A21B7B99D00B6E4F6 /* Kline.swift */; };
 		D466AB2E21B7BD6A00B6E4F6 /* Tick.swift in Sources */ = {isa = PBXBuildFile; fileRef = D466AB2D21B7BD6A00B6E4F6 /* Tick.swift */; };
@@ -177,6 +200,83 @@
 			remoteGlobalIDString = A58A4ED274A941CA248EA921;
 			remoteInfo = Charts;
 		};
+		D45DCA772249F37300596084 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D45DCA6C2249F37200596084 /* fmdb.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8DD76FA10486AA7600D96B5E;
+			remoteInfo = fmdb;
+		};
+		D45DCA792249F37300596084 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D45DCA6C2249F37200596084 /* fmdb.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = EE4290EF12B42F870088BD94;
+			remoteInfo = FMDB;
+		};
+		D45DCA7B2249F37300596084 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D45DCA6C2249F37200596084 /* fmdb.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = BF5D041618416BB2008C5AA9;
+			remoteInfo = Tests;
+		};
+		D45DCA7D2249F37300596084 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D45DCA6C2249F37200596084 /* fmdb.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6290CBB5188FE836009790F8;
+			remoteInfo = "FMDB-IOS";
+		};
+		D45DCA7F2249F37300596084 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D45DCA6C2249F37200596084 /* fmdb.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 83C73EFE1C326AB000FFC730;
+			remoteInfo = "FMDB iOS";
+		};
+		D45DCA812249F37300596084 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D45DCA6C2249F37200596084 /* fmdb.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 83C73F0B1C326ADA00FFC730;
+			remoteInfo = "FMDB MacOS";
+		};
+		D45DCA832249F37300596084 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D45DCA6C2249F37200596084 /* fmdb.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 2CD2426D1FCC09CA00479FDE;
+			remoteInfo = "FMDB watchOS";
+		};
+		D45DCA8B2249F38500596084 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D45DCA852249F38500596084 /* AliyunLOGiOS.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 28363D921D4F175400BB1738;
+			remoteInfo = AliyunLOGiOS;
+		};
+		D45DCA8D2249F38500596084 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D45DCA852249F38500596084 /* AliyunLOGiOS.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D89EAFFE20CA6C8000A82916;
+			remoteInfo = AliyunLOGiOSTests;
+		};
+		D45DCA952249F40A00596084 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D45DCA6C2249F37200596084 /* fmdb.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 83C73EFD1C326AB000FFC730;
+			remoteInfo = "FMDB iOS";
+		};
+		D45DCA992249F40A00596084 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D45DCA852249F38500596084 /* AliyunLOGiOS.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 28363D911D4F175400BB1738;
+			remoteInfo = AliyunLOGiOS;
+		};
 		D480226B20688A180033E202 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = D480224E20688A180033E202 /* Project object */;
@@ -200,7 +300,9 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				D45DCA982249F40A00596084 /* AliyunLOGiOS.framework in Embed Frameworks */,
 				D420B2AC20DD07320045B6AF /* Charts.framework in Embed Frameworks */,
+				D45DCA942249F40A00596084 /* FMDB.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -252,6 +354,44 @@
 		D447698021A7BF8000620CA0 /* OptionalTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionalTableViewCell.swift; sourceTree = "<group>"; };
 		D44934EA21B0CFFC0069422F /* Quote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Quote.swift; sourceTree = "<group>"; };
 		D44934EC21B0DCA80069422F /* RtnMD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RtnMD.swift; sourceTree = "<group>"; };
+		D45DCA072241E06300596084 /* AMPURLConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AMPURLConnection.h; sourceTree = "<group>"; };
+		D45DCA082241E06300596084 /* AMPIdentify.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AMPIdentify.h; sourceTree = "<group>"; };
+		D45DCA092241E06300596084 /* AMPLocationManagerDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AMPLocationManagerDelegate.m; sourceTree = "<group>"; };
+		D45DCA0A2241E06300596084 /* AMPDeviceInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AMPDeviceInfo.h; sourceTree = "<group>"; };
+		D45DCA0B2241E06300596084 /* AMPDatabaseHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AMPDatabaseHelper.h; sourceTree = "<group>"; };
+		D45DCA0C2241E06300596084 /* AMPUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AMPUtils.m; sourceTree = "<group>"; };
+		D45DCA0D2241E06300596084 /* ComodoCaLimitedRsaCertificationAuthority.der */ = {isa = PBXFileReference; lastKnownFileType = file; path = ComodoCaLimitedRsaCertificationAuthority.der; sourceTree = "<group>"; };
+		D45DCA0E2241E06300596084 /* AMPConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AMPConstants.h; sourceTree = "<group>"; };
+		D45DCA102241E06300596084 /* ISPPinnedNSURLSessionDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISPPinnedNSURLSessionDelegate.h; sourceTree = "<group>"; };
+		D45DCA112241E06300596084 /* ISPPinnedNSURLConnectionDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISPPinnedNSURLConnectionDelegate.h; sourceTree = "<group>"; };
+		D45DCA122241E06300596084 /* ISPCertificatePinning.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISPCertificatePinning.m; sourceTree = "<group>"; };
+		D45DCA132241E06300596084 /* SSLCertificatePinning-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SSLCertificatePinning-Prefix.pch"; sourceTree = "<group>"; };
+		D45DCA142241E06300596084 /* ISPPinnedNSURLSessionDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISPPinnedNSURLSessionDelegate.m; sourceTree = "<group>"; };
+		D45DCA152241E06300596084 /* ISPPinnedNSURLConnectionDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISPPinnedNSURLConnectionDelegate.m; sourceTree = "<group>"; };
+		D45DCA162241E06300596084 /* ISPCertificatePinning.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISPCertificatePinning.h; sourceTree = "<group>"; };
+		D45DCA172241E06300596084 /* AMPRevenue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AMPRevenue.m; sourceTree = "<group>"; };
+		D45DCA182241E06300596084 /* api.amplitude.com.der */ = {isa = PBXFileReference; lastKnownFileType = file; path = api.amplitude.com.der; sourceTree = "<group>"; };
+		D45DCA192241E06300596084 /* AMPTrackingOptions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AMPTrackingOptions.m; sourceTree = "<group>"; };
+		D45DCA1A2241E06300596084 /* ComodoRsaDomainValidationCA.der */ = {isa = PBXFileReference; lastKnownFileType = file; path = ComodoRsaDomainValidationCA.der; sourceTree = "<group>"; };
+		D45DCA1B2241E06300596084 /* AMPURLSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AMPURLSession.m; sourceTree = "<group>"; };
+		D45DCA1C2241E06300596084 /* AppledocSettings.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = AppledocSettings.plist; sourceTree = "<group>"; };
+		D45DCA1D2241E06300596084 /* Amplitude.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Amplitude.h; sourceTree = "<group>"; };
+		D45DCA1E2241E06300596084 /* AMPDatabaseHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AMPDatabaseHelper.m; sourceTree = "<group>"; };
+		D45DCA1F2241E06300596084 /* AMPDeviceInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AMPDeviceInfo.m; sourceTree = "<group>"; };
+		D45DCA202241E06300596084 /* AMPIdentify.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AMPIdentify.m; sourceTree = "<group>"; };
+		D45DCA212241E06300596084 /* AMPLocationManagerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AMPLocationManagerDelegate.h; sourceTree = "<group>"; };
+		D45DCA222241E06300596084 /* AMPURLConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AMPURLConnection.m; sourceTree = "<group>"; };
+		D45DCA232241E06300596084 /* ComodoRsaCA.der */ = {isa = PBXFileReference; lastKnownFileType = file; path = ComodoRsaCA.der; sourceTree = "<group>"; };
+		D45DCA242241E06300596084 /* Amplitude+SSLPinning.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Amplitude+SSLPinning.h"; sourceTree = "<group>"; };
+		D45DCA252241E06300596084 /* AMPRevenue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AMPRevenue.h; sourceTree = "<group>"; };
+		D45DCA262241E06300596084 /* AMPConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AMPConstants.m; sourceTree = "<group>"; };
+		D45DCA272241E06300596084 /* AMPARCMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AMPARCMacros.h; sourceTree = "<group>"; };
+		D45DCA282241E06300596084 /* AMPUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AMPUtils.h; sourceTree = "<group>"; };
+		D45DCA292241E06300596084 /* AMPURLSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AMPURLSession.h; sourceTree = "<group>"; };
+		D45DCA2A2241E06300596084 /* AMPTrackingOptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AMPTrackingOptions.h; sourceTree = "<group>"; };
+		D45DCA2B2241E06300596084 /* Amplitude.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Amplitude.m; sourceTree = "<group>"; };
+		D45DCA6C2249F37200596084 /* fmdb.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = fmdb.xcodeproj; path = "aliyun-log-ios-sdk-master/fmdb/fmdb.xcodeproj"; sourceTree = "<group>"; };
+		D45DCA852249F38500596084 /* AliyunLOGiOS.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = AliyunLOGiOS.xcodeproj; path = "aliyun-log-ios-sdk-master/Source/AliyunLOGiOS.xcodeproj"; sourceTree = "<group>"; };
 		D466AB2421B673E100B6E4F6 /* SwiftTryCatch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SwiftTryCatch.m; path = "../../Downloads/SwiftTryCatch-master/SwiftTryCatch.m"; sourceTree = "<group>"; };
 		D466AB2621B673E100B6E4F6 /* SwiftTryCatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwiftTryCatch.h; path = "../../Downloads/SwiftTryCatch-master/SwiftTryCatch.h"; sourceTree = "<group>"; };
 		D466AB2A21B7B99D00B6E4F6 /* Kline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Kline.swift; sourceTree = "<group>"; };
@@ -390,6 +530,8 @@
 				D4A2B2EB21946035008536F7 /* Foundation.framework in Frameworks */,
 				D4A2B2E92194602B008536F7 /* UIKit.framework in Frameworks */,
 				D4A2B2E721946022008536F7 /* CoreGraphics.framework in Frameworks */,
+				D45DCA932249F40A00596084 /* FMDB.framework in Frameworks */,
+				D45DCA972249F40A00596084 /* AliyunLOGiOS.framework in Frameworks */,
 				D4A2B2E521946017008536F7 /* CoreTelephony.framework in Frameworks */,
 				D4A2B2E32194600C008536F7 /* SystemConfiguration.framework in Frameworks */,
 				D4A2B2E121946001008536F7 /* CoreLocation.framework in Frameworks */,
@@ -442,6 +584,80 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		D45DCA062241E06300596084 /* Amplitude */ = {
+			isa = PBXGroup;
+			children = (
+				D45DCA072241E06300596084 /* AMPURLConnection.h */,
+				D45DCA082241E06300596084 /* AMPIdentify.h */,
+				D45DCA092241E06300596084 /* AMPLocationManagerDelegate.m */,
+				D45DCA0A2241E06300596084 /* AMPDeviceInfo.h */,
+				D45DCA0B2241E06300596084 /* AMPDatabaseHelper.h */,
+				D45DCA0C2241E06300596084 /* AMPUtils.m */,
+				D45DCA0D2241E06300596084 /* ComodoCaLimitedRsaCertificationAuthority.der */,
+				D45DCA0E2241E06300596084 /* AMPConstants.h */,
+				D45DCA0F2241E06300596084 /* SSLCertificatePinning */,
+				D45DCA172241E06300596084 /* AMPRevenue.m */,
+				D45DCA182241E06300596084 /* api.amplitude.com.der */,
+				D45DCA192241E06300596084 /* AMPTrackingOptions.m */,
+				D45DCA1A2241E06300596084 /* ComodoRsaDomainValidationCA.der */,
+				D45DCA1B2241E06300596084 /* AMPURLSession.m */,
+				D45DCA1C2241E06300596084 /* AppledocSettings.plist */,
+				D45DCA1D2241E06300596084 /* Amplitude.h */,
+				D45DCA1E2241E06300596084 /* AMPDatabaseHelper.m */,
+				D45DCA1F2241E06300596084 /* AMPDeviceInfo.m */,
+				D45DCA202241E06300596084 /* AMPIdentify.m */,
+				D45DCA212241E06300596084 /* AMPLocationManagerDelegate.h */,
+				D45DCA222241E06300596084 /* AMPURLConnection.m */,
+				D45DCA232241E06300596084 /* ComodoRsaCA.der */,
+				D45DCA242241E06300596084 /* Amplitude+SSLPinning.h */,
+				D45DCA252241E06300596084 /* AMPRevenue.h */,
+				D45DCA262241E06300596084 /* AMPConstants.m */,
+				D45DCA272241E06300596084 /* AMPARCMacros.h */,
+				D45DCA282241E06300596084 /* AMPUtils.h */,
+				D45DCA292241E06300596084 /* AMPURLSession.h */,
+				D45DCA2A2241E06300596084 /* AMPTrackingOptions.h */,
+				D45DCA2B2241E06300596084 /* Amplitude.m */,
+			);
+			path = Amplitude;
+			sourceTree = "<group>";
+		};
+		D45DCA0F2241E06300596084 /* SSLCertificatePinning */ = {
+			isa = PBXGroup;
+			children = (
+				D45DCA102241E06300596084 /* ISPPinnedNSURLSessionDelegate.h */,
+				D45DCA112241E06300596084 /* ISPPinnedNSURLConnectionDelegate.h */,
+				D45DCA122241E06300596084 /* ISPCertificatePinning.m */,
+				D45DCA132241E06300596084 /* SSLCertificatePinning-Prefix.pch */,
+				D45DCA142241E06300596084 /* ISPPinnedNSURLSessionDelegate.m */,
+				D45DCA152241E06300596084 /* ISPPinnedNSURLConnectionDelegate.m */,
+				D45DCA162241E06300596084 /* ISPCertificatePinning.h */,
+			);
+			path = SSLCertificatePinning;
+			sourceTree = "<group>";
+		};
+		D45DCA6D2249F37200596084 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D45DCA782249F37300596084 /* fmdb */,
+				D45DCA7A2249F37300596084 /* libFMDB.a */,
+				D45DCA7C2249F37300596084 /* Tests.xctest */,
+				D45DCA7E2249F37300596084 /* libFMDB-IOS.a */,
+				D45DCA802249F37300596084 /* FMDB.framework */,
+				D45DCA822249F37300596084 /* FMDB.framework */,
+				D45DCA842249F37300596084 /* FMDB.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		D45DCA862249F38500596084 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D45DCA8C2249F38500596084 /* AliyunLOGiOS.framework */,
+				D45DCA8E2249F38500596084 /* AliyunLOGiOSTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		D47A4E882089BC6500255276 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
@@ -456,11 +672,13 @@
 		D480224D20688A180033E202 = {
 			isa = PBXGroup;
 			children = (
+				D45DCA852249F38500596084 /* AliyunLOGiOS.xcodeproj */,
 				D466AB2621B673E100B6E4F6 /* SwiftTryCatch.h */,
 				D466AB2421B673E100B6E4F6 /* SwiftTryCatch.m */,
 				D4A2B2DA21945F54008536F7 /* BaiduMobStat.h */,
 				D4A2B2D821945F54008536F7 /* libBaiduMobStat.a */,
 				D420B27E20DD00090045B6AF /* Charts.xcodeproj */,
+				D45DCA6C2249F37200596084 /* fmdb.xcodeproj */,
 				D480225820688A180033E202 /* shinnyfutures */,
 				D480226D20688A180033E202 /* shinnyfuturesTests */,
 				D480227820688A180033E202 /* shinnyfuturesUITests */,
@@ -483,6 +701,7 @@
 		D480225820688A180033E202 /* shinnyfutures */ = {
 			isa = PBXGroup;
 			children = (
+				D45DCA062241E06300596084 /* Amplitude */,
 				D4F1E1AB206E33C400BC1C50 /* Controller */,
 				D4F1E1AA206E339B00BC1C50 /* View */,
 				D4F1E1A9206E339300BC1C50 /* Model */,
@@ -703,6 +922,8 @@
 			);
 			dependencies = (
 				D420B2AE20DD07320045B6AF /* PBXTargetDependency */,
+				D45DCA962249F40A00596084 /* PBXTargetDependency */,
+				D45DCA9A2249F40A00596084 /* PBXTargetDependency */,
 			);
 			name = shinnyfutures;
 			productName = shinnyfutures;
@@ -759,7 +980,7 @@
 				TargetAttributes = {
 					D480225520688A180033E202 = {
 						CreatedOnToolsVersion = 9.2;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 					};
 					D480226920688A180033E202 = {
 						CreatedOnToolsVersion = 9.2;
@@ -786,8 +1007,16 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
+					ProductGroup = D45DCA862249F38500596084 /* Products */;
+					ProjectRef = D45DCA852249F38500596084 /* AliyunLOGiOS.xcodeproj */;
+				},
+				{
 					ProductGroup = D420B27F20DD00090045B6AF /* Products */;
 					ProjectRef = D420B27E20DD00090045B6AF /* Charts.xcodeproj */;
+				},
+				{
+					ProductGroup = D45DCA6D2249F37200596084 /* Products */;
+					ProjectRef = D45DCA6C2249F37200596084 /* fmdb.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -814,6 +1043,69 @@
 			remoteRef = D420B28520DD00090045B6AF /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		D45DCA782249F37300596084 /* fmdb */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			path = fmdb;
+			remoteRef = D45DCA772249F37300596084 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D45DCA7A2249F37300596084 /* libFMDB.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libFMDB.a;
+			remoteRef = D45DCA792249F37300596084 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D45DCA7C2249F37300596084 /* Tests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = Tests.xctest;
+			remoteRef = D45DCA7B2249F37300596084 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D45DCA7E2249F37300596084 /* libFMDB-IOS.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libFMDB-IOS.a";
+			remoteRef = D45DCA7D2249F37300596084 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D45DCA802249F37300596084 /* FMDB.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = FMDB.framework;
+			remoteRef = D45DCA7F2249F37300596084 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D45DCA822249F37300596084 /* FMDB.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = FMDB.framework;
+			remoteRef = D45DCA812249F37300596084 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D45DCA842249F37300596084 /* FMDB.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = FMDB.framework;
+			remoteRef = D45DCA832249F37300596084 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D45DCA8C2249F38500596084 /* AliyunLOGiOS.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = AliyunLOGiOS.framework;
+			remoteRef = D45DCA8B2249F38500596084 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D45DCA8E2249F38500596084 /* AliyunLOGiOSTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = AliyunLOGiOSTests.xctest;
+			remoteRef = D45DCA8D2249F38500596084 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
@@ -821,15 +1113,20 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D45DCA382241E06300596084 /* AppledocSettings.plist in Resources */,
 				D480226420688A180033E202 /* LaunchScreen.storyboard in Resources */,
 				D4805D0721D8B8B100286ED4 /* DataTableViewCell.xib in Resources */,
 				D480226120688A180033E202 /* Assets.xcassets in Resources */,
 				D4EBC91E20AEB55700A9163F /* VolumeKeyboardView.xib in Resources */,
+				D45DCA3D2241E06300596084 /* ComodoRsaCA.der in Resources */,
 				D4805D0621D8B8B100286ED4 /* ImageHeaderView.xib in Resources */,
 				D48E663120B559B500C808C2 /* KlineMarkerView.xib in Resources */,
+				D45DCA362241E06300596084 /* ComodoRsaDomainValidationCA.der in Resources */,
 				D4F4E18B20AEA2CA007A2975 /* PriceKeyboardView.xib in Resources */,
 				D480225F20688A180033E202 /* Main.storyboard in Resources */,
 				D48E663A20B5672800C808C2 /* CurrentDayMarkerView.xib in Resources */,
+				D45DCA2F2241E06300596084 /* ComodoCaLimitedRsaCertificationAuthority.der in Resources */,
+				D45DCA342241E06300596084 /* api.amplitude.com.der in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -875,14 +1172,12 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-shinnyfutures/Pods-shinnyfutures-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/Amplitude-iOS/Amplitude_iOS.framework",
 				"${BUILT_PRODUCTS_DIR}/DeepDiff/DeepDiff.framework",
 				"${BUILT_PRODUCTS_DIR}/Siren/Siren.framework",
 				"${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Amplitude_iOS.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DeepDiff.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Siren.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Starscream.framework",
@@ -949,8 +1244,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				D420B2E720E0964E0045B6AF /* CurrentDayYAxisRenderer.swift in Sources */,
+				D45DCA392241E06300596084 /* AMPDatabaseHelper.m in Sources */,
 				D4195FC120907C550072C021 /* TDWebSocketUtils.swift in Sources */,
 				D4805D1C21DA1B6B00286ED4 /* RightNavigationTableViewCell.swift in Sources */,
+				D45DCA312241E06300596084 /* ISPPinnedNSURLSessionDelegate.m in Sources */,
 				D4F10EA320A5780000DC9E1C /* ConfirmSettlementView.swift in Sources */,
 				D415D0C620DCD6F700EA8DA3 /* KlineMarkerView.swift in Sources */,
 				D47F66E7215BA7110068C853 /* ResponsibilityView.swift in Sources */,
@@ -961,10 +1258,12 @@
 				D49A718120738A9B00AA947A /* TradeTableViewController.swift in Sources */,
 				D4F48C352212ABC900FD2143 /* KlineDurationViewController.swift in Sources */,
 				D48606B220A5283800C4FEB5 /* AccountConstants.swift in Sources */,
+				D45DCA3A2241E06300596084 /* AMPDeviceInfo.m in Sources */,
 				D48606A820A4429200C4FEB5 /* QuoteConstants.swift in Sources */,
 				D447698121A7BF8000620CA0 /* OptionalTableViewCell.swift in Sources */,
 				D4CA2A1A21EDC29C0054528A /* ParaContentTableViewCell.swift in Sources */,
 				D4B2346921DDEE280073498C /* ReqPeekMessage.swift in Sources */,
+				D45DCA322241E06300596084 /* ISPPinnedNSURLConnectionDelegate.m in Sources */,
 				D4B3DBCF207B65BE00545376 /* TransactionViewController.swift in Sources */,
 				D47A4E852089958A00255276 /* FileUtils.swift in Sources */,
 				D466AB3A21B7C63000B6E4F6 /* Position.swift in Sources */,
@@ -975,7 +1274,9 @@
 				D466AB3621B7C30B00B6E4F6 /* User.swift in Sources */,
 				D4F4E18920AEA080007A2975 /* PriceKeyboardView.swift in Sources */,
 				D4B2346121DDEAC00073498C /* ReqCancelOrder.swift in Sources */,
+				D45DCA3F2241E06300596084 /* Amplitude.m in Sources */,
 				D466D4CF2137D47500FD6FBA /* BankTransferViewController.swift in Sources */,
+				D45DCA2D2241E06300596084 /* AMPLocationManagerDelegate.m in Sources */,
 				D48606AE20A444BA00C4FEB5 /* ChartConstants.swift in Sources */,
 				D485107B20CB7C8E00EC0B19 /* NotifyConstants.swift in Sources */,
 				D466D4D32138225200FD6FBA /* BankTransferTableViewCell.swift in Sources */,
@@ -999,8 +1300,10 @@
 				D420B2F020E2207F0045B6AF /* KlineYAxisRenderer.swift in Sources */,
 				D441816B222816EB00458C1F /* MD5ViewController.swift in Sources */,
 				D466D4D62138D4B300FD6FBA /* BankConstants.swift in Sources */,
+				D45DCA3C2241E06300596084 /* AMPURLConnection.m in Sources */,
 				D480225C20688A180033E202 /* QuoteViewController.swift in Sources */,
 				D420B2F220E2207F0045B6AF /* MyCandleStickChartRenderer.swift in Sources */,
+				D45DCA372241E06300596084 /* AMPURLSession.m in Sources */,
 				D4CA2A1821EDC2810054528A /* ParaNavTableViewCell.swift in Sources */,
 				D47A4E7B20871F7A00255276 /* KlinePopupViewController.swift in Sources */,
 				D466AB3421B7C1F500B6E4F6 /* RtnTD.swift in Sources */,
@@ -1014,6 +1317,7 @@
 				D48606AC20A444A700C4FEB5 /* TickConstants.swift in Sources */,
 				D42EE52C20721ED000EF8066 /* SearchTableViewController.swift in Sources */,
 				D480225A20688A180033E202 /* AppDelegate.swift in Sources */,
+				D45DCA3B2241E06300596084 /* AMPIdentify.m in Sources */,
 				D466AB2E21B7BD6A00B6E4F6 /* Tick.swift in Sources */,
 				D466D4D82138D4F000FD6FBA /* TransferConstants.swift in Sources */,
 				D466AB3221B7BEFB00B6E4F6 /* Chart.swift in Sources */,
@@ -1030,10 +1334,13 @@
 				D420B2E120E091300045B6AF /* KlineCombinedChartView.swift in Sources */,
 				D486069E20A030B900C4FEB5 /* OptionalPopupViewController.swift in Sources */,
 				D4805D2021DA1C3600286ED4 /* RightTableViewController.swift in Sources */,
+				D45DCA2E2241E06300596084 /* AMPUtils.m in Sources */,
 				D4775A4021EDE55900CC3C55 /* ParaViewController.swift in Sources */,
 				D4195FCF20994D560072C021 /* TradeConstants.swift in Sources */,
 				D480229C206B67C70033E202 /* FeedbackViewController.swift in Sources */,
 				D420B2E820E0964E0045B6AF /* CurrentDayXAxisRenderer.swift in Sources */,
+				D45DCA332241E06300596084 /* AMPRevenue.m in Sources */,
+				D45DCA302241E06300596084 /* ISPCertificatePinning.m in Sources */,
 				D4CA2A1621EDB2B40054528A /* SettingTableViewController.swift in Sources */,
 				D47A4E812088928300255276 /* DataManager.swift in Sources */,
 				D4B3DBD7207CB82C00545376 /* KlineViewController.swift in Sources */,
@@ -1041,6 +1348,7 @@
 				D4418167221AADB800458C1F /* MyBarChartRenderer.swift in Sources */,
 				D420B2DD20E091300045B6AF /* CurrentDayCombinedChartView.swift in Sources */,
 				D47F66F1216B58010068C853 /* LocalCommonConstants.swift in Sources */,
+				D45DCA3E2241E06300596084 /* AMPConstants.m in Sources */,
 				D4F48C3A2213BF7200FD2143 /* AddDurationCollectionViewController.swift in Sources */,
 				D4B2345B21DDAFD20073498C /* BrokerTableViewCell.swift in Sources */,
 				D4B2346521DDEDA90073498C /* ReqConfirmSettlement.swift in Sources */,
@@ -1066,6 +1374,7 @@
 				D4B3DBD3207CB7BA00545376 /* KlinePageViewController.swift in Sources */,
 				D4B2346F21DDEF3A0073498C /* ReqSetChartKline.swift in Sources */,
 				D44934ED21B0DCA80069422F /* RtnMD.swift in Sources */,
+				D45DCA352241E06300596084 /* AMPTrackingOptions.m in Sources */,
 				D4B2345F21DDEA340073498C /* ReqBankTransfer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1093,6 +1402,16 @@
 			isa = PBXTargetDependency;
 			name = Charts;
 			targetProxy = D420B2AD20DD07320045B6AF /* PBXContainerItemProxy */;
+		};
+		D45DCA962249F40A00596084 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "FMDB iOS";
+			targetProxy = D45DCA952249F40A00596084 /* PBXContainerItemProxy */;
+		};
+		D45DCA9A2249F40A00596084 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = AliyunLOGiOS;
+			targetProxy = D45DCA992249F40A00596084 /* PBXContainerItemProxy */;
 		};
 		D480226C20688A180033E202 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1179,6 +1498,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
@@ -1233,6 +1553,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "-lsqlite3.0";
 				SDKROOT = iphoneos;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -1247,8 +1568,8 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = ETY2JG84H2;
 				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1265,7 +1586,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.shinnytech.zhongqihuo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = zhongqihuo2019;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/shinnyfutures/shinnyfutures-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1280,8 +1601,8 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = ETY2JG84H2;
 				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1300,7 +1621,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.shinnytech.zhongqihuo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = zhongqihuo2019;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/shinnyfutures/shinnyfutures-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

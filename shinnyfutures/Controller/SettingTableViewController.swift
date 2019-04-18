@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AliyunLOGiOS
 
 class SettingTableViewController: UITableViewController {
 
@@ -91,7 +92,7 @@ class SettingTableViewController: UITableViewController {
         case 2:
             switch indexPath.row{
             case 0:
-                ToastUtils.showPositiveMessage(message: "日志上传成功")
+                upload()
                 break
             default:
                 break
@@ -141,6 +142,37 @@ class SettingTableViewController: UITableViewController {
 
     @IBAction func klineDurationViewControllerUnwindSegue(segue: UIStoryboardSegue) {
         print("我从k线周期设置页来～")
+    }
+
+    func upload() {
+        let user = DataManager.getInstance().sUser_id
+        let version = DataManager.getInstance().sAppVersion
+        let logGroup = LogGroup(topic: "user log", source: "V\(version) User id: \(user)")
+
+        let dm = DBManager.defaultManager()
+        let lists = dm.fetchRecords(limit: 500)
+        for data in lists {
+            if let logEntity = data as? Dictionary<String, Any>{
+                let content = logEntity["log"] as? String ?? ""
+                let log = Log()
+                log.PutContent("content", value: content)
+                logGroup.PutLog(log)
+            }
+        }
+
+        /* Post log */
+        DataManager.getInstance().sClient?.PostLog(logGroup, logStoreName: "kq-xq"){ response, error in
+            //当前回调是在异步线程中，在主线程中同步UI
+            if error != nil {
+                // handle response however you want
+                print("直接发送失败,error : \(String(describing: error?.localizedDescription))")
+            }else{
+                print("直接发送成功")
+                DispatchQueue.main.async {
+                    ToastUtils.showPositiveMessage(message: "日志上传成功")
+                }
+            }
+        }
     }
 
 }

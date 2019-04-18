@@ -62,7 +62,7 @@ class LoginViewController: UIViewController {
                 self.userName.text = ""
             }
 
-            if userName.isEmpty{
+            if self.userName.text!.isEmpty{
                 self.deleteName.isHidden = true
             }else{
                 self.deleteName.isHidden = false
@@ -77,7 +77,7 @@ class LoginViewController: UIViewController {
                 self.userPassword.text = ""
             }
 
-            if userPassword.isEmpty{
+            if self.userPassword.text!.isEmpty{
                 self.deletePassword.isHidden = true
             }else{
                 self.deletePassword.isHidden = false
@@ -91,6 +91,8 @@ class LoginViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(loadBrokerInfo), name: Notification.Name(CommonConstants.BrokerInfoNotification), object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(loginResult), name: Notification.Name(CommonConstants.LoginNotification), object: nil)
+
+        NotificationCenter.default.addObserver(self, selector: #selector(changePassword), name: Notification.Name(CommonConstants.WeakPasswordNotification), object: nil)
 
     }
     
@@ -189,6 +191,12 @@ class LoginViewController: UIViewController {
             }
             
         })
+    }
+
+    //弱密码修改
+    @objc func changePassword(){
+        self.userPassword.text = ""
+        self.performSegue(withIdentifier: CommonConstants.LoginToChangePassword, sender: self.login)
     }
 
     @objc func toBrokerList(){

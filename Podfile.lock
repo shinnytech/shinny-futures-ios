@@ -1,5 +1,4 @@
 PODS:
-  - Amplitude-iOS (4.2.0)
   - Bugly (2.5.0)
   - DeepDiff (1.2.0)
   - Siren (3.3.0)
@@ -10,7 +9,6 @@ PODS:
   - UMCSecurityPlugins (1.0.6)
 
 DEPENDENCIES:
-  - Amplitude-iOS
   - Bugly
   - DeepDiff
   - Siren
@@ -21,7 +19,6 @@ DEPENDENCIES:
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
-    - Amplitude-iOS
     - Bugly
     - DeepDiff
     - Siren
@@ -31,7 +28,6 @@ SPEC REPOS:
     - UMCSecurityPlugins
 
 SPEC CHECKSUMS:
-  Amplitude-iOS: 45f10ac763db6f9ddfa06f2e4d63ed5f8d3c7bf6
   Bugly: 3ca9f255c01025582df26f9222893b383c7e4b4e
   DeepDiff: 0ee83ac6942d441f677c22e981548c6e0937f2b6
   Siren: e7183967550b986736103f24ca6c74896a475145
@@ -40,6 +36,6 @@ SPEC CHECKSUMS:
   UMCCommon: 82d21f4bb9532a5472cc533bbd8ed48aff376a14
   UMCSecurityPlugins: 0831a08f3988f3cea9f1d3a7626cd9bee4fef150
 
-PODFILE CHECKSUM: 90c6891fa355d817dc28d83dca60ecf4f981ff14
+PODFILE CHECKSUM: ad3a0d8426add2ef18a28f8a92fe030d815e9771
 
 COCOAPODS: 1.5.0
