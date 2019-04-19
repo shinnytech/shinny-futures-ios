@@ -61,7 +61,6 @@
 		D45DCA942249F40A00596084 /* FMDB.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D45DCA802249F37300596084 /* FMDB.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D45DCA972249F40A00596084 /* AliyunLOGiOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D45DCA8C2249F38500596084 /* AliyunLOGiOS.framework */; };
 		D45DCA982249F40A00596084 /* AliyunLOGiOS.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D45DCA8C2249F38500596084 /* AliyunLOGiOS.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		D466AB2721B673E100B6E4F6 /* SwiftTryCatch.m in Sources */ = {isa = PBXBuildFile; fileRef = D466AB2421B673E100B6E4F6 /* SwiftTryCatch.m */; };
 		D466AB2B21B7B99D00B6E4F6 /* Kline.swift in Sources */ = {isa = PBXBuildFile; fileRef = D466AB2A21B7B99D00B6E4F6 /* Kline.swift */; };
 		D466AB2E21B7BD6A00B6E4F6 /* Tick.swift in Sources */ = {isa = PBXBuildFile; fileRef = D466AB2D21B7BD6A00B6E4F6 /* Tick.swift */; };
 		D466AB3221B7BEFB00B6E4F6 /* Chart.swift in Sources */ = {isa = PBXBuildFile; fileRef = D466AB3121B7BEFB00B6E4F6 /* Chart.swift */; };
@@ -167,6 +166,7 @@
 		D4CA2A1621EDB2B40054528A /* SettingTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CA2A1521EDB2B40054528A /* SettingTableViewController.swift */; };
 		D4CA2A1821EDC2810054528A /* ParaNavTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CA2A1721EDC2810054528A /* ParaNavTableViewCell.swift */; };
 		D4CA2A1A21EDC29C0054528A /* ParaContentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CA2A1921EDC29C0054528A /* ParaContentTableViewCell.swift */; };
+		D4EB2339226815E5002DB7D7 /* SwiftTryCatch.m in Sources */ = {isa = PBXBuildFile; fileRef = D4EB2337226815E5002DB7D7 /* SwiftTryCatch.m */; };
 		D4EBC91E20AEB55700A9163F /* VolumeKeyboardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D4EBC91D20AEB55700A9163F /* VolumeKeyboardView.xib */; };
 		D4EBC92220AEB71A00A9163F /* VolumeKeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4EBC92120AEB71A00A9163F /* VolumeKeyboardView.swift */; };
 		D4F10EA320A5780000DC9E1C /* ConfirmSettlementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F10EA220A5780000DC9E1C /* ConfirmSettlementView.swift */; };
@@ -392,8 +392,6 @@
 		D45DCA2B2241E06300596084 /* Amplitude.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Amplitude.m; sourceTree = "<group>"; };
 		D45DCA6C2249F37200596084 /* fmdb.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = fmdb.xcodeproj; path = "aliyun-log-ios-sdk-master/fmdb/fmdb.xcodeproj"; sourceTree = "<group>"; };
 		D45DCA852249F38500596084 /* AliyunLOGiOS.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = AliyunLOGiOS.xcodeproj; path = "aliyun-log-ios-sdk-master/Source/AliyunLOGiOS.xcodeproj"; sourceTree = "<group>"; };
-		D466AB2421B673E100B6E4F6 /* SwiftTryCatch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SwiftTryCatch.m; path = "../../Downloads/SwiftTryCatch-master/SwiftTryCatch.m"; sourceTree = "<group>"; };
-		D466AB2621B673E100B6E4F6 /* SwiftTryCatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwiftTryCatch.h; path = "../../Downloads/SwiftTryCatch-master/SwiftTryCatch.h"; sourceTree = "<group>"; };
 		D466AB2A21B7B99D00B6E4F6 /* Kline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Kline.swift; sourceTree = "<group>"; };
 		D466AB2D21B7BD6A00B6E4F6 /* Tick.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tick.swift; sourceTree = "<group>"; };
 		D466AB3121B7BEFB00B6E4F6 /* Chart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chart.swift; sourceTree = "<group>"; };
@@ -507,6 +505,8 @@
 		D4CA2A1521EDB2B40054528A /* SettingTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingTableViewController.swift; sourceTree = "<group>"; };
 		D4CA2A1721EDC2810054528A /* ParaNavTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParaNavTableViewCell.swift; sourceTree = "<group>"; };
 		D4CA2A1921EDC29C0054528A /* ParaContentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParaContentTableViewCell.swift; sourceTree = "<group>"; };
+		D4EB2337226815E5002DB7D7 /* SwiftTryCatch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SwiftTryCatch.m; sourceTree = "<group>"; };
+		D4EB2338226815E5002DB7D7 /* SwiftTryCatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwiftTryCatch.h; sourceTree = "<group>"; };
 		D4EBC91D20AEB55700A9163F /* VolumeKeyboardView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VolumeKeyboardView.xib; sourceTree = "<group>"; };
 		D4EBC92120AEB71A00A9163F /* VolumeKeyboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolumeKeyboardView.swift; sourceTree = "<group>"; };
 		D4F10EA220A5780000DC9E1C /* ConfirmSettlementView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfirmSettlementView.swift; sourceTree = "<group>"; };
@@ -673,8 +673,8 @@
 			isa = PBXGroup;
 			children = (
 				D45DCA852249F38500596084 /* AliyunLOGiOS.xcodeproj */,
-				D466AB2621B673E100B6E4F6 /* SwiftTryCatch.h */,
-				D466AB2421B673E100B6E4F6 /* SwiftTryCatch.m */,
+				D4EB2338226815E5002DB7D7 /* SwiftTryCatch.h */,
+				D4EB2337226815E5002DB7D7 /* SwiftTryCatch.m */,
 				D4A2B2DA21945F54008536F7 /* BaiduMobStat.h */,
 				D4A2B2D821945F54008536F7 /* libBaiduMobStat.a */,
 				D420B27E20DD00090045B6AF /* Charts.xcodeproj */,
@@ -1308,7 +1308,6 @@
 				D47A4E7B20871F7A00255276 /* KlinePopupViewController.swift in Sources */,
 				D466AB3421B7C1F500B6E4F6 /* RtnTD.swift in Sources */,
 				D4B3DBD1207CB47400545376 /* TransactionPageViewController.swift in Sources */,
-				D466AB2721B673E100B6E4F6 /* SwiftTryCatch.m in Sources */,
 				D4805CED21D893AF00286ED4 /* SlideMenuController.swift in Sources */,
 				D441816F222B92D700458C1F /* MyLineChartRenderer.swift in Sources */,
 				D48022902069116F0033E202 /* QuotePageViewController.swift in Sources */,
@@ -1347,6 +1346,7 @@
 				D4B2346D21DDEEE50073498C /* ReqSetChart.swift in Sources */,
 				D4418167221AADB800458C1F /* MyBarChartRenderer.swift in Sources */,
 				D420B2DD20E091300045B6AF /* CurrentDayCombinedChartView.swift in Sources */,
+				D4EB2339226815E5002DB7D7 /* SwiftTryCatch.m in Sources */,
 				D47F66F1216B58010068C853 /* LocalCommonConstants.swift in Sources */,
 				D45DCA3E2241E06300596084 /* AMPConstants.m in Sources */,
 				D4F48C3A2213BF7200FD2143 /* AddDurationCollectionViewController.swift in Sources */,
