@@ -13,4 +13,6 @@ struct ReqLogin: Codable {
     var bid: String
     var user_name: String
     var password: String
+    var client_system_info: String
+    var client_app_id: String
 }

@@ -78,13 +78,15 @@ class TDWebSocketUtils: NSObject, WebSocketDelegate, WebSocketPongDelegate {
     // MARK: 用户登录
     func sendReqLogin(bid: String, user_name: String, password: String) {
         guard let socket_ = self.socket else {return}
-        let reqLogin = ReqLogin(aid: "req_login", bid: bid, user_name: user_name, password: password)
+        let systemInfo = UserDefaults.standard.string(forKey: CommonConstants.CONFIG_PERMISSION) ?? ""
+        let reqLogin = ReqLogin(aid: "req_login", bid: bid, user_name: user_name, password: password, client_system_info: systemInfo, client_app_id: "SHINNY_XQ_1.0")
         let jsonEncoder = JSONEncoder()
         do {
             let jsonData = try jsonEncoder.encode(reqLogin)
             guard let json = String(data: jsonData, encoding: String.Encoding.utf8) else {return}
             socket_.write(string: json)
             DataManager.getInstance().insertRecordsToDB(log: json)
+            print(json)
         } catch {
             print(error)
         }

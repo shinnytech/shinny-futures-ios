@@ -15,5 +15,6 @@
 #import "BaiduMobStat.h"
 #import "SwiftTryCatch.h"
 #import "Amplitude.h"
+#import "Supervision.h"
 
 #endif /* shinnyfutures_Bridging_Header_h */

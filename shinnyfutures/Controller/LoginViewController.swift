@@ -24,6 +24,7 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var passwordBorder: UIView!
 
     let sDataManager = DataManager.getInstance()
+    var brokers = [String]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,14 +33,16 @@ class LoginViewController: UIViewController {
         brokerLabel.addGestureRecognizer(gestureRecognizerLabel)
         let gestureRecognizerImage = UITapGestureRecognizer(target: self, action: #selector(toBrokerList))
         brokerImage.addGestureRecognizer(gestureRecognizerImage)
+        brokers = sDataManager.getBrokersFromBrokerId()
         if let brokerInfo = UserDefaults.standard.string(forKey: CommonConstants.CONFIG_BROKER) {
             self.brokerLabel.text = brokerInfo
-        }else if !sDataManager.sBrokers.isEmpty{
-            self.brokerLabel.text = sDataManager.sBrokers[0]
+        }else if !brokers.isEmpty{
+            self.brokerLabel.text = brokers[0]
         }
 
         var isLockUserName = false
         var isLockPassword = false
+        sDataManager.isShowToast = false
 
         isLockUserName = UserDefaults.standard.bool(forKey: CommonConstants.CONFIG_LOCK_USER_NAME)
         if isLockUserName{
@@ -85,6 +88,7 @@ class LoginViewController: UIViewController {
 
         }
 
+        sDataManager.requestPermission()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -108,6 +112,14 @@ class LoginViewController: UIViewController {
         userName.resignFirstResponder()
         userPassword.resignFirstResponder()
     }
+
+    //在这个方法中给新页面传递参数
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == CommonConstants.LoginToBroker{
+            let controller = segue.destination as! BrokerTableViewController
+            controller.dataSelect = self.brokerLabel.text ?? ""
+        }
+    }
     
     // MARK: Actions
     @IBAction func login(_ sender: UIButton) {
@@ -129,12 +141,13 @@ class LoginViewController: UIViewController {
             ToastUtils.showNegativeMessage(message: "密码为空～")
             return
         }
+        sDataManager.isShowToast = true
         TDWebSocketUtils.getInstance().sendReqLogin(bid: broker_info!, user_name: user_name!, password: password!)
     }
 
     //Set the drop down menu's options
     @objc func loadBrokerInfo() {
-        let brokerArray = sDataManager.sBrokers
+        let brokerArray = brokers
         guard let broker = self.brokerLabel.text else{return}
         if broker.isEmpty && !brokerArray.isEmpty {
             self.brokerLabel.text = brokerArray[0]

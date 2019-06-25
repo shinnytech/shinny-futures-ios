@@ -30,6 +30,8 @@
 		D42EE5282071D3C600EF8066 /* Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = D42EE5272071D3C600EF8066 /* Search.swift */; };
 		D42EE52A2071D55700EF8066 /* SearchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D42EE5292071D55700EF8066 /* SearchTableViewCell.swift */; };
 		D42EE52C20721ED000EF8066 /* SearchTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D42EE52B20721ED000EF8066 /* SearchTableViewController.swift */; };
+		D439CD4422A0F4A900B9B974 /* Supervision.mm in Sources */ = {isa = PBXBuildFile; fileRef = D439CD4322A0F4A900B9B974 /* Supervision.mm */; };
+		D439CD4522A0F4A900B9B974 /* Supervision.mm in Sources */ = {isa = PBXBuildFile; fileRef = D439CD4322A0F4A900B9B974 /* Supervision.mm */; };
 		D4418165221AAD0E00458C1F /* CurrentDayCombinedChartRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4418164221AAD0E00458C1F /* CurrentDayCombinedChartRenderer.swift */; };
 		D4418167221AADB800458C1F /* MyBarChartRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4418166221AADB800458C1F /* MyBarChartRenderer.swift */; };
 		D441816B222816EB00458C1F /* MD5ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D441816A222816EA00458C1F /* MD5ViewController.swift */; };
@@ -76,6 +78,8 @@
 		D466D4D32138225200FD6FBA /* BankTransferTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D466D4D22138225200FD6FBA /* BankTransferTableViewCell.swift */; };
 		D466D4D62138D4B300FD6FBA /* BankConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D466D4D52138D4B300FD6FBA /* BankConstants.swift */; };
 		D466D4D82138D4F000FD6FBA /* TransferConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D466D4D72138D4F000FD6FBA /* TransferConstants.swift */; };
+		D46B72CA22ADF60100DBB171 /* libIOSDataCollect_single_realease_v1.0-2019-05-30.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D46B72C922ADF60100DBB171 /* libIOSDataCollect_single_realease_v1.0-2019-05-30.a */; };
+		D46B72CB22ADF60100DBB171 /* libIOSDataCollect_single_realease_v1.0-2019-05-30.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D46B72C922ADF60100DBB171 /* libIOSDataCollect_single_realease_v1.0-2019-05-30.a */; };
 		D4775A4021EDE55900CC3C55 /* ParaViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4775A3F21EDE55900CC3C55 /* ParaViewController.swift */; };
 		D47A4E772085D0FF00255276 /* QuoteNavigationCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47A4E762085D0FF00255276 /* QuoteNavigationCollectionViewCell.swift */; };
 		D47A4E792085D1A700255276 /* QuoteNavigationCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47A4E782085D1A700255276 /* QuoteNavigationCollectionViewController.swift */; };
@@ -167,6 +171,171 @@
 		D4CA2A1821EDC2810054528A /* ParaNavTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CA2A1721EDC2810054528A /* ParaNavTableViewCell.swift */; };
 		D4CA2A1A21EDC29C0054528A /* ParaContentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CA2A1921EDC29C0054528A /* ParaContentTableViewCell.swift */; };
 		D4EB2339226815E5002DB7D7 /* SwiftTryCatch.m in Sources */ = {isa = PBXBuildFile; fileRef = D4EB2337226815E5002DB7D7 /* SwiftTryCatch.m */; };
+		D4EB235E226EA9F6002DB7D7 /* CurrentDayYAxisRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D420B2E320E0964E0045B6AF /* CurrentDayYAxisRenderer.swift */; };
+		D4EB235F226EA9F6002DB7D7 /* AMPDatabaseHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = D45DCA1E2241E06300596084 /* AMPDatabaseHelper.m */; };
+		D4EB2360226EA9F6002DB7D7 /* TDWebSocketUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4195FC020907C550072C021 /* TDWebSocketUtils.swift */; };
+		D4EB2361226EA9F6002DB7D7 /* RightNavigationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4805D1B21DA1B6B00286ED4 /* RightNavigationTableViewCell.swift */; };
+		D4EB2362226EA9F6002DB7D7 /* ISPPinnedNSURLSessionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D45DCA142241E06300596084 /* ISPPinnedNSURLSessionDelegate.m */; };
+		D4EB2363226EA9F6002DB7D7 /* ConfirmSettlementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F10EA220A5780000DC9E1C /* ConfirmSettlementView.swift */; };
+		D4EB2364226EA9F6002DB7D7 /* KlineMarkerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D415D0C420DCD6F700EA8DA3 /* KlineMarkerView.swift */; };
+		D4EB2365226EA9F6002DB7D7 /* ResponsibilityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47F66E6215BA7110068C853 /* ResponsibilityView.swift */; };
+		D4EB2366226EA9F6002DB7D7 /* MyYAxis.swift in Sources */ = {isa = PBXBuildFile; fileRef = D420B2E620E0964E0045B6AF /* MyYAxis.swift */; };
+		D4EB2367226EA9F6002DB7D7 /* LeftTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4805D1D21DA1C2300286ED4 /* LeftTableViewController.swift */; };
+		D4EB2368226EA9F6002DB7D7 /* PositionTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B3DBC82074C58200545376 /* PositionTableViewController.swift */; };
+		D4EB2369226EA9F6002DB7D7 /* Kline.swift in Sources */ = {isa = PBXBuildFile; fileRef = D466AB2A21B7B99D00B6E4F6 /* Kline.swift */; };
+		D4EB236A226EA9F6002DB7D7 /* TradeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D49A718020738A9B00AA947A /* TradeTableViewController.swift */; };
+		D4EB236B226EA9F6002DB7D7 /* KlineDurationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F48C342212ABC900FD2143 /* KlineDurationViewController.swift */; };
+		D4EB236C226EA9F6002DB7D7 /* AccountConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48606B120A5283800C4FEB5 /* AccountConstants.swift */; };
+		D4EB236D226EA9F6002DB7D7 /* AMPDeviceInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = D45DCA1F2241E06300596084 /* AMPDeviceInfo.m */; };
+		D4EB236E226EA9F6002DB7D7 /* QuoteConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48606A720A4429200C4FEB5 /* QuoteConstants.swift */; };
+		D4EB236F226EA9F6002DB7D7 /* OptionalTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D447698021A7BF8000620CA0 /* OptionalTableViewCell.swift */; };
+		D4EB2370226EA9F6002DB7D7 /* ParaContentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CA2A1921EDC29C0054528A /* ParaContentTableViewCell.swift */; };
+		D4EB2371226EA9F6002DB7D7 /* ReqPeekMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B2346821DDEE280073498C /* ReqPeekMessage.swift */; };
+		D4EB2372226EA9F6002DB7D7 /* ISPPinnedNSURLConnectionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D45DCA152241E06300596084 /* ISPPinnedNSURLConnectionDelegate.m */; };
+		D4EB2373226EA9F6002DB7D7 /* TransactionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B3DBCE207B65BE00545376 /* TransactionViewController.swift */; };
+		D4EB2374226EA9F6002DB7D7 /* FileUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47A4E842089958A00255276 /* FileUtils.swift */; };
+		D4EB2375226EA9F6002DB7D7 /* Position.swift in Sources */ = {isa = PBXBuildFile; fileRef = D466AB3921B7C63000B6E4F6 /* Position.swift */; };
+		D4EB2376226EA9F6002DB7D7 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D480229D206B67FE0033E202 /* LoginViewController.swift */; };
+		D4EB2377226EA9F6002DB7D7 /* QuoteTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48022892068C0240033E202 /* QuoteTableViewCell.swift */; };
+		D4EB2378226EA9F6002DB7D7 /* PopupCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D486069F20A3E0BC00C4FEB5 /* PopupCollectionViewController.swift */; };
+		D4EB2379226EA9F6002DB7D7 /* CurrentDayMarkerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D415D0C320DCD6F700EA8DA3 /* CurrentDayMarkerView.swift */; };
+		D4EB237A226EA9F6002DB7D7 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = D466AB3521B7C30B00B6E4F6 /* User.swift */; };
+		D4EB237B226EA9F6002DB7D7 /* PriceKeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F4E18820AEA080007A2975 /* PriceKeyboardView.swift */; };
+		D4EB237C226EA9F6002DB7D7 /* ReqCancelOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B2346021DDEAC00073498C /* ReqCancelOrder.swift */; };
+		D4EB237D226EA9F6002DB7D7 /* Amplitude.m in Sources */ = {isa = PBXBuildFile; fileRef = D45DCA2B2241E06300596084 /* Amplitude.m */; };
+		D4EB237E226EA9F6002DB7D7 /* BankTransferViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D466D4CE2137D47500FD6FBA /* BankTransferViewController.swift */; };
+		D4EB237F226EA9F6002DB7D7 /* AMPLocationManagerDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D45DCA092241E06300596084 /* AMPLocationManagerDelegate.m */; };
+		D4EB2380226EA9F6002DB7D7 /* ChartConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48606AD20A444BA00C4FEB5 /* ChartConstants.swift */; };
+		D4EB2381226EA9F6002DB7D7 /* NotifyConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D485107A20CB7C8E00EC0B19 /* NotifyConstants.swift */; };
+		D4EB2382226EA9F6002DB7D7 /* BankTransferTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D466D4D22138225200FD6FBA /* BankTransferTableViewCell.swift */; };
+		D4EB2383226EA9F6002DB7D7 /* BaseChartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48E662E20B4235A00C808C2 /* BaseChartViewController.swift */; };
+		D4EB2384226EA9F6002DB7D7 /* PopupCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48606A120A3EA8100C4FEB5 /* PopupCollectionViewCell.swift */; };
+		D4EB2385226EA9F6002DB7D7 /* OrderTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B3DBCA2074C59300545376 /* OrderTableViewController.swift */; };
+		D4EB2386226EA9F6002DB7D7 /* RtnTDConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D485107820CB7A4C00EC0B19 /* RtnTDConstants.swift */; };
+		D4EB2387226EA9F6002DB7D7 /* CurrentDayCombinedChartRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4418164221AAD0E00458C1F /* CurrentDayCombinedChartRenderer.swift */; };
+		D4EB2388226EA9F6002DB7D7 /* TradeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D49A7186207399C000AA947A /* TradeTableViewCell.swift */; };
+		D4EB2389226EA9F6002DB7D7 /* KlineXAxisRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D420B2EF20E2207F0045B6AF /* KlineXAxisRenderer.swift */; };
+		D4EB238A226EA9F6002DB7D7 /* DrawerStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47A4E7C2087353100255276 /* DrawerStackView.swift */; };
+		D4EB238B226EA9F6002DB7D7 /* ReqSubscribeQuote.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B2346A21DDEEA70073498C /* ReqSubscribeQuote.swift */; };
+		D4EB238C226EA9F6002DB7D7 /* BrokerTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B2345721DDAFB90073498C /* BrokerTableViewController.swift */; };
+		D4EB238D226EA9F6002DB7D7 /* CommonConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47A4E862089BBF100255276 /* CommonConstants.swift */; };
+		D4EB238E226EA9F6002DB7D7 /* OrderConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48606B520A5286E00C4FEB5 /* OrderConstants.swift */; };
+		D4EB238F226EA9F6002DB7D7 /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4A2B2CF21893E3A008536F7 /* AboutViewController.swift */; };
+		D4EB2390226EA9F6002DB7D7 /* OrderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B3DBC62074C55A00545376 /* OrderTableViewCell.swift */; };
+		D4EB2391226EA9F6002DB7D7 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = D466AB3721B7C40E00B6E4F6 /* Account.swift */; };
+		D4EB2392226EA9F6002DB7D7 /* OptionalPopupTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D447697E21A7BDEF00620CA0 /* OptionalPopupTableViewController.swift */; };
+		D4EB2393226EA9F6002DB7D7 /* KlineDurationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F48C372212B07100FD2143 /* KlineDurationTableViewCell.swift */; };
+		D4EB2394226EA9F6002DB7D7 /* KlineYAxisRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D420B2EB20E2207E0045B6AF /* KlineYAxisRenderer.swift */; };
+		D4EB2395226EA9F6002DB7D7 /* MD5ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D441816A222816EA00458C1F /* MD5ViewController.swift */; };
+		D4EB2396226EA9F6002DB7D7 /* BankConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D466D4D52138D4B300FD6FBA /* BankConstants.swift */; };
+		D4EB2397226EA9F6002DB7D7 /* AMPURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = D45DCA222241E06300596084 /* AMPURLConnection.m */; };
+		D4EB2398226EA9F6002DB7D7 /* QuoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D480225B20688A180033E202 /* QuoteViewController.swift */; };
+		D4EB2399226EA9F6002DB7D7 /* MyCandleStickChartRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D420B2ED20E2207E0045B6AF /* MyCandleStickChartRenderer.swift */; };
+		D4EB239A226EA9F6002DB7D7 /* AMPURLSession.m in Sources */ = {isa = PBXBuildFile; fileRef = D45DCA1B2241E06300596084 /* AMPURLSession.m */; };
+		D4EB239B226EA9F6002DB7D7 /* ParaNavTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CA2A1721EDC2810054528A /* ParaNavTableViewCell.swift */; };
+		D4EB239C226EA9F6002DB7D7 /* KlinePopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47A4E7A20871F7A00255276 /* KlinePopupViewController.swift */; };
+		D4EB239D226EA9F6002DB7D7 /* RtnTD.swift in Sources */ = {isa = PBXBuildFile; fileRef = D466AB3321B7C1F500B6E4F6 /* RtnTD.swift */; };
+		D4EB239E226EA9F6002DB7D7 /* TransactionPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B3DBD0207CB47400545376 /* TransactionPageViewController.swift */; };
+		D4EB239F226EA9F6002DB7D7 /* SlideMenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4805CEB21D893AE00286ED4 /* SlideMenuController.swift */; };
+		D4EB23A0226EA9F6002DB7D7 /* MyLineChartRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D441816E222B92D700458C1F /* MyLineChartRenderer.swift */; };
+		D4EB23A1226EA9F6002DB7D7 /* QuotePageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D480228F2069116F0033E202 /* QuotePageViewController.swift */; };
+		D4EB23A2226EA9F6002DB7D7 /* AddDurationCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F48C3B221400ED00FD2143 /* AddDurationCollectionViewCell.swift */; };
+		D4EB23A3226EA9F6002DB7D7 /* KlineCombinedChartRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D420B2EE20E2207F0045B6AF /* KlineCombinedChartRenderer.swift */; };
+		D4EB23A4226EA9F6002DB7D7 /* TickConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48606AB20A444A700C4FEB5 /* TickConstants.swift */; };
+		D4EB23A5226EA9F6002DB7D7 /* SearchTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D42EE52B20721ED000EF8066 /* SearchTableViewController.swift */; };
+		D4EB23A6226EA9F6002DB7D7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D480225920688A180033E202 /* AppDelegate.swift */; };
+		D4EB23A7226EA9F6002DB7D7 /* AMPIdentify.m in Sources */ = {isa = PBXBuildFile; fileRef = D45DCA202241E06300596084 /* AMPIdentify.m */; };
+		D4EB23A8226EA9F6002DB7D7 /* Tick.swift in Sources */ = {isa = PBXBuildFile; fileRef = D466AB2D21B7BD6A00B6E4F6 /* Tick.swift */; };
+		D4EB23A9226EA9F6002DB7D7 /* TransferConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D466D4D72138D4F000FD6FBA /* TransferConstants.swift */; };
+		D4EB23AA226EA9F6002DB7D7 /* Chart.swift in Sources */ = {isa = PBXBuildFile; fileRef = D466AB3121B7BEFB00B6E4F6 /* Chart.swift */; };
+		D4EB23AB226EA9F6002DB7D7 /* ChangePasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4805D2121DB594A00286ED4 /* ChangePasswordViewController.swift */; };
+		D4EB23AC226EA9F6002DB7D7 /* SearchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D42EE5292071D55700EF8066 /* SearchTableViewCell.swift */; };
+		D4EB23AD226EA9F6002DB7D7 /* RtnMDConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48606A520A43FFA00C4FEB5 /* RtnMDConstants.swift */; };
+		D4EB23AE226EA9F6002DB7D7 /* ReqLogin.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B2346621DDEDDB0073498C /* ReqLogin.swift */; };
+		D4EB23AF226EA9F6002DB7D7 /* CurrentDayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B3DBD4207CB80400545376 /* CurrentDayViewController.swift */; };
+		D4EB23B0226EA9F6002DB7D7 /* Order.swift in Sources */ = {isa = PBXBuildFile; fileRef = D466AB3B21B7C75000B6E4F6 /* Order.swift */; };
+		D4EB23B1226EA9F6002DB7D7 /* Trade.swift in Sources */ = {isa = PBXBuildFile; fileRef = D466AB3D21B7C7CF00B6E4F6 /* Trade.swift */; };
+		D4EB23B2226EA9F6002DB7D7 /* PositionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B3DBC42074C54F00545376 /* PositionTableViewCell.swift */; };
+		D4EB23B3226EA9F6002DB7D7 /* QuoteTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D480228B2068D52C0033E202 /* QuoteTableViewController.swift */; };
+		D4EB23B4226EA9F6002DB7D7 /* MyXAxis.swift in Sources */ = {isa = PBXBuildFile; fileRef = D420B2E520E0964E0045B6AF /* MyXAxis.swift */; };
+		D4EB23B5226EA9F6002DB7D7 /* KlineCombinedChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D420B2D420E0912F0045B6AF /* KlineCombinedChartView.swift */; };
+		D4EB23B6226EA9F6002DB7D7 /* OptionalPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D486069D20A030B900C4FEB5 /* OptionalPopupViewController.swift */; };
+		D4EB23B7226EA9F6002DB7D7 /* RightTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4805D1F21DA1C3600286ED4 /* RightTableViewController.swift */; };
+		D4EB23B8226EA9F6002DB7D7 /* AMPUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = D45DCA0C2241E06300596084 /* AMPUtils.m */; };
+		D4EB23B9226EA9F6002DB7D7 /* ParaViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4775A3F21EDE55900CC3C55 /* ParaViewController.swift */; };
+		D4EB23BA226EA9F6002DB7D7 /* TradeConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4195FCE20994D560072C021 /* TradeConstants.swift */; };
+		D4EB23BB226EA9F6002DB7D7 /* FeedbackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D480229B206B67C70033E202 /* FeedbackViewController.swift */; };
+		D4EB23BC226EA9F6002DB7D7 /* CurrentDayXAxisRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D420B2E420E0964E0045B6AF /* CurrentDayXAxisRenderer.swift */; };
+		D4EB23BD226EA9F6002DB7D7 /* AMPRevenue.m in Sources */ = {isa = PBXBuildFile; fileRef = D45DCA172241E06300596084 /* AMPRevenue.m */; };
+		D4EB23BE226EA9F6002DB7D7 /* ISPCertificatePinning.m in Sources */ = {isa = PBXBuildFile; fileRef = D45DCA122241E06300596084 /* ISPCertificatePinning.m */; };
+		D4EB23BF226EA9F6002DB7D7 /* SettingTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CA2A1521EDB2B40054528A /* SettingTableViewController.swift */; };
+		D4EB23C0226EA9F6002DB7D7 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47A4E802088928300255276 /* DataManager.swift */; };
+		D4EB23C1226EA9F6002DB7D7 /* KlineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B3DBD6207CB82C00545376 /* KlineViewController.swift */; };
+		D4EB23C2226EA9F6002DB7D7 /* ReqSetChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B2346C21DDEEE50073498C /* ReqSetChart.swift */; };
+		D4EB23C3226EA9F6002DB7D7 /* MyBarChartRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4418166221AADB800458C1F /* MyBarChartRenderer.swift */; };
+		D4EB23C4226EA9F6002DB7D7 /* CurrentDayCombinedChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D420B2D020E0912F0045B6AF /* CurrentDayCombinedChartView.swift */; };
+		D4EB23C5226EA9F6002DB7D7 /* SwiftTryCatch.m in Sources */ = {isa = PBXBuildFile; fileRef = D4EB2337226815E5002DB7D7 /* SwiftTryCatch.m */; };
+		D4EB23C6226EA9F6002DB7D7 /* LocalCommonConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47F66F0216B58010068C853 /* LocalCommonConstants.swift */; };
+		D4EB23C7226EA9F6002DB7D7 /* AMPConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = D45DCA262241E06300596084 /* AMPConstants.m */; };
+		D4EB23C8226EA9F6002DB7D7 /* AddDurationCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F48C392213BF7200FD2143 /* AddDurationCollectionViewController.swift */; };
+		D4EB23C9226EA9F6002DB7D7 /* BrokerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B2345A21DDAFD20073498C /* BrokerTableViewCell.swift */; };
+		D4EB23CA226EA9F6002DB7D7 /* ReqConfirmSettlement.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B2346421DDEDA90073498C /* ReqConfirmSettlement.swift */; };
+		D4EB23CB226EA9F6002DB7D7 /* QuoteNavigationCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47A4E762085D0FF00255276 /* QuoteNavigationCollectionViewCell.swift */; };
+		D4EB23CC226EA9F6002DB7D7 /* DurationCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D406B2AA22141986005AACAA /* DurationCollectionViewCell.swift */; };
+		D4EB23CD226EA9F6002DB7D7 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4802295206B375E0033E202 /* MainViewController.swift */; };
+		D4EB23CE226EA9F6002DB7D7 /* Bank.swift in Sources */ = {isa = PBXBuildFile; fileRef = D466AB4121B7C8AE00B6E4F6 /* Bank.swift */; };
+		D4EB23CF226EA9F6002DB7D7 /* LeftNavigationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4805D1921DA1B5400286ED4 /* LeftNavigationTableViewCell.swift */; };
+		D4EB23D0226EA9F6002DB7D7 /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4802297206B67650033E202 /* AccountViewController.swift */; };
+		D4EB23D1226EA9F6002DB7D7 /* HandicapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B3DBCC207B65AB00545376 /* HandicapViewController.swift */; };
+		D4EB23D2226EA9F6002DB7D7 /* DropDownBtn.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B2347021DDFF590073498C /* DropDownBtn.swift */; };
+		D4EB23D3226EA9F6002DB7D7 /* ReqInsertOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B2346221DDEC640073498C /* ReqInsertOrder.swift */; };
+		D4EB23D4226EA9F6002DB7D7 /* PositionConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48606B320A5285600C4FEB5 /* PositionConstants.swift */; };
+		D4EB23D5226EA9F6002DB7D7 /* VolumeKeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4EBC92120AEB71A00A9163F /* VolumeKeyboardView.swift */; };
+		D4EB23D6226EA9F6002DB7D7 /* ReqPassword.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B2345C21DDE9A20073498C /* ReqPassword.swift */; };
+		D4EB23D7226EA9F6002DB7D7 /* Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = D42EE5272071D3C600EF8066 /* Search.swift */; };
+		D4EB23D8226EA9F6002DB7D7 /* QuoteNavigationCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47A4E782085D1A700255276 /* QuoteNavigationCollectionViewController.swift */; };
+		D4EB23D9226EA9F6002DB7D7 /* MDWebSocketUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B1F7B8209020E800BCAD2C /* MDWebSocketUtils.swift */; };
+		D4EB23DA226EA9F6002DB7D7 /* KlineConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48606A920A442E200C4FEB5 /* KlineConstants.swift */; };
+		D4EB23DB226EA9F6002DB7D7 /* Transfer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D466AB3F21B7C84D00B6E4F6 /* Transfer.swift */; };
+		D4EB23DC226EA9F6002DB7D7 /* ToastUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48606A320A42BAD00C4FEB5 /* ToastUtils.swift */; };
+		D4EB23DD226EA9F6002DB7D7 /* Quote.swift in Sources */ = {isa = PBXBuildFile; fileRef = D44934EA21B0CFFC0069422F /* Quote.swift */; };
+		D4EB23DE226EA9F6002DB7D7 /* KlinePageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B3DBD2207CB7BA00545376 /* KlinePageViewController.swift */; };
+		D4EB23DF226EA9F6002DB7D7 /* ReqSetChartKline.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B2346E21DDEF3A0073498C /* ReqSetChartKline.swift */; };
+		D4EB23E0226EA9F6002DB7D7 /* RtnMD.swift in Sources */ = {isa = PBXBuildFile; fileRef = D44934EC21B0DCA80069422F /* RtnMD.swift */; };
+		D4EB23E1226EA9F6002DB7D7 /* AMPTrackingOptions.m in Sources */ = {isa = PBXBuildFile; fileRef = D45DCA192241E06300596084 /* AMPTrackingOptions.m */; };
+		D4EB23E2226EA9F6002DB7D7 /* ReqBankTransfer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B2345E21DDEA340073498C /* ReqBankTransfer.swift */; };
+		D4EB23E4226EA9F6002DB7D7 /* libstdc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = D4A2B2EE21946050008536F7 /* libstdc++.tbd */; };
+		D4EB23E5226EA9F6002DB7D7 /* libz.1.2.5.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = D4A2B2EC21946045008536F7 /* libz.1.2.5.tbd */; };
+		D4EB23E6226EA9F6002DB7D7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4A2B2EA21946035008536F7 /* Foundation.framework */; };
+		D4EB23E7226EA9F6002DB7D7 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4A2B2E82194602B008536F7 /* UIKit.framework */; };
+		D4EB23E8226EA9F6002DB7D7 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4A2B2E621946022008536F7 /* CoreGraphics.framework */; };
+		D4EB23E9226EA9F6002DB7D7 /* FMDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D45DCA802249F37300596084 /* FMDB.framework */; };
+		D4EB23EA226EA9F6002DB7D7 /* AliyunLOGiOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D45DCA8C2249F38500596084 /* AliyunLOGiOS.framework */; };
+		D4EB23EB226EA9F6002DB7D7 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4A2B2E421946017008536F7 /* CoreTelephony.framework */; };
+		D4EB23EC226EA9F6002DB7D7 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4A2B2E22194600C008536F7 /* SystemConfiguration.framework */; };
+		D4EB23ED226EA9F6002DB7D7 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4A2B2E021946001008536F7 /* CoreLocation.framework */; };
+		D4EB23EE226EA9F6002DB7D7 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4A2B2DE21945FF5008536F7 /* Security.framework */; };
+		D4EB23EF226EA9F6002DB7D7 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4A2B2DC21945FEB008536F7 /* JavaScriptCore.framework */; };
+		D4EB23F0226EA9F6002DB7D7 /* Pods_shinnyfutures.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 757606269397994F1BC181D6 /* Pods_shinnyfutures.framework */; settings = {ATTRIBUTES = (Required, ); }; };
+		D4EB23F1226EA9F6002DB7D7 /* libBaiduMobStat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D4A2B2D821945F54008536F7 /* libBaiduMobStat.a */; };
+		D4EB23F2226EA9F6002DB7D7 /* Charts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D420B28420DD00090045B6AF /* Charts.framework */; };
+		D4EB23F4226EA9F6002DB7D7 /* AppledocSettings.plist in Resources */ = {isa = PBXBuildFile; fileRef = D45DCA1C2241E06300596084 /* AppledocSettings.plist */; };
+		D4EB23F5226EA9F6002DB7D7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D480226220688A180033E202 /* LaunchScreen.storyboard */; };
+		D4EB23F6226EA9F6002DB7D7 /* DataTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D4805D0521D8B8B100286ED4 /* DataTableViewCell.xib */; };
+		D4EB23F7226EA9F6002DB7D7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D480226020688A180033E202 /* Assets.xcassets */; };
+		D4EB23F8226EA9F6002DB7D7 /* VolumeKeyboardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D4EBC91D20AEB55700A9163F /* VolumeKeyboardView.xib */; };
+		D4EB23F9226EA9F6002DB7D7 /* ComodoRsaCA.der in Resources */ = {isa = PBXBuildFile; fileRef = D45DCA232241E06300596084 /* ComodoRsaCA.der */; };
+		D4EB23FA226EA9F6002DB7D7 /* ImageHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D4805D0421D8B8B100286ED4 /* ImageHeaderView.xib */; };
+		D4EB23FB226EA9F6002DB7D7 /* KlineMarkerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D48E663020B559B400C808C2 /* KlineMarkerView.xib */; };
+		D4EB23FC226EA9F6002DB7D7 /* ComodoRsaDomainValidationCA.der in Resources */ = {isa = PBXBuildFile; fileRef = D45DCA1A2241E06300596084 /* ComodoRsaDomainValidationCA.der */; };
+		D4EB23FD226EA9F6002DB7D7 /* PriceKeyboardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D4F4E18A20AEA2CA007A2975 /* PriceKeyboardView.xib */; };
+		D4EB23FE226EA9F6002DB7D7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D480225D20688A180033E202 /* Main.storyboard */; };
+		D4EB23FF226EA9F6002DB7D7 /* CurrentDayMarkerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D48E663920B5672800C808C2 /* CurrentDayMarkerView.xib */; };
+		D4EB2400226EA9F6002DB7D7 /* ComodoCaLimitedRsaCertificationAuthority.der in Resources */ = {isa = PBXBuildFile; fileRef = D45DCA0D2241E06300596084 /* ComodoCaLimitedRsaCertificationAuthority.der */; };
+		D4EB2401226EA9F6002DB7D7 /* api.amplitude.com.der in Resources */ = {isa = PBXBuildFile; fileRef = D45DCA182241E06300596084 /* api.amplitude.com.der */; };
+		D4EB2405226EA9F6002DB7D7 /* AliyunLOGiOS.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D45DCA8C2249F38500596084 /* AliyunLOGiOS.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		D4EB2406226EA9F6002DB7D7 /* Charts.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D420B28420DD00090045B6AF /* Charts.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		D4EB2407226EA9F6002DB7D7 /* FMDB.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D45DCA802249F37300596084 /* FMDB.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D4EBC91E20AEB55700A9163F /* VolumeKeyboardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D4EBC91D20AEB55700A9163F /* VolumeKeyboardView.xib */; };
 		D4EBC92220AEB71A00A9163F /* VolumeKeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4EBC92120AEB71A00A9163F /* VolumeKeyboardView.swift */; };
 		D4F10EA320A5780000DC9E1C /* ConfirmSettlementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F10EA220A5780000DC9E1C /* ConfirmSettlementView.swift */; };
@@ -291,6 +460,27 @@
 			remoteGlobalIDString = D480225520688A180033E202;
 			remoteInfo = shinnyfutures;
 		};
+		D4EB2357226EA9F6002DB7D7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D420B27E20DD00090045B6AF /* Charts.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = A58A4ED274A941CA248EA921;
+			remoteInfo = Charts;
+		};
+		D4EB2359226EA9F6002DB7D7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D45DCA6C2249F37200596084 /* fmdb.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 83C73EFD1C326AB000FFC730;
+			remoteInfo = "FMDB iOS";
+		};
+		D4EB235B226EA9F6002DB7D7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D45DCA852249F38500596084 /* AliyunLOGiOS.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 28363D911D4F175400BB1738;
+			remoteInfo = AliyunLOGiOS;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -303,6 +493,29 @@
 				D45DCA982249F40A00596084 /* AliyunLOGiOS.framework in Embed Frameworks */,
 				D420B2AC20DD07320045B6AF /* Charts.framework in Embed Frameworks */,
 				D45DCA942249F40A00596084 /* FMDB.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D4EB2403226EA9F6002DB7D7 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D4EB2404226EA9F6002DB7D7 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				D4EB2405226EA9F6002DB7D7 /* AliyunLOGiOS.framework in Embed Frameworks */,
+				D4EB2406226EA9F6002DB7D7 /* Charts.framework in Embed Frameworks */,
+				D4EB2407226EA9F6002DB7D7 /* FMDB.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -346,6 +559,9 @@
 		D42EE5272071D3C600EF8066 /* Search.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Search.swift; sourceTree = "<group>"; };
 		D42EE5292071D55700EF8066 /* SearchTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTableViewCell.swift; sourceTree = "<group>"; };
 		D42EE52B20721ED000EF8066 /* SearchTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTableViewController.swift; sourceTree = "<group>"; };
+		D439CD04229E304000B9B974 /* IOSDataCollect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IOSDataCollect.h; sourceTree = "<group>"; };
+		D439CD4222A0F44D00B9B974 /* Supervision.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Supervision.h; sourceTree = "<group>"; };
+		D439CD4322A0F4A900B9B974 /* Supervision.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = Supervision.mm; sourceTree = "<group>"; };
 		D4418164221AAD0E00458C1F /* CurrentDayCombinedChartRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrentDayCombinedChartRenderer.swift; sourceTree = "<group>"; };
 		D4418166221AADB800458C1F /* MyBarChartRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyBarChartRenderer.swift; sourceTree = "<group>"; };
 		D441816A222816EA00458C1F /* MD5ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MD5ViewController.swift; sourceTree = "<group>"; };
@@ -407,6 +623,7 @@
 		D466D4D22138225200FD6FBA /* BankTransferTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankTransferTableViewCell.swift; sourceTree = "<group>"; };
 		D466D4D52138D4B300FD6FBA /* BankConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankConstants.swift; sourceTree = "<group>"; };
 		D466D4D72138D4F000FD6FBA /* TransferConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferConstants.swift; sourceTree = "<group>"; };
+		D46B72C922ADF60100DBB171 /* libIOSDataCollect_single_realease_v1.0-2019-05-30.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libIOSDataCollect_single_realease_v1.0-2019-05-30.a"; sourceTree = "<group>"; };
 		D4775A3F21EDE55900CC3C55 /* ParaViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParaViewController.swift; sourceTree = "<group>"; };
 		D47A4E762085D0FF00255276 /* QuoteNavigationCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuoteNavigationCollectionViewCell.swift; sourceTree = "<group>"; };
 		D47A4E782085D1A700255276 /* QuoteNavigationCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuoteNavigationCollectionViewController.swift; sourceTree = "<group>"; };
@@ -507,6 +724,8 @@
 		D4CA2A1921EDC29C0054528A /* ParaContentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParaContentTableViewCell.swift; sourceTree = "<group>"; };
 		D4EB2337226815E5002DB7D7 /* SwiftTryCatch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SwiftTryCatch.m; sourceTree = "<group>"; };
 		D4EB2338226815E5002DB7D7 /* SwiftTryCatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwiftTryCatch.h; sourceTree = "<group>"; };
+		D4EB240C226EA9F7002DB7D7 /* shinnyfutures-qhqh.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "shinnyfutures-qhqh.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D4EB240D226EA9F7002DB7D7 /* shinnyfutures-qhqh-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "shinnyfutures-qhqh-Info.plist"; path = "/Users/chenli/XCodeProjects/shinny-futures-ios/shinnyfutures-qhqh-Info.plist"; sourceTree = "<absolute>"; };
 		D4EBC91D20AEB55700A9163F /* VolumeKeyboardView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VolumeKeyboardView.xib; sourceTree = "<group>"; };
 		D4EBC92120AEB71A00A9163F /* VolumeKeyboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolumeKeyboardView.swift; sourceTree = "<group>"; };
 		D4F10EA220A5780000DC9E1C /* ConfirmSettlementView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfirmSettlementView.swift; sourceTree = "<group>"; };
@@ -525,16 +744,17 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D4A2B2E121946001008536F7 /* CoreLocation.framework in Frameworks */,
+				D4A2B2E521946017008536F7 /* CoreTelephony.framework in Frameworks */,
 				D4A2B2EF21946050008536F7 /* libstdc++.tbd in Frameworks */,
 				D4A2B2ED21946045008536F7 /* libz.1.2.5.tbd in Frameworks */,
 				D4A2B2EB21946035008536F7 /* Foundation.framework in Frameworks */,
+				D46B72CA22ADF60100DBB171 /* libIOSDataCollect_single_realease_v1.0-2019-05-30.a in Frameworks */,
 				D4A2B2E92194602B008536F7 /* UIKit.framework in Frameworks */,
 				D4A2B2E721946022008536F7 /* CoreGraphics.framework in Frameworks */,
 				D45DCA932249F40A00596084 /* FMDB.framework in Frameworks */,
 				D45DCA972249F40A00596084 /* AliyunLOGiOS.framework in Frameworks */,
-				D4A2B2E521946017008536F7 /* CoreTelephony.framework in Frameworks */,
 				D4A2B2E32194600C008536F7 /* SystemConfiguration.framework in Frameworks */,
-				D4A2B2E121946001008536F7 /* CoreLocation.framework in Frameworks */,
 				D4A2B2DF21945FF5008536F7 /* Security.framework in Frameworks */,
 				D4A2B2DD21945FEB008536F7 /* JavaScriptCore.framework in Frameworks */,
 				A201C1B9C6E1BC86E298943E /* Pods_shinnyfutures.framework in Frameworks */,
@@ -556,6 +776,29 @@
 			buildActionMask = 2147483647;
 			files = (
 				85BAAAC148A0034F65548EEC /* Pods_shinnyfuturesUITests.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D4EB23E3226EA9F6002DB7D7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D4EB23E4226EA9F6002DB7D7 /* libstdc++.tbd in Frameworks */,
+				D4EB23E5226EA9F6002DB7D7 /* libz.1.2.5.tbd in Frameworks */,
+				D4EB23E6226EA9F6002DB7D7 /* Foundation.framework in Frameworks */,
+				D4EB23E7226EA9F6002DB7D7 /* UIKit.framework in Frameworks */,
+				D4EB23E8226EA9F6002DB7D7 /* CoreGraphics.framework in Frameworks */,
+				D46B72CB22ADF60100DBB171 /* libIOSDataCollect_single_realease_v1.0-2019-05-30.a in Frameworks */,
+				D4EB23E9226EA9F6002DB7D7 /* FMDB.framework in Frameworks */,
+				D4EB23EA226EA9F6002DB7D7 /* AliyunLOGiOS.framework in Frameworks */,
+				D4EB23EB226EA9F6002DB7D7 /* CoreTelephony.framework in Frameworks */,
+				D4EB23EC226EA9F6002DB7D7 /* SystemConfiguration.framework in Frameworks */,
+				D4EB23ED226EA9F6002DB7D7 /* CoreLocation.framework in Frameworks */,
+				D4EB23EE226EA9F6002DB7D7 /* Security.framework in Frameworks */,
+				D4EB23EF226EA9F6002DB7D7 /* JavaScriptCore.framework in Frameworks */,
+				D4EB23F0226EA9F6002DB7D7 /* Pods_shinnyfutures.framework in Frameworks */,
+				D4EB23F1226EA9F6002DB7D7 /* libBaiduMobStat.a in Frameworks */,
+				D4EB23F2226EA9F6002DB7D7 /* Charts.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -672,7 +915,11 @@
 		D480224D20688A180033E202 = {
 			isa = PBXGroup;
 			children = (
+				D439CD4222A0F44D00B9B974 /* Supervision.h */,
+				D439CD4322A0F4A900B9B974 /* Supervision.mm */,
 				D45DCA852249F38500596084 /* AliyunLOGiOS.xcodeproj */,
+				D439CD04229E304000B9B974 /* IOSDataCollect.h */,
+				D46B72C922ADF60100DBB171 /* libIOSDataCollect_single_realease_v1.0-2019-05-30.a */,
 				D4EB2338226815E5002DB7D7 /* SwiftTryCatch.h */,
 				D4EB2337226815E5002DB7D7 /* SwiftTryCatch.m */,
 				D4A2B2DA21945F54008536F7 /* BaiduMobStat.h */,
@@ -685,6 +932,7 @@
 				D480225720688A180033E202 /* Products */,
 				3A875C7DD54F40D9738E5FA5 /* Pods */,
 				E16A9E2ED1671736EDEED584 /* Frameworks */,
+				D4EB240D226EA9F7002DB7D7 /* shinnyfutures-qhqh-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -694,6 +942,7 @@
 				D480225620688A180033E202 /* shinnyfutures.app */,
 				D480226A20688A180033E202 /* shinnyfuturesTests.xctest */,
 				D480227520688A180033E202 /* shinnyfuturesUITests.xctest */,
+				D4EB240C226EA9F7002DB7D7 /* shinnyfutures-qhqh.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -917,6 +1166,7 @@
 				D4F4E18520AE6BEA007A2975 /* Embed App Extensions */,
 				D415D14C20DCE96800EA8DA3 /* Embed Frameworks */,
 				D47B8FF720F3536E006D5DE6 /* ShellScript */,
+				D413FFA022C2135A0026F822 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -968,6 +1218,31 @@
 			productReference = D480227520688A180033E202 /* shinnyfuturesUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		D4EB2355226EA9F6002DB7D7 /* shinnyfutures-qhqh */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D4EB2409226EA9F6002DB7D7 /* Build configuration list for PBXNativeTarget "shinnyfutures-qhqh" */;
+			buildPhases = (
+				D4EB235C226EA9F6002DB7D7 /* [CP] Check Pods Manifest.lock */,
+				D4EB235D226EA9F6002DB7D7 /* Sources */,
+				D4EB23E3226EA9F6002DB7D7 /* Frameworks */,
+				D4EB23F3226EA9F6002DB7D7 /* Resources */,
+				D4EB2402226EA9F6002DB7D7 /* [CP] Embed Pods Frameworks */,
+				D4EB2403226EA9F6002DB7D7 /* Embed App Extensions */,
+				D4EB2404226EA9F6002DB7D7 /* Embed Frameworks */,
+				D4EB2408226EA9F6002DB7D7 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D4EB2356226EA9F6002DB7D7 /* PBXTargetDependency */,
+				D4EB2358226EA9F6002DB7D7 /* PBXTargetDependency */,
+				D4EB235A226EA9F6002DB7D7 /* PBXTargetDependency */,
+			);
+			name = "shinnyfutures-qhqh";
+			productName = shinnyfutures;
+			productReference = D4EB240C226EA9F7002DB7D7 /* shinnyfutures-qhqh.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -991,6 +1266,9 @@
 						CreatedOnToolsVersion = 9.2;
 						ProvisioningStyle = Automatic;
 						TestTargetID = D480225520688A180033E202;
+					};
+					D4EB2355226EA9F6002DB7D7 = {
+						ProvisioningStyle = Manual;
 					};
 				};
 			};
@@ -1024,6 +1302,7 @@
 				D480225520688A180033E202 /* shinnyfutures */,
 				D480226920688A180033E202 /* shinnyfuturesTests */,
 				D480227420688A180033E202 /* shinnyfuturesUITests */,
+				D4EB2355226EA9F6002DB7D7 /* shinnyfutures-qhqh */,
 			);
 		};
 /* End PBXProject section */
@@ -1144,6 +1423,27 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D4EB23F3226EA9F6002DB7D7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D4EB23F4226EA9F6002DB7D7 /* AppledocSettings.plist in Resources */,
+				D4EB23F5226EA9F6002DB7D7 /* LaunchScreen.storyboard in Resources */,
+				D4EB23F6226EA9F6002DB7D7 /* DataTableViewCell.xib in Resources */,
+				D4EB23F7226EA9F6002DB7D7 /* Assets.xcassets in Resources */,
+				D4EB23F8226EA9F6002DB7D7 /* VolumeKeyboardView.xib in Resources */,
+				D4EB23F9226EA9F6002DB7D7 /* ComodoRsaCA.der in Resources */,
+				D4EB23FA226EA9F6002DB7D7 /* ImageHeaderView.xib in Resources */,
+				D4EB23FB226EA9F6002DB7D7 /* KlineMarkerView.xib in Resources */,
+				D4EB23FC226EA9F6002DB7D7 /* ComodoRsaDomainValidationCA.der in Resources */,
+				D4EB23FD226EA9F6002DB7D7 /* PriceKeyboardView.xib in Resources */,
+				D4EB23FE226EA9F6002DB7D7 /* Main.storyboard in Resources */,
+				D4EB23FF226EA9F6002DB7D7 /* CurrentDayMarkerView.xib in Resources */,
+				D4EB2400226EA9F6002DB7D7 /* ComodoCaLimitedRsaCertificationAuthority.der in Resources */,
+				D4EB2401226EA9F6002DB7D7 /* api.amplitude.com.der in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
@@ -1223,7 +1523,77 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		D413FFA022C2135A0026F822 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#!/bin/sh\n# Copyright 2014-2015 Bugly @Tencent. All rights reserved.\n#\n# V 1.1\n#\n################################################################################\n# 注意: 请配置下面的信息\n################################################################################\nBUGLY_APP_ID=\"0027757d18\"\nBUGLY_APP_KEY=\"a19fb865-7106-415c-9723-d3408fdbc90b\"\nBUNDLE_IDENTIFIER=\"com.shinnytech.zhongqihuo\"\n################################################################################\n# 自定义配置\n################################################################################\n# Debug模式编译是否上传，1＝上传 0＝不上传，默认不上传\nUPLOAD_DEBUG_SYMBOLS=0\n#\n# 模拟器编译是否上传，1=上传 0=不上传，默认不上传\nUPLOAD_SIMULATOR_SYMBOLS=0\n#\n# buglySymboliOS.jar路径\nBUGLY_SYMBOL_JAR_PATH=\"${SRCROOT}/bugly/buglySymboliOS.jar\"\n#\n# # 脚本默认配置的版本格式为CFBundleShortVersionString(CFBundleVersion),  如果你修改默认的版本格式, 请设置此变量, 如果不想修改, 请忽略此设置\n# CUSTOMIZED_APP_VERSION=\"\"\n#\n#\n#\n# This script will extract symbols from the .dSYM and generate .symbol file(Bugly supported) and upload to server.\n# You could visit http://bugly.qq.com to get more details about Bugly.\n#\n# Usage:\n#   * The instructions assume you have copyed this script into your project int Xcode.\n#   * Copy the \"buglySymbolIOS.jar\" file into the \"~/bin\" folder.\n#   * Open the project editor, select your build target.\n#   * Click \"Build Phases\" at the top of the project editor.\n#   * Click \"+\" button in the top left corner and select \"New Run Script Phase\".\n#   * Click \"Run Script\".\n#   * Paste the following script into the dark text box. You will have to uncomment the lines (remove the #) of course.\n#\n# --- SCRIPT BEGINS ON NEXT LINE, COPY AND EDIT FROM THERE ---\n#\n#\n#\n# --- END OF SCRIPT ---\n\n\n################################################################################\n# 注意: 如果你不知道此脚本的执行流程和用法，请不要随便修改！\n################################################################################\n\n# 退出执行并打印提示信息\nexitWithMessage() {\necho \"--------------------------------\"\necho -e \"${1}\"\necho \"--------------------------------\"\necho \"No upload and exit.\"\necho \"----------------------------------------------------------------\"\nexit ${2}\n}\n\necho \"----------------------------------------------------------------\"\necho \"Copyright 2014-2015 Bugly @Tencent. All rights reserved.\"\n\necho \"This script will extract symbols from the .dSYM file and generate .symbol file(Bugly supported) and upload to server.\"\necho \"You could visit http://bugly.qq.com to get more details about Bugly.\"\necho \"----------------------------------------------------------------\"\n\necho \"Uploading dSYM to Bugly.\"\necho \"\"\n\n# Bugly服务域名\nDSYM_UPLOAD_DOMAIN=\"bugly.qq.com\"\n\n# 读取Info.plist文件中的版本信息\necho \"Info.Plist : ${INFOPLIST_FILE}\"\n\nBUNDLE_VERSION=$(/usr/libexec/PlistBuddy -c 'Print CFBundleVersion' \"${INFOPLIST_FILE}\")\nBUNDLE_SHORT_VERSION=$(/usr/libexec/PlistBuddy -c 'Print CFBundleShortVersionString' \"${INFOPLIST_FILE}\")\n\n# 组装Bugly默认识别的版本信息(格式为CFBundleShortVersionString(CFBundleVersion), 例如: 1.0(1))\nif [ ! \"${CUSTOMIZED_APP_VERSION}\" ]; then\nBUGLY_APP_VERSION=\"${BUNDLE_SHORT_VERSION}(${BUNDLE_VERSION})\"\nelse\nBUGLY_APP_VERSION=\"${CUSTOMIZED_APP_VERSION}\"\nfi\n\necho \"--------------------------------\"\necho \"Step 1: Prepare application information.\"\necho \"--------------------------------\"\n\necho \"Product Name: ${PRODUCT_NAME}\"\necho \"Bundle Identifier: ${BUNDLE_IDENTIFIER}\"\necho \"Version: ${BUNDLE_SHORT_VERSION}\"\necho \"Build: ${BUNDLE_VERSION}\"\n\necho \"Bugly App ID: ${BUGLY_APP_ID}\"\necho \"Bugly App key: ${BUGLY_APP_KEY}\"\necho \"Bugly App Version: ${BUGLY_APP_VERSION}\"\n\necho \"--------------------------------\"\necho \"Step 2: Check the arguments ...\"\n\n# 检查模拟器编译是否允许上传符号\nif [ \"$EFFECTIVE_PLATFORM_NAME\" == \"-iphonesimulator\" ]; then\nif [ $UPLOAD_SIMULATOR_SYMBOLS -eq 0 ]; then\nexitWithMessage \"Warning: Build for simulator and skipping to upload. \\nYou can modify 'UPLOAD_SIMULATOR_SYMBOLS' to 1 in the script.\" 0\nfi\nfi\n\nif [ \"${CONFIGURATION=}\" == \"Debug\" ]; then\nif [ $UPLOAD_DEBUG_SYMBOLS -eq 0 ]; then\nexitWithMessage \"Warning: Build for debug mode and skipping to upload. \\nYou can modify 'UPLOAD_DEBUG_SYMBOLS' to 1 in the script.\" 0\nfi\nfi\n\n# 检查必须参数是否设置\nif [ ! \"${BUGLY_APP_ID}\" ]; then\nexitWithMessage \"Error: Bugly App ID not defined.\" 1\nfi\n\nif [ ! \"${BUGLY_APP_KEY}\" ]; then\nexitWithMessage \"Error: Bugly APP Key not defined.\" 1\nfi\n\nif [ ! \"${BUNDLE_IDENTIFIER}\" ]; then\nexitWithMessage \"Error: Bundle Identifier not defined.\" 1\nfi\n\nfunction uploadDSYM {\nDSYM_SRC=\"$1\"\necho \".dSYM file: ${DSYM_SRC}\"\nif [ ! -d \"$DSYM_SRC\" ]; then\nexitWithMessage \"dSYM source not found: ${DSYM_SRC}\" 1\nfi\nDSYM_FILE_NAME=${DSYM_SRC##*/}\nDSYM_SYMBOL_OUT_ZIP_NAME=\"${DSYM_FILE_NAME}.bSymbol.zip\"\n# 替换空格\nDSYM_SYMBOL_OUT_ZIP_NAME=\"${DSYM_SYMBOL_OUT_ZIP_NAME// /_}\"\nDSYM_ZIP_FPATH=\"${BUILT_PRODUCTS_DIR}/${DSYM_SYMBOL_OUT_ZIP_NAME}\"\n\nDSYM_SYMBOL_BACKUP_DIR=${BUILD_DIR}/Symbols\n\nif [ ! -e \"${DSYM_SYMBOL_BACKUP_DIR}\" ]; then\nmkdir ${DSYM_SYMBOL_BACKUP_DIR}\nfi\n\n# 备份并清理\nfind ${BUILT_PRODUCTS_DIR} -name \"*.zip\" -print0 | xargs -0 -I {} mv {} ${DSYM_SYMBOL_BACKUP_DIR}\n/bin/rm -rf \"${BUILT_PRODUCTS_DIR}/*.zip\"\n\necho \"Extract symbols from dSYM to ${DSYM_ZIP_FPATH}.\"\n\necho \"--------------------------------\"\n(/usr/bin/java -jar \"${BUGLY_SYMBOL_JAR_PATH}\" -i \"${DSYM_SRC}\" -o \"${DSYM_ZIP_FPATH}\" ) || exitWithMessage \"Error: Failed to extract symbols.\" 1\necho \"--------------------------------\"\n\nif [ ! -e \"${DSYM_ZIP_FPATH}\" ]; then\nDSYM_SYMBOL_OUT_ZIP_NAME=$(ls ${BUILT_PRODUCTS_DIR} | grep \".zip\")\nDSYM_ZIP_FPATH=\"${BUILT_PRODUCTS_DIR}/${DSYM_SYMBOL_OUT_ZIP_NAME}\"\nDSYM_SYMBOL_OUT_ZIP_NAME=${DSYM_SYMBOL_OUT_ZIP_NAME//&/_}\nfi\n\nif [ ! -e \"${DSYM_ZIP_FPATH}\" ] ; then\nexitWithMessage \"no symbol file zip archive generated: ${DSYM_ZIP_FPATH}\" 1\nfi\n\n# 提取符号信息\necho \"--------------------------------\"\necho \"Step 3: Extract symbol info from .dSYM file.\"\n\nif [ ! -e \"$BUGLY_SYMBOL_JAR_PATH\" ]; then\nexitWithMessage \"Error: Jar file '${BUGLY_SYMBOL_JAR_PATH}' was not found. \\nPlease copy the jar file into ~/bin folder.\" 1\nfi\n\necho \"Step 4: Upload the symbols of dSYM.\"\necho \"--------------------------------\"\necho \"zip : ${DSYM_SYMBOL_OUT_ZIP_NAME}\"\necho \"dir : ${DSYM_ZIP_FPATH}\"\n\necho \"dSYM upload domain: ${DSYM_UPLOAD_DOMAIN}\"\nDSYM_UPLOAD_URL=\"http://${DSYM_UPLOAD_DOMAIN}/upload/dsym?app=${BUGLY_APP_ID}&pid=2&ver=${BUGLY_APP_VERSION}&n=${DSYM_SYMBOL_OUT_ZIP_NAME}&key=${BUGLY_APP_KEY}&bid=${BUNDLE_IDENTIFIER}\"\necho \"dSYM upload url: ${DSYM_UPLOAD_URL}\"\n\n# Upload dSYM to Bugly\necho \"curl --header \"Content-Type:application/zip\" --data-binary \"@${DSYM_ZIP_FPATH}\" \"${DSYM_UPLOAD_URL}\" --verbose\"\n\necho \"--------------------------------\"\nSTATUS=$(/usr/bin/curl --header \"Content-Type:application/zip\" --data-binary \"@${DSYM_ZIP_FPATH}\" \"${DSYM_UPLOAD_URL}\" --verbose)\necho \"--------------------------------\"\n\nUPLOAD_RESULT=\"FAILTURE\"\necho \"Bugly server response: ${STATUS}\"\nif [ ! \"${STATUS}\" ]; then\necho \"Error: Failed to upload the zip archive file.\"\nelif [[ \"${STATUS}\" == *\":true\"* ]]; then\necho \"Success to upload the dSYM for the app [${BUNDLE_IDENTIFIER} ${BUGLY_APP_VERSION}]\"\nUPLOAD_RESULT=\"SUCCESS\"\nelse\necho \"Error: Failed to upload the zip archive file to Bugly.\"\nfi\n\n#Remove temp dSYM archive\necho \"Remove temporary zip archive: ${DSYM_ZIP_FPATH}\"\n#/bin/rm -f \"${DSYM_ZIP_FPATH}\"\n\nif [ \"$?\" -ne 0 ]; then\nexitWithMessage \"Error: Failed to remove temporary zip archive.\" 1\nfi\n\necho \"--------------------------------\"\necho \"${UPLOAD_RESULT} - dSYM upload complete.\"\n\nif [[ \"${UPLOAD_RESULT}\" == \"FAILTURE\" ]]; then\necho \"--------------------------------\"\necho \"Failed to upload the dSYM\"\necho \"Please check the script and try it again.\"\nfi\n\necho \"----------------------------------------------------------------\"\n}\n\n# .dSYM文件信息\n\necho \"DSYM FOLDER ${DWARF_DSYM_FOLDER_PATH}\"\n\nDSYM_FOLDER=\"${DWARF_DSYM_FOLDER_PATH}\"\n\nIFS=$'\\n'\n\nfor dsymFile in $(find \"$DSYM_FOLDER\" -name '*.dSYM'); do\necho \"Found dSYM file: $dsymFile\"\nuploadDSYM $dsymFile\ndone\n";
+		};
 		D47B8FF720F3536E006D5DE6 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#!/bin/bash\n// 判断是哪个configuration\n// Release Debug 或者只自定义的配置\nif [ \"Release\" != \"${CONFIGURATION}\" ]\n// 如果是Release做哪些事情\nthen\n// 如果不是Release做哪些事情\n// exit 0 退出 不执行下面的代码\nfi\n\n// 获取info.plist信息 CFBundleVersion 可以更改为想获取的信息的名字\nbuildNumber=$(/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"$INFOPLIST_FILE\")\nbuildNumber=$(($buildNumber + 1))\n\n// 设置info.plist\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"$INFOPLIST_FILE\"\n\n";
+		};
+		D4EB235C226EA9F6002DB7D7 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-shinnyfutures-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D4EB2402226EA9F6002DB7D7 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-shinnyfutures/Pods-shinnyfutures-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/DeepDiff/DeepDiff.framework",
+				"${BUILT_PRODUCTS_DIR}/Siren/Siren.framework",
+				"${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DeepDiff.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Siren.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Starscream.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-shinnyfutures/Pods-shinnyfutures-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D4EB2408226EA9F6002DB7D7 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1318,6 +1688,7 @@
 				D480225A20688A180033E202 /* AppDelegate.swift in Sources */,
 				D45DCA3B2241E06300596084 /* AMPIdentify.m in Sources */,
 				D466AB2E21B7BD6A00B6E4F6 /* Tick.swift in Sources */,
+				D439CD4422A0F4A900B9B974 /* Supervision.mm in Sources */,
 				D466D4D82138D4F000FD6FBA /* TransferConstants.swift in Sources */,
 				D466AB3221B7BEFB00B6E4F6 /* Chart.swift in Sources */,
 				D4805D2221DB594A00286ED4 /* ChangePasswordViewController.swift in Sources */,
@@ -1395,6 +1766,147 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D4EB235D226EA9F6002DB7D7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D4EB235E226EA9F6002DB7D7 /* CurrentDayYAxisRenderer.swift in Sources */,
+				D4EB235F226EA9F6002DB7D7 /* AMPDatabaseHelper.m in Sources */,
+				D4EB2360226EA9F6002DB7D7 /* TDWebSocketUtils.swift in Sources */,
+				D4EB2361226EA9F6002DB7D7 /* RightNavigationTableViewCell.swift in Sources */,
+				D4EB2362226EA9F6002DB7D7 /* ISPPinnedNSURLSessionDelegate.m in Sources */,
+				D4EB2363226EA9F6002DB7D7 /* ConfirmSettlementView.swift in Sources */,
+				D4EB2364226EA9F6002DB7D7 /* KlineMarkerView.swift in Sources */,
+				D4EB2365226EA9F6002DB7D7 /* ResponsibilityView.swift in Sources */,
+				D4EB2366226EA9F6002DB7D7 /* MyYAxis.swift in Sources */,
+				D4EB2367226EA9F6002DB7D7 /* LeftTableViewController.swift in Sources */,
+				D4EB2368226EA9F6002DB7D7 /* PositionTableViewController.swift in Sources */,
+				D4EB2369226EA9F6002DB7D7 /* Kline.swift in Sources */,
+				D4EB236A226EA9F6002DB7D7 /* TradeTableViewController.swift in Sources */,
+				D4EB236B226EA9F6002DB7D7 /* KlineDurationViewController.swift in Sources */,
+				D4EB236C226EA9F6002DB7D7 /* AccountConstants.swift in Sources */,
+				D4EB236D226EA9F6002DB7D7 /* AMPDeviceInfo.m in Sources */,
+				D4EB236E226EA9F6002DB7D7 /* QuoteConstants.swift in Sources */,
+				D4EB236F226EA9F6002DB7D7 /* OptionalTableViewCell.swift in Sources */,
+				D4EB2370226EA9F6002DB7D7 /* ParaContentTableViewCell.swift in Sources */,
+				D4EB2371226EA9F6002DB7D7 /* ReqPeekMessage.swift in Sources */,
+				D4EB2372226EA9F6002DB7D7 /* ISPPinnedNSURLConnectionDelegate.m in Sources */,
+				D4EB2373226EA9F6002DB7D7 /* TransactionViewController.swift in Sources */,
+				D4EB2374226EA9F6002DB7D7 /* FileUtils.swift in Sources */,
+				D4EB2375226EA9F6002DB7D7 /* Position.swift in Sources */,
+				D4EB2376226EA9F6002DB7D7 /* LoginViewController.swift in Sources */,
+				D4EB2377226EA9F6002DB7D7 /* QuoteTableViewCell.swift in Sources */,
+				D4EB2378226EA9F6002DB7D7 /* PopupCollectionViewController.swift in Sources */,
+				D4EB2379226EA9F6002DB7D7 /* CurrentDayMarkerView.swift in Sources */,
+				D4EB237A226EA9F6002DB7D7 /* User.swift in Sources */,
+				D4EB237B226EA9F6002DB7D7 /* PriceKeyboardView.swift in Sources */,
+				D4EB237C226EA9F6002DB7D7 /* ReqCancelOrder.swift in Sources */,
+				D4EB237D226EA9F6002DB7D7 /* Amplitude.m in Sources */,
+				D4EB237E226EA9F6002DB7D7 /* BankTransferViewController.swift in Sources */,
+				D4EB237F226EA9F6002DB7D7 /* AMPLocationManagerDelegate.m in Sources */,
+				D4EB2380226EA9F6002DB7D7 /* ChartConstants.swift in Sources */,
+				D4EB2381226EA9F6002DB7D7 /* NotifyConstants.swift in Sources */,
+				D4EB2382226EA9F6002DB7D7 /* BankTransferTableViewCell.swift in Sources */,
+				D4EB2383226EA9F6002DB7D7 /* BaseChartViewController.swift in Sources */,
+				D4EB2384226EA9F6002DB7D7 /* PopupCollectionViewCell.swift in Sources */,
+				D4EB2385226EA9F6002DB7D7 /* OrderTableViewController.swift in Sources */,
+				D4EB2386226EA9F6002DB7D7 /* RtnTDConstants.swift in Sources */,
+				D4EB2387226EA9F6002DB7D7 /* CurrentDayCombinedChartRenderer.swift in Sources */,
+				D4EB2388226EA9F6002DB7D7 /* TradeTableViewCell.swift in Sources */,
+				D4EB2389226EA9F6002DB7D7 /* KlineXAxisRenderer.swift in Sources */,
+				D4EB238A226EA9F6002DB7D7 /* DrawerStackView.swift in Sources */,
+				D4EB238B226EA9F6002DB7D7 /* ReqSubscribeQuote.swift in Sources */,
+				D4EB238C226EA9F6002DB7D7 /* BrokerTableViewController.swift in Sources */,
+				D4EB238D226EA9F6002DB7D7 /* CommonConstants.swift in Sources */,
+				D4EB238E226EA9F6002DB7D7 /* OrderConstants.swift in Sources */,
+				D4EB238F226EA9F6002DB7D7 /* AboutViewController.swift in Sources */,
+				D4EB2390226EA9F6002DB7D7 /* OrderTableViewCell.swift in Sources */,
+				D4EB2391226EA9F6002DB7D7 /* Account.swift in Sources */,
+				D4EB2392226EA9F6002DB7D7 /* OptionalPopupTableViewController.swift in Sources */,
+				D4EB2393226EA9F6002DB7D7 /* KlineDurationTableViewCell.swift in Sources */,
+				D4EB2394226EA9F6002DB7D7 /* KlineYAxisRenderer.swift in Sources */,
+				D4EB2395226EA9F6002DB7D7 /* MD5ViewController.swift in Sources */,
+				D4EB2396226EA9F6002DB7D7 /* BankConstants.swift in Sources */,
+				D4EB2397226EA9F6002DB7D7 /* AMPURLConnection.m in Sources */,
+				D4EB2398226EA9F6002DB7D7 /* QuoteViewController.swift in Sources */,
+				D4EB2399226EA9F6002DB7D7 /* MyCandleStickChartRenderer.swift in Sources */,
+				D4EB239A226EA9F6002DB7D7 /* AMPURLSession.m in Sources */,
+				D4EB239B226EA9F6002DB7D7 /* ParaNavTableViewCell.swift in Sources */,
+				D4EB239C226EA9F6002DB7D7 /* KlinePopupViewController.swift in Sources */,
+				D4EB239D226EA9F6002DB7D7 /* RtnTD.swift in Sources */,
+				D4EB239E226EA9F6002DB7D7 /* TransactionPageViewController.swift in Sources */,
+				D4EB239F226EA9F6002DB7D7 /* SlideMenuController.swift in Sources */,
+				D4EB23A0226EA9F6002DB7D7 /* MyLineChartRenderer.swift in Sources */,
+				D4EB23A1226EA9F6002DB7D7 /* QuotePageViewController.swift in Sources */,
+				D4EB23A2226EA9F6002DB7D7 /* AddDurationCollectionViewCell.swift in Sources */,
+				D4EB23A3226EA9F6002DB7D7 /* KlineCombinedChartRenderer.swift in Sources */,
+				D4EB23A4226EA9F6002DB7D7 /* TickConstants.swift in Sources */,
+				D4EB23A5226EA9F6002DB7D7 /* SearchTableViewController.swift in Sources */,
+				D4EB23A6226EA9F6002DB7D7 /* AppDelegate.swift in Sources */,
+				D4EB23A7226EA9F6002DB7D7 /* AMPIdentify.m in Sources */,
+				D4EB23A8226EA9F6002DB7D7 /* Tick.swift in Sources */,
+				D439CD4522A0F4A900B9B974 /* Supervision.mm in Sources */,
+				D4EB23A9226EA9F6002DB7D7 /* TransferConstants.swift in Sources */,
+				D4EB23AA226EA9F6002DB7D7 /* Chart.swift in Sources */,
+				D4EB23AB226EA9F6002DB7D7 /* ChangePasswordViewController.swift in Sources */,
+				D4EB23AC226EA9F6002DB7D7 /* SearchTableViewCell.swift in Sources */,
+				D4EB23AD226EA9F6002DB7D7 /* RtnMDConstants.swift in Sources */,
+				D4EB23AE226EA9F6002DB7D7 /* ReqLogin.swift in Sources */,
+				D4EB23AF226EA9F6002DB7D7 /* CurrentDayViewController.swift in Sources */,
+				D4EB23B0226EA9F6002DB7D7 /* Order.swift in Sources */,
+				D4EB23B1226EA9F6002DB7D7 /* Trade.swift in Sources */,
+				D4EB23B2226EA9F6002DB7D7 /* PositionTableViewCell.swift in Sources */,
+				D4EB23B3226EA9F6002DB7D7 /* QuoteTableViewController.swift in Sources */,
+				D4EB23B4226EA9F6002DB7D7 /* MyXAxis.swift in Sources */,
+				D4EB23B5226EA9F6002DB7D7 /* KlineCombinedChartView.swift in Sources */,
+				D4EB23B6226EA9F6002DB7D7 /* OptionalPopupViewController.swift in Sources */,
+				D4EB23B7226EA9F6002DB7D7 /* RightTableViewController.swift in Sources */,
+				D4EB23B8226EA9F6002DB7D7 /* AMPUtils.m in Sources */,
+				D4EB23B9226EA9F6002DB7D7 /* ParaViewController.swift in Sources */,
+				D4EB23BA226EA9F6002DB7D7 /* TradeConstants.swift in Sources */,
+				D4EB23BB226EA9F6002DB7D7 /* FeedbackViewController.swift in Sources */,
+				D4EB23BC226EA9F6002DB7D7 /* CurrentDayXAxisRenderer.swift in Sources */,
+				D4EB23BD226EA9F6002DB7D7 /* AMPRevenue.m in Sources */,
+				D4EB23BE226EA9F6002DB7D7 /* ISPCertificatePinning.m in Sources */,
+				D4EB23BF226EA9F6002DB7D7 /* SettingTableViewController.swift in Sources */,
+				D4EB23C0226EA9F6002DB7D7 /* DataManager.swift in Sources */,
+				D4EB23C1226EA9F6002DB7D7 /* KlineViewController.swift in Sources */,
+				D4EB23C2226EA9F6002DB7D7 /* ReqSetChart.swift in Sources */,
+				D4EB23C3226EA9F6002DB7D7 /* MyBarChartRenderer.swift in Sources */,
+				D4EB23C4226EA9F6002DB7D7 /* CurrentDayCombinedChartView.swift in Sources */,
+				D4EB23C5226EA9F6002DB7D7 /* SwiftTryCatch.m in Sources */,
+				D4EB23C6226EA9F6002DB7D7 /* LocalCommonConstants.swift in Sources */,
+				D4EB23C7226EA9F6002DB7D7 /* AMPConstants.m in Sources */,
+				D4EB23C8226EA9F6002DB7D7 /* AddDurationCollectionViewController.swift in Sources */,
+				D4EB23C9226EA9F6002DB7D7 /* BrokerTableViewCell.swift in Sources */,
+				D4EB23CA226EA9F6002DB7D7 /* ReqConfirmSettlement.swift in Sources */,
+				D4EB23CB226EA9F6002DB7D7 /* QuoteNavigationCollectionViewCell.swift in Sources */,
+				D4EB23CC226EA9F6002DB7D7 /* DurationCollectionViewCell.swift in Sources */,
+				D4EB23CD226EA9F6002DB7D7 /* MainViewController.swift in Sources */,
+				D4EB23CE226EA9F6002DB7D7 /* Bank.swift in Sources */,
+				D4EB23CF226EA9F6002DB7D7 /* LeftNavigationTableViewCell.swift in Sources */,
+				D4EB23D0226EA9F6002DB7D7 /* AccountViewController.swift in Sources */,
+				D4EB23D1226EA9F6002DB7D7 /* HandicapViewController.swift in Sources */,
+				D4EB23D2226EA9F6002DB7D7 /* DropDownBtn.swift in Sources */,
+				D4EB23D3226EA9F6002DB7D7 /* ReqInsertOrder.swift in Sources */,
+				D4EB23D4226EA9F6002DB7D7 /* PositionConstants.swift in Sources */,
+				D4EB23D5226EA9F6002DB7D7 /* VolumeKeyboardView.swift in Sources */,
+				D4EB23D6226EA9F6002DB7D7 /* ReqPassword.swift in Sources */,
+				D4EB23D7226EA9F6002DB7D7 /* Search.swift in Sources */,
+				D4EB23D8226EA9F6002DB7D7 /* QuoteNavigationCollectionViewController.swift in Sources */,
+				D4EB23D9226EA9F6002DB7D7 /* MDWebSocketUtils.swift in Sources */,
+				D4EB23DA226EA9F6002DB7D7 /* KlineConstants.swift in Sources */,
+				D4EB23DB226EA9F6002DB7D7 /* Transfer.swift in Sources */,
+				D4EB23DC226EA9F6002DB7D7 /* ToastUtils.swift in Sources */,
+				D4EB23DD226EA9F6002DB7D7 /* Quote.swift in Sources */,
+				D4EB23DE226EA9F6002DB7D7 /* KlinePageViewController.swift in Sources */,
+				D4EB23DF226EA9F6002DB7D7 /* ReqSetChartKline.swift in Sources */,
+				D4EB23E0226EA9F6002DB7D7 /* RtnMD.swift in Sources */,
+				D4EB23E1226EA9F6002DB7D7 /* AMPTrackingOptions.m in Sources */,
+				D4EB23E2226EA9F6002DB7D7 /* ReqBankTransfer.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -1422,6 +1934,21 @@
 			isa = PBXTargetDependency;
 			target = D480225520688A180033E202 /* shinnyfutures */;
 			targetProxy = D480227620688A180033E202 /* PBXContainerItemProxy */;
+		};
+		D4EB2356226EA9F6002DB7D7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = Charts;
+			targetProxy = D4EB2357226EA9F6002DB7D7 /* PBXContainerItemProxy */;
+		};
+		D4EB2358226EA9F6002DB7D7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "FMDB iOS";
+			targetProxy = D4EB2359226EA9F6002DB7D7 /* PBXContainerItemProxy */;
+		};
+		D4EB235A226EA9F6002DB7D7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = AliyunLOGiOS;
+			targetProxy = D4EB235B226EA9F6002DB7D7 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1495,7 +2022,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "";
@@ -1550,7 +2077,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-lsqlite3.0";
@@ -1570,11 +2097,16 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
+				DEFINES_MODULE = NO;
 				DEVELOPMENT_TEAM = ETY2JG84H2;
-				ENABLE_BITCODE = YES;
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"COCOAPODS=1",
 				);
 				INFOPLIST_FILE = shinnyfutures/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
@@ -1588,6 +2120,7 @@
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = zhongqihuo2019;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/shinnyfutures/shinnyfutures-Bridging-Header.h";
+				SWIFT_PRECOMPILE_BRIDGING_HEADER = YES;
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "";
@@ -1603,11 +2136,16 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
+				DEFINES_MODULE = NO;
 				DEVELOPMENT_TEAM = ETY2JG84H2;
-				ENABLE_BITCODE = YES;
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"COCOAPODS=1",
 				);
 				INFOPLIST_FILE = shinnyfutures/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
@@ -1623,6 +2161,7 @@
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = zhongqihuo2019;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/shinnyfutures/shinnyfutures-Bridging-Header.h";
+				SWIFT_PRECOMPILE_BRIDGING_HEADER = YES;
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "";
@@ -1699,6 +2238,82 @@
 			};
 			name = Release;
 		};
+		D4EB240A226EA9F6002DB7D7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 388B73ABF830D4AAE96C6437 /* Pods-shinnyfutures.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-qhqh";
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "LaunchImage-qhqh";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = KWUAQ4HXRT;
+				ENABLE_BITCODE = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"COCOAPODS=1",
+				);
+				INFOPLIST_FILE = "$(SRCROOT)/shinnyfutures-qhqh-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.qhfco.xiaoq;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = qhfcoxiaoQ;
+				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/shinnyfutures/shinnyfutures-Bridging-Header.h";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				USER_HEADER_SEARCH_PATHS = "";
+			};
+			name = Debug;
+		};
+		D4EB240B226EA9F6002DB7D7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = FC8D39CA76C29378AD94B136 /* Pods-shinnyfutures.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-qhqh";
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "LaunchImage-qhqh";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = KWUAQ4HXRT;
+				ENABLE_BITCODE = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"COCOAPODS=1",
+				);
+				INFOPLIST_FILE = "$(SRCROOT)/shinnyfutures-qhqh-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				MTL_ENABLE_DEBUG_INFO = NO;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.qhfco.xiaoq;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = qhfcoxiaoQ;
+				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/shinnyfutures/shinnyfutures-Bridging-Header.h";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				USER_HEADER_SEARCH_PATHS = "";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1734,6 +2349,15 @@
 			buildConfigurations = (
 				D480228520688A180033E202 /* Debug */,
 				D480228620688A180033E202 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D4EB2409226EA9F6002DB7D7 /* Build configuration list for PBXNativeTarget "shinnyfutures-qhqh" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D4EB240A226EA9F6002DB7D7 /* Debug */,
+				D4EB240B226EA9F6002DB7D7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

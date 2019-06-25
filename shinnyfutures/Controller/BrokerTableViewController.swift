@@ -12,13 +12,19 @@ class BrokerTableViewController: UITableViewController {
 
     var datas = [String]()
     var dataRetrurn = ""
+    var dataSelect = ""
 
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.separatorColor = UIColor.black
         tableView.cellLayoutMarginsFollowReadableWidth = true
         tableView.tableFooterView = UIView()
-        datas = DataManager.getInstance().sBrokers
+        datas = DataManager.getInstance().getBrokersFromBrokerId()
+        tableView.reloadData()
+        if let index = datas.firstIndex(of: dataSelect){
+            tableView.scrollToRow(at: IndexPath(item: index, section: 0), at: .top, animated: false)
+        }
+
     }
 
     // MARK: - Table view data source

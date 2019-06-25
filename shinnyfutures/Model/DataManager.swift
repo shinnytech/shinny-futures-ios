@@ -8,6 +8,7 @@
 
 import Foundation
 import AliyunLOGiOS
+import CoreLocation
 
 class DataManager {
     private static let instance: DataManager = {
@@ -56,6 +57,8 @@ class DataManager {
     var ak = ""
     var sk = ""
     var sClient: LOGClient?
+    //是否显示登录成功
+    var isShowToast = false
 
     func parseLatestFile(latestData: Data) {
         NSLog("解析开始")
@@ -621,7 +624,6 @@ class DataManager {
     }
 
     func parseBrokers(rtnData: [String: Any]) {
-        print(rtnData)
         if !rtnData.keys.contains(RtnTDConstants.brokers) {
             sIsLogin = false
             sIsEmpty = true
@@ -672,6 +674,13 @@ class DataManager {
             if "140".elementsEqual(code) || "131".elementsEqual(code){
                 DispatchQueue.main.async {
                     NotificationCenter.default.post(name: Notification.Name(CommonConstants.WeakPasswordNotification), object: nil)
+                }
+            }
+            if "登录成功".elementsEqual(content){
+                if isShowToast{
+                    isShowToast = false
+                }else{
+                    continue
                 }
             }
             if "SETTLEMENT".elementsEqual(type){
@@ -863,5 +872,36 @@ class DataManager {
         let time = dformatter.string(from: date)
         let dm = DBManager.defaultManager()
         dm.insertRecords(endpoint: "http://cn-shanghai.log.aliyuncs.com", project: "kq-xq", logstore: "kq-xq", log: log + "\ntimeStamp: " + time, timestamp: Date().timeIntervalSince1970)
+    }
+
+    func getBrokersFromBrokerId() -> [String] {
+        var brokers = [String]()
+        guard let broker_id = Bundle.main.infoDictionary?["Channel"] as? String else {return brokers}
+        for broker in sBrokers {
+            if "快期小Q".elementsEqual(broker_id){
+                brokers.append(broker)
+            }else if broker.contains(broker_id){
+                brokers.append(broker)
+            }
+        }
+        return brokers
+    }
+
+    //获取定位权限
+    func requestPermission() {
+        if CLLocationManager.authorizationStatus() != .denied {
+            let supersion: Supervision = Supervision()
+            let systemInfo = supersion.getSystemInfo() ?? ""
+            UserDefaults.standard.set(systemInfo, forKey: CommonConstants.CONFIG_PERMISSION)
+        }else{
+            let alert = UIAlertController(title: "打开定位开关", message:  "定位服务未开启,请进入系统设置>隐私>定位服务中打开开关,并允许App使用定位服务", preferredStyle: .alert)
+            let settings = UIAlertAction(title: "设置", style: .default){(alertAction) in
+                if let appSettings = NSURL(string: UIApplicationOpenSettingsURLString){
+                    UIApplication.shared.open(appSettings as URL, options: [:], completionHandler: nil)
+                }
+            }
+            alert.addAction(settings)
+            UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true, completion: nil)
+        }
     }
 }

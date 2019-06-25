@@ -172,7 +172,8 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
 
         initDefaultConfig()
         initTMDURLs()
-        getAppVersion()
+        checkResposibility()
+        dataManager.requestPermission()
         self.mdWebSocketUtils.mdWebSocketUtilsDelegate = self
         self.tdWebSocketUtils.tdWebSocketUtilsDelegate = self
         sessionSimpleDownload(urlString: CommonConstants.LATEST_FILE_URL)
@@ -197,6 +198,7 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
         NotificationCenter.default.addObserver(self, selector: #selector(refreshMenu), name: Notification.Name(CommonConstants.BrokerInfoEmptyNotification), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(popupOptionalList), name: Notification.Name(CommonConstants.PopupOptionalInsListNotification), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(refresh), name: Notification.Name(CommonConstants.LatestFileParsedNotification), object: nil)
+
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -241,6 +243,10 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
     //初始化默认配置
     func initDefaultConfig() {
 
+        if UserDefaults.standard.object(forKey: CommonConstants.CONFIG_PERMISSION) == nil {
+            UserDefaults.standard.set("", forKey: CommonConstants.CONFIG_PERMISSION)
+        }
+
         if UserDefaults.standard.object(forKey: CommonConstants.CONFIG_SETTING_KLINE_DURATION_DEFAULT) == nil {
             UserDefaults.standard.set(CommonConstants.klineDurationDefault, forKey: CommonConstants.CONFIG_SETTING_KLINE_DURATION_DEFAULT)
         }else{
@@ -278,7 +284,6 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
         if UserDefaults.standard.object(forKey: CommonConstants.CONFIG_MD5) == nil {
             UserDefaults.standard.set(true, forKey: CommonConstants.CONFIG_MD5)
         }
-
 
         if UserDefaults.standard.object(forKey: CommonConstants.CONFIG_KLINE_DAY_TYPE) == nil {
             UserDefaults.standard.set(CommonConstants.KLINE_1_DAY, forKey: CommonConstants.CONFIG_KLINE_DAY_TYPE)
@@ -356,8 +361,8 @@ class MainViewController: UIViewController, MDWebSocketUtilsDelegate, TDWebSocke
         dataManager.sClient?.mIsLogEnable = true
     }
 
-    //获取软件版本
-    func getAppVersion() {
+    //检查免责条款
+    func checkResposibility() {
         if let appVersion = Bundle.main.infoDictionary!["CFBundleShortVersionString"] as? String, let appBuild = Bundle.main.infoDictionary!["CFBundleVersion"] as? String{
             self.dataManager.sAppVersion = appVersion
             self.dataManager.sAppBuild = appBuild

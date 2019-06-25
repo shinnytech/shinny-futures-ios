@@ -10,15 +10,15 @@ import Foundation
 
 class CommonConstants {
     //MARK: Server URL
-    public static var LATEST_FILE_URL = "http://openmd.shinnytech.com/t/md/symbols/latest.json"
-    public static let MARKET_URL_1 = "ws://openmd.shinnytech.com/t/md/front/mobile"
-    public static let MARKET_URL_2 = "ws://139.198.126.116/t/md/front/mobile"
-    public static let MARKET_URL_3 = "ws://139.198.122.80/t/md/front/mobile"
-    public static let MARKET_URL_4 = "ws://139.198.123.206/t/md/front/mobile"
-    public static let MARKET_URL_5 = "ws://106.15.82.247/t/md/front/mobile"
-    public static let MARKET_URL_6 = "ws://106.15.82.189/t/md/front/mobile"
-    public static let MARKET_URL_7 = "ws://106.15.219.160/t/md/front/mobile"
-    public static var TRANSACTION_URL = "ws://opentd.shinnytech.com/trade/user0"
+    public static var LATEST_FILE_URL = "https://openmd.shinnytech.com/t/md/symbols/latest.json"
+    public static let MARKET_URL_1 = "wss://openmd.shinnytech.com/t/md/front/mobile"
+    public static let MARKET_URL_2 = "wss://139.198.126.116/t/md/front/mobile"
+    public static let MARKET_URL_3 = "wss://139.198.122.80/t/md/front/mobile"
+    public static let MARKET_URL_4 = "wss://139.198.123.206/t/md/front/mobile"
+    public static let MARKET_URL_5 = "wss://106.15.82.247/t/md/front/mobile"
+    public static let MARKET_URL_6 = "wss://106.15.82.189/t/md/front/mobile"
+    public static let MARKET_URL_7 = "wss://106.15.219.160/t/md/front/mobile"
+    public static var TRANSACTION_URL = "wss://opentd.shinnytech.com/trade/user0"
     public static let REDMINE_URL = "https://ask.shinnytech.com/src/indexm.html"
 
     //MARK: default config
@@ -39,6 +39,7 @@ class CommonConstants {
     public static let CONFIG_KLINE_HOUR_TYPE = "klineHour"
     public static let CONFIG_KLINE_MINUTE_TYPE = "klineMinute"
     public static let CONFIG_KLINE_SECOND_TYPE = "klineSecond"
+    public static let CONFIG_PERMISSION = "permission"
 
     //MARK: Kline type
     public static let CHART_ID = "CHART_ID"

@@ -8,6 +8,8 @@
 
 import UIKit
 import Siren
+import CoreLocation
+import CoreTelephony
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -64,6 +66,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillEnterForeground(_ application: UIApplication) {
         // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+        dataManager.requestPermission()
         Siren.shared.checkVersion(checkType: .immediately)
         dataManager.sIndex = MDWebSocketUtils.getInstance().connect(url: dataManager.sMdURLs[dataManager.sIndex], index: dataManager.sIndex)
         TDWebSocketUtils.getInstance().connect(url: CommonConstants.TRANSACTION_URL)
